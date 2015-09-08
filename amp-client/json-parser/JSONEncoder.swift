@@ -1,0 +1,105 @@
+//
+//  JSONEncoder.swift
+//  DeJSON
+//
+//  Created by Johannes Schriewer on 04.02.15.
+//  Copyright (c) 2015 anfema. All rights reserved.
+//
+
+import Foundation
+
+func * (left: String, right: Int) -> String {
+    if right <= 0 {
+        return ""
+    }
+    
+    var result = left
+    for _ in 1..<right {
+        result += left
+    }
+    
+    return result
+}
+
+func -(left: String.Index, right: Int) -> String.Index {
+	return left.advancedBy(-right)
+}
+
+public class JSONEncoder {
+    let jsonObject: JSONObject
+    
+    public init(_ jsonObject: JSONObject) {
+        self.jsonObject = jsonObject
+    }
+    
+    public var jsonString: String? {
+        return decodeObject(self.jsonObject)
+    }
+
+    public var prettyJSONString: String? {
+        return decodeObject(self.jsonObject, prettyPrint: true)
+    }
+
+    
+    func decodeObject(jsonObject: JSONObject, prettyPrint: Bool = false, indent: Int = 0) -> String? {
+        var result: String
+
+        switch jsonObject {
+        case .JSONNumber(let number):
+            result = "\(number)"
+        case .JSONString(let string):
+            result = "\"\(string)\""
+        case .JSONBoolean(let value):
+			if value {
+				result = "true"
+			} else {
+				result = "false"
+			}
+        case .JSONNull:
+            result = "null"
+        case .JSONInvalid:
+            return nil
+        case .JSONArray(let arr):
+            result = prettyPrint ? "[\n" : "["
+            for (index, item) in arr.enumerate() {
+                if let string = decodeObject(item, prettyPrint: prettyPrint, indent: indent + 4) {
+                    if index > 0 {
+                        if prettyPrint && result[result.endIndex - 1] == "\n" {
+                            result.removeAtIndex(result.endIndex - 1)
+                        }
+                        result += prettyPrint ? ",\n" : ","
+                    }
+                    if prettyPrint {
+                        result += " " * (indent + 4) + string + "\n"
+                    } else {
+                        result += string
+                    }
+                }
+            }
+            result += prettyPrint ? " " * indent + "]" : "]"
+        case .JSONDictionary(let dict):
+            result = prettyPrint ? "{\n" : "{"
+            var first = true
+            for (key, value) in dict {
+                if let string = decodeObject(value, prettyPrint: prettyPrint, indent: indent + 4) {
+                    if !first {
+                        if prettyPrint && result[result.endIndex - 1] == "\n" {
+                            result.removeAtIndex(result.endIndex - 1)
+                        }
+                        result += prettyPrint ? ",\n" : ","
+                    } else {
+                        first = false
+                    }
+                    
+                    if prettyPrint {
+                        result += " " * (indent + 4) + "\"\(key)\" : \(string)"
+                    } else {
+                        result += "\"\(key)\":\(string)"
+                    }
+                }
+            }
+            result += prettyPrint ? "\n" + " " * indent + "}" : "}"
+        }
+        return result
+    }
+}
