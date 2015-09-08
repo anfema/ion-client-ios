@@ -1,0 +1,578 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		755D8B7D1B9DDB4C00AB10C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8B7C1B9DDB4C00AB10C8 /* AppDelegate.swift */; };
+		755D8B7F1B9DDB4C00AB10C8 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8B7E1B9DDB4C00AB10C8 /* MasterViewController.swift */; };
+		755D8B811B9DDB4C00AB10C8 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8B801B9DDB4C00AB10C8 /* DetailViewController.swift */; };
+		755D8B841B9DDB4C00AB10C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755D8B821B9DDB4C00AB10C8 /* Main.storyboard */; };
+		755D8B861B9DDB4C00AB10C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 755D8B851B9DDB4C00AB10C8 /* Assets.xcassets */; };
+		755D8B891B9DDB4C00AB10C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 755D8B871B9DDB4C00AB10C8 /* LaunchScreen.storyboard */; };
+		755D8BB21B9DDBB200AB10C8 /* amp-client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8BAD1B9DDB9500AB10C8 /* amp-client.framework */; };
+		755D8BF61B9F36EE00AB10C8 /* amp-client.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8BAD1B9DDB9500AB10C8 /* amp-client.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		755D8C091B9F378600AB10C8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8C021B9F377300AB10C8 /* Alamofire.framework */; };
+		755D8C0A1B9F378600AB10C8 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8C021B9F377300AB10C8 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		755D8B901B9DDB4D00AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8B711B9DDB4C00AB10C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 755D8B781B9DDB4C00AB10C8;
+			remoteInfo = "amp-client-demo";
+		};
+		755D8BAC1B9DDB9500AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 755D8B561B9DDAF700AB10C8;
+			remoteInfo = "amp-client";
+		};
+		755D8BAE1B9DDB9500AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 755D8B601B9DDAF700AB10C8;
+			remoteInfo = "amp-clientTests";
+		};
+		755D8BB01B9DDBAC00AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 755D8B551B9DDAF700AB10C8;
+			remoteInfo = "amp-client";
+		};
+		755D8BF71B9F36EF00AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 755D8B551B9DDAF700AB10C8;
+			remoteInfo = ampclient;
+		};
+		755D8C011B9F377300AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		755D8C031B9F377300AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
+			remoteInfo = "Alamofire OSX";
+		};
+		755D8C051B9F377300AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS Tests";
+		};
+		755D8C071B9F377300AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F829C6B21A7A94F100A2CD59;
+			remoteInfo = "Alamofire OSX Tests";
+		};
+		755D8C0B1B9F378600AB10C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		755D8BF91B9F36EF00AB10C8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				755D8BF61B9F36EE00AB10C8 /* amp-client.framework in Embed Frameworks */,
+				755D8C0A1B9F378600AB10C8 /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		755D8B791B9DDB4C00AB10C8 /* amp-client-demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "amp-client-demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		755D8B7C1B9DDB4C00AB10C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		755D8B7E1B9DDB4C00AB10C8 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		755D8B801B9DDB4C00AB10C8 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		755D8B831B9DDB4C00AB10C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		755D8B851B9DDB4C00AB10C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		755D8B881B9DDB4C00AB10C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		755D8B8A1B9DDB4C00AB10C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		755D8B8F1B9DDB4D00AB10C8 /* amp-client-demoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "amp-client-demoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "amp-client.xcodeproj"; sourceTree = "<group>"; };
+		755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		755D8B761B9DDB4C00AB10C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755D8BB21B9DDBB200AB10C8 /* amp-client.framework in Frameworks */,
+				755D8C091B9F378600AB10C8 /* Alamofire.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755D8B8C1B9DDB4D00AB10C8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		755D8B701B9DDB4C00AB10C8 = {
+			isa = PBXGroup;
+			children = (
+				755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */,
+				755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */,
+				755D8B7B1B9DDB4C00AB10C8 /* amp-client-demo */,
+				755D8B7A1B9DDB4C00AB10C8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		755D8B7A1B9DDB4C00AB10C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				755D8B791B9DDB4C00AB10C8 /* amp-client-demo.app */,
+				755D8B8F1B9DDB4D00AB10C8 /* amp-client-demoTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		755D8B7B1B9DDB4C00AB10C8 /* amp-client-demo */ = {
+			isa = PBXGroup;
+			children = (
+				755D8B7C1B9DDB4C00AB10C8 /* AppDelegate.swift */,
+				755D8B7E1B9DDB4C00AB10C8 /* MasterViewController.swift */,
+				755D8B801B9DDB4C00AB10C8 /* DetailViewController.swift */,
+				755D8B821B9DDB4C00AB10C8 /* Main.storyboard */,
+				755D8B851B9DDB4C00AB10C8 /* Assets.xcassets */,
+				755D8B871B9DDB4C00AB10C8 /* LaunchScreen.storyboard */,
+				755D8B8A1B9DDB4C00AB10C8 /* Info.plist */,
+			);
+			path = "amp-client-demo";
+			sourceTree = "<group>";
+		};
+		755D8BA81B9DDB9500AB10C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				755D8BAD1B9DDB9500AB10C8 /* amp-client.framework */,
+				755D8BAF1B9DDB9500AB10C8 /* amp-clientTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		755D8BFB1B9F377200AB10C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				755D8C021B9F377300AB10C8 /* Alamofire.framework */,
+				755D8C041B9F377300AB10C8 /* Alamofire.framework */,
+				755D8C061B9F377300AB10C8 /* Alamofire iOS Tests.xctest */,
+				755D8C081B9F377300AB10C8 /* Alamofire OSX Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		755D8B781B9DDB4C00AB10C8 /* amp-client-demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755D8B981B9DDB4D00AB10C8 /* Build configuration list for PBXNativeTarget "amp-client-demo" */;
+			buildPhases = (
+				755D8B751B9DDB4C00AB10C8 /* Sources */,
+				755D8B761B9DDB4C00AB10C8 /* Frameworks */,
+				755D8B771B9DDB4C00AB10C8 /* Resources */,
+				755D8BF91B9F36EF00AB10C8 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755D8BB11B9DDBAC00AB10C8 /* PBXTargetDependency */,
+				755D8BF81B9F36EF00AB10C8 /* PBXTargetDependency */,
+				755D8C0C1B9F378600AB10C8 /* PBXTargetDependency */,
+			);
+			name = "amp-client-demo";
+			productName = "amp-client-demo";
+			productReference = 755D8B791B9DDB4C00AB10C8 /* amp-client-demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		755D8B8E1B9DDB4D00AB10C8 /* amp-client-demoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 755D8B9B1B9DDB4D00AB10C8 /* Build configuration list for PBXNativeTarget "amp-client-demoTests" */;
+			buildPhases = (
+				755D8B8B1B9DDB4D00AB10C8 /* Sources */,
+				755D8B8C1B9DDB4D00AB10C8 /* Frameworks */,
+				755D8B8D1B9DDB4D00AB10C8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				755D8B911B9DDB4D00AB10C8 /* PBXTargetDependency */,
+			);
+			name = "amp-client-demoTests";
+			productName = "amp-client-demoTests";
+			productReference = 755D8B8F1B9DDB4D00AB10C8 /* amp-client-demoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		755D8B711B9DDB4C00AB10C8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = anfema;
+				TargetAttributes = {
+					755D8B781B9DDB4C00AB10C8 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					755D8B8E1B9DDB4D00AB10C8 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = 755D8B781B9DDB4C00AB10C8;
+					};
+				};
+			};
+			buildConfigurationList = 755D8B741B9DDB4C00AB10C8 /* Build configuration list for PBXProject "amp-client-demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 755D8B701B9DDB4C00AB10C8;
+			productRefGroup = 755D8B7A1B9DDB4C00AB10C8 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 755D8BFB1B9F377200AB10C8 /* Products */;
+					ProjectRef = 755D8BFA1B9F377200AB10C8 /* Alamofire.xcodeproj */;
+				},
+				{
+					ProductGroup = 755D8BA81B9DDB9500AB10C8 /* Products */;
+					ProjectRef = 755D8BA71B9DDB9500AB10C8 /* amp-client.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				755D8B781B9DDB4C00AB10C8 /* amp-client-demo */,
+				755D8B8E1B9DDB4D00AB10C8 /* amp-client-demoTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		755D8BAD1B9DDB9500AB10C8 /* amp-client.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "amp-client.framework";
+			remoteRef = 755D8BAC1B9DDB9500AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		755D8BAF1B9DDB9500AB10C8 /* amp-clientTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "amp-clientTests.xctest";
+			remoteRef = 755D8BAE1B9DDB9500AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		755D8C021B9F377300AB10C8 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 755D8C011B9F377300AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		755D8C041B9F377300AB10C8 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 755D8C031B9F377300AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		755D8C061B9F377300AB10C8 /* Alamofire iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire iOS Tests.xctest";
+			remoteRef = 755D8C051B9F377300AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		755D8C081B9F377300AB10C8 /* Alamofire OSX Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire OSX Tests.xctest";
+			remoteRef = 755D8C071B9F377300AB10C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		755D8B771B9DDB4C00AB10C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755D8B891B9DDB4C00AB10C8 /* LaunchScreen.storyboard in Resources */,
+				755D8B861B9DDB4C00AB10C8 /* Assets.xcassets in Resources */,
+				755D8B841B9DDB4C00AB10C8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755D8B8D1B9DDB4D00AB10C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		755D8B751B9DDB4C00AB10C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755D8B811B9DDB4C00AB10C8 /* DetailViewController.swift in Sources */,
+				755D8B7F1B9DDB4C00AB10C8 /* MasterViewController.swift in Sources */,
+				755D8B7D1B9DDB4C00AB10C8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		755D8B8B1B9DDB4D00AB10C8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		755D8B911B9DDB4D00AB10C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 755D8B781B9DDB4C00AB10C8 /* amp-client-demo */;
+			targetProxy = 755D8B901B9DDB4D00AB10C8 /* PBXContainerItemProxy */;
+		};
+		755D8BB11B9DDBAC00AB10C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "amp-client";
+			targetProxy = 755D8BB01B9DDBAC00AB10C8 /* PBXContainerItemProxy */;
+		};
+		755D8BF81B9F36EF00AB10C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ampclient;
+			targetProxy = 755D8BF71B9F36EF00AB10C8 /* PBXContainerItemProxy */;
+		};
+		755D8C0C1B9F378600AB10C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Alamofire iOS";
+			targetProxy = 755D8C0B1B9F378600AB10C8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		755D8B821B9DDB4C00AB10C8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				755D8B831B9DDB4C00AB10C8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		755D8B871B9DDB4C00AB10C8 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				755D8B881B9DDB4C00AB10C8 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		755D8B961B9DDB4D00AB10C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		755D8B971B9DDB4D00AB10C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		755D8B991B9DDB4D00AB10C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "amp-client-demo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		755D8B9A1B9DDB4D00AB10C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "amp-client-demo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demo";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		755D8B9C1B9DDB4D00AB10C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "amp-client-demoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/amp-client-demo.app/amp-client-demo";
+			};
+			name = Debug;
+		};
+		755D8B9D1B9DDB4D00AB10C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "amp-client-demoTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demoTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/amp-client-demo.app/amp-client-demo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		755D8B741B9DDB4C00AB10C8 /* Build configuration list for PBXProject "amp-client-demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755D8B961B9DDB4D00AB10C8 /* Debug */,
+				755D8B971B9DDB4D00AB10C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755D8B981B9DDB4D00AB10C8 /* Build configuration list for PBXNativeTarget "amp-client-demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755D8B991B9DDB4D00AB10C8 /* Debug */,
+				755D8B9A1B9DDB4D00AB10C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		755D8B9B1B9DDB4D00AB10C8 /* Build configuration list for PBXNativeTarget "amp-client-demoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				755D8B9C1B9DDB4D00AB10C8 /* Debug */,
+				755D8B9D1B9DDB4D00AB10C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 755D8B711B9DDB4C00AB10C8 /* Project object */;
+}
