@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import DEjson
 
 public struct AMPError {
 	public static let Domain = "com.anfema.amp"
@@ -16,6 +17,7 @@ public struct AMPError {
 		case InvalidJSON(JSONObject?)
 		case JSONObjectExpected(JSONObject?)
 		case JSONArrayExpected(JSONObject?)
+        case JSONArrayOrObjectExpected(JSONObject?)
 		case UnknownContentType(String)
 	}
 
@@ -52,8 +54,14 @@ public struct AMPError {
 			if let json = obj {
 				userInfo["object"] = JSONEncoder(json).prettyJSONString
 			}
+        case .JSONArrayOrObjectExpected(let obj):
+            numericalCode = -7005
+            userInfo[NSLocalizedFailureReasonErrorKey] = "JSON Array or Object expected"
+            if let json = obj {
+                userInfo["object"] = JSONEncoder(json).prettyJSONString
+            }
 		case .UnknownContentType(let str):
-			numericalCode = -7005
+			numericalCode = -7006
 			userInfo[NSLocalizedFailureReasonErrorKey] = "Unknown content type received"
 			userInfo["contentType"] = str
 		}

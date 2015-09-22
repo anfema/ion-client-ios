@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:amp-client.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Alamofire/Alamofire.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DEjson/DEjson.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:amp-client-demo.xcodeproj">
+   </FileRef>
+</Workspace>

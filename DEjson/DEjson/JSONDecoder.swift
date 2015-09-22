@@ -32,11 +32,7 @@ public class JSONDecoder {
                     return .JSONInvalid
                 }
             case 91: // [
-                if let arr = self.parseArray(&generator) {
-                    return .JSONArray(arr)
-                } else {
-                    return .JSONInvalid
-                }
+                return .JSONArray(self.parseArray(&generator))
             case 34: // "
                 return .JSONString(self.parseString(&generator))
             case 43, 45, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57: // 0-9, -, +
@@ -106,7 +102,7 @@ public class JSONDecoder {
     }
 
     func parseDict(inout generator: String.UnicodeScalarView.Generator) -> (Dictionary<String, JSONObject>?) {
-        var dict : Dictionary<String, JSONObject>? = Dictionary()
+        var dict : Dictionary<String, JSONObject> = Dictionary()
         var dictKey: String? = nil
         var dictEnded = false
 
@@ -118,7 +114,7 @@ public class JSONDecoder {
                 dictKey = self.parseString(&generator)
             case 58: // :
                 if let key = dictKey {
-                    dict!.updateValue(self.scanObject(&generator), forKey: key)
+                    dict.updateValue(self.scanObject(&generator), forKey: key)
                     dictKey = nil
                 } else {
                     dictEnded = true
@@ -136,8 +132,8 @@ public class JSONDecoder {
         return dict
     }
 
-    func parseArray(inout generator: String.UnicodeScalarView.Generator) -> (Array<JSONObject>?) {
-        var arr : Array<JSONObject>? = Array()
+    func parseArray(inout generator: String.UnicodeScalarView.Generator) -> (Array<JSONObject>) {
+        var arr : Array<JSONObject> = Array()
         var arrayEnded = false
 
         while let c = generator.next() {
@@ -147,7 +143,7 @@ public class JSONDecoder {
             case 93: // ]
                 arrayEnded = true
             default:
-                arr!.append(self.scanObject(&generator, currentChar: c))
+                arr.append(self.scanObject(&generator, currentChar: c))
             }
             if (arrayEnded) {
                 break
@@ -248,6 +244,9 @@ public class JSONDecoder {
             }
         }
 
+        let e = __exp10(Double(exponent - decimalCount))
+        number = number * e
+        number *= sign
         return number
     }
 
@@ -286,7 +285,6 @@ public class JSONDecoder {
                     if c == search.unicodeScalars[i] {
                          state = .ParseStateTrue(index+1)
                         if index == search.characters.count - 1 {
-                            generator.next()
                             return true
                         }
                     }
@@ -296,7 +294,6 @@ public class JSONDecoder {
                 if c == search.unicodeScalars[i] {
                     state = .ParseStateFalse(index+1)
                     if index == search.characters.count - 1 {
-                        generator.next()
                         return false
                     }
                 }
@@ -305,8 +302,7 @@ public class JSONDecoder {
                 let i = search.unicodeScalars.startIndex.advancedBy(index)
                 if c == search.unicodeScalars[i] {
                     state = .ParseStateNull(index+1)
-                    if index == search.characters.count - 1 {
-                        generator.next()
+                    if index == search.characters.count - 1{
                         return nil
                     }
                 }
