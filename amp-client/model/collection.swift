@@ -27,7 +27,7 @@ class AMPPageMeta {
         }
         
         let fmt = NSDateFormatter()
-        fmt.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+        fmt.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSSSSS'Z'"
         fmt.timeZone   = NSTimeZone(forSecondsFromGMT: 0)
         fmt.locale     = NSLocale(localeIdentifier: "en_US_POSIX")
         
