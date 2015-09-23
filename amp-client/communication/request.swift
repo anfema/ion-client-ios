@@ -14,7 +14,6 @@ import DEjson
 // TODO: Cache invalidation
 
 public class AMPRequest {
-    private static let queue = dispatch_queue_create("com.anfema.amp.ResponseQueue", nil)
     
     private class func buildURL(endpoint: String, queryParameters:Dictionary<String, String>) -> String {
         let url = AMP.config.serverURL.URLByAppendingPathComponent(endpoint)
@@ -63,8 +62,8 @@ public class AMPRequest {
             do {
                 let data = try String(contentsOfFile: cacheName)
                 let json = JSONDecoder(data).jsonObject
-                dispatch_async(AMPRequest.queue) {
-                    callback(.Success(json))
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(.Success(json))
                 }
                 return
             } catch {
@@ -103,7 +102,7 @@ public class AMPRequest {
         // Check disk cache
         if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
             // return from cache instantly
-            dispatch_async(AMPRequest.queue) {
+            dispatch_async(AMP.config.responseQueue) {
                 callback(Result.Success(cacheName))
             }
             return
@@ -111,9 +110,13 @@ public class AMPRequest {
         
         let downloadTask = Alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             if let err = error {
-                callback(Result.Failure(data, err))
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(Result.Failure(data, err))
+                }
             } else {
-                callback(Result.Success(cacheName))
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(Result.Success(cacheName))
+                }
             }
         }
         

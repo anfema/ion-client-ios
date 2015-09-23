@@ -21,6 +21,7 @@ private class AMPMemCache {
 public struct AMPConfig {
     var serverURL:NSURL!
     var locale:String = "en_EN"
+    var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", nil)
 }
 
 public class AMP {
