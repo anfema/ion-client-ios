@@ -52,25 +52,27 @@ public class AMPRequest {
         
     }
     
-    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>, cached: Bool, callback: (Result<JSONObject> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
-
-        // Check disk cache before running HTTP request
         let cacheName = self.cacheName(NSURL(string: urlString)!) + ".json"
-        if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
-            // return from cache instantly
-            do {
-                let data = try String(contentsOfFile: cacheName)
-                let json = JSONDecoder(data).jsonObject
+
+        if cached {
+            // Check disk cache before running HTTP request
+            if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+                // return from cache instantly
+                do {
+                    let data = try String(contentsOfFile: cacheName)
+                    let json = JSONDecoder(data).jsonObject
                     dispatch_async(AMP.config.responseQueue) {
                         callback(.Success(json))
+                    }
+                    return
+                } catch {
+                    // do nothing, fallthrough to HTTP request
                 }
-                return
-            } catch {
-                // do nothing, fallthrough to HTTP request
             }
         }
-
+        
         var headers = self.headers()
         headers["Accept"] = "application/json"
 
@@ -86,12 +88,22 @@ public class AMPRequest {
                     }
                 }
             }
-            callback(result)
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
+            }
         }
+    }
+
+    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
+    }
+    
+    public class func fetchJSONUncached(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
     }
     
     // returns file name on disk in callback
-    public class func fetchBinary(urlString: String, queryParameters: Dictionary<String, String>, callback: (Result<String> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: Dictionary<String, String>, cached:Bool, callback: (Result<String> -> Void)) {
         let headers = self.headers()
         let cacheName = self.cacheName(NSURL(string: urlString)!)
         
@@ -100,7 +112,7 @@ public class AMPRequest {
         }
         
         // Check disk cache
-        if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+        if cached && NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
             // return from cache instantly
             dispatch_async(AMP.config.responseQueue) {
                 callback(Result.Success(cacheName))
@@ -122,4 +134,13 @@ public class AMPRequest {
         
         AMP.registerProgress(downloadTask.progress, urlString: urlString)
     }
+    
+    public class func fetchBinary(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
+    }
+    
+    public class func fetchBinaryUncached(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
+    }
+
 }
