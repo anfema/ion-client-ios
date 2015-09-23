@@ -18,12 +18,14 @@ public class AMPRequest {
     private static var cacheDB:Array<JSONObject>?
     
     // MARK: Private
-    private class func buildURL(endpoint: String, queryParameters:Dictionary<String, String>) -> String {
+    private class func buildURL(endpoint: String, queryParameters:Dictionary<String, String>?) -> String {
         let url = AMP.config.serverURL.URLByAppendingPathComponent(endpoint)
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
         components.queryItems = Array<NSURLQueryItem>()
-        for (key, value) in queryParameters {
-            components.queryItems!.append(NSURLQueryItem(name: key, value: value))
+        if let parameters = queryParameters {
+            for (key, value) in parameters {
+                components.queryItems!.append(NSURLQueryItem(name: key, value: value))
+            }
         }
         let urlString = components.URLString
         return urlString
@@ -171,7 +173,7 @@ public class AMPRequest {
     }
     
     // MARK: API
-    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>, cached: Bool, callback: (Result<JSONObject> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>?, cached: Bool, callback: (Result<JSONObject> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
 
@@ -208,21 +210,21 @@ public class AMPRequest {
         }
     }
 
-    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: Dictionary<String,String>?, callback: (Result<JSONObject> -> Void)) {
         self.fetchJSON(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
     }
     
-    public class func fetchJSONUncached(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
+    public class func fetchJSONUncached(endpoint: String, queryParameters: Dictionary<String,String>?, callback: (Result<JSONObject> -> Void)) {
         self.fetchJSON(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
     }
     
     // returns file name on disk in callback
-    public class func fetchBinary(urlString: String, queryParameters: Dictionary<String, String>, cached:Bool, callback: (Result<String> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: Dictionary<String, String>?, cached:Bool, callback: (Result<String> -> Void)) {
         let headers = self.headers()
         let cacheName = self.cacheName(NSURL(string: urlString)!)
         
         let destination = { (url: NSURL, response: NSHTTPURLResponse) -> NSURL in
-            return NSURL(string: cacheName)!
+            return NSURL(fileURLWithPath: cacheName)
         }
         
         // Check disk cache
@@ -250,12 +252,12 @@ public class AMPRequest {
         AMP.registerProgress(downloadTask.progress, urlString: urlString)
     }
     
-    public class func fetchBinary(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
-        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
+    public class func fetchBinary(endpoint: String, queryParameters: Dictionary<String,String>?, callback: (Result<String> -> Void)) {
+        self.fetchBinary(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
     }
     
-    public class func fetchBinaryUncached(endpoint: String, queryParameters: Dictionary<String,String>, callback: (Result<JSONObject> -> Void)) {
-        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
+    public class func fetchBinaryUncached(endpoint: String, queryParameters: Dictionary<String,String>?, callback: (Result<String> -> Void)) {
+        self.fetchBinary(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
     }
     
     public class func resetCache(host: String) {

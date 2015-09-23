@@ -15,6 +15,7 @@ public class AMPFileContent : AMPContentBase {
     var mimeType:String!
     var fileName:String!
     var size:Int        = 0
+    var checksumMethod:String!
     var checksum:String!
     var url:NSURL!
     
@@ -38,30 +39,35 @@ public class AMPFileContent : AMPContentBase {
         self.mimeType = mimeType
         self.fileName = fileName
         self.size     = Int(size)
-        self.checksum = checksum
+        var checksumParts = checksum.componentsSeparatedByString(":")
+        self.checksumMethod = checksumParts[0]
+        self.checksum = checksumParts[1]
         self.url      = NSURL(string: fileUrl)
     }
     
-    func data() -> NSData? {
-        // TODO: fetch data from cache
-        return nil
+    public func data(callback: (NSData -> Void)) {
+        // TODO: Cache invalidation
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
+            guard case .Success(let filename) = result else {
+                    return
+            }
+            do {
+                let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(data)
+                }
+            } catch {
+                print("AMP: Could not read file \(filename)")
+            }
+        }
     }
 }
 
 extension AMPPage {
-    public func fileData(name: String) -> NSData? {
-        if let content = self.outlet(name) {
-            if case .File(let file) = content {
-                return file.data()
-            }
-        }
-        return nil
-    }
-    
     public func fileData(name: String, callback: (NSData -> Void)) {
         self.outlet(name) { content in
             if case .File(let file) = content {
-                if let data = file.data() {
+                file.data { data in
                     callback(data)
                 }
             }

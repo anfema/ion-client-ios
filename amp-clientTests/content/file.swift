@@ -13,7 +13,22 @@ class fileContentTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    // TODO: Write file tests
+       
+    func testFileOutletFetchAsync() {
+        let expectation = self.expectationWithDescription("fetch outlet")
+        
+        AMP.collection("test").page("page_001").fileData("File") { data in
+            guard let outlet = AMP.collection("test").page("page_001").outlet("File"),
+                case .File(let file) = outlet else {
+                    XCTFail("File outlet not found or of wrong type")
+                    expectation.fulfill()
+                    return
+            }
+            XCTAssert(file.checksumMethod == "sha256")
+            XCTAssert(data.sha256().hexString() == file.checksum)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(13.0, handler: nil)
+    }
     
 }
