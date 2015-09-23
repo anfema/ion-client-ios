@@ -13,30 +13,43 @@ import DEjson
 public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible {
     public var identifier:String
     public var collection:AMPCollection
+    public var lastUpdate:NSDate!
     public var locale:String
     public var isProxy:Bool
 
     public var content = Array<AMPContent>()
-    
+
+    private var useCache = false
+
     public var description: String {
         return "AMPPage: \(identifier), \(content.count) content items"
     }
 
     // MARK: Initializer
-    public init(collection: AMPCollection, identifier: String) {
+    public convenience init(collection: AMPCollection, identifier: String) {
+        self.init(collection: collection, identifier: identifier, useCache: true)
+    }
+    
+    public convenience init(collection: AMPCollection, identifier: String, callback:(AMPPage -> Void)) {
+        self.init(collection: collection, identifier:identifier, useCache: true, callback:callback)
+    }
+    
+    public init(collection: AMPCollection, identifier: String, useCache: Bool) {
         // Lazy initializer, if this is used the page is not loaded but loading will start
         // in background, so we need to ask the collection's pageCache for the real instance
         // and act as a proxy to that instance
         self.identifier = identifier
         self.collection = collection
+        self.useCache = useCache
         self.locale = self.collection.locale
         self.isProxy = true
     }
 
-    public init(collection: AMPCollection, identifier: String, callback:(AMPPage -> Void)) {
+    public init(collection: AMPCollection, identifier: String, useCache: Bool, callback:(AMPPage -> Void)) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
         self.collection = collection
+        self.useCache = useCache
         self.locale = self.collection.locale
         self.isProxy = false
         super.init()
@@ -106,17 +119,20 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     
     private func fetch(identifier: String, callback:(Void -> Void)) {
         // TODO: this url is not unique, fix in backend
-        AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ]) { result in
+        AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
                     self.error = AMPError.Code.JSONObjectExpected(result.value!)
                     return
             }
-            guard dict["page"] != nil,
-                case .JSONArray(let array) = dict["page"]! else {
+            guard dict["page"] != nil && dict["last_updated"] != nil,
+                  case .JSONArray(let array) = dict["page"]!,
+                  case .JSONNumber(let timestamp) = dict["last_updated"]! else {
                     self.error = AMPError.Code.JSONObjectExpected(dict["page"])
                     return
             }
+            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
+
             
             if case .JSONDictionary(let dict) = array[0] {
                 guard (dict["identifier"] != nil) && (dict["translations"] != nil),
@@ -153,6 +169,7 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
                     }
                 }
             }
+            self.useCache = true
             callback()
         }
     }

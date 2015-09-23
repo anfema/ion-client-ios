@@ -54,6 +54,48 @@ public class AMP {
         AMPMemCache.sharedInstance.collectionCache.removeAll()
     }
     
+    public class func resetDiskCache() {
+        AMPRequest.resetCache(self.config.serverURL!.host!)
+    }
+    
+    public class func refreshCache(callback: (AMPCollection -> Void)) {
+       
+        let queue = dispatch_queue_create("com.anfema.amp.CacheRefresh", nil)
+        dispatch_suspend(queue)
+        for index in AMPMemCache.sharedInstance.collectionCache.indices {
+            let collection = AMPMemCache.sharedInstance.collectionCache[index]
+            let name = collection.identifier
+
+            dispatch_async(queue) {
+                let locale = collection.locale
+                
+                // reinitialize cached collection, turning cache off for this call
+                let _ = AMPCollection(identifier: name, locale: locale, useCache: false) { collection in
+                    AMPMemCache.sharedInstance.collectionCache.replaceRange(Range<Int>(start: index, end: index + 1), with: [collection])
+                    callback(collection)
+                }
+            }
+            
+            for page in collection.pageCache {
+                dispatch_async(queue) {
+                    AMP.collection(name) { collection in
+                        for p in collection.pages {
+                            if (p.identifier == page.identifier) && (p.lastChanged.compare(page.lastUpdate) != .OrderedAscending) {
+                                collection.page(page.identifier) { page in
+                                    // do nothing, just download page
+                                    print("AMP: Page refreshed: \(collection.identifier) -> \(page.identifier)")
+                                }
+                            } else {
+                                print("AMP: Page current: \(collection.identifier) -> \(page.identifier)")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        dispatch_resume(queue)
+    }
+    
     public class func registerProgress(progressObject: NSProgress, urlString: String) {
         // TODO: send progress callbacks
     }

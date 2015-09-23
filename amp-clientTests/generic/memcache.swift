@@ -23,7 +23,7 @@ class memcacheTests: XCTestCase {
     }
     
     func testCollectionMemcache() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("fetch collection")
         
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection)

@@ -45,6 +45,7 @@
 		8FC269A21BB17C3900E38569 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A01BB17B6600E38569 /* request.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269A41BB19B1200E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269D11BB1A23600E38569 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D21BB2E51000E38569 /* diskcache.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC269B91BB1A0B600E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
+		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				8FC2699E1BB16E6D00E38569 /* memcache.swift */,
+				8FC269D21BB2E51000E38569 /* diskcache.swift */,
 			);
 			path = generic;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				8FC2699A1BB0462D00E38569 /* collection.swift in Sources */,
 				8FC269971BB0452800E38569 /* option.swift in Sources */,
 				8FC269961BB0452800E38569 /* media.swift in Sources */,
+				8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */,
 				8FC269981BB0452800E38569 /* text.swift in Sources */,
 				8FC269931BB0452800E38569 /* flag.swift in Sources */,
 			);

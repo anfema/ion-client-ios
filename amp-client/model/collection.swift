@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import DEjson
 
-private class AMPPageMeta {
+class AMPPageMeta {
     var identifier:String!
     var parent:String?
     var lastChanged:NSDate!
@@ -46,33 +46,50 @@ private class AMPPageMeta {
 }
 
 public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConvertible {
-    public var identifier:String!                     = nil
-    public var pageCache = Array<AMPPage>()
-    private var pages:Array<AMPPageMeta>              = []
-    public var defaultLocale:String                   = "en_EN"
-    public var locale:String                          = "en_EN"
-    
+    public var identifier:String!
+    public var locale:String!
+
+    public var defaultLocale:String?
+    public var lastUpdate:NSDate!
+
+    private var useCache = false
+
+    var pageCache = Array<AMPPage>()
+    var pages = Array<AMPPageMeta>()
+
     public var description: String {
         return "AMPCollection: \(identifier!), \(pages.count) pages"
     }
 
     // MARK: Initializer
-    public init(identifier: String, locale: String, callback:(AMPCollection -> Void)) {
+    public init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)) {
         super.init()
         self.locale = locale
+        self.useCache = useCache
+        self.identifier = identifier
         self.fetch(identifier) {
             self.isReady = true
             callback(self)
         }
     }
     
-    public init(identifier: String, locale: String) {
+    public init(identifier: String, locale: String, useCache: Bool) {
         super.init()
         self.locale = locale
+        self.useCache = useCache
+        self.identifier = identifier
         self.fetch(identifier) {
             self.isReady = true
             self.executeTasks()
         }
+    }
+
+    public convenience init(identifier: String, locale: String, callback:(AMPCollection -> Void)) {
+        self.init(identifier: identifier, locale: locale, useCache: true, callback: callback)
+    }
+    
+    public convenience init(identifier: String, locale: String) {
+        self.init(identifier: identifier, locale: locale, useCache: true)
     }
 
     // MARK: API
@@ -134,17 +151,19 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
     }
     
     private func fetch(identifier: String, callback:(Void -> Void)) {
-        AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ]) { result in
+        AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
                     self.error = AMPError.Code.JSONObjectExpected(result.value!)
                     return
             }
-            guard dict["collection"] != nil,
-                  case .JSONArray(let array) = dict["collection"]! else {
-                    self.error = AMPError.Code.JSONObjectExpected(dict["collection"])
+            guard dict["collection"] != nil && dict["last_updated"] != nil,
+                  case .JSONArray(let array) = dict["collection"]!,
+                  case .JSONNumber(let timestamp) = dict["last_updated"]! else {
+                    self.error = AMPError.Code.JSONObjectExpected(result.value!)
                     return
             }
+            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
             
             if case .JSONDictionary(let dict) = array[0] {
                 guard (dict["identifier"] != nil) && (dict["pages"] != nil) && (dict["default_locale"] != nil),
@@ -171,6 +190,9 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
                     }
                 }
             }
+            
+            // revert to cache
+            self.useCache = true
             callback()
         }
     }
