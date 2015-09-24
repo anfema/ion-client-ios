@@ -39,7 +39,7 @@ public class AMPFileContent : AMPContentBase {
         self.mimeType = mimeType
         self.fileName = fileName
         self.size     = Int(size)
-        var checksumParts = checksum.componentsSeparatedByString(":")
+        let checksumParts = checksum.componentsSeparatedByString(":")
         self.checksumMethod = checksumParts[0]
         self.checksum = checksumParts[1]
         self.url      = NSURL(string: fileUrl)
@@ -49,7 +49,7 @@ public class AMPFileContent : AMPContentBase {
         // TODO: Cache invalidation
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
             guard case .Success(let filename) = result else {
-                    return
+                return
             }
             do {
                 let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)

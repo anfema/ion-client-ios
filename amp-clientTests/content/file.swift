@@ -29,6 +29,5 @@ class fileContentTests: XCTestCase {
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(13.0, handler: nil)
-    }
-    
+    }   
 }
