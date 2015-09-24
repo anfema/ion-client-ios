@@ -9,7 +9,7 @@
 import Foundation
 import CommonCrypto
 
-extension Int {
+extension UInt8 {
     func hexString() -> String {
         return NSString(format: "%02x", self) as String
     }
@@ -23,7 +23,7 @@ extension NSData {
         let bytes = UnsafePointer<UInt8>(self.bytes)
         
         for i in UnsafeBufferPointer<UInt8>(start: bytes, count: self.length) {
-            string += Int(i).hexString()
+            string += i.hexString()
         }
         
         return string
