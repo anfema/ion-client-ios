@@ -15,6 +15,7 @@ public class AMPMediaContent : AMPContentBase {
     var mimeType:String!
     var size:CGSize				= CGSizeZero
     var fileSize:Int			= 0
+    var checksumMethod:String!
     var checksum:String!
     var length:Float			= 0.0
     var url:NSURL!
@@ -22,6 +23,7 @@ public class AMPMediaContent : AMPContentBase {
     var originalMimeType:String!
     var originalSize:CGSize		= CGSizeZero
     var originalFileSize:Int	= 0
+    var originalChecksumMethod:String!
     var originalChecksum:String!
     var originalLength:Float	= 0.0
     var originalURL:NSURL!
@@ -59,22 +61,37 @@ public class AMPMediaContent : AMPContentBase {
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
         self.url      = NSURL(string: fileUrl)
-        self.checksum = checksum
+        let checksumParts = checksum.componentsSeparatedByString(":")
+        self.checksumMethod = checksumParts[0]
+        self.checksum = checksumParts[1]
         self.length   = Float(length)
         
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
         self.originalURL      = NSURL(string: oFileUrl)
-        self.originalChecksum = oChecksum
+        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+        self.originalChecksumMethod = originalChecksumParts[0]
+        self.originalChecksum = originalChecksumParts[1]
         self.originalLength   = Float(oLength)
     }
     
-    func data() -> NSData? {
-        // TODO: fetch data from cache
-        return nil
+    public func data(callback: (NSData -> Void)) {
+        // TODO: Cache invalidation
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
+            guard case .Success(let filename) = result else {
+                return
+            }
+            do {
+                let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(data)
+                }
+            } catch {
+                print("AMP: Could not read file \(filename)")
+            }
+        }
     }
-
 }
 
 extension AMPPage {
@@ -96,20 +113,11 @@ extension AMPPage {
             }
         }
     }
-
-    public func mediaData(name: String) -> NSData? {
-        if let content = self.outlet(name) {
-            if case .Media(let media) = content {
-                return media.data()
-            }
-        }
-        return nil
-    }
-    
+   
     public func mediaData(name: String, callback: (NSData -> Void)) {
         self.outlet(name) { content in
             if case .Media(let media) = content {
-                if let data = media.data() {
+                media.data() { data in
                     callback(data)
                 }
             }
