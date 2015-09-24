@@ -46,6 +46,7 @@
 		8FC269A41BB19B1200E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269D11BB1A23600E38569 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D21BB2E51000E38569 /* diskcache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269D51BB429C000E38569 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		8FC269B91BB1A0B600E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
+		8FC269D41BB429BF00E38569 /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = request_cache.swift; path = cache/request_cache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				8F52CD401BA9B2D5004588F4 /* chainable.swift */,
+				8FC269D41BB429BF00E38569 /* request_cache.swift */,
 			);
 			name = cache;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				8F52CD371BA86812004588F4 /* container.swift in Sources */,
 				8F52CD3F1BA86812004588F4 /* text.swift in Sources */,
 				8FC269A21BB17C3900E38569 /* request.swift in Sources */,
+				8FC269D51BB429C000E38569 /* request_cache.swift in Sources */,
 				755D8BCD1B9F34D700AB10C8 /* page.swift in Sources */,
 				8F52CD391BA86812004588F4 /* file.swift in Sources */,
 				755D8BB41B9DE08B00AB10C8 /* content.swift in Sources */,
