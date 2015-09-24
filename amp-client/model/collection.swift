@@ -54,8 +54,8 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
 
     private var useCache = false
 
-    var pageCache = Array<AMPPage>()
-    var pages = Array<AMPPageMeta>()
+    var pageCache = [AMPPage]()
+    var pages = [AMPPageMeta]()
 
     public var description: String {
         return "AMPCollection: \(identifier!), \(pages.count) pages"

@@ -11,7 +11,7 @@ import UIKit
 import DEjson
 
 public class AMPContainerContent : AMPContentBase {
-    var children:Array<AMPContent>!
+    var children:[AMPContent]!
     
     override init(json:JSONObject) throws {
         try super.init(json: json)
@@ -40,7 +40,7 @@ public class AMPContainerContent : AMPContentBase {
 }
 
 extension AMPPage {
-    public func children(name: String) -> Array<AMPContent>? {
+    public func children(name: String) -> [AMPContent]? {
         if let content = self.outlet(name) {
             if case .Container(let container) = content {
                 return container.children
@@ -49,7 +49,7 @@ extension AMPPage {
         return nil
     }
     
-    public func children(name: String, callback: (Array<AMPContent> -> Void)) {
+    public func children(name: String, callback: ([AMPContent] -> Void)) {
         self.outlet(name) { content in
             if case .Container(let container) = content {
                 if let c = container.children {

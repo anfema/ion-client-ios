@@ -17,7 +17,7 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     public var locale:String
     public var isProxy:Bool
 
-    public var content = Array<AMPContent>()
+    public var content = [AMPContent]()
 
     private var useCache = false
 

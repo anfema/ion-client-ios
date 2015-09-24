@@ -9,9 +9,9 @@
 import Foundation
 
 public class AMPChainable<TKey: Hashable, TReturn> {
-    var tasks:Dictionary<TKey, (TKey -> Void)>                               = Dictionary<TKey, (TKey -> Void)>()
-    var callbacks:Array<(identifier: TKey, block: (TReturn -> Void))>        = []
-    var errorCallbacks:Array<(ErrorType -> Void)>                            = []
+    var tasks:[TKey:(TKey -> Void)]                               = Dictionary<TKey, (TKey -> Void)>() // why so complex swift?
+    var callbacks:[(identifier: TKey, block: (TReturn -> Void))]  = []
+    var errorCallbacks:[(ErrorType -> Void)]                      = []
     
     var isReady:Bool                                 = false
     var error:AMPError.Code? = nil {

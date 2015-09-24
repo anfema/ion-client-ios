@@ -10,7 +10,7 @@ import Foundation
 
 private class AMPMemCache {
     static let sharedInstance = AMPMemCache()
-    var collectionCache = Array<AMPCollection>()
+    var collectionCache = [AMPCollection]()
     
     private init() {
         // do nothing but make init private
