@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import DEjson
-
+import ImageIO
 
 public class AMPImageContent : AMPContentBase {
     var mimeType:String!
@@ -65,31 +65,47 @@ public class AMPImageContent : AMPContentBase {
         self.originalURL      = NSURL(string: oFileUrl)
     }
     
-    func cgImage() -> CGImageRef? {
-        // TODO: fetch data from cache
-        return nil
+    public func dataProvider(callback: (CGDataProviderRef -> Void)) {
+        // TODO: Cache invalidation
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
+            guard case .Success(let filename) = result else {
+                return
+            }
+            if let dataProvider = CGDataProviderCreateWithFilename(filename) {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(dataProvider)
+                }
+            } else {
+                print("AMP: Could not create dataprovider from file \(filename)")
+            }
+        }
+    }
+
+    
+    public func cgImage(callback: (CGImageRef -> Void)) {
+        self.dataProvider() { provider in
+            let options = Dictionary<String, AnyObject>()
+            if let src = CGImageSourceCreateWithDataProvider(provider, options) {
+                if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
+                    callback(img)
+                }
+            }
+        }
     }
     
-    func uiImage() -> UIImage? {
-        // TODO: fetch data from cache
-        return nil
+    public func uiImage(callback: (UIImage -> Void)) {
+        self.cgImage() { img in
+            let uiImage = UIImage(CGImage: img)
+            callback(uiImage)
+        }
     }
 }
 
 extension AMPPage {
-    public func image(name: String) -> UIImage? {
-        if let content = self.outlet(name) {
-            if case .Image(let img) = content {
-                return img.uiImage()
-            }
-        }
-        return nil
-    }
-    
     public func image(name: String, callback: (UIImage -> Void)) {
         self.outlet(name) { content in
             if case .Image(let img) = content {
-                if let image = img.uiImage() {
+                img.uiImage() { image in
                     callback(image)
                 }
             }
