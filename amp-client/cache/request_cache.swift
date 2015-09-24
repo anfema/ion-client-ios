@@ -63,7 +63,7 @@ extension AMPRequest {
         }
         
         // generate cache path
-        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.md5())
+        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5))
         return fileURL.path!
     }
 
@@ -149,7 +149,7 @@ extension AMPRequest {
         // populate object with current data
         obj!["url"]          = .JSONString(request.URLString)
         obj!["host"]         = .JSONString(request.URL!.host!)
-        obj!["filename"]     = .JSONString(request.URLString.md5())
+        obj!["filename"]     = .JSONString(request.URLString.cryptoHash(.MD5))
         obj!["last_updated"] = .JSONNumber(timestamp)
         
         // append to cache DB and save

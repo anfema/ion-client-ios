@@ -25,7 +25,7 @@ class fileContentTests: XCTestCase {
                     return
             }
             XCTAssert(file.checksumMethod == "sha256")
-            XCTAssert(data.sha256().hexString() == file.checksum)
+            XCTAssert(data.cryptoHash(HashTypes(rawValue: file.checksumMethod)!).hexString() == file.checksum)
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(13.0, handler: nil)
