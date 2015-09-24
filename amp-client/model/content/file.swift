@@ -67,9 +67,7 @@ extension AMPPage {
     public func fileData(name: String, callback: (NSData -> Void)) {
         self.outlet(name) { content in
             if case .File(let file) = content {
-                file.data { data in
-                    callback(data)
-                }
+                file.data(callback)
             }
         }
     }

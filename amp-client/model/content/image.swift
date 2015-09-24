@@ -105,9 +105,7 @@ extension AMPPage {
     public func image(name: String, callback: (UIImage -> Void)) {
         self.outlet(name) { content in
             if case .Image(let img) = content {
-                img.uiImage() { image in
-                    callback(image)
-                }
+                img.uiImage(callback)
             }
         }
     }

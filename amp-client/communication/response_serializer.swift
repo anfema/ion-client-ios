@@ -11,11 +11,9 @@ import DEjson
 
 extension Request {
     
-    /**
-    Creates a response serializer that returns an AMP object constructed from the response data
-    
-    - returns: An AMP object response serializer.
-    */
+    /// Creates a response serializer that returns an JSON object constructed from the response data
+    ///
+    /// - Returns: A `JSONObject` response serializer
     public static func DEJSONResponseSerializer() -> GenericResponseSerializer<JSONObject> {
         return GenericResponseSerializer { _, _, data in
             guard let validData = data else {
@@ -35,15 +33,12 @@ extension Request {
         }
     }
     
-    /**
-    Adds a handler to be called once the request has finished.
-    
-    - parameter completionHandler: A closure to be executed once the request has finished. The closure takes 3
-    arguments: the URL request, the URL response and the result produced while
-    creating the AMP object.
-    
-    - returns: The request.
-    */
+    /// Adds a handler to be called once the request has finished.
+    ///
+    /// - Parameter completionHandler: A closure to be executed once the request has finished. The closure takes 3
+    ///                                arguments: the URL request, the URL response and the result produced while
+    ///                                creating the JSON object.
+    /// - Returns: The request.
     public func responseDEJSON(
         completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<JSONObject>) -> Void)
         -> Self

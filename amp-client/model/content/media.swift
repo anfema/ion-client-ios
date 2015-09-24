@@ -117,9 +117,7 @@ extension AMPPage {
     public func mediaData(name: String, callback: (NSData -> Void)) {
         self.outlet(name) { content in
             if case .Media(let media) = content {
-                media.data() { data in
-                    callback(data)
-                }
+                media.data(callback)
             }
         }
     }
