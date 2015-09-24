@@ -24,6 +24,11 @@ public struct AMPConfig {
     var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", nil)
 }
 
+
+/// AMP base class, almost everything will start here
+///
+/// Documentation missing, so here's a picture of a cat:
+/// ![cat](http://lorempixel.com/300/200/cats/)
 public class AMP {
     static var config = AMPConfig()
     
