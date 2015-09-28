@@ -7,7 +7,11 @@
 //
 
 import Foundation
-import UIKit
+#if os(OSX)
+    import AppKit
+#elseif os(iOS)
+    import UIKit
+#endif
 import DEjson
 import ImageIO
 
@@ -92,16 +96,27 @@ public class AMPImageContent : AMPContentBase {
             }
         }
     }
-    
+    #if os(iOS)
     public func uiImage(callback: (UIImage -> Void)) {
         self.cgImage() { img in
             let uiImage = UIImage(CGImage: img)
             callback(uiImage)
         }
     }
+    #endif
+    
+    #if os(OSX)
+    public func nsImage(callback: (NSImage -> Void)) {
+        self.cgImage() { img in
+            let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
+                callback(nsImage)
+            }
+        }
+    #endif
 }
 
 extension AMPPage {
+    #if os(iOS)
     public func image(name: String, callback: (UIImage -> Void)) {
         self.outlet(name) { content in
             if case .Image(let img) = content {
@@ -109,4 +124,15 @@ extension AMPPage {
             }
         }
     }
+    #endif
+
+    #if os(OSX)
+    public func image(name: String, callback: (NSImage -> Void)) {
+        self.outlet(name) { content in
+            if case .Image(let img) = content {
+                img.nsImage(callback)
+            }
+        }
+    }
+    #endif
 }

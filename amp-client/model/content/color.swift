@@ -7,7 +7,11 @@
 //
 
 import Foundation
-import UIKit
+#if os(OSX)
+    import AppKit
+    #elseif os(iOS)
+    import UIKit
+#endif
 import DEjson
 
 public class AMPColorContent : AMPContentBase {
@@ -43,24 +47,67 @@ public class AMPColorContent : AMPContentBase {
         self.alpha = Int(a)
     }
     
+    #if os(iOS)
     /// Create an `UIColor` instance from the color object
     /// 
     /// - Returns: `UIColor` instance with values from color object
-    public func uiColor() -> UIColor? {
+    public func color() -> UIColor? {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
+    #endif
+    
+    #if os(OSX)
+    /// Create an `NSColor` instance from the color object
+    ///
+    /// - Returns: `NSColor` instance with values from color object
+    public func color() -> NSColor? {
+        return NSColor(deviceRed: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
+    }
+    #endif
 }
 
 extension AMPPage {
     
+    #if os(OSX)
+    /// Fetch `NSColor` object from named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
+    public func cachedColor(name: String) -> NSColor? {
+        if let content = self.outlet(name) {
+            if case .Color(let color) = content {
+                return color.color()
+            }
+        }
+        return nil
+    }
+    
+    /// Fetch `NSColor` object from named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
+    ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func color(name: String, callback: (NSColor -> Void)) {
+        self.outlet(name) { content in
+            if case .Color(let color) = content {
+                if let c = color.color() {
+                    callback(c)
+                }
+            }
+        }
+    }
+    #endif
+    
+    #if os(iOS)
     /// Fetch `UIColor` object from named outlet
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func color(name: String) -> UIColor? {
+    public func cachedColor(name: String) -> UIColor? {
         if let content = self.outlet(name) {
             if case .Color(let color) = content {
-                return color.uiColor()
+                return color.color()
             }
         }
         return nil
@@ -75,10 +122,12 @@ extension AMPPage {
     public func color(name: String, callback: (UIColor -> Void)) {
         self.outlet(name) { content in
             if case .Color(let color) = content {
-                if let c = color.uiColor() {
+                if let c = color.color() {
                     callback(c)
                 }
             }
         }
     }
+    #endif
+
 }

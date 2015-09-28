@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		755D8B5A1B9DDAF700AB10C8 /* amp-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 755D8B591B9DDAF700AB10C8 /* amp-client.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		755D8B5A1B9DDAF700AB10C8 /* ampclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 755D8B591B9DDAF700AB10C8 /* ampclient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		755D8B611B9DDAF700AB10C8 /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8B561B9DDAF700AB10C8 /* ampclient.framework */; settings = {ASSET_TAGS = (); }; };
 		755D8BB41B9DE08B00AB10C8 /* content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BB31B9DE08B00AB10C8 /* content.swift */; settings = {ASSET_TAGS = (); }; };
 		755D8BCA1B9F34C600AB10C8 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BC91B9F34C600AB10C8 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
@@ -16,7 +16,6 @@
 		755D8C101B9F3B4400AB10C8 /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8C0F1B9F3B4400AB10C8 /* error.swift */; settings = {ASSET_TAGS = (); }; };
 		755D8C131B9F407C00AB10C8 /* amp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8C121B9F407C00AB10C8 /* amp.swift */; settings = {ASSET_TAGS = (); }; };
 		8F49A00A1BA1B34000E1AC15 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F49A0081BA1B34000E1AC15 /* Alamofire.framework */; };
-		8F49A00B1BA1B34000E1AC15 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F49A0091BA1B34000E1AC15 /* DEjson.framework */; };
 		8F52CD361BA86812004588F4 /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2C1BA86812004588F4 /* color.swift */; settings = {ASSET_TAGS = (); }; };
 		8F52CD371BA86812004588F4 /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2D1BA86812004588F4 /* container.swift */; settings = {ASSET_TAGS = (); }; };
 		8F52CD381BA86812004588F4 /* datetime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2E1BA86812004588F4 /* datetime.swift */; settings = {ASSET_TAGS = (); }; };
@@ -39,14 +38,56 @@
 		8FC269961BB0452800E38569 /* media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698B1BB0452800E38569 /* media.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269971BB0452800E38569 /* option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698C1BB0452800E38569 /* option.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269981BB0452800E38569 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698D1BB0452800E38569 /* text.swift */; settings = {ASSET_TAGS = (); }; };
-		8FC2699A1BB0462D00E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269991BB0462D00E38569 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC2699C1BB0465A00E38569 /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2699B1BB0465A00E38569 /* page.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC2699F1BB16E6D00E38569 /* memcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2699E1BB16E6D00E38569 /* memcache.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269A21BB17C3900E38569 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A01BB17B6600E38569 /* request.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269A41BB19B1200E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
-		8FC269D11BB1A23600E38569 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D21BB2E51000E38569 /* diskcache.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269D51BB429C000E38569 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269E01BB9413500E38569 /* ampclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FC269DF1BB9413500E38569 /* ampclient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8FC269E71BB9413500E38569 /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269DD1BB9413500E38569 /* ampclient.framework */; settings = {ASSET_TAGS = (); }; };
+		8FC269F41BB9414D00E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269F51BB9414D00E38569 /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BF21B9F364600AB10C8 /* response_serializer.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269F61BB9414D00E38569 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A01BB17B6600E38569 /* request.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269F71BB9414D00E38569 /* chainable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD401BA9B2D5004588F4 /* chainable.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269F81BB9414D00E38569 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269F91BB9414D00E38569 /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2C1BA86812004588F4 /* color.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FA1BB9414D00E38569 /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2D1BA86812004588F4 /* container.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FB1BB9414D00E38569 /* datetime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2E1BA86812004588F4 /* datetime.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FC1BB9414D00E38569 /* file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD2F1BA86812004588F4 /* file.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FD1BB9414D00E38569 /* flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD301BA86812004588F4 /* flag.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FE1BB9414D00E38569 /* keyvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD321BA86812004588F4 /* keyvalue.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269FF1BB9414D00E38569 /* media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD331BA86812004588F4 /* media.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A001BB9414D00E38569 /* option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD341BA86812004588F4 /* option.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A011BB9414D00E38569 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD351BA86812004588F4 /* text.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A021BB9414D00E38569 /* content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BB31B9DE08B00AB10C8 /* content.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A031BB9414D00E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BC91B9F34C600AB10C8 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A041BB9414D00E38569 /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BCC1B9F34D700AB10C8 /* page.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A051BB9414D00E38569 /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8C0F1B9F3B4400AB10C8 /* error.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A061BB9414D00E38569 /* amp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8C121B9F407C00AB10C8 /* amp.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A071BB9418400E38569 /* image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52CD311BA86812004588F4 /* image.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A0E1BB942C000E38569 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A0C1BB942C000E38569 /* Alamofire.framework */; };
+		8FC26A311BB944DD00E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269991BB0462D00E38569 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A321BB944DD00E38569 /* base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269831BB0452800E38569 /* base.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A331BB944DD00E38569 /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269841BB0452800E38569 /* color.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A341BB944DD00E38569 /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269851BB0452800E38569 /* container.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A351BB944DD00E38569 /* datetime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269861BB0452800E38569 /* datetime.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A361BB944DD00E38569 /* file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269871BB0452800E38569 /* file.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A371BB944DD00E38569 /* flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269881BB0452800E38569 /* flag.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A381BB944DD00E38569 /* image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269891BB0452800E38569 /* image.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A391BB944DD00E38569 /* keyvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698A1BB0452800E38569 /* keyvalue.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3A1BB944DD00E38569 /* media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698B1BB0452800E38569 /* media.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3B1BB944DD00E38569 /* option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698C1BB0452800E38569 /* option.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3C1BB944DD00E38569 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2698D1BB0452800E38569 /* text.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3D1BB944DD00E38569 /* memcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2699E1BB16E6D00E38569 /* memcache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3E1BB944DD00E38569 /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D21BB2E51000E38569 /* diskcache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A3F1BB944DD00E38569 /* auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D61BB93C2C00E38569 /* auth.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A401BB944DD00E38569 /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC2699B1BB0465A00E38569 /* page.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A6D1BB9476300E38569 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A541BB9468F00E38569 /* CommonCrypto.framework */; };
+		8FC26A6E1BB9476F00E38569 /* CommonCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */; };
+		8FC26A701BB9518800E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A6F1BB9518800E38569 /* DEjson.framework */; };
+		8FC26A721BB9519300E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A711BB9519300E38569 /* DEjson.framework */; };
+		8FC26A741BB9542600E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269991BB0462D00E38569 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,13 +105,27 @@
 			remoteGlobalIDString = 8FC269B41BB1A0B600E38569;
 			remoteInfo = CommonCrypto;
 		};
+		8FC269E81BB9413500E38569 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8B4D1B9DDAF700AB10C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FC269DC1BB9413500E38569;
+			remoteInfo = "ampclient-osx";
+		};
+		8FC26A6B1BB9475900E38569 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 755D8B4D1B9DDAF700AB10C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FC26A531BB9468F00E38569;
+			remoteInfo = CommonCrypto_osx;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		755D8B561B9DDAF700AB10C8 /* ampclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ampclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		755D8B591B9DDAF700AB10C8 /* amp-client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "amp-client.h"; sourceTree = "<group>"; };
-		755D8B5B1B9DDAF700AB10C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		755D8B601B9DDAF700AB10C8 /* amp-clientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "amp-clientTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		755D8B591B9DDAF700AB10C8 /* ampclient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ampclient.h; path = "amp-client/ios/ampclient.h"; sourceTree = "<group>"; };
+		755D8B5B1B9DDAF700AB10C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "amp-client/ios/Info.plist"; sourceTree = "<group>"; };
+		755D8B601B9DDAF700AB10C8 /* ampclient_ios_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampclient_ios_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		755D8B671B9DDAF700AB10C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		755D8BB31B9DE08B00AB10C8 /* content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = content.swift; sourceTree = "<group>"; };
 		755D8BC91B9F34C600AB10C8 /* collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = collection.swift; sourceTree = "<group>"; };
@@ -116,6 +171,17 @@
 		8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
 		8FC269D41BB429BF00E38569 /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = request_cache.swift; path = cache/request_cache.swift; sourceTree = "<group>"; };
+		8FC269DD1BB9413500E38569 /* ampclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ampclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FC269DF1BB9413500E38569 /* ampclient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ampclient.h; sourceTree = "<group>"; };
+		8FC269E11BB9413500E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8FC269E61BB9413500E38569 /* ampclient_osx_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampclient_osx_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FC26A0C1BB942C000E38569 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Alamofire/build/Debug/Alamofire.framework; sourceTree = "<group>"; };
+		8FC26A0D1BB942C000E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "DEjson/build/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
+		8FC26A411BB9453400E38569 /* DEjson_osx.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson_osx.framework; path = DEjson/build/Debug/DEjson_osx.framework; sourceTree = "<group>"; };
+		8FC26A431BB9453C00E38569 /* DEjson_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson_ios.framework; path = "DEjson/build/Debug-iphoneos/DEjson_ios.framework"; sourceTree = "<group>"; };
+		8FC26A541BB9468F00E38569 /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FC26A6F1BB9518800E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = DEjson/build/Debug/DEjson.framework; sourceTree = "<group>"; };
+		8FC26A711BB9519300E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "DEjson/build/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,9 +189,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FC269D11BB1A23600E38569 /* CommonCrypto.framework in Frameworks */,
+				8FC26A721BB9519300E38569 /* DEjson.framework in Frameworks */,
+				8FC26A6E1BB9476F00E38569 /* CommonCrypto.framework in Frameworks */,
 				8F49A00A1BA1B34000E1AC15 /* Alamofire.framework in Frameworks */,
-				8F49A00B1BA1B34000E1AC15 /* DEjson.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,14 +210,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC269D91BB9413500E38569 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC26A701BB9518800E38569 /* DEjson.framework in Frameworks */,
+				8FC26A6D1BB9476300E38569 /* CommonCrypto.framework in Frameworks */,
+				8FC26A0E1BB942C000E38569 /* Alamofire.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC269E31BB9413500E38569 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC269E71BB9413500E38569 /* ampclient.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A501BB9468F00E38569 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		755D8B4C1B9DDAF700AB10C8 = {
 			isa = PBXGroup;
 			children = (
+				8FC26A2F1BB9444A00E38569 /* Supporting Files */,
 				755D8B581B9DDAF700AB10C8 /* amp-client */,
-				755D8B641B9DDAF700AB10C8 /* amp-clientTests */,
+				755D8B641B9DDAF700AB10C8 /* Tests */,
 				8F49A0101BA1B46B00E1AC15 /* Frameworks */,
 				755D8B571B9DDAF700AB10C8 /* Products */,
 			);
@@ -161,8 +253,11 @@
 			isa = PBXGroup;
 			children = (
 				755D8B561B9DDAF700AB10C8 /* ampclient.framework */,
-				755D8B601B9DDAF700AB10C8 /* amp-clientTests.xctest */,
+				755D8B601B9DDAF700AB10C8 /* ampclient_ios_Tests.xctest */,
 				8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */,
+				8FC269DD1BB9413500E38569 /* ampclient.framework */,
+				8FC269E61BB9413500E38569 /* ampclient_osx_Tests.xctest */,
+				8FC26A541BB9468F00E38569 /* CommonCrypto.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,13 +268,11 @@
 				755D8BF11B9F362300AB10C8 /* communication */,
 				755D8BF01B9F361D00AB10C8 /* cache */,
 				755D8BC81B9F34B300AB10C8 /* model */,
-				755D8B591B9DDAF700AB10C8 /* amp-client.h */,
-				755D8B5B1B9DDAF700AB10C8 /* Info.plist */,
 			);
 			path = "amp-client";
 			sourceTree = "<group>";
 		};
-		755D8B641B9DDAF700AB10C8 /* amp-clientTests */ = {
+		755D8B641B9DDAF700AB10C8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				8FC2697F1BB044E700E38569 /* collection */,
@@ -188,6 +281,7 @@
 				8FC269821BB044E700E38569 /* page */,
 				755D8B671B9DDAF700AB10C8 /* Info.plist */,
 			);
+			name = Tests;
 			path = "amp-clientTests";
 			sourceTree = "<group>";
 		};
@@ -225,6 +319,12 @@
 		8F49A0101BA1B46B00E1AC15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8FC26A711BB9519300E38569 /* DEjson.framework */,
+				8FC26A6F1BB9518800E38569 /* DEjson.framework */,
+				8FC26A431BB9453C00E38569 /* DEjson_ios.framework */,
+				8FC26A411BB9453400E38569 /* DEjson_osx.framework */,
+				8FC26A0C1BB942C000E38569 /* Alamofire.framework */,
+				8FC26A0D1BB942C000E38569 /* DEjson.framework */,
 				8FC269B61BB1A0B600E38569 /* CommonCrypto */,
 				8F49A0081BA1B34000E1AC15 /* Alamofire.framework */,
 				8F49A0091BA1B34000E1AC15 /* DEjson.framework */,
@@ -307,6 +407,34 @@
 			path = CommonCrypto;
 			sourceTree = "<group>";
 		};
+		8FC269DE1BB9413500E38569 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				8FC269DF1BB9413500E38569 /* ampclient.h */,
+				8FC269E11BB9413500E38569 /* Info.plist */,
+			);
+			name = osx;
+			path = "amp-client/osx";
+			sourceTree = "<group>";
+		};
+		8FC26A2F1BB9444A00E38569 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8FC26A301BB9446000E38569 /* ios */,
+				8FC269DE1BB9413500E38569 /* osx */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8FC26A301BB9446000E38569 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				755D8B591B9DDAF700AB10C8 /* ampclient.h */,
+				755D8B5B1B9DDAF700AB10C8 /* Info.plist */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -314,7 +442,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				755D8B5A1B9DDAF700AB10C8 /* amp-client.h in Headers */,
+				755D8B5A1B9DDAF700AB10C8 /* ampclient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,12 +453,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC269DA1BB9413500E38569 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC269E01BB9413500E38569 /* ampclient.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A511BB9468F00E38569 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		755D8B551B9DDAF700AB10C8 /* ampclient */ = {
+		755D8B551B9DDAF700AB10C8 /* ampclient_ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 755D8B6A1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient" */;
+			buildConfigurationList = 755D8B6A1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient_ios" */;
 			buildPhases = (
 				755D8B511B9DDAF700AB10C8 /* Sources */,
 				755D8B521B9DDAF700AB10C8 /* Frameworks */,
@@ -343,14 +486,14 @@
 			dependencies = (
 				8FC269CD1BB1A16300E38569 /* PBXTargetDependency */,
 			);
-			name = ampclient;
+			name = ampclient_ios;
 			productName = "amp-client";
 			productReference = 755D8B561B9DDAF700AB10C8 /* ampclient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		755D8B5F1B9DDAF700AB10C8 /* amp-clientTests */ = {
+		755D8B5F1B9DDAF700AB10C8 /* ampclient_ios_Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 755D8B6D1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "amp-clientTests" */;
+			buildConfigurationList = 755D8B6D1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient_ios_Tests" */;
 			buildPhases = (
 				755D8B5C1B9DDAF700AB10C8 /* Sources */,
 				755D8B5D1B9DDAF700AB10C8 /* Frameworks */,
@@ -361,14 +504,14 @@
 			dependencies = (
 				755D8B631B9DDAF700AB10C8 /* PBXTargetDependency */,
 			);
-			name = "amp-clientTests";
+			name = ampclient_ios_Tests;
 			productName = "amp-clientTests";
-			productReference = 755D8B601B9DDAF700AB10C8 /* amp-clientTests.xctest */;
+			productReference = 755D8B601B9DDAF700AB10C8 /* ampclient_ios_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8FC269B41BB1A0B600E38569 /* CommonCrypto */ = {
+		8FC269B41BB1A0B600E38569 /* CommonCrypto_ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8FC269C61BB1A0B700E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto" */;
+			buildConfigurationList = 8FC269C61BB1A0B700E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto_ios" */;
 			buildPhases = (
 				8FC269B01BB1A0B600E38569 /* Sources */,
 				8FC269B11BB1A0B600E38569 /* Frameworks */,
@@ -379,9 +522,65 @@
 			);
 			dependencies = (
 			);
-			name = CommonCrypto;
+			name = CommonCrypto_ios;
 			productName = CommonCrypto;
 			productReference = 8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8FC269DC1BB9413500E38569 /* ampclient_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FC269EE1BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx" */;
+			buildPhases = (
+				8FC269D81BB9413500E38569 /* Sources */,
+				8FC269D91BB9413500E38569 /* Frameworks */,
+				8FC269DA1BB9413500E38569 /* Headers */,
+				8FC269DB1BB9413500E38569 /* Resources */,
+				8FC26A081BB9429500E38569 /* TODOs as warnings */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8FC26A6C1BB9475900E38569 /* PBXTargetDependency */,
+			);
+			name = ampclient_osx;
+			productName = "ampclient-osx";
+			productReference = 8FC269DD1BB9413500E38569 /* ampclient.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8FC269E51BB9413500E38569 /* ampclient_osx_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FC269F11BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx_Tests" */;
+			buildPhases = (
+				8FC269E21BB9413500E38569 /* Sources */,
+				8FC269E31BB9413500E38569 /* Frameworks */,
+				8FC269E41BB9413500E38569 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8FC269E91BB9413500E38569 /* PBXTargetDependency */,
+			);
+			name = ampclient_osx_Tests;
+			productName = "ampclient-osxTests";
+			productReference = 8FC269E61BB9413500E38569 /* ampclient_osx_Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8FC26A531BB9468F00E38569 /* CommonCrypto_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FC26A651BB9469000E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto_osx" */;
+			buildPhases = (
+				8FC26A4F1BB9468F00E38569 /* Sources */,
+				8FC26A501BB9468F00E38569 /* Frameworks */,
+				8FC26A511BB9468F00E38569 /* Headers */,
+				8FC26A521BB9468F00E38569 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CommonCrypto_osx;
+			productName = CommonCrypto;
+			productReference = 8FC26A541BB9468F00E38569 /* CommonCrypto.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -403,6 +602,15 @@
 					8FC269B41BB1A0B600E38569 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					8FC269DC1BB9413500E38569 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					8FC269E51BB9413500E38569 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					8FC26A531BB9468F00E38569 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = 755D8B501B9DDAF700AB10C8 /* Build configuration list for PBXProject "amp-client" */;
@@ -417,9 +625,12 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				755D8B551B9DDAF700AB10C8 /* ampclient */,
-				755D8B5F1B9DDAF700AB10C8 /* amp-clientTests */,
-				8FC269B41BB1A0B600E38569 /* CommonCrypto */,
+				755D8B551B9DDAF700AB10C8 /* ampclient_ios */,
+				8FC269DC1BB9413500E38569 /* ampclient_osx */,
+				755D8B5F1B9DDAF700AB10C8 /* ampclient_ios_Tests */,
+				8FC269E51BB9413500E38569 /* ampclient_osx_Tests */,
+				8FC269B41BB1A0B600E38569 /* CommonCrypto_ios */,
+				8FC26A531BB9468F00E38569 /* CommonCrypto_osx */,
 			);
 		};
 /* End PBXProject section */
@@ -446,10 +657,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC269DB1BB9413500E38569 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC269E41BB9413500E38569 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A521BB9468F00E38569 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		8FC2699D1BB053B900E38569 /* TODOs as warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "TODOs as warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/amp-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'\nfind \"${SRCROOT}/amp-clientTests\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
+			showEnvVarsInLog = 0;
+		};
+		8FC26A081BB9429500E38569 /* TODOs as warnings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -505,9 +752,9 @@
 				8FC269921BB0452800E38569 /* file.swift in Sources */,
 				8FC2698F1BB0452800E38569 /* color.swift in Sources */,
 				8FC269901BB0452800E38569 /* container.swift in Sources */,
+				8FC26A741BB9542600E38569 /* collection.swift in Sources */,
 				8FC2698E1BB0452800E38569 /* base.swift in Sources */,
 				8FC269951BB0452800E38569 /* keyvalue.swift in Sources */,
-				8FC2699A1BB0462D00E38569 /* collection.swift in Sources */,
 				8FC269971BB0452800E38569 /* option.swift in Sources */,
 				8FC269961BB0452800E38569 /* media.swift in Sources */,
 				8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */,
@@ -523,18 +770,84 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC269D81BB9413500E38569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC269F51BB9414D00E38569 /* response_serializer.swift in Sources */,
+				8FC269F71BB9414D00E38569 /* chainable.swift in Sources */,
+				8FC26A041BB9414D00E38569 /* page.swift in Sources */,
+				8FC269FF1BB9414D00E38569 /* media.swift in Sources */,
+				8FC269F41BB9414D00E38569 /* hash_extensions.swift in Sources */,
+				8FC26A001BB9414D00E38569 /* option.swift in Sources */,
+				8FC269FE1BB9414D00E38569 /* keyvalue.swift in Sources */,
+				8FC269F91BB9414D00E38569 /* color.swift in Sources */,
+				8FC26A031BB9414D00E38569 /* collection.swift in Sources */,
+				8FC26A071BB9418400E38569 /* image.swift in Sources */,
+				8FC269F61BB9414D00E38569 /* request.swift in Sources */,
+				8FC26A011BB9414D00E38569 /* text.swift in Sources */,
+				8FC26A021BB9414D00E38569 /* content.swift in Sources */,
+				8FC269FA1BB9414D00E38569 /* container.swift in Sources */,
+				8FC269FB1BB9414D00E38569 /* datetime.swift in Sources */,
+				8FC26A061BB9414D00E38569 /* amp.swift in Sources */,
+				8FC269FC1BB9414D00E38569 /* file.swift in Sources */,
+				8FC269F81BB9414D00E38569 /* request_cache.swift in Sources */,
+				8FC26A051BB9414D00E38569 /* error.swift in Sources */,
+				8FC269FD1BB9414D00E38569 /* flag.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC269E21BB9413500E38569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC26A351BB944DD00E38569 /* datetime.swift in Sources */,
+				8FC26A401BB944DD00E38569 /* page.swift in Sources */,
+				8FC26A3E1BB944DD00E38569 /* diskcache.swift in Sources */,
+				8FC26A3D1BB944DD00E38569 /* memcache.swift in Sources */,
+				8FC26A381BB944DD00E38569 /* image.swift in Sources */,
+				8FC26A361BB944DD00E38569 /* file.swift in Sources */,
+				8FC26A331BB944DD00E38569 /* color.swift in Sources */,
+				8FC26A341BB944DD00E38569 /* container.swift in Sources */,
+				8FC26A321BB944DD00E38569 /* base.swift in Sources */,
+				8FC26A311BB944DD00E38569 /* collection.swift in Sources */,
+				8FC26A391BB944DD00E38569 /* keyvalue.swift in Sources */,
+				8FC26A3B1BB944DD00E38569 /* option.swift in Sources */,
+				8FC26A3A1BB944DD00E38569 /* media.swift in Sources */,
+				8FC26A3C1BB944DD00E38569 /* text.swift in Sources */,
+				8FC26A371BB944DD00E38569 /* flag.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A4F1BB9468F00E38569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		755D8B631B9DDAF700AB10C8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 755D8B551B9DDAF700AB10C8 /* ampclient */;
+			target = 755D8B551B9DDAF700AB10C8 /* ampclient_ios */;
 			targetProxy = 755D8B621B9DDAF700AB10C8 /* PBXContainerItemProxy */;
 		};
 		8FC269CD1BB1A16300E38569 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8FC269B41BB1A0B600E38569 /* CommonCrypto */;
+			target = 8FC269B41BB1A0B600E38569 /* CommonCrypto_ios */;
 			targetProxy = 8FC269CC1BB1A16300E38569 /* PBXContainerItemProxy */;
+		};
+		8FC269E91BB9413500E38569 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8FC269DC1BB9413500E38569 /* ampclient_osx */;
+			targetProxy = 8FC269E81BB9413500E38569 /* PBXContainerItemProxy */;
+		};
+		8FC26A6C1BB9475900E38569 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8FC26A531BB9468F00E38569 /* CommonCrypto_osx */;
+			targetProxy = 8FC26A6B1BB9475900E38569 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -641,15 +954,15 @@
 					"$(PROJECT_DIR)/Alamofire/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
 				);
-				INFOPLIST_FILE = "amp-client/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/amp-client/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.ampclient.ios;
+				PRODUCT_NAME = ampclient;
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/frameworks/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -669,15 +982,15 @@
 					"$(PROJECT_DIR)/Alamofire/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
 				);
-				INFOPLIST_FILE = "amp-client/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/amp-client/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/system",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.ampclient.ios;
+				PRODUCT_NAME = ampclient;
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/frameworks/**";
 			};
@@ -725,7 +1038,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.CommonCrypto;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = CommonCrypto;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -742,7 +1055,127 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.CommonCrypto;
+				PRODUCT_NAME = CommonCrypto;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8FC269EF1BB9413500E38569 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Alamofire/build/Debug",
+					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/DEjson/build/Debug",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/amp-client/osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.ampclient.osx;
+				PRODUCT_NAME = ampclient;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8FC269F01BB9413500E38569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Alamofire/build/Debug",
+					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/DEjson/build/Debug",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/amp-client/osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.ampclient.osx;
+				PRODUCT_NAME = ampclient;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8FC269F21BB9413500E38569 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "amp-clientTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-osxTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8FC269F31BB9413500E38569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "amp-clientTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-osxTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8FC26A661BB9469000E38569 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommonCrypto/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.CommonCrypto;
+				PRODUCT_NAME = CommonCrypto;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8FC26A671BB9469000E38569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommonCrypto/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.CommonCrypto;
+				PRODUCT_NAME = CommonCrypto;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -759,7 +1192,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		755D8B6A1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient" */ = {
+		755D8B6A1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				755D8B6B1B9DDAF700AB10C8 /* Debug */,
@@ -768,7 +1201,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		755D8B6D1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "amp-clientTests" */ = {
+		755D8B6D1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient_ios_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				755D8B6E1B9DDAF700AB10C8 /* Debug */,
@@ -777,11 +1210,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8FC269C61BB1A0B700E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto" */ = {
+		8FC269C61BB1A0B700E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8FC269C71BB1A0B700E38569 /* Debug */,
 				8FC269C81BB1A0B700E38569 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8FC269EE1BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC269EF1BB9413500E38569 /* Debug */,
+				8FC269F01BB9413500E38569 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8FC269F11BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC269F21BB9413500E38569 /* Debug */,
+				8FC269F31BB9413500E38569 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8FC26A651BB9469000E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC26A661BB9469000E38569 /* Debug */,
+				8FC26A671BB9469000E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

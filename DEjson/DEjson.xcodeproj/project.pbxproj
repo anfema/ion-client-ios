@@ -16,6 +16,11 @@
 		8F499FF21BA19F4F00E1AC15 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; settings = {ASSET_TAGS = (); }; };
 		8F499FF31BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; settings = {ASSET_TAGS = (); }; };
 		8F499FF41BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A1F1BB9435D00E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A151BB9435D00E38569 /* DEjson.framework */; settings = {ASSET_TAGS = (); }; };
+		8FC26A2C1BB943A400E38569 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; };
+		8FC26A2D1BB943A400E38569 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; };
+		8FC26A2E1BB943A400E38569 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; };
+		8FC26A731BB9524700E38569 /* DEjsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FE11BA19F2000E1AC15 /* DEjsonTests.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,18 +31,27 @@
 			remoteGlobalIDString = 8F499FD11BA19F1F00E1AC15;
 			remoteInfo = DEjson;
 		};
+		8FC26A201BB9435D00E38569 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F499FC91BA19F1F00E1AC15 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8FC26A141BB9435D00E38569;
+			remoteInfo = dejson;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8F499FD21BA19F1F00E1AC15 /* DEjson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DEjson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F499FD51BA19F1F00E1AC15 /* DEjson.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DEjson.h; sourceTree = "<group>"; };
 		8F499FD71BA19F1F00E1AC15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8F499FDC1BA19F2000E1AC15 /* DEjsonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DEjsonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F499FDC1BA19F2000E1AC15 /* DEjson_ios_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DEjson_ios_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F499FE11BA19F2000E1AC15 /* DEjsonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DEjsonTests.swift; sourceTree = "<group>"; };
 		8F499FE31BA19F2000E1AC15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		8FC26A151BB9435D00E38569 /* DEjson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DEjson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8FC26A1E1BB9435D00E38569 /* DEjson_osx_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DEjson_osx_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +67,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F499FDD1BA19F2000E1AC15 /* DEjson.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A111BB9435D00E38569 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A1B1BB9435D00E38569 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC26A1F1BB9435D00E38569 /* DEjson.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,7 +101,9 @@
 			isa = PBXGroup;
 			children = (
 				8F499FD21BA19F1F00E1AC15 /* DEjson.framework */,
-				8F499FDC1BA19F2000E1AC15 /* DEjsonTests.xctest */,
+				8F499FDC1BA19F2000E1AC15 /* DEjson_ios_tests.xctest */,
+				8FC26A151BB9435D00E38569 /* DEjson.framework */,
+				8FC26A1E1BB9435D00E38569 /* DEjson_osx_tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,12 +140,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC26A121BB9435D00E38569 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8F499FD11BA19F1F00E1AC15 /* DEjson */ = {
+		8F499FD11BA19F1F00E1AC15 /* DEjson_ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F499FE61BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson" */;
+			buildConfigurationList = 8F499FE61BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson_ios" */;
 			buildPhases = (
 				8F499FCD1BA19F1F00E1AC15 /* Sources */,
 				8F499FCE1BA19F1F00E1AC15 /* Frameworks */,
@@ -125,14 +163,14 @@
 			);
 			dependencies = (
 			);
-			name = DEjson;
+			name = DEjson_ios;
 			productName = DEjson;
 			productReference = 8F499FD21BA19F1F00E1AC15 /* DEjson.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8F499FDB1BA19F2000E1AC15 /* DEjsonTests */ = {
+		8F499FDB1BA19F2000E1AC15 /* DEjson_ios_tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F499FE91BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjsonTests" */;
+			buildConfigurationList = 8F499FE91BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson_ios_tests" */;
 			buildPhases = (
 				8F499FD81BA19F2000E1AC15 /* Sources */,
 				8F499FD91BA19F2000E1AC15 /* Frameworks */,
@@ -143,9 +181,45 @@
 			dependencies = (
 				8F499FDF1BA19F2000E1AC15 /* PBXTargetDependency */,
 			);
-			name = DEjsonTests;
+			name = DEjson_ios_tests;
 			productName = DEjsonTests;
-			productReference = 8F499FDC1BA19F2000E1AC15 /* DEjsonTests.xctest */;
+			productReference = 8F499FDC1BA19F2000E1AC15 /* DEjson_ios_tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8FC26A141BB9435D00E38569 /* DEjson_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FC26A2A1BB9435D00E38569 /* Build configuration list for PBXNativeTarget "DEjson_osx" */;
+			buildPhases = (
+				8FC26A101BB9435D00E38569 /* Sources */,
+				8FC26A111BB9435D00E38569 /* Frameworks */,
+				8FC26A121BB9435D00E38569 /* Headers */,
+				8FC26A131BB9435D00E38569 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DEjson_osx;
+			productName = dejson;
+			productReference = 8FC26A151BB9435D00E38569 /* DEjson.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8FC26A1D1BB9435D00E38569 /* DEjson_osx_tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FC26A2B1BB9435D00E38569 /* Build configuration list for PBXNativeTarget "DEjson_osx_tests" */;
+			buildPhases = (
+				8FC26A1A1BB9435D00E38569 /* Sources */,
+				8FC26A1B1BB9435D00E38569 /* Frameworks */,
+				8FC26A1C1BB9435D00E38569 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8FC26A211BB9435D00E38569 /* PBXTargetDependency */,
+			);
+			name = DEjson_osx_tests;
+			productName = dejsonTests;
+			productReference = 8FC26A1E1BB9435D00E38569 /* DEjson_osx_tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -164,6 +238,12 @@
 					8F499FDB1BA19F2000E1AC15 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					8FC26A141BB9435D00E38569 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					8FC26A1D1BB9435D00E38569 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = 8F499FCC1BA19F1F00E1AC15 /* Build configuration list for PBXProject "DEjson" */;
@@ -178,8 +258,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8F499FD11BA19F1F00E1AC15 /* DEjson */,
-				8F499FDB1BA19F2000E1AC15 /* DEjsonTests */,
+				8F499FD11BA19F1F00E1AC15 /* DEjson_ios */,
+				8F499FDB1BA19F2000E1AC15 /* DEjson_ios_tests */,
+				8FC26A141BB9435D00E38569 /* DEjson_osx */,
+				8FC26A1D1BB9435D00E38569 /* DEjson_osx_tests */,
 			);
 		};
 /* End PBXProject section */
@@ -193,6 +275,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8F499FDA1BA19F2000E1AC15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A131BB9435D00E38569 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A1C1BB9435D00E38569 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -223,13 +319,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8FC26A101BB9435D00E38569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC26A2C1BB943A400E38569 /* JSONDecoder.swift in Sources */,
+				8FC26A2D1BB943A400E38569 /* JSONEncoder.swift in Sources */,
+				8FC26A2E1BB943A400E38569 /* JSONObject.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8FC26A1A1BB9435D00E38569 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8FC26A731BB9524700E38569 /* DEjsonTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		8F499FDF1BA19F2000E1AC15 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F499FD11BA19F1F00E1AC15 /* DEjson */;
+			target = 8F499FD11BA19F1F00E1AC15 /* DEjson_ios */;
 			targetProxy = 8F499FDE1BA19F2000E1AC15 /* PBXContainerItemProxy */;
+		};
+		8FC26A211BB9435D00E38569 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8FC26A141BB9435D00E38569 /* DEjson_osx */;
+			targetProxy = 8FC26A201BB9435D00E38569 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -334,8 +453,8 @@
 				INFOPLIST_FILE = DEjson/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.ios;
+				PRODUCT_NAME = DEjson;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -352,8 +471,8 @@
 				INFOPLIST_FILE = DEjson/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.ios;
+				PRODUCT_NAME = DEjson;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -378,6 +497,72 @@
 			};
 			name = Release;
 		};
+		8FC26A261BB9435D00E38569 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = DEjson/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.osx;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8FC26A271BB9435D00E38569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = DEjson/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.osx;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8FC26A281BB9435D00E38569 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = DEjsonTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.dejsonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8FC26A291BB9435D00E38569 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = DEjsonTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.dejsonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -390,19 +575,37 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F499FE61BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson" */ = {
+		8F499FE61BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F499FE71BA19F2000E1AC15 /* Debug */,
 				8F499FE81BA19F2000E1AC15 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		8F499FE91BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjsonTests" */ = {
+		8F499FE91BA19F2000E1AC15 /* Build configuration list for PBXNativeTarget "DEjson_ios_tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F499FEA1BA19F2000E1AC15 /* Debug */,
 				8F499FEB1BA19F2000E1AC15 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8FC26A2A1BB9435D00E38569 /* Build configuration list for PBXNativeTarget "DEjson_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC26A261BB9435D00E38569 /* Debug */,
+				8FC26A271BB9435D00E38569 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8FC26A2B1BB9435D00E38569 /* Build configuration list for PBXNativeTarget "DEjson_osx_tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FC26A281BB9435D00E38569 /* Debug */,
+				8FC26A291BB9435D00E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

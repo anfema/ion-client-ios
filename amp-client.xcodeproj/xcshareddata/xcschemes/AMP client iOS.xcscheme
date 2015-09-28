@@ -16,25 +16,25 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "755D8B551B9DDAF700AB10C8"
                BuildableName = "ampclient.framework"
-               BlueprintName = "ampclient"
+               BlueprintName = "ampclient_ios"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "755D8B5F1B9DDAF700AB10C8"
-               BuildableName = "amp-clientTests.xctest"
-               BlueprintName = "amp-clientTests"
+               BuildableName = "ampclient_ios_Tests.xctest"
+               BlueprintName = "ampclient_ios_Tests"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "755D8B551B9DDAF700AB10C8"
             BuildableName = "ampclient.framework"
-            BlueprintName = "ampclient"
+            BlueprintName = "ampclient_ios"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -52,11 +52,11 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -66,7 +66,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "755D8B551B9DDAF700AB10C8"
             BuildableName = "ampclient.framework"
-            BlueprintName = "ampclient"
+            BlueprintName = "ampclient_ios"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -74,17 +74,17 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "755D8B551B9DDAF700AB10C8"
             BuildableName = "ampclient.framework"
-            BlueprintName = "ampclient"
+            BlueprintName = "ampclient_ios"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

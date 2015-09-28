@@ -14,9 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8FC269B41BB1A0B600E38569"
-               BuildableName = "CommonCrypto.framework"
-               BlueprintName = "CommonCrypto"
+               BlueprintIdentifier = "8FC269DC1BB9413500E38569"
+               BuildableName = "ampclient.framework"
+               BlueprintName = "ampclient_osx"
+               ReferencedContainer = "container:amp-client.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8FC269E51BB9413500E38569"
+               BuildableName = "ampclient_osx_Tests.xctest"
+               BlueprintName = "ampclient_osx_Tests"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8FC269BD1BB1A0B600E38569"
-               BuildableName = "CommonCryptoTests.xctest"
-               BlueprintName = "CommonCryptoTests"
+               BlueprintIdentifier = "8FC269E51BB9413500E38569"
+               BuildableName = "ampclient_osx_Tests.xctest"
+               BlueprintName = "ampclient_osx_Tests"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,9 +56,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8FC269B41BB1A0B600E38569"
-            BuildableName = "CommonCrypto.framework"
-            BlueprintName = "CommonCrypto"
+            BlueprintIdentifier = "8FC269DC1BB9413500E38569"
+            BuildableName = "ampclient.framework"
+            BlueprintName = "ampclient_osx"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,9 +78,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8FC269B41BB1A0B600E38569"
-            BuildableName = "CommonCrypto.framework"
-            BlueprintName = "CommonCrypto"
+            BlueprintIdentifier = "8FC269DC1BB9413500E38569"
+            BuildableName = "ampclient.framework"
+            BlueprintName = "ampclient_osx"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +96,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8FC269B41BB1A0B600E38569"
-            BuildableName = "CommonCrypto.framework"
-            BlueprintName = "CommonCrypto"
+            BlueprintIdentifier = "8FC269DC1BB9413500E38569"
+            BuildableName = "ampclient.framework"
+            BlueprintName = "ampclient_osx"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

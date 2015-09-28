@@ -18,7 +18,7 @@ class colorContentTests: XCTestCase {
         let expectation = self.expectationWithDescription("fetch outlet")
         
         AMP.collection("test").page("page_001") { page in
-            if let value = page.color("Color") {
+            if let value = page.cachedColor("Color") {
                 var r:CGFloat = 0.0
                 var g:CGFloat = 0.0
                 var b:CGFloat = 0.0
