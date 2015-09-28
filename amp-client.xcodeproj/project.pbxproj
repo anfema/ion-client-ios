@@ -44,6 +44,7 @@
 		8FC269A41BB19B1200E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269D31BB2E51000E38569 /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D21BB2E51000E38569 /* diskcache.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269D51BB429C000E38569 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC269D71BB93C2C00E38569 /* auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D61BB93C2C00E38569 /* auth.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC269E01BB9413500E38569 /* ampclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FC269DF1BB9413500E38569 /* ampclient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FC269E71BB9413500E38569 /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269DD1BB9413500E38569 /* ampclient.framework */; settings = {ASSET_TAGS = (); }; };
 		8FC269F41BB9414D00E38569 /* hash_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269A31BB19B1200E38569 /* hash_extensions.swift */; settings = {ASSET_TAGS = (); }; };
@@ -88,6 +89,8 @@
 		8FC26A701BB9518800E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A6F1BB9518800E38569 /* DEjson.framework */; };
 		8FC26A721BB9519300E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A711BB9519300E38569 /* DEjson.framework */; };
 		8FC26A741BB9542600E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269991BB0462D00E38569 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A761BB958F600E38569 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC26A751BB958F600E38569 /* config.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A771BB958F600E38569 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC26A751BB958F600E38569 /* config.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -171,6 +174,7 @@
 		8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
 		8FC269D41BB429BF00E38569 /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = request_cache.swift; path = cache/request_cache.swift; sourceTree = "<group>"; };
+		8FC269D61BB93C2C00E38569 /* auth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.swift; sourceTree = "<group>"; };
 		8FC269DD1BB9413500E38569 /* ampclient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ampclient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC269DF1BB9413500E38569 /* ampclient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ampclient.h; sourceTree = "<group>"; };
 		8FC269E11BB9413500E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 		8FC26A541BB9468F00E38569 /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC26A6F1BB9518800E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = DEjson/build/Debug/DEjson.framework; sourceTree = "<group>"; };
 		8FC26A711BB9519300E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "DEjson/build/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
+		8FC26A751BB958F600E38569 /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +280,7 @@
 		755D8B641B9DDAF700AB10C8 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8FC26A751BB958F600E38569 /* config.swift */,
 				8FC2697F1BB044E700E38569 /* collection */,
 				8FC269801BB044E700E38569 /* content */,
 				8FC269811BB044E700E38569 /* generic */,
@@ -382,6 +388,7 @@
 			children = (
 				8FC2699E1BB16E6D00E38569 /* memcache.swift */,
 				8FC269D21BB2E51000E38569 /* diskcache.swift */,
+				8FC269D61BB93C2C00E38569 /* auth.swift */,
 			);
 			path = generic;
 			sourceTree = "<group>";
@@ -747,12 +754,14 @@
 			files = (
 				8FC2699F1BB16E6D00E38569 /* memcache.swift in Sources */,
 				8FC2699C1BB0465A00E38569 /* page.swift in Sources */,
+				8FC26A761BB958F600E38569 /* config.swift in Sources */,
 				8FC269911BB0452800E38569 /* datetime.swift in Sources */,
 				8FC269941BB0452800E38569 /* image.swift in Sources */,
 				8FC269921BB0452800E38569 /* file.swift in Sources */,
 				8FC2698F1BB0452800E38569 /* color.swift in Sources */,
 				8FC269901BB0452800E38569 /* container.swift in Sources */,
 				8FC26A741BB9542600E38569 /* collection.swift in Sources */,
+				8FC269D71BB93C2C00E38569 /* auth.swift in Sources */,
 				8FC2698E1BB0452800E38569 /* base.swift in Sources */,
 				8FC269951BB0452800E38569 /* keyvalue.swift in Sources */,
 				8FC269971BB0452800E38569 /* option.swift in Sources */,
@@ -802,6 +811,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FC26A351BB944DD00E38569 /* datetime.swift in Sources */,
+				8FC26A3F1BB944DD00E38569 /* auth.swift in Sources */,
+				8FC26A771BB958F600E38569 /* config.swift in Sources */,
 				8FC26A401BB944DD00E38569 /* page.swift in Sources */,
 				8FC26A3E1BB944DD00E38569 /* diskcache.swift in Sources */,
 				8FC26A3D1BB944DD00E38569 /* memcache.swift in Sources */,

@@ -54,7 +54,7 @@ public class AMPRequest {
         var headers = self.headers()
         headers["Accept"] = "application/json"
         
-        Alamofire.request(.GET, urlString, headers:headers).responseDEJSON { (request, response, result) in
+        AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { (request, response, result) in
             // save response to cache
             self.saveToCache(request, response, result)
             
@@ -115,7 +115,7 @@ public class AMPRequest {
         }
         
         // Start download task
-        let downloadTask = Alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
+        let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             
             // check for download errors
             if let err = error {
@@ -158,6 +158,25 @@ public class AMPRequest {
         self.fetchBinary(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
     }
     
+    /// Async POST JSON to AMP Server
+    ///
+    /// - Parameter endpoint: the API endpoint to post to
+    /// - Parameter queryParameters: any get parameters to include in the query or nil
+    /// - Parameter body: dictionary with parameters (will be JSON encoded)
+    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
+    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: ((NSHTTPURLResponse?, Result<JSONObject>) -> Void)) {
+        let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
+        var headers = self.headers()
+        headers["Accept"] = "application/json"
+        headers["Content-Type"] = "application/json"
+        
+        AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers).responseDEJSON { (request, response, result) in
+            // call callback in correct queue
+            dispatch_async(AMP.config.responseQueue) {
+                callback(response, result)
+            }
+        }
+    }
     
     // MARK: - Private
     
@@ -188,10 +207,10 @@ public class AMPRequest {
     ///
     /// - Returns: Headers-Dictionary for use in Alamofire request
     private class func headers() -> [String:String] {
-        let headers = [
-            // TODO: Make login dynamic, use login API
-            "Authorization": "Basic YWRtaW46dGVzdA==",
-        ]
+        var headers = [String:String]()
+        if let token = AMP.config.sessionToken {
+            headers["Authorization"] = "Token " + token
+        }
         return headers
     }
 
