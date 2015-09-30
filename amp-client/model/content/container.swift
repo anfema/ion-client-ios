@@ -31,7 +31,11 @@ public class AMPContainerContent : AMPContentBase {
         
         self.children = []
         for child in children {
-            try self.children!.append(AMPContent(json: child))
+            do {
+                try self.children!.append(AMPContent(json: child))
+            } catch {
+                print("AMP: Deserialization failed")
+            }
         }
     }
     
