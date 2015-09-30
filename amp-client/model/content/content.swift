@@ -10,18 +10,23 @@ import Foundation
 import DEjson
 
 public class AMPContentBase {
-	var variation:String!
-	var outlet:String!
-	var isSearchable:Bool = false
+	public var variation:String!            /// variation name
+	public var outlet:String!               /// outlet name
+	public var isSearchable = false         /// searchable?
 
+    /// Initialize content content object from JSON
+    ///
+    /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized content content object
 	init(json:JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
 			throw AMPError.Code.JSONObjectExpected(json)
 		}
 		
 		guard (dict["variation"] != nil) && (dict["outlet"] != nil),
-              case .JSONString(let variation)   = dict["variation"]!,
-              case .JSONString(let outlet)      = dict["outlet"]! else {
+              case .JSONString(let variation) = dict["variation"]!,
+              case .JSONString(let outlet)    = dict["outlet"]! else {
 			throw AMPError.Code.InvalidJSON(json)
 		}
 		
@@ -49,8 +54,11 @@ public enum AMPContent {
 	case Text(AMPTextContent)
 	case Invalid
 	   
-    // This is ridiculous... come on swift!
+    /// Get the `AMPContentBase` object from the specialized subclass
+    ///
+    /// - Returns: Essentially the associated object casted to `AMPContentBase`
     public func getBaseObject() -> AMPContentBase? {
+        // This is ridiculous... come on swift!
         switch self {
         case .Color(let cObj):
             return cObj
@@ -77,6 +85,13 @@ public enum AMPContent {
         }
     }
     
+    /// Initialize a content object from JSON
+    ///
+    /// This essentially removes the top JSON object casing and determines which object
+    /// to instanciate from the name of the key of that JSON object
+    ///
+    /// - Parameter json: the JSON object to parse
+    /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON, AMPError.Code.UnknownContentType
     public init(json:JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             self = .Invalid

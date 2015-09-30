@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8FC26A141BB9435D00E38569"
-               BuildableName = "DEjson_osx.framework"
+               BuildableName = "DEjson.framework"
                BlueprintName = "DEjson_osx"
                ReferencedContainer = "container:DEjson.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8FC26A141BB9435D00E38569"
-            BuildableName = "DEjson_osx.framework"
+            BuildableName = "DEjson.framework"
             BlueprintName = "DEjson_osx"
             ReferencedContainer = "container:DEjson.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8FC26A141BB9435D00E38569"
-            BuildableName = "DEjson_osx.framework"
+            BuildableName = "DEjson.framework"
             BlueprintName = "DEjson_osx"
             ReferencedContainer = "container:DEjson.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8FC26A141BB9435D00E38569"
-            BuildableName = "DEjson_osx.framework"
+            BuildableName = "DEjson.framework"
             BlueprintName = "DEjson_osx"
             ReferencedContainer = "container:DEjson.xcodeproj">
          </BuildableReference>

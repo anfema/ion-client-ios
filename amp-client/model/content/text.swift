@@ -11,10 +11,14 @@ import DEjson
 
 
 public class AMPTextContent : AMPContentBase {
-    var mimeType:String = "text/plain"
-    var multiLine:Bool  = false
-    var text:String!
+    public var mimeType:String = "text/plain"  /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
+    public var multiLine:Bool  = false         /// multi line hint
+
+    private var text:String!                   /// text, private because of conversion functions
     
+    /// Initialize text content object from JSON
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized text content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -34,25 +38,47 @@ public class AMPTextContent : AMPContentBase {
         self.text = text
     }
     
+    /// Fetch HTML Representation of the text
+    ///
+    /// All HTML gets wrapped in a `div` tag with 2 css classes applied:
+    /// - `ampcontent`
+    /// - `ampcontent__<outlet_name>`
+    ///
+    /// Available converters:
+    /// - html: just wrap in div tag
+    /// - plaintext: replace linebreaks with `br` tags and wrap in div
+    /// - markdown: convert to html and wrap in div (TODO)
+    ///
+    /// - Returns: String with HTML encoded text
     public func htmlText() -> String? {
+        var text: String = ""
         switch (self.mimeType) {
         case "text/html":
-            return self.text
+            text = self.text
         case "text/markdown":
             // TODO: convert Markdown to HTML
-            return self.text
+            text = self.text
         case "text/plain":
-            // FIXME: Wrap somehow?
-            return self.text
+            text = self.text.stringByReplacingOccurrencesOfString("\n", withString: "<br>\n")
         default:
             return nil
         }
+        return "<div class=\"ampcontent ampcontent__\(self.outlet)\">\(text)</div>"
     }
     
+    /// Fetch NSAttributed String version of the text
+    ///
+    /// Available converters:
+    /// - html: currently very slow
+    /// - plaintext: just apply default styling and return
+    /// - markdown: try to make best efford representation as attributed string (TODO)
+    ///
+    /// - Returns: attributed string version of text
     public func attributedString() -> NSAttributedString? {
+        // TODO: Setup default styling
         switch (self.mimeType) {
         case "text/html":
-            // TODO: Speed this up
+            // FIXME: Speed this up
             if let data = self.text.dataUsingEncoding(NSUTF8StringEncoding) {
                 do {
                     return try NSAttributedString(
@@ -79,6 +105,14 @@ public class AMPTextContent : AMPContentBase {
         }
     }
     
+    /// Fetch plaintext version of the text
+    ///
+    /// Available converters:
+    /// - html: strip tags, remove linebreaks, add linebreaks for `br` tags, add 2 linebreaks for `div` tags (TODO)
+    /// - plaintext: just return text
+    /// - markdown: strip markup (asterisk, underscore, links, heading markers) (TODO)
+    ///
+    /// - Returns: plaintext string of text
     public func plainText() -> String? {
         switch(self.mimeType) {
         case "text/plain":
@@ -96,7 +130,14 @@ public class AMPTextContent : AMPContentBase {
     }
 }
 
+// TODO: Support HTML text on page level
+// TODO: Support Attributed string on page level
 extension AMPPage {
+    
+    /// Fetch plaintext string from named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
     public func text(name: String) -> String? {
         if let content = self.outlet(name) {
             if case .Text(let txt) = content {
@@ -106,7 +147,13 @@ extension AMPPage {
         return nil
     }
     
-    public func text(name: String, callback: (String -> Void)) {
+    /// Fetch plaintext string from named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
+    ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func text(name: String, callback: (String -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Text(let txt) = content {
                 if let text = txt.plainText() {
@@ -114,5 +161,6 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
 }

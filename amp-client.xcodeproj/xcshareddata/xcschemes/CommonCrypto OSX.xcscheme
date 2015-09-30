@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8FC26A531BB9468F00E38569"
-               BuildableName = "CommonCrypto_osx.framework"
+               BuildableName = "CommonCrypto.framework"
                BlueprintName = "CommonCrypto_osx"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8FC26A531BB9468F00E38569"
-            BuildableName = "CommonCrypto_osx.framework"
+            BuildableName = "CommonCrypto.framework"
             BlueprintName = "CommonCrypto_osx"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8FC26A531BB9468F00E38569"
-            BuildableName = "CommonCrypto_osx.framework"
+            BuildableName = "CommonCrypto.framework"
             BlueprintName = "CommonCrypto_osx"
             ReferencedContainer = "container:amp-client.xcodeproj">
          </BuildableReference>

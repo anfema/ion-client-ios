@@ -11,13 +11,16 @@ import DEjson
 
 
 public class AMPFileContent : AMPContentBase {
-    var mimeType:String!
-    var fileName:String!
-    var size:Int        = 0
-    var checksumMethod:String!
-    var checksum:String!
-    var url:NSURL!
+    var mimeType:String!        /// mime type of file
+    var fileName:String!        /// file name
+    var size:Int = 0            /// file size in bytes
+    var checksumMethod:String!  /// checksumming method used
+    var checksum:String!        /// checksum as hex encoded string
+    var url:NSURL!              /// url to file
     
+    /// Initialize file content object from JSON
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized file content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -44,6 +47,10 @@ public class AMPFileContent : AMPContentBase {
         self.url      = NSURL(string: fileUrl)
     }
     
+    /// Load the file binary data and return memory mapped `NSData`
+    ///
+    /// - Parameter callback: block to call when file data gets available, will not be called if there was an error
+    ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
         // TODO: Cache invalidation
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
@@ -63,11 +70,19 @@ public class AMPFileContent : AMPContentBase {
 }
 
 extension AMPPage {
-    public func fileData(name: String, callback: (NSData -> Void)) {
+    
+    /// Fetch data for file async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the data becomes available, will not be called if the outlet
+    ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func fileData(name: String, callback: (NSData -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .File(let file) = content {
                 file.data(callback)
             }
         }
+        return self
     }
 }

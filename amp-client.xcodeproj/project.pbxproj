@@ -149,6 +149,7 @@
 		8F52CD341BA86812004588F4 /* option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = option.swift; sourceTree = "<group>"; };
 		8F52CD351BA86812004588F4 /* text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		8F52CD401BA9B2D5004588F4 /* chainable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = chainable.swift; path = helper/chainable.swift; sourceTree = "<group>"; };
+		8FABD49A1BBC244A006F6806 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		8FC269831BB0452800E38569 /* base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = base.swift; sourceTree = "<group>"; };
 		8FC269841BB0452800E38569 /* color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = color.swift; sourceTree = "<group>"; };
 		8FC269851BB0452800E38569 /* container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = container.swift; sourceTree = "<group>"; };
@@ -270,6 +271,7 @@
 		755D8B581B9DDAF700AB10C8 /* amp-client */ = {
 			isa = PBXGroup;
 			children = (
+				8FABD4991BBC2411006F6806 /* documentation */,
 				755D8BF11B9F362300AB10C8 /* communication */,
 				755D8BF01B9F361D00AB10C8 /* cache */,
 				755D8BC81B9F34B300AB10C8 /* model */,
@@ -355,6 +357,14 @@
 			);
 			name = Content;
 			path = content;
+			sourceTree = "<group>";
+		};
+		8FABD4991BBC2411006F6806 /* documentation */ = {
+			isa = PBXGroup;
+			children = (
+				8FABD49A1BBC244A006F6806 /* readme.md */,
+			);
+			name = documentation;
 			sourceTree = "<group>";
 		};
 		8FC2697F1BB044E700E38569 /* collection */ = {
@@ -1228,6 +1238,7 @@
 				8FC269C81BB1A0B700E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8FC269EE1BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx" */ = {
 			isa = XCConfigurationList;
@@ -1236,6 +1247,7 @@
 				8FC269F01BB9413500E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8FC269F11BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx_Tests" */ = {
 			isa = XCConfigurationList;
@@ -1244,6 +1256,7 @@
 				8FC269F31BB9413500E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8FC26A651BB9469000E38569 /* Build configuration list for PBXNativeTarget "CommonCrypto_osx" */ = {
 			isa = XCConfigurationList;
@@ -1252,6 +1265,7 @@
 				8FC26A671BB9469000E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

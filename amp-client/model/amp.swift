@@ -18,14 +18,23 @@ private class AMPMemCache {
     }
 }
 
-
+/// AMP configuration object
+///
+/// access with `AMP.config`
 public struct AMPConfig {
+    /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
     var serverURL:NSURL!
+    
+    /// locale-code to work on, defined by server config
     var locale:String = "en_EN"
+    
+    /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
     var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
+    /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     var sessionToken:String?
     
+    /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
     
     init() {
@@ -38,12 +47,8 @@ public struct AMPConfig {
     }
 }
 
-
-/// AMP base class, almost everything will start here
-///
-/// Documentation missing, so here's a picture of a cat:
-/// ![cat](http://lorempixel.com/300/200/cats/)
 public class AMP {
+    /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
     static var config = AMPConfig()
 
     /// Login user
@@ -78,7 +83,7 @@ public class AMP {
         }
     }
     
-    /// Fetch a collection
+    /// Fetch a collection sync
     ///
     /// If the collection is not in any cache initialization of values may
     /// be delayed. Access to items in a non initialized collection may have
@@ -131,6 +136,8 @@ public class AMP {
         AMPRequest.resetCache(self.config.serverURL!.host!)
     }
     
+    // TODO: missing host/locale disk cache reset
+    
     /// Refresh disk and memory caches
     ///
     /// This only updates disk and memory cache for already loaded collections and pages in memory cache
@@ -138,15 +145,19 @@ public class AMP {
     /// This is done of performance reasons and because the caching system does not currently know what exactly is
     /// in the cache.
     ///
-    /// - Parameter callback: Block to call when update is finished
+    /// - Parameter callback: Block to call when update of a collection is finished, must not mean the
+    ///                       pages in the collection have been updated already!
     public class func refreshCache(callback: (AMPCollection -> Void)) {
        
+        // create new serial queue and suspend it to allow filling before processing
         let queue = dispatch_queue_create("com.anfema.amp.CacheRefresh", nil)
         dispatch_suspend(queue)
+        
         for index in AMPMemCache.sharedInstance.collectionCache.indices {
             let collection = AMPMemCache.sharedInstance.collectionCache[index]
             let name = collection.identifier
 
+            // at first update collection
             dispatch_async(queue) {
                 let locale = collection.locale
                 
@@ -157,10 +168,14 @@ public class AMP {
                 }
             }
             
+            // add fetches to the syspended queue to avoid changing the page cache while iterating over it
             for page in collection.pageCache {
                 dispatch_async(queue) {
+
+                    // fetch collection
                     AMP.collection(name) { collection in
                         for p in collection.pages {
+                            // validate page last update dates with those from the cache
                             if (p.identifier == page.identifier) && (p.lastChanged.compare(page.lastUpdate) != .OrderedAscending) {
                                 collection.page(page.identifier) { page in
                                     // do nothing, just download page
@@ -174,8 +189,13 @@ public class AMP {
                 }
             }
         }
+        
+        // start the serial queue
         dispatch_resume(queue)
     }
+    
+    // TODO: missing collection refresh
+    // TODO: missing page refresh
     
     // MARK: - Internal
     

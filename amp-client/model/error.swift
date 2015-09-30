@@ -21,14 +21,10 @@ public struct AMPError {
 		case UnknownContentType(String)
 	}
 
-	/**
-	Creates an `NSError` with the given error code and failure reason.
-	
-	- parameter code:          The error code.
-	- parameter failureReason: The failure reason.
-	
-	- returns: An `NSError` with the given error code and failure reason.
-	*/
+	/// Creates an `NSError` with the given error code and failure reason.
+    ///
+    ///	- Parameter code: The error code.
+	/// - Returns: An `NSError` with the given error code and failure reason.
 	public static func error(code: Code) -> NSError {
 		var userInfo = [NSLocalizedFailureReasonErrorKey: "Unknown Error"]
 		var numericalCode = -7000

@@ -11,22 +11,25 @@ import DEjson
 
 
 public class AMPMediaContent : AMPContentBase {
-    var mimeType:String!
-    var size:CGSize				= CGSizeZero
-    var fileSize:Int			= 0
-    var checksumMethod:String!
-    var checksum:String!
-    var length:Float			= 0.0
-    var url:NSURL!
+    var mimeType:String!        /// mime type of media file
+    var size = CGSizeZero       /// dimensions of the media file if applicable
+    var fileSize = 0            /// file size in bytes
+    var checksumMethod:String!  /// checksumming method used
+    var checksum:String!        /// checksum of the file
+    var length = Float(0.0)     /// length in seconds of the media file if applicable
+    var url:NSURL!              /// url to the media file
     
-    var originalMimeType:String!
-    var originalSize:CGSize		= CGSizeZero
-    var originalFileSize:Int	= 0
-    var originalChecksumMethod:String!
-    var originalChecksum:String!
-    var originalLength:Float	= 0.0
-    var originalURL:NSURL!
+    var originalMimeType:String!        /// original media file mime type
+    var originalSize = CGSizeZero       /// dimensions of the original media file if applicable
+    var originalFileSize = 0            /// original media file size in bytes
+    var originalChecksumMethod:String!  /// checksumming method used
+    var originalChecksum:String!        /// checksum of the original file
+    var originalLength = Float(0.0)     /// length in seconds of the original media file if applicable
+    var originalURL:NSURL!              /// url to the original file
     
+    /// Initialize media content object from JSON
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized media content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -75,6 +78,10 @@ public class AMPMediaContent : AMPContentBase {
         self.originalLength   = Float(oLength)
     }
     
+    /// Load the file binary data and return memory mapped `NSData`
+    ///
+    /// - Parameter callback: block to call when file data gets available, will not be called if there was an error
+    ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
         // TODO: Cache invalidation
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
@@ -94,6 +101,11 @@ public class AMPMediaContent : AMPContentBase {
 }
 
 extension AMPPage {
+    
+    /// Fetch URL from named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
     public func mediaURL(name: String) -> NSURL? {
         if let content = self.outlet(name) {
             if case .Media(let media) = content {
@@ -103,7 +115,13 @@ extension AMPPage {
         return nil
     }
     
-    public func mediaURL(name: String, callback: (NSURL -> Void)) {
+    /// Fetch URL from named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the media object becomes available, will not be called if the outlet
+    ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func mediaURL(name: String, callback: (NSURL -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Media(let media) = content {
                 if let url = media.url {
@@ -111,13 +129,21 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
    
-    public func mediaData(name: String, callback: (NSData -> Void)) {
+    /// Fetch data for media file async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the data becomes available, will not be called if the outlet
+    ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func mediaData(name: String, callback: (NSData -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Media(let media) = content {
                 media.data(callback)
             }
         }
+        return self
     }
 }

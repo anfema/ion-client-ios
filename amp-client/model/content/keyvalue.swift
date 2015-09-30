@@ -13,6 +13,11 @@ import DEjson
 public class AMPKeyValueContent : AMPContentBase {
     private var values:Dictionary<String, AnyObject>!
     
+    /// Initialize key value content object from JSON
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized key value content object
+    ///
+    /// Values can be accessed by subscripting the object with a string
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -40,6 +45,7 @@ public class AMPKeyValueContent : AMPContentBase {
         }
     }
     
+    /// subscripting with a key yields the value
     subscript(index: String) -> AnyObject? {
         if let values = self.values {
             return values[index]
@@ -50,6 +56,12 @@ public class AMPKeyValueContent : AMPContentBase {
 
 
 extension AMPPage {
+    
+    /// Return value for key in named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter key: name of the value to return
+    /// - Returns: value if the key exists, the outlet was a kv outlet and the page was already cached, else nil
     public func valueForKey(name: String, key: String) -> AnyObject? {
         if let content = self.outlet(name) {
             if case .KeyValue(let kv) = content {
@@ -59,7 +71,14 @@ extension AMPPage {
         return nil
     }
     
-    public func valueForKey(name: String, key:String, callback: (AnyObject -> Void)) {
+    /// Fetch value for key in named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter key: name of the value to return
+    /// - Parameter callback: block to call when the value becomes available, will not be called if the outlet
+    ///                       is not a kv outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func valueForKey(name: String, key:String, callback: (AnyObject -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .KeyValue(let kv) = content {
                 if let value = kv[key] {
@@ -67,8 +86,13 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
 
+    /// Return a key/value dictionary for named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: dict if the outlet was a kv outlet and the page was already cached, else nil
     public func keyValue(name: String) -> Dictionary<String, AnyObject>? {
         if let content = self.outlet(name) {
             if case .KeyValue(let kv) = content {
@@ -78,7 +102,13 @@ extension AMPPage {
         return nil
     }
     
-    public func keyValue(name: String, callback: (Dictionary<String, AnyObject> -> Void)) {
+    /// Fetch key/value dictionary for named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the dict becomes available, will not be called if the outlet
+    ///                       is not a kv outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func keyValue(name: String, callback: (Dictionary<String, AnyObject> -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .KeyValue(let kv) = content {
                 if let values = kv.values {
@@ -86,5 +116,6 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
 }

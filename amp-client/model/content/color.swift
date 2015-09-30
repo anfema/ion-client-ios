@@ -88,7 +88,7 @@ extension AMPPage {
     /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, callback: (NSColor -> Void)) {
+    public func color(name: String, callback: (NSColor -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Color(let color) = content {
                 if let c = color.color() {
@@ -96,6 +96,7 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
     #endif
     
@@ -119,7 +120,7 @@ extension AMPPage {
     /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, callback: (UIColor -> Void)) {
+    public func color(name: String, callback: (UIColor -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Color(let color) = content {
                 if let c = color.color() {
@@ -127,6 +128,7 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
     #endif
 

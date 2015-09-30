@@ -70,7 +70,7 @@ extension AMPPage {
     /// - Parameter callback: block to call when the children become available, will not be called if the outlet
     ///                       is not a container outlet or non-existant or fetching the outlet was canceled because
     ///                       of a communication error
-    public func children(name: String, callback: ([AMPContent] -> Void)) {
+    public func children(name: String, callback: ([AMPContent] -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Container(let container) = content {
                 if let c = container.children {
@@ -78,5 +78,6 @@ extension AMPPage {
                 }
             }
         }
+        return self
     }
 }

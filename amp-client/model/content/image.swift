@@ -16,17 +16,20 @@ import DEjson
 import ImageIO
 
 public class AMPImageContent : AMPContentBase {
-    var mimeType:String!
-    var size:CGSize				= CGSizeZero
-    var fileSize:Int			= 0
-    var url:NSURL!
-    var originalMimeType:String!
-    var originalSize:CGSize		= CGSizeZero
-    var originalFileSize:Int	= 0
-    var originalURL:NSURL!
-    var translation:CGPoint		= CGPointZero
-    var scale:Float				= 1.0
+    var mimeType:String!                        /// mime type of the image
+    var size:CGSize				= CGSizeZero    /// dimensions of the image
+    var fileSize:Int			= 0             /// file size in bytes
+    var url:NSURL!                              /// URL of the image
+    var originalMimeType:String!                /// original image mime type
+    var originalSize:CGSize		= CGSizeZero    /// original image dimensions
+    var originalFileSize:Int	= 0             /// original image file size
+    var originalURL:NSURL!                      /// original image URL
+    var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
+    var scale:Float				= 1.0           /// image scale factor before cropping
     
+    /// Initialize image content object from JSON
+    ///
+    /// - Parameter json: `JSONObject` that contains serialized image content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -69,6 +72,9 @@ public class AMPImageContent : AMPContentBase {
         self.originalURL      = NSURL(string: oFileUrl)
     }
     
+    /// get a `CGDataProvider` for the image
+    ///
+    /// - Parameter callback: block to run when the provider becomes available
     public func dataProvider(callback: (CGDataProviderRef -> Void)) {
         // TODO: Cache invalidation
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
@@ -85,7 +91,9 @@ public class AMPImageContent : AMPContentBase {
         }
     }
 
-    
+    /// create a `CGImage` from the image data
+    ///
+    /// - Parameter callback: block to execute when the image has been allocated
     public func cgImage(callback: (CGImageRef -> Void)) {
         self.dataProvider() { provider in
             let options = Dictionary<String, AnyObject>()
@@ -96,8 +104,12 @@ public class AMPImageContent : AMPContentBase {
             }
         }
     }
+    
     #if os(iOS)
-    public func uiImage(callback: (UIImage -> Void)) {
+    /// create `UIImage` from the image data
+    ///
+    /// - Parameter callback: block to execute when the image has been allocated
+    public func image(callback: (UIImage -> Void)) {
         self.cgImage() { img in
             let uiImage = UIImage(CGImage: img)
             callback(uiImage)
@@ -106,7 +118,10 @@ public class AMPImageContent : AMPContentBase {
     #endif
     
     #if os(OSX)
-    public func nsImage(callback: (NSImage -> Void)) {
+    /// create `NSImage` from the image data
+    ///
+    /// - Parameter callback: block to execute when the image has been allocated
+    public func image(callback: (NSImage -> Void)) {
         self.cgImage() { img in
             let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
                 callback(nsImage)
@@ -117,22 +132,36 @@ public class AMPImageContent : AMPContentBase {
 
 extension AMPPage {
     #if os(iOS)
-    public func image(name: String, callback: (UIImage -> Void)) {
+    /// Allocate `UIImage` for named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func image(name: String, callback: (UIImage -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Image(let img) = content {
-                img.uiImage(callback)
+                img.image(callback)
             }
         }
+        return self
     }
     #endif
 
     #if os(OSX)
-    public func image(name: String, callback: (NSImage -> Void)) {
+    /// Allocate `NSImage` for named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func image(name: String, callback: (NSImage -> Void)) -> AMPPage {
         self.outlet(name) { content in
             if case .Image(let img) = content {
-                img.nsImage(callback)
+                img.image(callback)
             }
         }
+        return self
     }
     #endif
 }
