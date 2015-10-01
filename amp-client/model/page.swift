@@ -93,14 +93,14 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
                 self.callCallbacks(o.outlet, value: o, error: nil)
                 
                 // call all proxy object chained callbacks
-                if let proxy = self.collection.getCachedPage(self.identifier, proxy: true) {
+                if let proxy = AMP.getCachedPage(self.collection, identifier: self.identifier, proxy: true) {
                     proxy.callCallbacks(o.outlet, value: o, error: nil)
                 }
             }
             
             // all callbacks that are queued in the proxy now would have failed on a real object
             // so we call an error callback for each entry
-            if let proxy = self.collection.getCachedPage(self.identifier, proxy: true) {
+            if let proxy = AMP.getCachedPage(self.collection, identifier: self.identifier, proxy: true) {
                 let failedCallbacks = proxy.callbacks
                 proxy.callbacks = []
                 

@@ -99,7 +99,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 if updatedCollection.identifier == "test" {
                     updatedCollection.page("page_001") { updatedPage in
                         XCTAssertNotNil(updatedPage.lastUpdate)
-                        XCTAssert(updatedPage !== page)
+                        XCTAssert(updatedPage === page)
                         
                         // This works different from collection:
                         // - Collection is always updated, page not

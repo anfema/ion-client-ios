@@ -64,12 +64,11 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
 
     private var useCache = false        /// set to true to avoid using the cache (refreshes, etc.)
 
-    var pageCache = [AMPPage]()         /// memory cache for pages
-    var pages = [AMPPageMeta]()         /// page metadata
+    var pageMeta = [AMPPageMeta]()         /// page metadata
 
     /// CustomStringConvertible requirement
     public var description: String {
-        return "AMPCollection: \(identifier!), \(pages.count) pages"
+        return "AMPCollection: \(identifier!), \(pageMeta.count) pages"
     }
 
     // MARK: - Initializer
@@ -153,11 +152,11 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
         
         // this block fetches the page from the cache or web and calls the associated callbacks
         let block:(String -> Void) = { identifier in
-            if let page = self.getCachedPage(identifier, proxy: false) {
+            if let page = AMP.getCachedPage(self, identifier: identifier, proxy: false) {
                 self.callCallbacks(identifier, value: page, error: nil)
             } else {
                 AMPPage(collection: self, identifier: identifier, callback: { page in
-                    self.pageCache.append(page)
+                    AMP.cachePage(page)
                     self.callCallbacks(identifier, value: page, error: nil)
                 }).onError({ error in
                     self.callCallbacks(identifier, value: nil, error: error)
@@ -182,13 +181,13 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
     public func page(identifier: String) -> AMPPage {
         // fetch page and resume processing when ready
 
-        if let page = self.getCachedPage(identifier, proxy: false) {
+        if let page = AMP.getCachedPage(self, identifier: identifier, proxy: false) {
             // well page is cached, just return cached version
             return page
         } else {
             // not cached, fetch from web and add it to the cache
             AMPPage(collection: self, identifier: identifier, callback: { page in
-                self.pageCache.append(page)
+                AMP.cachePage(page)
                 self.callCallbacks(identifier, value: page, error: nil)
             }).onError({ error in
                 self.callCallbacks(identifier, value: nil, error: error)
@@ -196,13 +195,13 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
         }
 
         // if we get here the async page fetch has been initialized, so return a proxy
-        if let proxy = self.getCachedPage(identifier, proxy: true) {
+        if let proxy = AMP.getCachedPage(self, identifier: identifier, proxy: true) {
             // we had a cached proxy
             return proxy
         } else {
             // create a new proxy and add it to the cache
             let proxy = AMPPage(collection: self, identifier: identifier)
-            self.pageCache.append(proxy)
+            AMP.cachePage(proxy)
             return proxy
         }
     }
@@ -216,23 +215,7 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
         errorCallbacks.append(callback)
         return self
     }
-
-    // MARK: - Internal
-    
-    /// Fetch page from cached page list
-    ///
-    /// - Parameter identifier: the identifier of the page to fetch
-    /// - Parameter proxy: whether to fetch a proxy or a real page
-    /// - Returns: page object or nil if not found
-    func getCachedPage(identifier: String, proxy: Bool) -> AMPPage? {
-        for p in self.pageCache {
-            if (p.identifier == identifier) && (p.isProxy == proxy) {
-                return p
-            }
-        }
-        return nil
-    }
-    
+   
     // MARK: - Private
     
     /// Fetch collection from cache or web
@@ -282,7 +265,7 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
                 for page in pages {
                     do {
                         let obj = try AMPPageMeta(json: page)
-                        self.pages.append(obj)
+                        self.pageMeta.append(obj)
                     } catch {
                         if let json = JSONEncoder(page).prettyJSONString {
                             print("Invalid page: " + json)
