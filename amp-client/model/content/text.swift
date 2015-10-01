@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPTextContent : AMPContentBase {
+public class AMPTextContent : AMPContent {
     public var mimeType:String = "text/plain"  /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
     public var multiLine:Bool  = false         /// multi line hint
 
@@ -140,8 +140,8 @@ extension AMPPage {
     /// - Returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
     public func text(name: String) -> String? {
         if let content = self.outlet(name) {
-            if case .Text(let txt) = content {
-                return txt.plainText()
+            if case let content as AMPTextContent = content {
+                return content.plainText()
             }
         }
         return nil
@@ -155,8 +155,8 @@ extension AMPPage {
     ///                       communication error
     public func text(name: String, callback: (String -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Text(let txt) = content {
-                if let text = txt.plainText() {
+            if case let content as AMPTextContent = content {
+                if let text = content.plainText() {
                     callback(text)
                 }
             }

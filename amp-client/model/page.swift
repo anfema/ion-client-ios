@@ -89,14 +89,12 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
         // fetch page async
         self.fetch(identifier) {
             self.isReady = true
-            for cObj in self.content {
-                if let o = cObj.getBaseObject() {
-                    self.callCallbacks(o.outlet, value: cObj, error: nil)
-                    
-                    // call all proxy object chained callbacks
-                    if let proxy = self.collection.getCachedPage(self.identifier, proxy: true) {
-                        proxy.callCallbacks(o.outlet, value: cObj, error: nil)
-                    }
+            for o in self.content {
+                self.callCallbacks(o.outlet, value: o, error: nil)
+                
+                // call all proxy object chained callbacks
+                if let proxy = self.collection.getCachedPage(self.identifier, proxy: true) {
+                    proxy.callCallbacks(o.outlet, value: o, error: nil)
                 }
             }
             
@@ -144,11 +142,9 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
             // search content
             var cObj:AMPContent? = nil
             for content in self.content {
-                if let c = content.getBaseObject() {
-                    if c.outlet == name {
-                        cObj = content
-                        break
-                    }
+                if content.outlet == name {
+                    cObj = content
+                    break
                 }
             }
             if let c = cObj {
@@ -172,11 +168,9 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
             // search content
             var cObj:AMPContent? = nil
             for content in self.content {
-                if let c = content.getBaseObject() {
-                    if c.outlet == name {
-                        cObj = content
-                        break
-                    }
+                if content.outlet == name {
+                    cObj = content
+                    break
                 }
             }
             return cObj
@@ -249,7 +243,7 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
                     // parse and append content to this page
                     for c in content {
                         do {
-                            let obj = try AMPContent(json: c)
+                            let obj = try AMPContent.factory(c)
                             self.appendContent(obj)
                         } catch {
                             // Content could not be deserialized, do not add to page
@@ -272,8 +266,7 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     /// - Parameter obj: the content object to append including it's children
     private func appendContent(obj:AMPContent) {
         // recursively append all content
-        switch obj {
-        case .Container(let container):
+        if case let container as AMPContainerContent = obj {
             if let children = container.children {
                 for child in children {
                     // container's children are appended on base level to be able to find them quicker
@@ -281,7 +274,6 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
                     self.appendContent(child)
                 }
             }
-        default: break
         }
         self.content.append(obj)
     }

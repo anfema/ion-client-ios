@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPFileContent : AMPContentBase {
+public class AMPFileContent : AMPContent {
     var mimeType:String!        /// mime type of file
     var fileName:String!        /// file name
     var size:Int = 0            /// file size in bytes
@@ -79,8 +79,8 @@ extension AMPPage {
     ///                       communication error
     public func fileData(name: String, callback: (NSData -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .File(let file) = content {
-                file.data(callback)
+            if case let content as AMPFileContent = content {
+                content.data(callback)
             }
         }
         return self

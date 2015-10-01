@@ -16,7 +16,7 @@ class fileContentTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_001").fileData("File") { data in
             guard let outlet = AMP.collection("test").page("page_001").outlet("File"),
-                case .File(let file) = outlet else {
+                  case let file as AMPFileContent = outlet else {
                     XCTFail("File outlet not found or of wrong type")
                     expectation.fulfill()
                     return

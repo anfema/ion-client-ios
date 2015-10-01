@@ -15,7 +15,7 @@ import Foundation
 import DEjson
 import ImageIO
 
-public class AMPImageContent : AMPContentBase {
+public class AMPImageContent : AMPContent {
     var mimeType:String!                        /// mime type of the image
     var size:CGSize				= CGSizeZero    /// dimensions of the image
     var fileSize:Int			= 0             /// file size in bytes
@@ -140,8 +140,8 @@ extension AMPPage {
     ///                       communication error
     public func image(name: String, callback: (UIImage -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Image(let img) = content {
-                img.image(callback)
+            if case let content as AMPImageContent = content {
+                content.image(callback)
             }
         }
         return self
@@ -157,8 +157,8 @@ extension AMPPage {
     ///                       communication error
     public func image(name: String, callback: (NSImage -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Image(let img) = content {
-                img.image(callback)
+            if case let content as AMPImageContent = content {
+                content.image(callback)
             }
         }
         return self

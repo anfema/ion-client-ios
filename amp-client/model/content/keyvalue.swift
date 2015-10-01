@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPKeyValueContent : AMPContentBase {
+public class AMPKeyValueContent : AMPContent {
     private var values:Dictionary<String, AnyObject>!
     
     /// Initialize key value content object from JSON
@@ -64,8 +64,8 @@ extension AMPPage {
     /// - Returns: value if the key exists, the outlet was a kv outlet and the page was already cached, else nil
     public func valueForKey(name: String, key: String) -> AnyObject? {
         if let content = self.outlet(name) {
-            if case .KeyValue(let kv) = content {
-                return kv[key]
+            if case let content as AMPKeyValueContent = content {
+                return content[key]
             }
         }
         return nil
@@ -80,8 +80,8 @@ extension AMPPage {
     ///                       communication error
     public func valueForKey(name: String, key:String, callback: (AnyObject -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .KeyValue(let kv) = content {
-                if let value = kv[key] {
+            if case let content as AMPKeyValueContent = content {
+                if let value = content[key] {
                     callback(value)
                 }
             }
@@ -95,8 +95,8 @@ extension AMPPage {
     /// - Returns: dict if the outlet was a kv outlet and the page was already cached, else nil
     public func keyValue(name: String) -> Dictionary<String, AnyObject>? {
         if let content = self.outlet(name) {
-            if case .KeyValue(let kv) = content {
-                return kv.values
+            if case let content as AMPKeyValueContent = content {
+                return content.values
             }
         }
         return nil
@@ -110,8 +110,8 @@ extension AMPPage {
     ///                       communication error
     public func keyValue(name: String, callback: (Dictionary<String, AnyObject> -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .KeyValue(let kv) = content {
-                if let values = kv.values {
+            if case let content as AMPKeyValueContent = content {
+                if let values = content.values {
                     callback(values)
                 }
             }

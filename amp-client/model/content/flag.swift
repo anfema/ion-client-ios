@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPFlagContent : AMPContentBase {
+public class AMPFlagContent : AMPContent {
     var enabled:Bool! /// status of the flag
     
     /// Initialize flag content object from JSON
@@ -40,8 +40,8 @@ extension AMPPage {
     /// - Returns: true or false if the outlet was a flag outlet and the page was already cached, else nil
     public func isSet(name: String) -> Bool? {
         if let content = self.outlet(name) {
-            if case .Flag(let flag) = content {
-                return flag.enabled
+            if case let content as AMPFlagContent = content {
+                return content.enabled
             }
         }
         return nil
@@ -55,8 +55,8 @@ extension AMPPage {
     ///                       communication error
     public func isSet(name: String, callback: (Bool -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Flag(let flag) = content {
-                callback(flag.enabled)
+            if case let content as AMPFlagContent = content {
+                callback(content.enabled)
             }
         }
         return self

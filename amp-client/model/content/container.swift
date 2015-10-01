@@ -9,7 +9,7 @@
 import Foundation
 import DEjson
 
-public class AMPContainerContent : AMPContentBase {
+public class AMPContainerContent : AMPContent {
     var children:[AMPContent]!
     
     /// Initialize container content object from JSON
@@ -32,7 +32,7 @@ public class AMPContainerContent : AMPContentBase {
         self.children = []
         for child in children {
             do {
-                try self.children!.append(AMPContent(json: child))
+                try self.children!.append(AMPContent.factory(child))
             } catch {
                 print("AMP: Deserialization failed")
             }
@@ -57,8 +57,8 @@ extension AMPPage {
     ///            cached, else nil
     public func children(name: String) -> [AMPContent]? {
         if let content = self.outlet(name) {
-            if case .Container(let container) = content {
-                return container.children
+            if case let content as AMPContainerContent = content {
+                return content.children
             }
         }
         return nil
@@ -72,8 +72,8 @@ extension AMPPage {
     ///                       of a communication error
     public func children(name: String, callback: ([AMPContent] -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Container(let container) = content {
-                if let c = container.children {
+            if case let content as AMPContainerContent = content {
+                if let c = content.children {
                     callback(c)
                 }
             }

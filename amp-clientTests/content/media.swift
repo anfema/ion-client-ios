@@ -16,7 +16,7 @@ class mediaContentTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_001").mediaData("Media") { data in
             guard let outlet = AMP.collection("test").page("page_001").outlet("Media"),
-                  case .Media(let file) = outlet else {
+                  case let file as AMPMediaContent = outlet else {
                     XCTFail("Media outlet not found or of wrong type")
                     expectation.fulfill()
                     return

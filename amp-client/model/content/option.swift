@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPOptionContent : AMPContentBase {
+public class AMPOptionContent : AMPContent {
     var value:String! /// value for the selected option
     
     /// Initialize option content object from JSON
@@ -40,8 +40,8 @@ extension AMPPage {
     /// - Returns: string if the outlet was an option outlet and the page was already cached, else nil
     public func selectedOption(name: String) -> String? {
         if let content = self.outlet(name) {
-            if case .Option(let opt) = content {
-                return opt.value
+            if case let content as AMPOptionContent = content {
+                return content.value
             }
         }
         return nil
@@ -55,8 +55,8 @@ extension AMPPage {
     ///                       communication error
     public func selectedOption(name: String, callback: (String -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Option(let opt) = content {
-                if let value = opt.value {
+            if case let content as AMPOptionContent = content {
+                if let value = content.value {
                     callback(value)
                 }
             }

@@ -130,10 +130,10 @@ In a `page(identifier: String, callback:(AMPPage -> Void))` callback block you m
 
 When you request an outlet that is not found in the page no queued commands or success blocks will be called, just the error blocks of the page will be called, see [Error handling](#error-handling) for more information.
 
-The result of an `outlet(*)` call is always an `AMPContent` object that encapsulates the real content. To get the values of the content object you'll need a switch:
+The result of an `outlet(*)` call is always an `AMPContent` object. To get the values of the content object you'll need a switch:
 
     switch(content) {
-    case .Text(let t):
+    case let t as AMPTextContent:
         print(t.plainText())
     
     ...
@@ -142,16 +142,12 @@ The result of an `outlet(*)` call is always an `AMPContent` object that encapsul
         break
     }
 
-or at least a `if case`:
+or at least a `if case let`:
 
-    if case .Text(let t) = content {
+    if case let t as AMPTextContent = content {
         print(t.plainText())
     }
 
-or when you only need the `AMPContentBase` base class use the convenience function `getBaseObject()` on it:
-
-    let obj = content.getBaseObject()
-    print("outlet name \(obj.outlet)")
 
 
 ### Fetch a single outlet

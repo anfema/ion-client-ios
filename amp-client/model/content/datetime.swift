@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPDateTimeContent : AMPContentBase {
+public class AMPDateTimeContent : AMPContent {
     public var date:NSDate? /// parsed date
     
     /// Initialize datetime content object from JSON
@@ -45,8 +45,8 @@ extension AMPPage {
     /// - Returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
     public func date(name: String) -> NSDate? {
         if let content = self.outlet(name) {
-            if case .DateTime(let date) = content {
-                return date.date
+            if case let content as AMPDateTimeContent = content {
+                return content.date
             }
         }
         return nil
@@ -60,8 +60,8 @@ extension AMPPage {
     ///                       communication error
     public func date(name: String, callback: (NSDate -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .DateTime(let date) = content {
-                if let d = date.date {
+            if case let content as AMPDateTimeContent = content {
+                if let d = content.date {
                     callback(d)
                 }
             }

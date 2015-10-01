@@ -14,7 +14,7 @@ import Foundation
 #endif
 import DEjson
 
-public class AMPColorContent : AMPContentBase {
+public class AMPColorContent : AMPContent {
     var r:Int!
     var g:Int!
     var b:Int!
@@ -75,8 +75,8 @@ extension AMPPage {
     /// - Returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String) -> NSColor? {
         if let content = self.outlet(name) {
-            if case .Color(let color) = content {
-                return color.color()
+            if case let content as AMPColorContent = content {
+                return content.color()
             }
         }
         return nil
@@ -90,8 +90,8 @@ extension AMPPage {
     ///                       communication error
     public func color(name: String, callback: (NSColor -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Color(let color) = content {
-                if let c = color.color() {
+            if case let content as AMPColorContent = content {
+                if let c = content.color() {
                     callback(c)
                 }
             }
@@ -107,8 +107,8 @@ extension AMPPage {
     /// - Returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String) -> UIColor? {
         if let content = self.outlet(name) {
-            if case .Color(let color) = content {
-                return color.color()
+            if case let content as AMPColorContent = content {
+                return content.color()
             }
         }
         return nil
@@ -122,8 +122,8 @@ extension AMPPage {
     ///                       communication error
     public func color(name: String, callback: (UIColor -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Color(let color) = content {
-                if let c = color.color() {
+            if case let content as AMPColorContent = content {
+                if let c = content.color() {
                     callback(c)
                 }
             }

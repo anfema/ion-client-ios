@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 
-public class AMPMediaContent : AMPContentBase {
+public class AMPMediaContent : AMPContent {
     var mimeType:String!        /// mime type of media file
     var size = CGSizeZero       /// dimensions of the media file if applicable
     var fileSize = 0            /// file size in bytes
@@ -108,8 +108,8 @@ extension AMPPage {
     /// - Returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
     public func mediaURL(name: String) -> NSURL? {
         if let content = self.outlet(name) {
-            if case .Media(let media) = content {
-                return media.url
+            if case let content as AMPMediaContent = content {
+                return content.url
             }
         }
         return nil
@@ -123,8 +123,8 @@ extension AMPPage {
     ///                       communication error
     public func mediaURL(name: String, callback: (NSURL -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Media(let media) = content {
-                if let url = media.url {
+            if case let content as AMPMediaContent = content {
+                if let url = content.url {
                     callback(url)
                 }
             }
@@ -140,8 +140,8 @@ extension AMPPage {
     ///                       communication error
     public func mediaData(name: String, callback: (NSData -> Void)) -> AMPPage {
         self.outlet(name) { content in
-            if case .Media(let media) = content {
-                media.data(callback)
+            if case let content as AMPMediaContent = content {
+                content.data(callback)
             }
         }
         return self
