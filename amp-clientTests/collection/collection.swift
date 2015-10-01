@@ -33,6 +33,11 @@ class collectionTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }).onError { error in
+            if case .CollectionNotFound(let name) = error {
+                XCTAssertEqual(name, "gnarf")
+            } else {
+                XCTFail()
+            }
             expectation.fulfill()
         }
         

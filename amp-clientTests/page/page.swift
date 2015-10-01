@@ -21,6 +21,9 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertTrue(page.isProxy)
             XCTAssert(page.identifier == "page_001")
             expectation.fulfill()
+        }.onError() { error in
+            XCTFail()
+            expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(3.0, handler: nil)
     }
@@ -32,7 +35,29 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
             expectation.fulfill()
+        }.onError() { error in
+            XCTFail()
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+    }
+
+    func testPageFetchFail() {
+        let expectation = self.expectationWithDescription("fetch page")
+        
+        AMP.collection("test").page("unknown_page") { page in
+            XCTFail()
+            expectation.fulfill()
+        }.onError() { error in
+            if case .PageNotFound(let name) = error {
+                XCTAssertEqual(name, "unknown_page")
+            } else {
+                XCTFail()
+            }
+            expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(3.0, handler: nil)
     }
+
 }
