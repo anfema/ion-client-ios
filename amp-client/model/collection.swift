@@ -211,7 +211,7 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the collection
-    public func onError(callback: (ErrorType -> Void)) -> AMPCollection {
+    public func onError(callback: (AMPError.Code -> Void)) -> AMPCollection {
         // enqueue error callback for lazy resolving
         errorCallbacks.append(callback)
         return self
@@ -241,7 +241,11 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
     /// - Parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(Void -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
-
+            if case .Failure = result {
+                self.error = AMPError.Code.CollectionNotFound(identifier)
+                return
+            }
+            
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {

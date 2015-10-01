@@ -19,6 +19,9 @@ public struct AMPError {
 		case JSONArrayExpected(JSONObject?)
         case JSONArrayOrObjectExpected(JSONObject?)
 		case UnknownContentType(String)
+        case CollectionNotFound(String)
+        case PageNotFound(String)
+        case OutletNotFound(String)
 	}
 
 	/// Creates an `NSError` with the given error code and failure reason.
@@ -60,7 +63,20 @@ public struct AMPError {
 			numericalCode = -7006
 			userInfo[NSLocalizedFailureReasonErrorKey] = "Unknown content type received"
 			userInfo["contentType"] = str
+        case .CollectionNotFound(let name):
+            numericalCode = -7007
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Collection not found"
+            userInfo["name"] = name
+        case .PageNotFound(let name):
+            numericalCode = -7008
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Page not found"
+            userInfo["name"] = name
+        case .OutletNotFound(let name):
+            numericalCode = -7009
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Outlet not found"
+            userInfo["name"] = name
 		}
+        
 		return NSError(domain: Domain, code: numericalCode, userInfo: userInfo)
 	}
 }

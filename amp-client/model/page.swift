@@ -99,17 +99,32 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
                     }
                 }
             }
+            
+            // all callbacks that are queued in the proxy now would have failed on a real object
+            // so we call an error callback for each entry
+            if let proxy = self.collection.getCachedPage(self.identifier, proxy: true) {
+                let failedCallbacks = proxy.callbacks
+                proxy.callbacks = []
+                
+                for fc in failedCallbacks {
+                    for ec in proxy.errorCallbacks {
+                        ec(AMPError.Code.OutletNotFound(fc.identifier))
+                    }
+                }
+            }
             callback(self)
         }
     }
     
     // MARK: Async API
     
+    // TODO: children as child("test")
+    
     /// Error handler to chain to the page
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the page
-    public func onError(callback: (ErrorType -> Void)) -> AMPPage {
+    public func onError(callback: (AMPError.Code -> Void)) -> AMPPage {
         // enqueue error callback for lazy resolving
         errorCallbacks.append(callback)
         return self
@@ -138,6 +153,8 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
             }
             if let c = cObj {
                 callback(c)
+            } else {
+                self.error = AMPError.Code.OutletNotFound(name)
             }
         }
         return self
@@ -175,6 +192,10 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     private func fetch(identifier: String, callback:(Void -> Void)) {
         // FIXME: this url is not unique, fix in backend
         AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
+            if case .Failure = result {
+                self.error = AMPError.Code.PageNotFound(identifier)
+                return
+            }
 
             // we need a result value and need it to be a dictionary
             guard result.value != nil,

@@ -12,7 +12,7 @@ public class AMPChainable<TKey: Hashable, TReturn> {
 
     var tasks: [TKey: (TKey -> Void)] = [:] // better?
     var callbacks: [(identifier: TKey, block: (TReturn -> Void))]  = [] // this way because of generics
-    var errorCallbacks: [(ErrorType -> Void)]                      = [] // ^^^
+    var errorCallbacks: [(AMPError.Code -> Void)]                  = [] // ^^^
     
     var isReady:Bool                                 = false
     
@@ -60,12 +60,14 @@ public class AMPChainable<TKey: Hashable, TReturn> {
     /// - Parameter identifier: the identifier of the callbacks to run (if set `error` is ignored)
     /// - Parameter value: value to submit with the callback (if set `error` is ignored)
     /// - Parameter error: an error to call the error callbacks for (if set `identifier` and `value` are ignored)
-    func callCallbacks(identifier: TKey?, value: TReturn?, error: ErrorType?) {
+    func callCallbacks(identifier: TKey?, value: TReturn?, error: AMPError.Code?) {
         if let v = value {
             // filter identifier from callback list and call the callbacks in process
             self.callbacks = self.callbacks.filter({ (currentIdentifier: TKey, block: (TReturn -> Void)) -> Bool in
                 if currentIdentifier == identifier! {
-                    block(v)
+                    dispatch_async(AMP.config.responseQueue) {
+                        block(v)
+                    }
                     return false
                 }
                 return true
@@ -74,7 +76,9 @@ public class AMPChainable<TKey: Hashable, TReturn> {
         
         if let e = error {
             for callback in errorCallbacks {
-                callback(e)
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(e)
+                }
             }
         }
     }
