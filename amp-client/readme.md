@@ -54,7 +54,7 @@ Server URL and locale may be changed at any time afterwards, existing data is no
 
 ## Login to the API Server
 
-For logging in call the `login` function of the `AMP` class or supply a `sessionToken` in the configuration when you decide to not use the login functionality of the AMP server.
+For logging in call the `login` function of the `AMP` class **or** supply a `sessionToken` in the configuration when you decide to not use the login functionality of the AMP server.
 
 Example:
 
@@ -66,6 +66,8 @@ Example:
 ## Getting collections
 
 All calls run through the AMP class and it's class functions. Most calls have synchronous and asynchronous variants, the sync variants should only be used when you are sure the object is in the cache.
+
+When you request a collection that is not found on the server no queued commands or success blocks will be called, just the error blocks, see [Error handling](#error-handling) for more information.
 
 Async variant:
 
@@ -83,6 +85,8 @@ The sync variant fetches its values in the background async, so not all values w
 
 
 ## Getting pages
+
+When you request a page that is not found in the collection no queued commands or success blocks will be called, just the error blocks, see [Error handling](#error-handling) for more information.
 
 Fetching pages can be done in multiple ways.
 
@@ -121,6 +125,10 @@ Variant 2:
 ## Getting outlets
 
 This works analogous to pages but has some convenience functionality.
+
+In a `page(identifier: String, callback:(AMPPage -> Void))` callback block you may use the sync variants as the page you just fetched contains the content.
+
+When you request an outlet that is not found in the page no queued commands or success blocks will be called, just the error blocks of the page will be called, see [Error handling](#error-handling) for more information.
 
 The result of an `outlet(*)` call is always an `AMPContent` object that encapsulates the real content. To get the values of the content object you'll need a switch:
 
