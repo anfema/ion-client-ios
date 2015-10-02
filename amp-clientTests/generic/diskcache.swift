@@ -34,6 +34,7 @@ class diskcacheTests: LoggedInXCTestCase {
             AMP.resetDiskCache()
             AMP.collection("test") { collection2 in
                 XCTAssert(collection2 !== collection)
+                XCTAssert(collection2 == collection)
                 XCTAssertNotNil(collection2.lastUpdate)
                 XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedDescending)
                 expectation.fulfill()
@@ -50,6 +51,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 if collection.identifier == updatedCollection.identifier {
                     XCTAssertNotNil(updatedCollection.lastUpdate)
                     XCTAssert(updatedCollection !== collection)
+                    XCTAssert(updatedCollection == collection)
                     XCTAssert(updatedCollection.lastUpdate!.compare(collection.lastUpdate!) == .OrderedDescending)
                     let collection2 = AMP.collection("test")
                     XCTAssert(collection2 === updatedCollection)
@@ -68,6 +70,7 @@ class diskcacheTests: LoggedInXCTestCase {
             AMP.collection("test").page("page_001") { page2 in
                 XCTAssertNotNil(page2.lastUpdate)
                 XCTAssert(page2 !== page)
+                XCTAssert(page2 == page)
                 XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
                 expectation.fulfill()
             }
@@ -83,6 +86,7 @@ class diskcacheTests: LoggedInXCTestCase {
             AMP.resetDiskCache()
             AMP.collection("test").page("page_001") { page2 in
                 XCTAssert(page2 !== page)
+                XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
                 XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedDescending)
                 expectation.fulfill()
