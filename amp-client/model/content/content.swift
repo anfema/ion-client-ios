@@ -14,6 +14,8 @@ public class AMPContent {
 	public var outlet:String!               /// outlet name
 	public var isSearchable = false         /// searchable?
 
+    // TODO: Array index?
+    
     /// Initialize content content object from JSON
     ///
     /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!

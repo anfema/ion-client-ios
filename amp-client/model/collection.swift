@@ -55,20 +55,29 @@ class AMPPageMeta {
     }
 }
 
-public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConvertible {
+public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
+    return (lhs.identifier == rhs.identifier)
+}
+
+public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equatable, Hashable {
     public var identifier:String!       /// identifier
     public var locale:String!           /// locale code
 
     public var defaultLocale:String?    /// default locale for this collection
-    public var lastUpdate:NSDate!       /// last update date
+    public var lastUpdate:NSDate?       /// last update date
 
-    private var useCache = false        /// set to true to avoid using the cache (refreshes, etc.)
-
+    private var useCache = true         /// set to false to avoid using the cache (refreshes, etc.)
+    
     var pageMeta = [AMPPageMeta]()         /// page metadata
 
     /// CustomStringConvertible requirement
     public var description: String {
         return "AMPCollection: \(identifier!), \(pageMeta.count) pages"
+    }
+    
+    /// Hashable requirement
+    public var hashValue: Int {
+        return identifier.hashValue
     }
 
     // MARK: - Initializer
@@ -148,7 +157,7 @@ public class AMPCollection : AMPChainable<String, AMPPage>, CustomStringConverti
     /// - Returns: self, to be able to chain more actions to the collection
     public func page(identifier: String, callback:(AMPPage -> Void)) -> AMPCollection {
         // register callback with async queue
-        callbacks.append((identifier, callback))
+        self.appendCallback(identifier, callback: callback)
         
         // this block fetches the page from the cache or web and calls the associated callbacks
         let block:(String -> Void) = { identifier in

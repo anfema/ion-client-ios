@@ -8,10 +8,9 @@
 
 import Foundation
 
-public class AMPChainable<TKey: Hashable, TReturn> {
-
-    var tasks: [TKey: (TKey -> Void)] = [:] // better?
-    var callbacks: [(identifier: TKey, block: (TReturn -> Void))]  = [] // this way because of generics
+public class AMPChainable<TReturn> {
+    var tasks: [String: (String -> Void)] = [:] // better?
+    var callbacks: [(identifier: String, block: (TReturn -> Void))]  = [] // this way because of generics
     var errorCallbacks: [(AMPError.Code -> Void)]                  = [] // ^^^
     
     var isReady:Bool                                 = false
@@ -23,12 +22,12 @@ public class AMPChainable<TKey: Hashable, TReturn> {
             self.callCallbacks(nil, value: nil, error: self.error)
         }
     }
-    
+
     /// Append a task to the queue
     ///
     /// - Parameter identifier: task identifier, used to avoid queueing the same task twice
     /// - Parameter block: the task block
-    func appendTask(identifier: TKey, block: (TKey -> Void)) {
+    func appendTask(identifier: String, block: (String -> Void)) {
         if self.tasks[identifier] != nil {
             // Task already queued, do nothing
             return
@@ -55,15 +54,19 @@ public class AMPChainable<TKey: Hashable, TReturn> {
         }
     }
     
+    func appendCallback(identifier: String, callback: (TReturn -> Void)) {
+        self.callbacks.append((identifier, callback))
+    }
+    
     /// Run callbacks that have been queued
     ///
     /// - Parameter identifier: the identifier of the callbacks to run (if set `error` is ignored)
     /// - Parameter value: value to submit with the callback (if set `error` is ignored)
     /// - Parameter error: an error to call the error callbacks for (if set `identifier` and `value` are ignored)
-    func callCallbacks(identifier: TKey?, value: TReturn?, error: AMPError.Code?) {
+    func callCallbacks(identifier: String?, value: TReturn?, error: AMPError.Code?) {
         if let v = value {
             // filter identifier from callback list and call the callbacks in process
-            self.callbacks = self.callbacks.filter({ (currentIdentifier: TKey, block: (TReturn -> Void)) -> Bool in
+            self.callbacks = self.callbacks.filter({ (currentIdentifier: String, block: (TReturn -> Void)) -> Bool in
                 if currentIdentifier == identifier! {
                     dispatch_async(AMP.config.responseQueue) {
                         block(v)

@@ -12,7 +12,11 @@ import DEjson
 
 // FIXME: do we have a dependency circle with `collection` attribute and pagecache in the collection?
 
-public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible {
+public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
+    return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier) && (lhs.isProxy == rhs.isProxy)
+}
+
+public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equatable, Hashable {
     public var identifier:String            /// page identifier
     public var collection:AMPCollection     /// collection of this page
     public var lastUpdate:NSDate!           /// last update date of this page
@@ -27,7 +31,12 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     public var description: String {
         return "AMPPage: \(identifier), \(content.count) content items"
     }
-
+    
+    /// Hashable requirement
+    public var hashValue: Int {
+        return self.collection.hashValue + self.identifier.hashValue + self.isProxy.hashValue
+    }
+    
     // MARK: Initializer
     
     /// Initialize page for collection (uses cache, initializes proxy)
@@ -137,7 +146,7 @@ public class AMPPage : AMPChainable<String, AMPContent>, CustomStringConvertible
     public func outlet(name: String, callback: (AMPContent -> Void)) -> AMPPage {
         if self.isProxy {
             // defer callback to when the page loaded
-            callbacks.append((name, callback))
+            self.appendCallback(name, callback: callback)
         } else {
             // search content
             var cObj:AMPContent? = nil

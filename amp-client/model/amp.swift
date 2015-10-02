@@ -197,6 +197,7 @@ public class AMP {
     
     /// Fetch page from cached page list
     ///
+    /// - Parameter collection: a collection object
     /// - Parameter identifier: the identifier of the page to fetch
     /// - Parameter proxy: whether to fetch a proxy or a real page
     /// - Returns: page object or nil if not found
@@ -209,6 +210,9 @@ public class AMP {
         return nil
     }
     
+    /// Save page to the page cache overwriting older versions
+    ///
+    /// - Parameter page: the page to add to the cache
     class func cachePage(page: AMPPage) {
         // check if we need to overwrite an old page
         self.pageCache = self.pageCache.filter({ p -> Bool in
