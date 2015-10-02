@@ -107,16 +107,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                 }
             }
             
+            
             // all callbacks that are queued in the proxy now would have failed on a real object
             // so we call an error callback for each entry
             if let proxy = AMP.getCachedPage(self.collection, identifier: self.identifier, proxy: true) {
-                let failedCallbacks = proxy.callbacks
-                proxy.callbacks = []
-                
-                for fc in failedCallbacks {
-                    for ec in proxy.errorCallbacks {
-                        ec(AMPError.Code.OutletNotFound(fc.identifier))
-                    }
+                let failedIdentifiers = proxy.getQueuedIdentifiers()
+                for identifier in failedIdentifiers {
+                    proxy.callError(identifier, error: AMPError.Code.OutletNotFound(identifier))
                 }
             }
             callback(self)
@@ -133,7 +130,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Returns: self, to be able to chain more actions to the page
     public func onError(callback: (AMPError.Code -> Void)) -> AMPPage {
         // enqueue error callback for lazy resolving
-        errorCallbacks.append(callback)
+        self.appendErrorCallback(callback)
         return self
     }
 
@@ -144,10 +141,10 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///                       exists or there was any kind of communication error while fetching the page
     /// - Returns: self to be able to chain another call
     public func outlet(name: String, callback: (AMPContent -> Void)) -> AMPPage {
-        if self.isProxy {
-            // defer callback to when the page loaded
-            self.appendCallback(name, callback: callback)
-        } else {
+        self.appendCallback(name, callback: callback)
+
+        // resolve instantly if possible
+        if !self.isProxy {
             // search content
             var cObj:AMPContent? = nil
             for content in self.content {
@@ -159,7 +156,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             if let c = cObj {
                 callback(c)
             } else {
-                self.error = AMPError.Code.OutletNotFound(name)
+                self.callError(name, error: AMPError.Code.OutletNotFound(name))
             }
         }
         return self
@@ -196,14 +193,14 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         // FIXME: this url is not unique, fix in backend
         AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                self.error = AMPError.Code.PageNotFound(identifier)
+                self.collection.callError(identifier, error: AMPError.Code.PageNotFound(identifier))
                 return
             }
 
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    self.error = AMPError.Code.JSONObjectExpected(result.value!)
+                    self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
                     return
             }
             
@@ -211,7 +208,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             guard dict["page"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["page"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    self.error = AMPError.Code.JSONObjectExpected(dict["page"])
+                    self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(dict["page"]))
                     return
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -221,13 +218,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
 
                 // make sure everything is there
                 guard (dict["identifier"] != nil) && (dict["translations"] != nil),
-                      case .JSONString(let identifier) = dict["identifier"]!,
+                      case .JSONString(let id) = dict["identifier"]!,
                       case .JSONArray(let translations) = dict["translations"]! else {
-                        self.error = AMPError.Code.InvalidJSON(result.value)
+                        self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(result.value))
                         return
                 }
                 
-                self.identifier = identifier
+                self.identifier = id
 
                 // we only process the first translation as we used the `locale` filter in the request
                 if translations.count > 0 {
@@ -235,7 +232,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     
                     // guard against garbage data
                     guard case .JSONDictionary(let t) = translation else {
-                        self.error = AMPError.Code.JSONObjectExpected(translation)
+                        self.collection.callError(identifier, error:AMPError.Code.JSONObjectExpected(translation))
                         return
                     }
                     
@@ -243,7 +240,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     guard (t["locale"] != nil) && (t["content"] != nil),
                         case .JSONString(let localeCode) = t["locale"]!,
                         case .JSONArray(let content)     = t["content"]! else {
-                            self.error = AMPError.Code.InvalidJSON(translation)
+                            self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(translation))
                             return
                     }
                     

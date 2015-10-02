@@ -14,11 +14,11 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetch() {
         let expectation = self.expectationWithDescription("fetch collection")
         
-        AMP.collection("test", callback: { collection in
+        AMP.collection("test") { collection in
             XCTAssertNotNil(collection)
             XCTAssert(collection.identifier == "test")
             expectation.fulfill()
-        }).onError({ error in
+        }.onError({ error in
             XCTFail()
             expectation.fulfill()
         })
@@ -29,10 +29,10 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetchError() {
         let expectation = self.expectationWithDescription("fetch collection")
         
-        AMP.collection("gnarf", callback:{ collection in
+        AMP.collection("gnarf") { collection in
             XCTFail()
             expectation.fulfill()
-        }).onError { error in
+        }.onError { error in
             if case .CollectionNotFound(let name) = error {
                 XCTAssertEqual(name, "gnarf")
             } else {

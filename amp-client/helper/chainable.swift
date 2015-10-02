@@ -8,21 +8,61 @@
 
 import Foundation
 
-public class AMPChainable<TReturn> {
-    var tasks: [String: (String -> Void)] = [:] // better?
-    var callbacks: [(identifier: String, block: (TReturn -> Void))]  = [] // this way because of generics
-    var errorCallbacks: [(AMPError.Code -> Void)]                  = [] // ^^^
+private class AMPCallstack<T> {
+    private var errorCallback:(AMPError.Code -> Void)? = nil
+    private var callbacks:[(identifier: String, block: (T -> Void))] = []
     
-    var isReady:Bool                                 = false
-    
-    // kv observer to automatically call all error callback as soon as an error is set
-    var error:AMPError.Code? = nil {
-        didSet {
-            print("AMP: Error \(self.error)")
-            self.callCallbacks(nil, value: nil, error: self.error)
+    var queuedIdentifiers:[String] {
+        get {
+            var identifiers:[String] = []
+            for callback in self.callbacks {
+                identifiers.append(callback.identifier)
+            }
+            return identifiers
         }
     }
 
+    init(errorCallback: (AMPError.Code -> Void)?) {
+        self.errorCallback = errorCallback
+    }
+    
+    func appendCallback(identifier: String, callback: (T -> Void)) {
+        self.callbacks.append((identifier, callback))
+    }
+    
+    func callCallbacks(identifier: String, value: T?, error: AMPError.Code?) {
+        // filter identifier from callback list and call the callbacks in process
+        self.callbacks = self.callbacks.filter { (currentIdentifier: String, block: (T -> Void)) -> Bool in
+            if currentIdentifier == identifier {
+                if let v = value {
+                    // if there's a value call the block
+                    dispatch_async(AMP.config.responseQueue) {
+                        block(v)
+                    }
+                }
+                
+                if let e = error, let callback = self.errorCallback {
+                    // if there's an error and an error callback call it
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(e)
+                    }
+                }
+
+                // remove callback from list
+                return false
+            }
+            
+            // this callback stays in list as it is unrelated to identifier
+            return true
+        }
+    }
+}
+
+public class AMPChainable<TReturn> {
+    var tasks: [String: (String -> Void)] = [:]
+    private var callStack:[AMPCallstack<TReturn>] = []
+    var isReady:Bool                                 = false
+    
     /// Append a task to the queue
     ///
     /// - Parameter identifier: task identifier, used to avoid queueing the same task twice
@@ -54,8 +94,31 @@ public class AMPChainable<TReturn> {
         }
     }
     
+    func callError(identifier: String, error: AMPError.Code) {
+        print("AMP: Error \(error)")
+        self.callCallbacks(identifier, value: nil, error: error)
+    }
+    
+    func getQueuedIdentifiers() -> [String] {
+        var identifiers:[String] = []
+        for item in callStack {
+            identifiers.appendContentsOf(item.queuedIdentifiers)
+        }
+        return identifiers
+    }
+    
+    // MARK: Stack handling
+    func appendErrorCallback(callback: (AMPError.Code -> Void)?) {
+        self.callStack.append(AMPCallstack<TReturn>(errorCallback: callback))
+    }
+    
     func appendCallback(identifier: String, callback: (TReturn -> Void)) {
-        self.callbacks.append((identifier, callback))
+        var callStack = self.callStack.last
+        if callStack == nil {
+            self.appendErrorCallback(nil)
+            callStack = self.callStack.last
+        }
+        callStack!.appendCallback(identifier, callback: callback)
     }
     
     /// Run callbacks that have been queued
@@ -63,26 +126,13 @@ public class AMPChainable<TReturn> {
     /// - Parameter identifier: the identifier of the callbacks to run (if set `error` is ignored)
     /// - Parameter value: value to submit with the callback (if set `error` is ignored)
     /// - Parameter error: an error to call the error callbacks for (if set `identifier` and `value` are ignored)
-    func callCallbacks(identifier: String?, value: TReturn?, error: AMPError.Code?) {
-        if let v = value {
-            // filter identifier from callback list and call the callbacks in process
-            self.callbacks = self.callbacks.filter({ (currentIdentifier: String, block: (TReturn -> Void)) -> Bool in
-                if currentIdentifier == identifier! {
-                    dispatch_async(AMP.config.responseQueue) {
-                        block(v)
-                    }
-                    return false
-                }
-                return true
-            })
-        }
-        
-        if let e = error {
-            for callback in errorCallbacks {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(e)
-                }
+    func callCallbacks(identifier: String, value: TReturn?, error: AMPError.Code?) {
+        self.callStack = self.callStack.filter { item -> Bool in
+            item.callCallbacks(identifier, value: value, error: error)
+            if item.callbacks.count == 0 {
+                return false // remove this error handler from call stack as there are no further callbacks to call
             }
+            return true
         }
     }
 }

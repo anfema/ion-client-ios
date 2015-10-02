@@ -31,12 +31,12 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchAsync() {
         let expectation = self.expectationWithDescription("fetch page")
         
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").onError() { error in
+            XCTFail()
+            expectation.fulfill()
+        }.page("page_001") { page in
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
-            expectation.fulfill()
-        }.onError() { error in
-            XCTFail()
             expectation.fulfill()
         }
         
@@ -46,15 +46,15 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchFail() {
         let expectation = self.expectationWithDescription("fetch page")
         
-        AMP.collection("test").page("unknown_page") { page in
-            XCTFail()
-            expectation.fulfill()
-        }.onError() { error in
+        AMP.collection("test").onError() { error in
             if case .PageNotFound(let name) = error {
                 XCTAssertEqual(name, "unknown_page")
             } else {
                 XCTFail()
             }
+            expectation.fulfill()
+        }.page("unknown_page") { page in
+            XCTFail()
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(3.0, handler: nil)

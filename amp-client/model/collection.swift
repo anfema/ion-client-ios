@@ -164,12 +164,10 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             if let page = AMP.getCachedPage(self, identifier: identifier, proxy: false) {
                 self.callCallbacks(identifier, value: page, error: nil)
             } else {
-                AMPPage(collection: self, identifier: identifier, callback: { page in
+                AMPPage(collection: self, identifier: identifier) { page in
                     AMP.cachePage(page)
                     self.callCallbacks(identifier, value: page, error: nil)
-                }).onError({ error in
-                    self.callCallbacks(identifier, value: nil, error: error)
-                })
+                }
             }
         }
         
@@ -195,12 +193,10 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             return page
         } else {
             // not cached, fetch from web and add it to the cache
-            AMPPage(collection: self, identifier: identifier, callback: { page in
+            AMPPage(collection: self, identifier: identifier) { page in
                 AMP.cachePage(page)
                 self.callCallbacks(identifier, value: page, error: nil)
-            }).onError({ error in
-                self.callCallbacks(identifier, value: nil, error: error)
-            })
+            }
         }
 
         // if we get here the async page fetch has been initialized, so return a proxy
@@ -219,9 +215,9 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the collection
-    public func onError(callback: (AMPError.Code -> Void)) -> AMPCollection {
+    public func onError(callback: (AMPError.Code -> Void)?) -> AMPCollection {
         // enqueue error callback for lazy resolving
-        errorCallbacks.append(callback)
+        self.appendErrorCallback(callback)
         return self
     }
    
@@ -234,14 +230,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     private func fetch(identifier: String, callback:(Void -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                self.error = AMPError.Code.CollectionNotFound(identifier)
+                self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
                 return
             }
             
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    self.error = AMPError.Code.JSONObjectExpected(result.value!)
+                    self.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
                     return
             }
             
@@ -249,7 +245,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             guard dict["collection"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["collection"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    self.error = AMPError.Code.JSONObjectExpected(result.value!)
+                    self.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
                     return
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -259,15 +255,15 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 
                 // make sure everything is there
                 guard (dict["identifier"] != nil) && (dict["pages"] != nil) && (dict["default_locale"] != nil),
-                      case .JSONString(let identifier)    = dict["identifier"]!,
+                      case .JSONString(let id)    = dict["identifier"]!,
                       case .JSONString(let defaultLocale) = dict["default_locale"]!,
                       case .JSONArray(let pages)          = dict["pages"]! else {
-                        self.error = AMPError.Code.InvalidJSON(result.value!)
+                        self.callError(identifier, error: AMPError.Code.InvalidJSON(result.value!))
                         return
                 }
             
                 // initialize self
-                self.identifier = identifier
+                self.identifier = id
                 self.defaultLocale = defaultLocale
             
                 // initialize page metadata objects from the collection's page array

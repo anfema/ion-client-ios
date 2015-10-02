@@ -38,15 +38,15 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchFail() {
         let expectation = self.expectationWithDescription("fetch page")
         
-        AMP.collection("test").page("page_001").outlet("UnknownOutlet") { text in
-            XCTFail()
-            expectation.fulfill()
-        }.onError() { error in
+        AMP.collection("test").page("page_001").onError() { error in
             if case .OutletNotFound(let name) = error {
                 XCTAssertEqual(name, "UnknownOutlet")
             } else {
                 XCTFail()
             }
+            expectation.fulfill()
+        }.outlet("UnknownOutlet") { text in
+            XCTFail()
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(3.0, handler: nil)
