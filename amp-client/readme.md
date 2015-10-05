@@ -355,18 +355,23 @@ Page extension:
 
 ## Error handling
 
-`AMPCollection` as well as `AMPPage` have `onError(callback: (ErrorType -> Void))`-Handlers that may be chained like
-the `page` or `outlet` calls are. They will be called if something goes wrong immediately. The 'success' block will
+`AMPCollection` as well as `AMPPage` have `onError(callback: (ErrorType -> Void))`-Handlers that may be chained like the `page` or `outlet` calls are. They will be called if something goes wrong immediately. The 'success' block will
 not be called in such a situation to avoid error handling code in such blocks.
+
+The error handling block has to appear before calls that should be caught in it. If no error handling block is defined the error bubbles up.
+
+There is a global error handler in `AMP.config.errorHandler` that catches all errors that did bubble up and were not caught. The default implementation just logs `AMP unhandled error: \(error)`. The default handler can be restored by calling `AMP.config.resetErrorHandler()`.
 
 Example:
 
-    AMP.collection("collection001").onError() { error in
+    AMP.config.errorHandler = { (collection, error) in
         print("collection failed to load: \(error)")
+    }
+    
+    AMP.collection("collection001").onError() { error in
+        print("page failed to load: \(error)")
     }.page("page001") { page in
         print("page \(page.identifier) loaded")
-    }.onError() { error in
-        print("page failed to load: \(error)")
     }
 
 

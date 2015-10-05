@@ -250,7 +250,7 @@ AMP.config.locale = "en_US"
 
 <h2 id="login-to-the-api-server">Login to the API Server</h2>
 
-<p>For logging in call the <code>login</code> function of the <code>AMP</code> class or supply a <code>sessionToken</code> in the configuration when you decide to not use the login functionality of the AMP server.</p>
+<p>For logging in call the <code>login</code> function of the <code>AMP</code> class <strong>or</strong> supply a <code>sessionToken</code> in the configuration when you decide to not use the login functionality of the AMP server.</p>
 
 <p>Example:</p>
 
@@ -262,6 +262,8 @@ AMP.config.locale = "en_US"
 <h2 id="getting-collections">Getting collections</h2>
 
 <p>All calls run through the AMP class and it&rsquo;s class functions. Most calls have synchronous and asynchronous variants, the sync variants should only be used when you are sure the object is in the cache.</p>
+
+<p>When you request a collection that is not found on the server no queued commands or success blocks will be called, just the error blocks, see <a href="#error-handling">Error handling</a> for more information.</p>
 
 <p>Async variant:</p>
 
@@ -280,6 +282,8 @@ AMP.config.locale = "en_US"
 <p><strong>DO NOT</strong> use for getting to a collection only, use the async variant for that, <strong>USE</strong> to queue calls!</p>
 
 <h2 id="getting-pages">Getting pages</h2>
+
+<p>When you request a page that is not found in the collection no queued commands or success blocks will be called, just the error blocks, see <a href="#error-handling">Error handling</a> for more information.</p>
 
 <p>Fetching pages can be done in multiple ways.</p>
 
@@ -319,10 +323,14 @@ collection.page("page002") { page in
 
 <p>This works analogous to pages but has some convenience functionality.</p>
 
-<p>The result of an <code>outlet(*)</code> call is always an <code>AMPContent</code> object that encapsulates the real content. To get the values of the content object you&rsquo;ll need a switch:</p>
+<p>In a <code>page(identifier: String, callback:(AMPPage -&gt; Void))</code> callback block you may use the sync variants as the page you just fetched contains the content.</p>
+
+<p>When you request an outlet that is not found in the page no queued commands or success blocks will be called, just the error blocks of the page will be called, see <a href="#error-handling">Error handling</a> for more information.</p>
+
+<p>The result of an <code>outlet(*)</code> call is always an <code>AMPContent</code> object. To get the values of the content object you&rsquo;ll need a switch:</p>
 
 <pre><code>switch(content) {  
-case .Text(let t):  
+case let t as AMPTextContent:  
     print(t.plainText())
 
 ...
@@ -332,17 +340,11 @@ default:
 }
 </code></pre>
 
-<p>or at least a <code>if case</code>:</p>
+<p>or at least a <code>if case let</code>:</p>
 
-<pre><code>if case .Text(let t) = content {  
+<pre><code>if case let t as AMPTextContent = content {  
     print(t.plainText())  
 }
-</code></pre>
-
-<p>or when you only need the <code>AMPContentBase</code> base class use the convenience function <code>getBaseObject()</code> on it:</p>
-
-<pre><code>let obj = content.getBaseObject()  
-print("outlet name \(obj.outlet)")
 </code></pre>
 
 <h3 id="fetch-a-single-outlet">Fetch a single outlet</h3>
@@ -587,18 +589,23 @@ Calls callback with plain text version, returns <code>self</code> for further ch
 
 <h2 id="error-handling">Error handling</h2>
 
-<p><code>AMPCollection</code> as well as <code>AMPPage</code> have <code>onError(callback: (ErrorType -&gt; Void))</code>-Handlers that may be chained like<br/>
-the <code>page</code> or <code>outlet</code> calls are. They will be called if something goes wrong immediately. The &lsquo;success&rsquo; block will<br/>
+<p><code>AMPCollection</code> as well as <code>AMPPage</code> have <code>onError(callback: (ErrorType -&gt; Void))</code>-Handlers that may be chained like the <code>page</code> or <code>outlet</code> calls are. They will be called if something goes wrong immediately. The &lsquo;success&rsquo; block will<br/>
 not be called in such a situation to avoid error handling code in such blocks.</p>
+
+<p>The error handling block has to appear before calls that should be caught in it. If no error handling block is defined the error bubbles up.</p>
+
+<p>There is a global error handler in <code>AMP.config.errorHandler</code> that catches all errors that did bubble up and were not caught. The default implementation just logs <code>AMP unhandled error: \(error)</code>. The default handler can be restored by calling <code>AMP.config.resetErrorHandler()</code>.</p>
 
 <p>Example:</p>
 
-<pre><code>AMP.collection("collection001").onError() { error in  
+<pre><code>AMP.config.errorHandler = { (collection, error) in  
     print("collection failed to load: \(error)")  
+}
+
+AMP.collection("collection001").onError() { error in  
+    print("page failed to load: \(error)")  
 }.page("page001") { page in  
     print("page \(page.identifier) loaded")  
-}.onError() { error in  
-    print("page failed to load: \(error)")  
 }
 </code></pre>
 
