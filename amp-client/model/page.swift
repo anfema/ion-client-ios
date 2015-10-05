@@ -10,10 +10,8 @@ import Foundation
 import Alamofire
 import DEjson
 
-// FIXME: do we have a dependency circle with `collection` attribute and pagecache in the collection?
-
 public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
-    return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier) && (lhs.isProxy == rhs.isProxy)
+    return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
 }
 
 public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equatable, Hashable {
@@ -21,7 +19,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     public var collection:AMPCollection     /// collection of this page
     public var lastUpdate:NSDate!           /// last update date of this page
     public var locale:String                /// locale code for the page
-    public var isProxy:Bool                 /// full instance or proxy?
 
     public var content = [AMPContent]()     /// content list
 
@@ -34,12 +31,12 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     
     /// Hashable requirement
     public var hashValue: Int {
-        return self.collection.hashValue + self.identifier.hashValue + self.isProxy.hashValue
+        return self.collection.hashValue + self.identifier.hashValue
     }
     
     // MARK: Initializer
     
-    /// Initialize page for collection (uses cache, initializes proxy)
+    /// Initialize page for collection (uses cache)
     ///
     /// Use the `page` function from `AMPCollection`
     ///
@@ -60,7 +57,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         self.init(collection: collection, identifier:identifier, useCache: true, callback:callback)
     }
     
-    /// Initialize page for collection (initializes proxy)
+    /// Initialize page for collection
     ///
     /// Use the `page` function from `AMPCollection`
     ///
@@ -69,13 +66,11 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter useCache: set to false to force a page refresh
     init(collection: AMPCollection, identifier: String, useCache: Bool) {
         // Lazy initializer, if this is used the page is not loaded but loading will start
-        // in background, so we need to ask the collection's pageCache for the real instance
-        // and act as a proxy to that instance
+        // in background
         self.identifier = identifier
         self.collection = collection
         self.useCache = useCache
         self.locale = self.collection.locale
-        self.isProxy = true
     }
 
     /// Initialize page for collection (initializes real object)
@@ -92,7 +87,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         self.collection = collection
         self.useCache = useCache
         self.locale = self.collection.locale
-        self.isProxy = false
         super.init()
         
         // fetch page async
@@ -100,22 +94,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             self.isReady = true
             for o in self.content {
                 self.callCallbacks(o.outlet, value: o, error: nil)
-                
-                // call all proxy object chained callbacks
-                if let proxy = AMP.getCachedPage(self.collection, identifier: self.identifier, proxy: true) {
-                    proxy.callCallbacks(o.outlet, value: o, error: nil)
-                }
             }
             
-            
-            // all callbacks that are queued in the proxy now would have failed on a real object
-            // so we call an error callback for each entry
-            if let proxy = AMP.getCachedPage(self.collection, identifier: self.identifier, proxy: true) {
-                let failedIdentifiers = proxy.getQueuedIdentifiers()
-                for identifier in failedIdentifiers {
-                    proxy.callError(identifier, error: AMPError.Code.OutletNotFound(identifier))
-                }
+            let failedIdentifiers = self.getQueuedIdentifiers()
+            for identifier in failedIdentifiers {
+                self.callError(identifier, error: AMPError.Code.OutletNotFound(identifier))
             }
+
             callback(self)
         }
     }
@@ -130,10 +115,17 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Returns: self, to be able to chain more actions to the page
     public func onError(callback: (AMPError.Code -> Void)) -> AMPPage {
         // enqueue error callback for lazy resolving
-        self.appendErrorCallback(callback)
+        if let original = AMP.getCachedPage(self.collection, identifier: self.identifier) {
+            original.appendErrorCallback(callback)
+        }
         return self
     }
 
+    /// override default error callback to bubble error up to collection
+    override func defaultErrorCallback(error: AMPError.Code) {
+        self.collection.callError(self.identifier, error: error)
+    }
+    
     /// Fetch an outlet by name (probably deferred by page loading)
     ///
     /// - Parameter name: outlet name to fetch
@@ -141,10 +133,10 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///                       exists or there was any kind of communication error while fetching the page
     /// - Returns: self to be able to chain another call
     public func outlet(name: String, callback: (AMPContent -> Void)) -> AMPPage {
+        // resolve instantly if possible
         self.appendCallback(name, callback: callback)
 
-        // resolve instantly if possible
-        if !self.isProxy {
+        if self.isReady {
             // search content
             var cObj:AMPContent? = nil
             for content in self.content {
@@ -165,10 +157,10 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// Fetch an outlet by name (from loaded page)
     ///
     /// - Parameter name: outlet name to fetch
-    /// - Returns: content object if page was no proxy and outlet exists
+    /// - Returns: content object if page was loaded and outlet exists
     public func outlet(name: String) -> AMPContent? {
-        if self.isProxy {
-            // cannot return outlet synchronously from a proxy
+        if !self.isReady {
+            // cannot return outlet synchronously from a async loading page
             return nil
         } else {
             // search content
@@ -178,6 +170,9 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     cObj = content
                     break
                 }
+            }
+            if cObj == nil {
+                self.callError(name, error: AMPError.Code.OutletNotFound(name))
             }
             return cObj
         }
@@ -194,6 +189,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
             if case .Failure = result {
                 self.collection.callError(identifier, error: AMPError.Code.PageNotFound(identifier))
+                self.hasFailed = true
                 return
             }
 
@@ -201,6 +197,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
                     self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    self.hasFailed = true
                     return
             }
             
@@ -209,6 +206,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                   case .JSONArray(let array) = dict["page"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
                     self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(dict["page"]))
+                    self.hasFailed = true
                     return
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -221,6 +219,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                       case .JSONString(let id) = dict["identifier"]!,
                       case .JSONArray(let translations) = dict["translations"]! else {
                         self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(result.value))
+                        self.hasFailed = true
                         return
                 }
                 
@@ -233,6 +232,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     // guard against garbage data
                     guard case .JSONDictionary(let t) = translation else {
                         self.collection.callError(identifier, error:AMPError.Code.JSONObjectExpected(translation))
+                        self.hasFailed = true
                         return
                     }
                     
@@ -241,6 +241,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                         case .JSONString(let localeCode) = t["locale"]!,
                         case .JSONArray(let content)     = t["content"]! else {
                             self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(translation))
+                            self.hasFailed = true
                             return
                     }
                     

@@ -59,21 +59,20 @@ private class AMPCallstack<T> {
 }
 
 public class AMPChainable<TReturn> {
-    var tasks: [String: (String -> Void)] = [:]
+    var tasks: [String: (String -> Void)]         = [:]
     private var callStack:[AMPCallstack<TReturn>] = []
-    var isReady:Bool                                 = false
+    var isReady:Bool                              = false
+    var hasFailed:Bool                            = false
     
     /// Append a task to the queue
     ///
     /// - Parameter identifier: task identifier, used to avoid queueing the same task twice
     /// - Parameter block: the task block
     func appendTask(identifier: String, block: (String -> Void)) {
-        if self.tasks[identifier] != nil {
-            // Task already queued, do nothing
-            return
+        if self.tasks[identifier] == nil {
+            // Add task to queue
+            self.tasks.updateValue(block, forKey: identifier)
         }
-        // Add task to queue
-        self.tasks.updateValue(block, forKey: identifier)
         
         // If we're ready already execute task directly
         if self.isReady {
@@ -95,7 +94,6 @@ public class AMPChainable<TReturn> {
     }
     
     func callError(identifier: String, error: AMPError.Code) {
-        print("AMP: Error \(error)")
         self.callCallbacks(identifier, value: nil, error: error)
     }
     
@@ -115,10 +113,16 @@ public class AMPChainable<TReturn> {
     func appendCallback(identifier: String, callback: (TReturn -> Void)) {
         var callStack = self.callStack.last
         if callStack == nil {
-            self.appendErrorCallback(nil)
+            self.appendErrorCallback { error in
+                self.defaultErrorCallback(error)
+            }
             callStack = self.callStack.last
         }
         callStack!.appendCallback(identifier, callback: callback)
+    }
+    
+    func defaultErrorCallback(error: AMPError.Code) {
+        // overridden by subclass if needed
     }
     
     /// Run callbacks that have been queued
@@ -127,6 +131,9 @@ public class AMPChainable<TReturn> {
     /// - Parameter value: value to submit with the callback (if set `error` is ignored)
     /// - Parameter error: an error to call the error callbacks for (if set `identifier` and `value` are ignored)
     func callCallbacks(identifier: String, value: TReturn?, error: AMPError.Code?) {
+        if (error != nil) && (self.callStack.count == 0) {
+            self.defaultErrorCallback(error!)
+        }
         self.callStack = self.callStack.filter { item -> Bool in
             item.callCallbacks(identifier, value: value, error: error)
             if item.callbacks.count == 0 {

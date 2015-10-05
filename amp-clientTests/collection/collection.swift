@@ -29,10 +29,8 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetchError() {
         let expectation = self.expectationWithDescription("fetch collection")
         
-        AMP.collection("gnarf") { collection in
-            XCTFail()
-            expectation.fulfill()
-        }.onError { error in
+        AMP.config.errorHandler = { (collectionID, error) in
+            XCTAssertEqual(collectionID, "gnarf")
             if case .CollectionNotFound(let name) = error {
                 XCTAssertEqual(name, "gnarf")
             } else {
@@ -41,7 +39,13 @@ class collectionTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
+        AMP.collection("gnarf") { collection in
+            XCTFail()
+            expectation.fulfill()
+        }
+        
         self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        AMP.config.resetErrorHandler()
     }
 }
 

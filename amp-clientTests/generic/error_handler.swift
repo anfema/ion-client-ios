@@ -53,7 +53,7 @@ class errorHandlerTests: LoggedInXCTestCase {
         }.page("unknown_page") { page in
             XCTFail()
             expectation.fulfill()
-        }.page("unknown_page") { page in
+        }.page("unknown_page2") { page in
             XCTFail()
             expectation.fulfill()
         }
@@ -122,5 +122,42 @@ class errorHandlerTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(3.0, handler: nil)
+    }
+    
+    func testBubblingToCollection() {
+        let expectation = self.expectationWithDescription("fetch page")
+
+        AMP.collection("test").onError() { error in
+            if case .OutletNotFound = error {
+                // all ok, we expected this
+            } else {
+                XCTFail()
+            }
+            expectation.fulfill()
+        }.page("page_001").outlet("unknown_outlet") { outlet in
+            XCTFail()
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+    }
+    
+    func testBubblingToAMP() {
+        let expectation = self.expectationWithDescription("fetch page")
+        
+        AMP.config.errorHandler = { (collection, error) in
+            if case .OutletNotFound = error {
+                // all ok, we expected this
+            } else {
+                XCTFail()
+            }
+            expectation.fulfill()
+        }
+        
+        AMP.collection("test").page("page_001").outlet("unknown_outlet") { outlet in
+            XCTFail()
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        AMP.config.resetErrorHandler()
     }
 }

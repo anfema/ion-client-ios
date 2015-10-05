@@ -22,6 +22,9 @@ public struct AMPConfig {
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
     var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
+    /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
+    var errorHandler:((String, AMPError.Code) -> Void)!
+    
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     var sessionToken:String?
     
@@ -35,6 +38,13 @@ public struct AMPConfig {
         configuration.HTTPShouldSetCookies = false
         
         self.alamofire = Alamofire.Manager(configuration: configuration)
+        self.resetErrorHandler()
+    }
+    
+    public mutating func resetErrorHandler() {
+        self.errorHandler = { (collection, error) in
+            print("AMP unhandled error in collection '\(collection)': \(error)")
+        }
     }
 }
 
@@ -104,8 +114,12 @@ public class AMP {
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
         for c in self.collectionCache {
             if c.identifier == identifier {
-                dispatch_async(self.config.responseQueue) {
-                    callback(c)
+                if c.hasFailed {
+                    self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                } else {
+                    dispatch_async(self.config.responseQueue) {
+                        callback(c)
+                    }
                 }
                 return c
             }
@@ -114,6 +128,17 @@ public class AMP {
         self.collectionCache.append(newCollection)
         return newCollection
     }
+
+    /// Error handler
+    ///
+    /// - Parameter identifier: the collection identifier that caused the error
+    /// - Parameter error: An error object
+    class func callError(identifier: String, error: AMPError.Code) {
+        dispatch_async(AMP.config.responseQueue) {
+            AMP.config.errorHandler(identifier, error)
+        }
+    }
+
     
     /// Clear memory cache
     ///
@@ -199,11 +224,10 @@ public class AMP {
     ///
     /// - Parameter collection: a collection object
     /// - Parameter identifier: the identifier of the page to fetch
-    /// - Parameter proxy: whether to fetch a proxy or a real page
     /// - Returns: page object or nil if not found
-    class func getCachedPage(collection: AMPCollection, identifier: String, proxy: Bool) -> AMPPage? {
+    class func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
         for p in self.pageCache {
-            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) && (p.isProxy == proxy) {
+            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
                 return p
             }
         }
@@ -216,7 +240,7 @@ public class AMP {
     class func cachePage(page: AMPPage) {
         // check if we need to overwrite an old page
         self.pageCache = self.pageCache.filter({ p -> Bool in
-            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier) && (p.isProxy == page.isProxy))
+            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
         })
         
         self.pageCache.append(page)

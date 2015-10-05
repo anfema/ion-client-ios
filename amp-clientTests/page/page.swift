@@ -18,7 +18,6 @@ class pageTests: LoggedInXCTestCase {
         AMP.collection("test") { collection in
             let page = collection.page("page_001")
             XCTAssertNotNil(page)
-            XCTAssertTrue(page.isProxy)
             XCTAssert(page.identifier == "page_001")
             expectation.fulfill()
         }.onError() { error in

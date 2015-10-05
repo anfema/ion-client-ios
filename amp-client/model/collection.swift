@@ -161,13 +161,20 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         
         // this block fetches the page from the cache or web and calls the associated callbacks
         let block:(String -> Void) = { identifier in
-            if let page = AMP.getCachedPage(self, identifier: identifier, proxy: false) {
-                self.callCallbacks(identifier, value: page, error: nil)
-            } else {
-                AMPPage(collection: self, identifier: identifier) { page in
-                    AMP.cachePage(page)
+            if let page = AMP.getCachedPage(self, identifier: identifier) {
+                if page.isReady {
                     self.callCallbacks(identifier, value: page, error: nil)
                 }
+                if page.hasFailed {
+                    // retry
+                    AMP.cachePage(AMPPage(collection: self, identifier: identifier) { page in
+                        self.callCallbacks(identifier, value: page, error: nil)
+                    })
+                }
+            } else {
+                AMP.cachePage(AMPPage(collection: self, identifier: identifier) { page in
+                    self.callCallbacks(identifier, value: page, error: nil)
+                })
             }
         }
         
@@ -180,34 +187,25 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
 
     /// Fetch a page from this collection
     ///
-    /// As there is no callback, this returns a page proxy that resolves async once the page becomes available
+    /// As there is no callback, this returns a page that resolves async once the page becomes available
     /// all actions chained to the page will be queued until the data is available
     ///
     /// - Parameter identifier: page identifier
-    /// - Returns: a page or a proxy that resolves automatically if the underlying page becomes available
+    /// - Returns: a page that resolves automatically if the underlying page becomes available
     public func page(identifier: String) -> AMPPage {
         // fetch page and resume processing when ready
+        self.appendCallback(identifier, callback: { page in })
 
-        if let page = AMP.getCachedPage(self, identifier: identifier, proxy: false) {
+        if let page = AMP.getCachedPage(self, identifier: identifier) {
             // well page is cached, just return cached version
             return page
         } else {
             // not cached, fetch from web and add it to the cache
-            AMPPage(collection: self, identifier: identifier) { page in
-                AMP.cachePage(page)
+            let page = AMPPage(collection: self, identifier: identifier) { page in
                 self.callCallbacks(identifier, value: page, error: nil)
             }
-        }
-
-        // if we get here the async page fetch has been initialized, so return a proxy
-        if let proxy = AMP.getCachedPage(self, identifier: identifier, proxy: true) {
-            // we had a cached proxy
-            return proxy
-        } else {
-            // create a new proxy and add it to the cache
-            let proxy = AMPPage(collection: self, identifier: identifier)
-            AMP.cachePage(proxy)
-            return proxy
+            AMP.cachePage(page)
+            return page
         }
     }
   
@@ -220,6 +218,11 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         self.appendErrorCallback(callback)
         return self
     }
+    
+    /// override default error callback to bubble error up to AMP object
+    override func defaultErrorCallback(error: AMPError.Code) {
+        AMP.callError(self.identifier, error: error)
+    }
    
     // MARK: - Private
     
@@ -230,14 +233,16 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     private func fetch(identifier: String, callback:(Void -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                AMP.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                self.hasFailed = true
                 return
             }
             
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    self.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    AMP.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    self.hasFailed = true
                     return
             }
             
@@ -245,7 +250,8 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             guard dict["collection"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["collection"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    self.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    AMP.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    self.hasFailed = true
                     return
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -258,7 +264,8 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                       case .JSONString(let id)    = dict["identifier"]!,
                       case .JSONString(let defaultLocale) = dict["default_locale"]!,
                       case .JSONArray(let pages)          = dict["pages"]! else {
-                        self.callError(identifier, error: AMPError.Code.InvalidJSON(result.value!))
+                        AMP.callError(identifier, error: AMPError.Code.InvalidJSON(result.value!))
+                        self.hasFailed = true
                         return
                 }
             
