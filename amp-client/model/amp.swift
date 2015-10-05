@@ -153,10 +153,33 @@ public class AMP {
     ///
     /// Removes all cached requests and files for the configured server, does not affect memory cache so be careful
     public class func resetDiskCache() {
-        AMPRequest.resetCache(self.config.serverURL!.host!)
+        AMPRequest.resetCache(self.config.serverURL!.host!, locale:self.config.locale)
     }
     
-    // TODO: missing host/locale disk cache reset
+    /// Clear disk cache for specific host and current locale
+    ///
+    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
+    /// - Parameter host: a hostname to empty the cache for
+    public class func resetDiskCache(host host:String) {
+        AMPRequest.resetCache(host)
+    }
+
+    /// Clear disk cache for specific host and locale
+    ///
+    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
+    /// - Parameter host: a hostname to empty the cache for
+    /// - Parameter locale: the locale to reset
+    public class func resetDiskCache(host host:String, locale:String) {
+        AMPRequest.resetCache(host, locale:locale)
+    }
+
+    /// Clear disk cache for specific locale and all hosts
+    ///
+    /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
+    /// - Parameter locale: a locale code to empty the cache for
+    public class func resetDiskCache(locale locale: String) {
+        AMPRequest.resetCache(locale: locale)
+    }
     
     /// Refresh disk and memory caches
     ///

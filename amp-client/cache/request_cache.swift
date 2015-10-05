@@ -21,9 +21,10 @@ extension AMPRequest {
     /// Reset the complete AMP cache for a specific host
     ///
     /// - Parameter host: host to clear cache for
-    public class func resetCache(host: String) {
+    /// - Parameter locale: locale to clear cache for
+    public class func resetCache(host: String, locale: String = AMP.config.locale) {
         // remove complete cache dir for this host
-        let fileURL = self.cacheBaseDir(host)
+        let fileURL = self.cacheBaseDir(host, locale: locale)
         do {
             try NSFileManager.defaultManager().removeItemAtPath(fileURL.path!)
         } catch {
@@ -43,6 +44,22 @@ extension AMPRequest {
         })
         self.saveCacheDB()
     }
+
+    public class func resetCache(locale locale: String) {
+        // remove complete cache dir for this host
+        let fileURL = self.cacheBaseDir(locale: locale)
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(fileURL.path!)
+        } catch {
+            // non-fatal, could not remove item at path, so probably path did not exist
+        }
+
+        if locale == AMP.config.locale {
+            // remove all entries for this locale from cache db
+            self.cacheDB = []
+            self.saveCacheDB()
+        }
+    }
     
     // MARK: - Internal API
     
@@ -51,7 +68,7 @@ extension AMPRequest {
     /// - Parameter url: the URL to find in the cache
     /// - Returns: Path to the cache file (may not exist)
     internal class func cacheName(url: NSURL) -> String {
-        var fileURL = self.cacheBaseDir(url.host!)
+        var fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
         
         // try to create the path if it does not exist
         if !NSFileManager.defaultManager().fileExistsAtPath(fileURL.path!) {
@@ -160,8 +177,8 @@ extension AMPRequest {
     // MARK: - Private API
     
     /// Private function to load cache DB from disk
-    private class func loadCacheDB() {
-        let fileURL = self.cacheBaseDir("cacheIndex.json")
+    private class func loadCacheDB(locale: String = AMP.config.locale) {
+        let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
         do {
             // try loading from disk
             let jsonString = try String(contentsOfFile: fileURL.path!)
@@ -173,7 +190,7 @@ extension AMPRequest {
             } else {
                 // invalid json, reset the cache db and remove disk cache completely
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheBaseDir("").path!)
+                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheBaseDir(locale: locale).path!)
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
@@ -187,7 +204,7 @@ extension AMPRequest {
     }
     
     /// Private function to save the cache DB to disk
-    private class func saveCacheDB() {
+    private class func saveCacheDB(locale: String = AMP.config.locale) {
         // can not save nothing
         guard let cacheDB = self.cacheDB else {
             return
@@ -197,8 +214,8 @@ extension AMPRequest {
         let jsonObject = JSONObject.JSONArray(cacheDB)
         if let jsonString = JSONEncoder(jsonObject).prettyJSONString {
             do {
-                let basePath = self.cacheBaseDir("").path!
-                let file = self.cacheBaseDir("cacheIndex.json").path!
+                let basePath = self.cacheBaseDir(locale: locale).path!
+                let file = self.cacheFile("cacheIndex.json", locale: locale).path!
                 
                 // make sure the cache dir is there
                 if !NSFileManager.defaultManager().fileExistsAtPath(basePath) {
@@ -210,7 +227,7 @@ extension AMPRequest {
             } catch {
                 // saving failed, remove disk cache completely because we don't have a clue what's in it
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheBaseDir("").path!)
+                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheBaseDir(locale: locale).path!)
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
@@ -234,9 +251,22 @@ extension AMPRequest {
     ///
     /// - Parameter host: the API host to fetch the cache dir for
     /// - Returns: File URL to the cache dir
-    private class func cacheBaseDir(host: String) -> NSURL {
+    private class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(host)")
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(host)")
         return fileURL
     }
+
+    private class func cacheBaseDir(locale locale: String) -> NSURL {
+        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)")
+        return fileURL
+    }
+
+    private class func cacheFile(filename: String, locale: String) -> NSURL {
+        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(filename)")
+        return fileURL
+    }
+
 }
