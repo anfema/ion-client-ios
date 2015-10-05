@@ -26,13 +26,19 @@ public class AMPKeyValueContent : AMPContent {
         }
         
         guard (dict["values"] != nil),
-            case .JSONDictionary(let values) = dict["values"]! else {
-                throw AMPError.Code.JSONObjectExpected(dict["values"])
+            case .JSONArray(let values) = dict["values"]! else {
+                throw AMPError.Code.JSONArrayExpected(dict["values"])
         }
         
         self.values = Dictionary()
-        for (key, valueObj) in values {
-            switch (valueObj) {
+        for item in values {
+            guard case .JSONDictionary(let itemDict) = item where (itemDict["name"] != nil) && (itemDict["value"] != nil),
+                  case .JSONString(let key) = itemDict["name"]!,
+                  let value = itemDict["value"] else {
+                    throw AMPError.Code.InvalidJSON(item)
+            }
+            
+            switch (value) {
             case .JSONString(let str):
                 self.values!.updateValue(str, forKey: key)
             case .JSONNumber(let number):
@@ -40,7 +46,7 @@ public class AMPKeyValueContent : AMPContent {
             case .JSONBoolean(let boolean):
                 self.values!.updateValue(boolean, forKey: key)
             default:
-                throw AMPError.Code.InvalidJSON(valueObj)
+                throw AMPError.Code.InvalidJSON(value)
             }
         }
     }
