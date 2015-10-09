@@ -160,7 +160,7 @@ public struct AttributedStringStyling {
         var paragraph = AttributedStringStyle()
         paragraph.font = font
         paragraph.foregroundColor = baseColor
-        paragraph.backgroundColor = baseColor
+        paragraph.backgroundColor = backgroundColor
         self.paragraph = paragraph
         
         var quote = AttributedStringStyle()
@@ -220,7 +220,6 @@ public struct AttributedStringStyling {
 extension ContentNode {
     
     public func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
-        let result = NSMutableAttributedString(string: "")
         let content = NSMutableAttributedString(string: "")
         for child in self.children {
             content.appendAttributedString(child.renderAttributedString(style))
@@ -233,57 +232,57 @@ extension ContentNode {
             
             // Block level
         case .Heading(let level):
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.heading[level - 1].makeAttributeDict(), range: NSMakeRange(0,2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.heading[level - 1].makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .UnorderedList:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.unorderedList.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.unorderedList.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .UnorderedListItem:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.unorderedListItem.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.unorderedListItem.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .OrderedList:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.orderedList.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.orderedList.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .OrderedListItem(let index):
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
+            let result = NSMutableAttributedString(string: "\n\n")
 
             let indexLabel = NSAttributedString(string: NSString(format: "%d. ", index) as String)
             result.insertAttributedString(indexLabel, atIndex: 1)
-            
-            result.setAttributes(style.orderedListItem.makeAttributeDict(), range: NSMakeRange(0, 2))
-
             result.insertAttributedString(content, atIndex: 1 + indexLabel.length)
+
+            result.addAttributes(style.orderedListItem.makeAttributeDict(), range: NSMakeRange(0, result.length))
+
             // FIXME: do not convert list index types to arabic numbers
             return result
             
         case .CodeBlock:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.codeBlock.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.codeBlock.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .Paragraph:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.paragraph.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.paragraph.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         case .Quote:
-            result.appendAttributedString(NSAttributedString(string: "\n\n"))
-            result.setAttributes(style.quoteBlock.makeAttributeDict(), range: NSMakeRange(0, 2))
+            let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
+            result.addAttributes(style.quoteBlock.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
         // Inline
@@ -291,36 +290,26 @@ extension ContentNode {
             return NSAttributedString(string: self.text)
             
         case .StrongText:
-            result.appendAttributedString(NSAttributedString(string: "  "))
-            result.setAttributes(style.strongText.makeAttributeDict(), range: NSMakeRange(0, 2))
-            result.insertAttributedString(content, atIndex: 1)
-            return result
+            content.addAttributes(style.strongText.makeAttributeDict(), range: NSMakeRange(0, content.length))
+            return content
             
         case .EmphasizedText:
-            result.appendAttributedString(NSAttributedString(string: "  "))
-            result.setAttributes(style.emphasizedText.makeAttributeDict(), range: NSMakeRange(0, 2))
-            result.insertAttributedString(content, atIndex: 1)
-            return result
+            content.addAttributes(style.emphasizedText.makeAttributeDict(), range: NSMakeRange(0, content.length))
+            return content
             
         case .DeletedText:
-            result.appendAttributedString(NSAttributedString(string: "  "))
-            result.setAttributes(style.deletedText.makeAttributeDict(), range: NSMakeRange(0, 2))
-            result.insertAttributedString(content, atIndex: 1)
-            return result
+            content.addAttributes(style.deletedText.makeAttributeDict(), range: NSMakeRange(0, content.length))
+            return content
             
         case .InlineCode:
-            result.appendAttributedString(NSAttributedString(string: "  "))
-            result.setAttributes(style.inlineCode.makeAttributeDict(), range: NSMakeRange(0, 2))
-            result.insertAttributedString(content, atIndex: 1)
-            return result
+            content.setAttributes(style.inlineCode.makeAttributeDict(), range: NSMakeRange(0, content.length))
+            return content
             
         case .Link(let location):
-            result.appendAttributedString(NSAttributedString(string: "  "))
             var attribs = style.strongText.makeAttributeDict()
             attribs[NSLinkAttributeName] = location
-            result.setAttributes(attribs, range: NSMakeRange(0, 2))
-            result.insertAttributedString(content, atIndex: 1)
-            return result
+            content.addAttributes(attribs, range: NSMakeRange(0, content.length))
+            return content
             
         case .Image:
             if style.embedImages {
