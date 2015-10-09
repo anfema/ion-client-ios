@@ -600,6 +600,7 @@
 				8FC26A271BB9435D00E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8FC26A2B1BB9435D00E38569 /* Build configuration list for PBXNativeTarget "DEjson_osx_tests" */ = {
 			isa = XCConfigurationList;
@@ -608,6 +609,7 @@
 				8FC26A291BB9435D00E38569 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
