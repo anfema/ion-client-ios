@@ -71,23 +71,43 @@ public class JSONDecoder {
     
     func parseString(inout generator: String.UnicodeScalarView.Generator) -> (String) {
         var stringEnded = false
-        var skip = false
+        var slash = false
         var string = String()
         while let c = generator.next() {
             
-            if skip {
-                if c.value != 34 {
-                    string.append(UnicodeScalar(92))
+            if slash {
+                switch c.value {
+                case 34: // "
+                    string.append(UnicodeScalar(34))
+                case 110: // n -> linefeed
+                    string.append(UnicodeScalar(10))
+                case 98: // b -> backspace
+                    string.append(UnicodeScalar(10))
+                case 102: // f -> formfeed
+                    string.append(UnicodeScalar(10))
+                case 114: // r -> carriage return
+                    string.append(UnicodeScalar(10))
+                case 116: // t -> tab
+                    string.append(UnicodeScalar(10))
+                case 117: // u -> unicode value
+                    // gather 4 chars
+                    let d1 = self.parseHexDigit(generator.next())
+                    let d2 = self.parseHexDigit(generator.next())
+                    let d3 = self.parseHexDigit(generator.next())
+                    let d4 = self.parseHexDigit(generator.next())
+                    let codepoint = (d1 << 12) | (d2 << 8) | (d3 << 4) | d4;
+                    string.append(UnicodeScalar(codepoint))
+                default:
+                    string.append(c)
                 }
-                string.append(c)
-                skip = false
+                slash = false
                 continue
             }
             
             switch c.value {
             case 92: // \
                 // skip next char (could be a ")
-                skip = true
+                slash = true
             case 34: // "
                 stringEnded = true
             default:
@@ -98,9 +118,24 @@ public class JSONDecoder {
                 break
             }
         }
-        return string
+        // TODO: parse backslash escaped characters
+        return string.stringByReplacingOccurrencesOfString("\\n", withString: "\n")
     }
 
+    func parseHexDigit(digit: UnicodeScalar?) -> UInt32 {
+        guard let digit = digit else {
+            return 0
+        }
+        switch digit.value {
+        case 48, 49, 50, 51, 52, 53, 54, 55, 56, 57:
+            return digit.value - 48
+        case 97, 98, 99, 100, 101, 102:
+            return digit.value - 87
+        default:
+            return 0
+        }
+    }
+    
     func parseDict(inout generator: String.UnicodeScalarView.Generator) -> (Dictionary<String, JSONObject>?) {
         var dict : Dictionary<String, JSONObject> = Dictionary()
         var dictKey: String? = nil
