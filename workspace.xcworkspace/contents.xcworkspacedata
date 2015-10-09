@@ -11,6 +11,9 @@
       location = "group:DEjson/DEjson.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:/Users/johannes/Code/amp-ios-client/markdown/Markdown.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "container:amp-client-demo.xcodeproj">
    </FileRef>
 </Workspace>

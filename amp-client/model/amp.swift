@@ -14,19 +14,19 @@ import Alamofire
 /// access with `AMP.config`
 public struct AMPConfig {
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
-    var serverURL:NSURL!
+    public var serverURL:NSURL!
     
     /// locale-code to work on, defined by server config
-    var locale:String = "en_EN"
+    public var locale:String = "en_EN"
     
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
-    var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
+    public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
     /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
     var errorHandler:((String, AMPError.Code) -> Void)!
     
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
-    var sessionToken:String?
+    public var sessionToken:String?
     
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
@@ -50,7 +50,7 @@ public struct AMPConfig {
 
 public class AMP {
     /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
-    static var config = AMPConfig()
+    static public var config = AMPConfig()
     
     static private var collectionCache:[AMPCollection] = []
     static private var pageCache:[AMPPage] = []         /// memory cache for pages

@@ -8,7 +8,7 @@
 
 import Foundation
 import DEjson
-
+import Markdown
 
 public class AMPTextContent : AMPContent {
     public var mimeType:String = "text/plain"  /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
@@ -56,8 +56,7 @@ public class AMPTextContent : AMPContent {
         case "text/html":
             text = self.text
         case "text/markdown":
-            // TODO: convert Markdown to HTML
-            text = self.text
+            text = MDParser(markdown: self.text).render().renderHTMLFragment()
         case "text/plain":
             text = self.text.stringByReplacingOccurrencesOfString("\n", withString: "<br>\n")
         default:
@@ -96,8 +95,7 @@ public class AMPTextContent : AMPContent {
                 return nil
             }
         case "text/markdown":
-            // TODO: Parse markdown
-            return NSAttributedString(string: self.text)
+            return MDParser(markdown: self.text).render().renderAttributedString(AttributedStringStyling())
         case "text/plain":
             return NSAttributedString(string: self.text)
         default:
@@ -121,8 +119,7 @@ public class AMPTextContent : AMPContent {
             // TODO: Strip tags
             return self.text
         case "text/markdown":
-            // TODO: Strip markup
-            return self.text
+            return MDParser(markdown: self.text).render().renderText()
         default:
             // Unknown content type, just assume user wants no alterations
             return self.text

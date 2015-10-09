@@ -93,6 +93,8 @@
 		8FC26A741BB9542600E38569 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269991BB0462D00E38569 /* collection.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC26A761BB958F600E38569 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC26A751BB958F600E38569 /* config.swift */; settings = {ASSET_TAGS = (); }; };
 		8FC26A771BB958F600E38569 /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC26A751BB958F600E38569 /* config.swift */; settings = {ASSET_TAGS = (); }; };
+		8FE01B9F1BC7EF3600D91F48 /* markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FE01B9E1BC7EF3600D91F48 /* markdown.framework */; };
+		8FE01BA11BC7EF3E00D91F48 /* markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FE01BA01BC7EF3E00D91F48 /* markdown.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +193,8 @@
 		8FC26A6F1BB9518800E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = DEjson/build/Debug/DEjson.framework; sourceTree = "<group>"; };
 		8FC26A711BB9519300E38569 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "DEjson/build/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
 		8FC26A751BB958F600E38569 /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
+		8FE01B9E1BC7EF3600D91F48 /* markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = markdown.framework; path = markdown/build/Debug/markdown.framework; sourceTree = "<group>"; };
+		8FE01BA01BC7EF3E00D91F48 /* markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = markdown.framework; path = "markdown/build/Debug-iphoneos/markdown.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +202,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FE01BA11BC7EF3E00D91F48 /* markdown.framework in Frameworks */,
 				8FC26A721BB9519300E38569 /* DEjson.framework in Frameworks */,
 				8FC26A6E1BB9476F00E38569 /* CommonCrypto.framework in Frameworks */,
 				8F49A00A1BA1B34000E1AC15 /* Alamofire.framework in Frameworks */,
@@ -223,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FE01B9F1BC7EF3600D91F48 /* markdown.framework in Frameworks */,
 				8FC26A701BB9518800E38569 /* DEjson.framework in Frameworks */,
 				8FC26A6D1BB9476300E38569 /* CommonCrypto.framework in Frameworks */,
 				8FC26A0E1BB942C000E38569 /* Alamofire.framework in Frameworks */,
@@ -330,6 +336,8 @@
 		8F49A0101BA1B46B00E1AC15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8FE01BA01BC7EF3E00D91F48 /* markdown.framework */,
+				8FE01B9E1BC7EF3600D91F48 /* markdown.framework */,
 				8FC26A711BB9519300E38569 /* DEjson.framework */,
 				8FC26A6F1BB9518800E38569 /* DEjson.framework */,
 				8FC26A431BB9453C00E38569 /* DEjson_ios.framework */,
@@ -980,6 +988,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Alamofire/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/markdown/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/amp-client/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1008,6 +1017,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Alamofire/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/markdown/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/amp-client/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1100,6 +1110,7 @@
 					"$(PROJECT_DIR)/Alamofire/build/Debug",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug",
+					"$(PROJECT_DIR)/markdown/build/Debug",
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/amp-client/osx/Info.plist";
@@ -1126,6 +1137,7 @@
 					"$(PROJECT_DIR)/Alamofire/build/Debug",
 					"$(PROJECT_DIR)/DEjson/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/DEjson/build/Debug",
+					"$(PROJECT_DIR)/markdown/build/Debug",
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "$(SRCROOT)/amp-client/osx/Info.plist";
