@@ -48,7 +48,7 @@ public class JSONEncoder {
         case .JSONNumber(let number):
             result = "\(number)"
         case .JSONString(let string):
-            result = "\"\(string)\""
+            result = "\"" + self.encodeString(string) + "\""
         case .JSONBoolean(let value):
 			if value {
 				result = "true"
@@ -101,5 +101,54 @@ public class JSONEncoder {
             result += prettyPrint ? "\n" + " " * indent + "}" : "}"
         }
         return result
+    }
+    
+    func encodeString(string: String) -> String {
+        var result:String = ""
+        var generator = string.unicodeScalars.generate()
+
+        while let c = generator.next() {
+            switch c.value {
+            case 8: // b -> backspace
+                result.append(UnicodeScalar(92))
+                result.append(UnicodeScalar(98))
+            case 9: // t -> tab
+                result.append(UnicodeScalar(92))
+                result.append(UnicodeScalar(116))
+            case 10: // n -> linefeed
+                result.append(UnicodeScalar(92))
+                result.append(UnicodeScalar(110))
+            case 12: // f -> formfeed
+                result.append(UnicodeScalar(92))
+                result.append(UnicodeScalar(102))
+            case 13: // r -> carriage return
+                result.append(UnicodeScalar(92))
+                result.append(UnicodeScalar(114))
+            case 34: // "
+                result.append(UnicodeScalar(92))
+                result.append(c)
+            default:
+                if c.value > 128 {
+                    result.append(UnicodeScalar(92))
+                    result.append(UnicodeScalar(117)) // u
+
+                    let high = UInt8((c.value >> 8) & 0xff)
+                    let low = UInt8(c.value & 0xff)
+                    var highString = self.makeHexString(high).unicodeScalars.generate()
+                    var lowString = self.makeHexString(low).unicodeScalars.generate()
+                    result.append(highString.next()!)
+                    result.append(highString.next()!)
+                    result.append(lowString.next()!)
+                    result.append(lowString.next()!)
+                } else {
+                    result.append(c)
+                }
+            }
+        }
+        return result
+    }
+    
+    func makeHexString(value: UInt8) -> String {
+        return NSString(format: "%02x", value) as String
     }
 }

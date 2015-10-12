@@ -82,13 +82,13 @@ public class JSONDecoder {
                 case 110: // n -> linefeed
                     string.append(UnicodeScalar(10))
                 case 98: // b -> backspace
-                    string.append(UnicodeScalar(10))
+                    string.append(UnicodeScalar(8))
                 case 102: // f -> formfeed
-                    string.append(UnicodeScalar(10))
+                    string.append(UnicodeScalar(12))
                 case 114: // r -> carriage return
-                    string.append(UnicodeScalar(10))
+                    string.append(UnicodeScalar(13))
                 case 116: // t -> tab
-                    string.append(UnicodeScalar(10))
+                    string.append(UnicodeScalar(9))
                 case 117: // u -> unicode value
                     // gather 4 chars
                     let d1 = self.parseHexDigit(generator.next())
