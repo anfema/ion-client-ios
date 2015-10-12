@@ -223,10 +223,10 @@ public class AMP {
                         if (p.identifier == page.identifier) && (p.lastChanged.compare(page.lastUpdate) != .OrderedAscending) {
                             collection.page(page.identifier) { page in
                                 // do nothing, just download page
-                                print("AMP: Page refreshed: \(collection.identifier) -> \(page.identifier)")
+                                // print("AMP: Page refreshed: \(collection.identifier) -> \(page.identifier)")
                             }
                         } else {
-                            print("AMP: Page current: \(collection.identifier) -> \(page.identifier)")
+                            // print("AMP: Page current: \(collection.identifier) -> \(page.identifier)")
                         }
                     }
                 }

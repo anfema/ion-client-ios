@@ -121,8 +121,17 @@ public class AMPRequest {
         // Start download task
         let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             
+            // save response to cache
+            self.saveToCache(request, response)
+
             // check for download errors
             if let err = error {
+                // remove file
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+                } catch {
+                    // do nothing, perhaps the file did not exist
+                }
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
                     callback(Result.Failure(data, err))
