@@ -127,8 +127,6 @@ public class AMPTextContent : AMPContent {
     }
 }
 
-// TODO: Support HTML text on page level
-// TODO: Support Attributed string on page level
 extension AMPPage {
     
     /// Fetch plaintext string from named outlet
@@ -160,4 +158,65 @@ extension AMPPage {
         }
         return self
     }
+    
+    /// Fetch html string from named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: html string if the outlet was a text outlet and the page was already cached, else nil
+    public func html(name: String) -> String? {
+        if let content = self.outlet(name) {
+            if case let content as AMPTextContent = content {
+                return content.htmlText()
+            }
+        }
+        return nil
+    }
+    
+    /// Fetch html string from named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
+    ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func html(name: String, callback: (String -> Void)) -> AMPPage {
+        self.outlet(name) { content in
+            if case let content as AMPTextContent = content {
+                if let text = content.htmlText() {
+                    callback(text)
+                }
+            }
+        }
+        return self
+    }
+
+    /// Fetch attributed string from named outlet
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
+    public func attributedString(name: String) -> NSAttributedString? {
+        if let content = self.outlet(name) {
+            if case let content as AMPTextContent = content {
+                return content.attributedString()
+            }
+        }
+        return nil
+    }
+    
+    /// Fetch attributed string from named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
+    ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func attributedString(name: String, callback: (NSAttributedString -> Void)) -> AMPPage {
+        self.outlet(name) { content in
+            if case let content as AMPTextContent = content {
+                if let text = content.attributedString() {
+                    callback(text)
+                }
+            }
+        }
+        return self
+    }
+
 }
