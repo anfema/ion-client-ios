@@ -286,6 +286,7 @@ extension ContentNode {
             return result
             
         // Inline
+        // FIXME: Inline fonts are overridden by block level fonts, so bold, italic and code do not work correctly.
         case .PlainText:
             return NSAttributedString(string: self.text)
             
