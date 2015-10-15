@@ -112,7 +112,37 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
         AMP.config.resetErrorHandler()
     }
+    
+    func testPageEnumeration() {
+        let expectation = self.expectationWithDescription("fetch page")
+
+        var pageCount = 0;
+        AMP.collection("test").pages { page in
+            pageCount++
+            if (page.identifier != "page_001") && (page.identifier != "page_002") {
+                XCTFail()
+            }
+            if pageCount == 2 {
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        XCTAssert(pageCount == 2)
+    }
+    
+    func testSubPageEnumeration() {
+        let expectation = self.expectationWithDescription("fetch page")
+        
+        AMP.collection("test").page("page_002").children { page in
+            XCTAssert(page.identifier == "subpage_001")
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
 }

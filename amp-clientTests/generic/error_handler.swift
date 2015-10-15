@@ -138,7 +138,10 @@ class errorHandlerTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        
+        // Test fails because page callback did work (outlet callback does not retain error callback of collection)
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testBubblingToAMP() {
