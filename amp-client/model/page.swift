@@ -16,6 +16,7 @@ public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
 
 public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equatable, Hashable {
     public var identifier:String            /// page identifier
+    public var parent:String?               /// page parent identifier
     public var collection:AMPCollection     /// collection of this page
     public var lastUpdate:NSDate!           /// last update date of this page
     public var locale:String                /// locale code for the page
@@ -42,8 +43,8 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
-    convenience init(collection: AMPCollection, identifier: String) {
-        self.init(collection: collection, identifier: identifier, useCache: true)
+    convenience init(collection: AMPCollection, identifier: String, parent: String?) {
+        self.init(collection: collection, identifier: identifier, useCache: true, parent: parent)
     }
 
     /// Initialize page for collection (uses cache, initializes real object)
@@ -53,8 +54,8 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
     /// - Parameter callback: the block to call when initialization finished
-    convenience init(collection: AMPCollection, identifier: String, callback:(AMPPage -> Void)) {
-        self.init(collection: collection, identifier:identifier, useCache: true, callback:callback)
+    convenience init(collection: AMPCollection, identifier: String, parent: String?, callback:(AMPPage -> Void)) {
+        self.init(collection: collection, identifier:identifier, useCache: true, parent: parent, callback:callback)
     }
     
     /// Initialize page for collection
@@ -64,12 +65,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
     /// - Parameter useCache: set to false to force a page refresh
-    init(collection: AMPCollection, identifier: String, useCache: Bool) {
+    init(collection: AMPCollection, identifier: String, useCache: Bool, parent: String?) {
         // Lazy initializer, if this is used the page is not loaded but loading will start
         // in background
         self.identifier = identifier
         self.collection = collection
         self.useCache = useCache
+        self.parent = parent
         self.locale = self.collection.locale
     }
 
@@ -81,11 +83,12 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter identifier: the page identifier
     /// - Parameter useCache: set to false to force a page refresh
     /// - Parameter callback: the block to call when initialization finished
-    init(collection: AMPCollection, identifier: String, useCache: Bool, callback:(AMPPage -> Void)) {
+    init(collection: AMPCollection, identifier: String, useCache: Bool, parent: String?, callback:(AMPPage -> Void)) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
         self.collection = collection
         self.useCache = useCache
+        self.parent = parent
         self.locale = self.collection.locale
         super.init()
         
@@ -107,8 +110,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     
     // MARK: Async API
     
-    // TODO: children as child("test")
-    
     /// Error handler to chain to the page
     ///
     /// - Parameter callback: the block to call in case of an error
@@ -121,6 +122,45 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         return self
     }
 
+    /// fetch page children
+    ///
+    /// - Parameter identifier: identifier of child page
+    /// - Parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
+    public func child(identifier: String, callback: (AMPPage -> Void)) {
+        self.collection.page(identifier) { page in
+            if page.parent == self.identifier {
+                callback(page)
+            } else {
+                self.collection.callError(identifier, error: AMPError.Code.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+            }
+        }
+    }
+
+    /// fetch page children
+    ///
+    /// - Parameter identifier: identifier of child page
+    /// - Returns: page object that resolves async or nil if page not child of self
+    public func child(identifier: String) -> AMPPage? {
+        let page = self.collection.page(identifier)
+        if page.parent == self.identifier {
+            return page
+        }
+        self.collection.callError(identifier, error: AMPError.Code.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+        return nil
+    }
+    
+    
+    /// enumerate page children
+    ///
+    /// - Parameter callback: the callback to call for each child
+    public func children(callback: (AMPPage -> Void)) {
+        let children = self.collection.getChildIdentifiersForPage(self.identifier)
+        for child in children {
+            self.child(child, callback: callback)
+        }
+    }
+    
+    
     /// override default error callback to bubble error up to collection
     override func defaultErrorCallback(error: AMPError.Code) {
         self.collection.callError(self.identifier, error: error)
@@ -217,12 +257,18 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                 // make sure everything is there
                 guard (dict["identifier"] != nil) && (dict["translations"] != nil),
                       case .JSONString(let id) = dict["identifier"]!,
+                      let parent = dict["parent"],
                       case .JSONArray(let translations) = dict["translations"]! else {
                         self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(result.value))
                         self.hasFailed = true
                         return
                 }
                 
+                if case .JSONString(let parentID) = parent {
+                    self.parent = parentID
+                } else {
+                    self.parent = nil
+                }
                 self.identifier = id
 
                 // we only process the first translation as we used the `locale` filter in the request

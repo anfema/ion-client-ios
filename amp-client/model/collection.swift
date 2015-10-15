@@ -167,12 +167,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 }
                 if page.hasFailed {
                     // retry
-                    AMP.cachePage(AMPPage(collection: self, identifier: identifier) { page in
+                    let parent = self.getParentForPage(identifier)
+                    AMP.cachePage(AMPPage(collection: self, identifier: identifier, parent:parent) { page in
                         self.callCallbacks(identifier, value: page, error: nil)
                     })
                 }
             } else {
-                AMP.cachePage(AMPPage(collection: self, identifier: identifier) { page in
+                let parent = self.getParentForPage(identifier)
+                AMP.cachePage(AMPPage(collection: self, identifier: identifier, parent:parent) { page in
                     self.callCallbacks(identifier, value: page, error: nil)
                 })
             }
@@ -194,14 +196,23 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Returns: a page that resolves automatically if the underlying page becomes available
     public func page(identifier: String) -> AMPPage {
         // fetch page and resume processing when ready
-        self.appendCallback(identifier, callback: { page in })
-
+        self.appendCallback(identifier, callback: { page in }) // have at least one callback, even if it does nothing
+        var fetch = true
+        
         if let page = AMP.getCachedPage(self, identifier: identifier) {
             // well page is cached, just return cached version
-            return page
-        } else {
+            if page.isReady {
+                fetch = false
+                return page
+            }
+        }
+        
+        if fetch {
+            // search metadata
+            let parent = self.getParentForPage(identifier)
+            
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier) { page in
+            let page = AMPPage(collection: self, identifier: identifier, parent: parent) { page in
                 self.callCallbacks(identifier, value: page, error: nil)
             }
             AMP.cachePage(page)
@@ -209,6 +220,17 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         }
     }
   
+    /// Enumerate pages
+    ///
+    /// - Parameter callback: block to call for each page
+    public func pages(callback: (AMPPage -> Void)) {
+        for meta in self.pageMeta {
+            if meta.parent == nil {
+                self.page(meta.identifier, callback:callback)
+            }
+        }
+    }
+    
     /// Error handler to chain to the collection
     ///
     /// - Parameter callback: the block to call in case of an error
@@ -223,8 +245,31 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     override func defaultErrorCallback(error: AMPError.Code) {
         AMP.callError(self.identifier, error: error)
     }
+    
+    // MARK: - Internal
+    
+    internal func getChildIdentifiersForPage(parent: String) -> [String] {
+        var result:[String] = []
+        for meta in self.pageMeta {
+            if meta.parent == parent {
+                result.append(meta.identifier)
+            }
+        }
+        return result
+    }
    
     // MARK: - Private
+    
+    private func getParentForPage(identifier: String) -> String? {
+        var parent: String? = nil
+        for meta in self.pageMeta {
+            if meta.identifier == identifier {
+                parent = meta.parent
+                break
+            }
+        }
+        return parent
+    }
     
     /// Fetch collection from cache or web
     ///

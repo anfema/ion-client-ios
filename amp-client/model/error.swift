@@ -21,6 +21,7 @@ public struct AMPError {
 		case UnknownContentType(String)
         case CollectionNotFound(String)
         case PageNotFound(String)
+        case InvalidPageHierarchy(parent: String, child: String)
         case OutletNotFound(String)
 	}
 
@@ -71,8 +72,13 @@ public struct AMPError {
             numericalCode = -7008
             userInfo[NSLocalizedFailureReasonErrorKey] = "Page not found"
             userInfo["name"] = name
-        case .OutletNotFound(let name):
+        case .InvalidPageHierarchy(let parent, let child):
             numericalCode = -7009
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Invalid page hierarchy, child does not belong to parent"
+            userInfo["parent"] = parent
+            userInfo["child"] = child
+        case .OutletNotFound(let name):
+            numericalCode = -7010
             userInfo[NSLocalizedFailureReasonErrorKey] = "Outlet not found"
             userInfo["name"] = name
 		}
