@@ -22,7 +22,7 @@ class contentBaseTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testOutletFetchAsync() {
@@ -32,7 +32,7 @@ class contentBaseTests: LoggedInXCTestCase {
             XCTAssertNotNil(text)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testOutletFetchFail() {
@@ -49,7 +49,7 @@ class contentBaseTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
 }

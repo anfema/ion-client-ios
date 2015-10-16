@@ -24,7 +24,7 @@ class datetimeContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testDateOutletFetchAsync() {
@@ -34,6 +34,6 @@ class datetimeContentTests: LoggedInXCTestCase {
             XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }

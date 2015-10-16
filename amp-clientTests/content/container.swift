@@ -22,7 +22,7 @@ class containerContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testContainerOutletFetchAsync() {
@@ -32,6 +32,6 @@ class containerContentTests: LoggedInXCTestCase {
             XCTAssertEqual(children.count, 9)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }

@@ -224,11 +224,17 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter callback: block to call for each page
     public func pages(callback: (AMPPage -> Void)) {
-        for meta in self.pageMeta {
-            if meta.parent == nil {
-                self.page(meta.identifier, callback:callback)
+        // this block fetches the page list after the collection is ready
+        let block:(String -> Void) = { identifier in
+            for meta in self.pageMeta {
+                if meta.parent == nil {
+                    self.page(meta.identifier, callback:callback)
+                }
             }
         }
+        
+        // append the task to fetch the pages
+        self.appendTask("pageList", deduplicate:false, block: block)
     }
     
     /// Error handler to chain to the collection

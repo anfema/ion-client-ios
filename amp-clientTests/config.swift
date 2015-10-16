@@ -37,7 +37,7 @@ class DefaultXCTestCase: XCTestCase {
         }
 
         //AMP.resetMemCache()
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }
 

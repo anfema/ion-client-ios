@@ -23,7 +23,7 @@ class optionContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testOptionOutletFetchAsync() {
@@ -33,7 +33,7 @@ class optionContentTests: LoggedInXCTestCase {
             XCTAssertEqual(value, "Green")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
 }

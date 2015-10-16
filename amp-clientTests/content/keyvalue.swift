@@ -24,7 +24,7 @@ class keyValueContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testKVOutletFetchDictionaryAsync() {
@@ -36,7 +36,7 @@ class keyValueContentTests: LoggedInXCTestCase {
             XCTAssertNotNil(dict["glompf"])
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testKVOutletFetchValueSync() {
@@ -50,7 +50,7 @@ class keyValueContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testKVOutletFetchValueAsync() {
@@ -60,7 +60,7 @@ class keyValueContentTests: LoggedInXCTestCase {
             XCTAssertEqual(value as? String, "bar")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
 }

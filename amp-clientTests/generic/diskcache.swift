@@ -23,7 +23,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testCollectionDiskCacheClean() {
@@ -40,7 +40,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testCollectionDiskCacheUpdate() {
@@ -59,7 +59,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 }
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testPageDiskCache() {
@@ -75,7 +75,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testPageDiskCacheClean() {
@@ -92,7 +92,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testPageDiskCacheUpdate() {
@@ -118,7 +118,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 }
             }
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
 }

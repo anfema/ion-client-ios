@@ -126,7 +126,8 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter identifier: identifier of child page
     /// - Parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
-    public func child(identifier: String, callback: (AMPPage -> Void)) {
+    /// - Returns: self, to be able to chain more actions to the page
+    public func child(identifier: String, callback: (AMPPage -> Void)) -> AMPPage {
         self.collection.page(identifier) { page in
             if page.parent == self.identifier {
                 callback(page)
@@ -134,6 +135,8 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                 self.collection.callError(identifier, error: AMPError.Code.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
             }
         }
+        
+        return self
     }
 
     /// fetch page children

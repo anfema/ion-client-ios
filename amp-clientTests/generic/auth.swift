@@ -27,7 +27,7 @@ class authTests: DefaultXCTestCase {
             XCTAssertNotNil(AMP.config.sessionToken)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testLoginFailure() {
@@ -38,6 +38,6 @@ class authTests: DefaultXCTestCase {
             XCTAssertNil(AMP.config.sessionToken)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }

@@ -24,7 +24,7 @@ class pageTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testPageFetchAsync() {
@@ -39,7 +39,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testPageFetchFail() {
@@ -56,7 +56,7 @@ class pageTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testPageParentAsync() {
@@ -69,7 +69,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testPageParent() {
@@ -89,7 +89,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testPageChildFail() {
@@ -104,8 +104,6 @@ class pageTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        
-        // Test fails when called with others: Assumption: some empty error handler attached to page or collection that swallows our error
         
         AMP.collection("test").page("page_002").child("page_001") { page in
             XCTFail()
@@ -130,7 +128,7 @@ class pageTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
         XCTAssert(pageCount == 2)
     }
     

@@ -23,7 +23,7 @@ class collectionTests: LoggedInXCTestCase {
             expectation.fulfill()
         })
         
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testCollectionFetchError() {
@@ -44,7 +44,7 @@ class collectionTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
         AMP.config.resetErrorHandler()
     }
 }

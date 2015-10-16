@@ -22,7 +22,7 @@ class textContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
     func testTextOutletFetchAsync() {
@@ -32,6 +32,6 @@ class textContentTests: LoggedInXCTestCase {
             XCTAssert(text.hasPrefix("Donec ullamcorper nulla non"))
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(3.0, handler: nil)
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }
