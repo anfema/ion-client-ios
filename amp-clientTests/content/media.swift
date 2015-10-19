@@ -25,6 +25,6 @@ class mediaContentTests: LoggedInXCTestCase {
             XCTAssert(data.cryptoHash(HashTypes(rawValue: file.checksumMethod)!).hexString() == file.checksum)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(13.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 }

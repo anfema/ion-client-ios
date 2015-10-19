@@ -19,7 +19,7 @@ class imageContentTests: LoggedInXCTestCase {
             XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(13.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
 }
