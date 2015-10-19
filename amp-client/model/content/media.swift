@@ -83,8 +83,8 @@ public class AMPMediaContent : AMPContent {
     /// - Parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
-        // TODO: Cache invalidation
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
+            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
             }

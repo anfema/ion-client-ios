@@ -11,8 +11,6 @@ import Foundation
 import Alamofire
 import DEjson
 
-// TODO: Cache invalidation
-
 public class AMPRequest {
     private static var cacheDB:[JSONObject]?
     
@@ -75,24 +73,6 @@ public class AMPRequest {
         }
     }
     
-    /// Async fetch cached JSON from AMP Server
-    ///
-    /// - Parameter endpoint: the API endpoint to query
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, callback: (Result<JSONObject> -> Void)) {
-        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
-    }
-
-    /// Async fetch JSON from AMP Server circumventing cache
-    ///
-    /// - Parameter endpoint: the API endpoint to query
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSONUncached(endpoint: String, queryParameters: [String:String]?, callback: (Result<JSONObject> -> Void)) {
-        self.fetchJSON(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
-    }
-    
     /// Async fetch a binary file from AMP Server
     ///
     /// - Parameter urlString: the URL to fetch, has to be a complete and valid URL
@@ -100,35 +80,59 @@ public class AMPRequest {
     /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached:Bool, callback: (Result<String> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String> -> Void)) {
         let headers = self.headers()
-        let cacheName = self.cacheName(NSURL(string: urlString)!)
+        let url = NSURL(string: urlString)!
+        
+        while true {
+            // TODO: Make unittest
+            
+            // validate checksum
+            let cacheDBEntry = self.getCacheDBEntry(urlString)
+            guard (cacheDBEntry != nil) && (cacheDBEntry!["filename"] != nil) &&
+                  (cacheDBEntry!["checksum_method"] != nil) && (cacheDBEntry!["checksum"] != nil),
+                  case .JSONString(let filename)             = cacheDBEntry!["filename"]!,
+                  case .JSONString(let cachedChecksumMethod) = cacheDBEntry!["checksum_method"]!,
+                  case .JSONString(let cachedChecksum)       = cacheDBEntry!["checksum"]! else {
+                break
+            }
+
+            let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
+            let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
+
+            if (cachedChecksumMethod != checksumMethod) || (cachedChecksum != checksum) {
+                // if checksum changed DO NOT USE cache
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+                } catch {
+                    // do nothing, perhaps the file did not exist
+                }
+                break
+            }
+            
+            // Check disk cache
+            if cached && NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+                // return from cache instantly
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(Result.Success(cacheName))
+                }
+                return
+            }
+        }
         
         // destination block for Alamofire request
-        let destination = { (url: NSURL, response: NSHTTPURLResponse) -> NSURL in
-            return NSURL(fileURLWithPath: cacheName)
+        let destination = { (file_url: NSURL, response: NSHTTPURLResponse) -> NSURL in
+            return NSURL(fileURLWithPath: self.cacheName(url))
         }
-        
-        // Check disk cache
-        if cached && NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
-            // return from cache instantly
-            dispatch_async(AMP.config.responseQueue) {
-                callback(Result.Success(cacheName))
-            }
-            return
-        }
-        
+
         // Start download task
         let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             
-            // save response to cache
-            self.saveToCache(request, response)
-
             // check for download errors
             if let err = error {
                 // remove file
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url))
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
@@ -138,11 +142,11 @@ public class AMPRequest {
                 }
             } else {
                 // no error, save file to cache db
-                self.saveToCache(request, response)
+                self.saveToCache(request, response, checksumMethod: checksumMethod, checksum: checksum)
                 
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(Result.Success(cacheName))
+                    callback(Result.Success(self.cacheName(url)))
                 }
             }
         }
@@ -150,27 +154,7 @@ public class AMPRequest {
         // Register the download with the global progress handler
         AMP.registerProgress(downloadTask.progress, urlString: urlString)
     }
-    
-    /// Async fetch a binary file from AMP Server (using cache if possible)
-    ///
-    /// - Parameter urlString: the URL to fetch, has to be a complete and valid URL
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
-    ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(endpoint: String, queryParameters: [String:String]?, callback: (Result<String> -> Void)) {
-        self.fetchBinary(endpoint, queryParameters: queryParameters, cached: true, callback: callback)
-    }
-
-    /// Async fetch a binary file from AMP Server circumventing cache
-    ///
-    /// - Parameter urlString: the URL to fetch, has to be a complete and valid URL
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
-    ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinaryUncached(endpoint: String, queryParameters: [String:String]?, callback: (Result<String> -> Void)) {
-        self.fetchBinary(endpoint, queryParameters: queryParameters, cached: false, callback: callback)
-    }
-    
+       
     /// Async POST JSON to AMP Server
     ///
     /// - Parameter endpoint: the API endpoint to post to

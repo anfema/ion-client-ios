@@ -11,8 +11,6 @@ import Foundation
 import Alamofire
 import DEjson
 
-// TODO: Cache invalidation
-
 extension AMPRequest {
     private static var cacheDB:[JSONObject]?
     
@@ -128,7 +126,7 @@ extension AMPRequest {
             try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
             
             // save object to cache DB
-            self.saveToCache(request, response)
+            self.saveToCache(request, response, checksumMethod: "null", checksum: "")
         } catch {
             // do nothing, could not be saved to cache -> nonfatal
         }
@@ -138,7 +136,7 @@ extension AMPRequest {
     ///
     /// - Parameter request: optional request (used to extract URL)
     /// - Parameter response: optional response, checked for status code
-    internal class func saveToCache(request: NSURLRequest?, _ response: NSHTTPURLResponse?) {
+    internal class func saveToCache(request: NSURLRequest?, _ response: NSHTTPURLResponse?, checksumMethod: String, checksum: String) {
         
         // object can only saved to cache DB if response was 200 and we have a request
         guard let request = request,
@@ -164,10 +162,12 @@ extension AMPRequest {
         }
         
         // populate object with current data
-        obj!["url"]          = .JSONString(request.URLString)
-        obj!["host"]         = .JSONString(request.URL!.host!)
-        obj!["filename"]     = .JSONString(request.URLString.cryptoHash(.MD5))
-        obj!["last_updated"] = .JSONNumber(timestamp)
+        obj!["url"]             = .JSONString(request.URLString)
+        obj!["host"]            = .JSONString(request.URL!.host!)
+        obj!["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5))
+        obj!["last_updated"]    = .JSONNumber(timestamp)
+        obj!["checksum_method"] = .JSONString(checksumMethod)
+        obj!["checksum"]        = .JSONString(checksum)
         
         // append to cache DB and save
         self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
@@ -247,11 +247,11 @@ extension AMPRequest {
         })
     }
     
-    /// Private function to return the base directory for the AMP cache
+    /// Internal function to return the base directory for the AMP cache
     ///
     /// - Parameter host: the API host to fetch the cache dir for
     /// - Returns: File URL to the cache dir
-    private class func cacheBaseDir(host: String, locale: String) -> NSURL {
+    internal class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(host)")
         return fileURL
