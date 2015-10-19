@@ -27,6 +27,12 @@ public class AMPImageContent : AMPContent {
     var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
     var scale:Float				= 1.0           /// image scale factor before cropping
     
+    var checksumMethod:String   = "null:"
+    var checksum:String         = ""
+
+    var originalChecksumMethod:String = "null:"
+    var originalChecksum:String       = ""
+
     /// Initialize image content object from JSON
     ///
     /// - Parameter json: `JSONObject` that contains serialized image content object
@@ -41,11 +47,13 @@ public class AMPImageContent : AMPContent {
             (dict["original_image"] != nil) && (dict["width"] != nil) && (dict["height"] != nil) &&
             (dict["original_width"] != nil) && (dict["original_height"] != nil) && (dict["file_size"] != nil) &&
             (dict["original_file_size"] != nil) && (dict["scale"] != nil) && (dict["translation_x"] != nil) &&
-            (dict["translation_y"] != nil),
+            (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
             case .JSONString(let fileUrl)   = dict["image"]!,
             case .JSONString(let oFileUrl)  = dict["original_image"]!,
+            case .JSONString(let checksum)  = dict["checksum"]!,
+            case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let width)     = dict["width"]!,
             case .JSONNumber(let height)    = dict["height"]!,
             case .JSONNumber(let oWidth)    = dict["original_width"]!,
@@ -70,14 +78,23 @@ public class AMPImageContent : AMPContent {
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
         self.originalURL      = NSURL(string: oFileUrl)
+        
+        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+        self.originalChecksumMethod = originalChecksumParts[0]
+        self.originalChecksum = originalChecksumParts[1]
+
+        let checksumParts = checksum.componentsSeparatedByString(":")
+        self.checksumMethod = checksumParts[0]
+        self.checksum = checksumParts[1]
+
     }
     
     /// get a `CGDataProvider` for the image
     ///
     /// - Parameter callback: block to run when the provider becomes available
     public func dataProvider(callback: (CGDataProviderRef -> Void)) {
-        // TODO: Cache invalidation
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil) { result in
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
+            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
             }
