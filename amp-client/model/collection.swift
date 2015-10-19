@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import DEjson
 
-class AMPPageMeta {
+public class AMPPageMeta {
     static let formatter:NSDateFormatter = NSDateFormatter()
     static var formatterInstanciated = false
     
@@ -68,7 +68,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
 
     private var useCache = true         /// set to false to avoid using the cache (refreshes, etc.)
     
-    var pageMeta = [AMPPageMeta]()         /// page metadata
+    public var pageMeta = [AMPPageMeta]()         /// page metadata
 
     /// CustomStringConvertible requirement
     public var description: String {
