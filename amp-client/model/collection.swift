@@ -162,11 +162,25 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         // this block fetches the page from the cache or web and calls the associated callbacks
         let block:(String -> Void) = { identifier in
             if let page = AMP.getCachedPage(self, identifier: identifier) {
+                var needsUpdate:Bool = false
+                // ready, check if we need to update
                 if page.isReady {
-                    self.callCallbacks(identifier, value: page, error: nil)
+                    if let lastUpdate = self.getMetaUpdate(page) {
+                        if page.lastUpdate.compare(lastUpdate) == NSComparisonResult.OrderedAscending {
+                            // page out of date, force update
+                            needsUpdate = true
+                        }
+                    }
+                    if !needsUpdate {
+                        // no update return instantly
+                        self.callCallbacks(identifier, value: page, error: nil)
+                    }
                 }
                 if page.hasFailed {
-                    // retry
+                    needsUpdate = true
+                }
+                if needsUpdate {
+                    // fetch page update
                     let parent = self.getParentForPage(identifier)
                     AMP.cachePage(AMPPage(collection: self, identifier: identifier, parent:parent) { page in
                         self.callCallbacks(identifier, value: page, error: nil)
@@ -275,6 +289,17 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             }
         }
         return parent
+    }
+    
+    private func getMetaUpdate(page: AMPPage) -> NSDate? {
+        var update: NSDate? = nil
+        for meta in self.pageMeta {
+            if meta.identifier == page.identifier {
+                update = meta.lastChanged
+                break
+            }
+        }
+        return update
     }
     
     /// Fetch collection from cache or web
