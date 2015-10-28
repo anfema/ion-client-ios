@@ -228,8 +228,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter identifier: page identifier to get
     /// - Parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(Void -> Void)) {
-        // FIXME: this url is not unique, fix in backend
-        AMPRequest.fetchJSON("pages/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
+        AMPRequest.fetchJSON("pages/\(self.collection.identifier)/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
             if case .Failure = result {
                 self.collection.callError(identifier, error: AMPError.Code.PageNotFound(identifier))
                 self.hasFailed = true
