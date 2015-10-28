@@ -14,19 +14,29 @@ public class AMPPageMeta {
     static let formatter:NSDateFormatter = NSDateFormatter()
     static var formatterInstanciated = false
     
-    var identifier:String!  /// page identifier
-    var parent:String?      /// parent identifier
-    var lastChanged:NSDate! /// last change date
+    /// page identifier
+    var identifier:String!
     
+    /// parent identifier, nil == top level
+    var parent:String?
+    
+    /// last change date
+    var lastChanged:NSDate!
+    
+    /// page title if available
     var title:String?
+    
+    /// page layout
     var layout:String!
+    
+    /// thumbnail URL if available, if you want the UIImage use convenience functions below
     var thumbnail:String?
     
     /// Init metadata from JSON object
     ///
     /// - Parameter json: serialized JSON object of page metadata
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
-    init(json: JSONObject) throws {
+    internal init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw AMPError.Code.JSONObjectExpected(json)
         }
@@ -79,15 +89,23 @@ public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
 }
 
 public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equatable, Hashable {
-    public var identifier:String!       /// identifier
-    public var locale:String!           /// locale code
-
-    public var defaultLocale:String?    /// default locale for this collection
-    public var lastUpdate:NSDate?       /// last update date
-
-    private var useCache = true         /// set to false to avoid using the cache (refreshes, etc.)
+    /// identifier
+    public var identifier:String!
     
-    public var pageMeta = [AMPPageMeta]()         /// page metadata
+    /// locale code
+    public var locale:String!
+
+    /// default locale for this collection
+    public var defaultLocale:String?
+    
+    /// last update date
+    public var lastUpdate:NSDate?
+
+    /// set to false to avoid using the cache (refreshes, etc.)
+    private var useCache = true
+    
+    /// page metadata
+    internal var pageMeta = [AMPPageMeta]()
 
     /// CustomStringConvertible requirement
     public var description: String {
@@ -257,11 +275,13 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             return page
         }
     }
+    
+    // TODO: public func page(index: Int) -> AMPPage
   
     /// Enumerate pages
     ///
     /// - Parameter callback: block to call for each page
-    public func pages(callback: (AMPPage -> Void)) {
+    public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
         // this block fetches the page list after the collection is ready
         let block:(String -> Void) = { identifier in
             for meta in self.pageMeta {
@@ -273,6 +293,87 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         
         // append the task to fetch the pages
         self.appendTask("pageList", deduplicate:false, block: block)
+        
+        return self
+    }
+    
+    /// Fetch page count
+    ///
+    /// - Parameter parent: parent to get page count for, nil == top level
+    /// - Parameter callback: block to call for page count return value
+    public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
+        // this block fetches the page count after the collection is ready
+        let block:(String -> Void) = { identifier in
+            var count = 0
+            for meta in self.pageMeta {
+                if meta.parent == parent {
+                    count++
+                }
+            }
+            callback(count)
+        }
+        
+        // append the task to fetch the pages
+        self.appendTask("pageCount", deduplicate:false, block: block)
+
+        return self
+    }
+    
+    // TODO: public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
+
+    /// Fetch metadata
+    ///
+    /// - Parameter identifier: page identifier to get metadata for
+    /// - Parameter callback: callback to call with metadata
+    public func metadata(identifier: String, callback: (AMPPageMeta -> Void)) -> AMPCollection {
+        // this block fetches the page count after the collection is ready
+        let block:(String -> Void) = { _ in
+            var found = false
+            for meta in self.pageMeta {
+                if meta.identifier == identifier {
+                    callback(meta)
+                    found = true
+                    break
+                }
+            }
+            if !found {
+                AMP.callError(self.identifier, error: AMPError.Code.PageNotFound(identifier))
+            }
+        }
+        
+        // append the task to fetch the pages
+        self.appendTask("pageMetadata", deduplicate:false, block: block)
+        
+        return self
+    }
+
+    /// Enumerate metadata
+    ///
+    /// - Parameter parent: parent to enumerate metadata for, nil == top level
+    /// - Parameter callback: callback to call with metadata
+    public func enumerateMetadata(parent: String?, callback: (AMPPageMeta -> Void)) -> AMPCollection {
+        // this block fetches the page metadata after the collection is ready
+        let block:(String -> Void) = { identifier in
+            var found = false
+            for meta in self.pageMeta {
+                if meta.parent == parent {
+                    found = true
+                    callback(meta)
+                }
+            }
+            if !found {
+                if let parent = parent {
+                    AMP.callError(self.identifier, error: AMPError.Code.PageNotFound(parent))
+                } else {
+                    AMP.callError(self.identifier, error: AMPError.Code.CollectionNotFound(self.identifier))
+                }
+            }
+        }
+        
+        // append the task to fetch the pages
+        self.appendTask("pageMetadataEnumeration", deduplicate:false, block: block)
+        
+        return self
     }
     
     /// Error handler to chain to the collection
