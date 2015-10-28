@@ -110,11 +110,10 @@ extension AMPRequest {
     /// - Parameter optRequest: optional request (used for request url)
     /// - Parameter optResponse: optional response, checked for status code 200
     /// - Parameter result: the object to save
-    internal class func saveToCache(optRequest: NSURLRequest?, _ optResponse: NSHTTPURLResponse?, _ result:Result<JSONObject>) {
+    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError.Code>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
-        guard let request = optRequest,
-            let response = optResponse where response.statusCode == 200,
+        guard result.isSuccess,
             case .Success(let data) = result,
             let json = JSONEncoder(data).prettyJSONString else {
                 return
@@ -126,7 +125,7 @@ extension AMPRequest {
             try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
             
             // save object to cache DB
-            self.saveToCache(request, response, checksumMethod: "null", checksum: "")
+            self.saveToCache(request, checksumMethod: "null", checksum: "")
         } catch {
             // do nothing, could not be saved to cache -> nonfatal
         }
@@ -136,14 +135,7 @@ extension AMPRequest {
     ///
     /// - Parameter request: optional request (used to extract URL)
     /// - Parameter response: optional response, checked for status code
-    internal class func saveToCache(request: NSURLRequest?, _ response: NSHTTPURLResponse?, checksumMethod: String, checksum: String) {
-        
-        // object can only saved to cache DB if response was 200 and we have a request
-        guard let request = request,
-            let response = response where response.statusCode == 200 else {
-                return
-        }
-        
+    internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()

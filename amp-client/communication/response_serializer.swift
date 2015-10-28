@@ -14,21 +14,24 @@ extension Request {
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - Returns: A `JSONObject` response serializer
-    public static func DEJSONResponseSerializer() -> GenericResponseSerializer<JSONObject> {
-        return GenericResponseSerializer { _, _, data in
+    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError.Code> {
+        return ResponseSerializer { _, response, data, error in
             guard let validData = data else {
-                let error = AMPError.error(AMPError.Code.NoData)
-                return .Failure(data, error)
+                return .Failure(AMPError.Code.NoData)
+            }
+            
+            if response!.statusCode != 200 {
+                return .Failure(AMPError.Code.NoData)
             }
             
             if let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) {
                 let JSON = JSONDecoder(jsonString).jsonObject
                 if case .JSONInvalid = JSON {
-                    return .Failure(data, AMPError.error(AMPError.Code.InvalidJSON(nil)))
+                    return .Failure(AMPError.Code.InvalidJSON(nil))
                 }
                 return .Success(JSON)
             } else {
-                return .Failure(data, AMPError.error(AMPError.Code.InvalidJSON(nil)))
+                return .Failure(AMPError.Code.InvalidJSON(nil))
             }
         }
     }
@@ -40,7 +43,7 @@ extension Request {
     ///                                creating the JSON object.
     /// - Returns: The request.
     public func responseDEJSON(
-        completionHandler: (NSURLRequest?, NSHTTPURLResponse?, Result<JSONObject>) -> Void)
+        completionHandler: Response<JSONObject, AMPError.Code> -> Void)
         -> Self
     {
         return response(

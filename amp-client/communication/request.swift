@@ -22,7 +22,7 @@ public class AMPRequest {
     /// - Parameter queryParameters: any query parameters to include in the query or nil
     /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject?, AMPError.Code> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
         
@@ -52,20 +52,19 @@ public class AMPRequest {
         var headers = self.headers()
         headers["Accept"] = "application/json"
         
-        AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { (request, response, result) in
+        AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { response in
             // save response to cache
-            self.saveToCache(request, response, result)
+            self.saveToCache(response.request!, response.result)
             
             
             // object can only be saved if there is a request url and the status code of the response is a 200
-            guard let response = response where response.statusCode == 200,
-                  case .Success(let json) = result else {
-                callback(Result<JSONObject>.Failure(nil, AMPError.error(AMPError.Code.NoData)))
+            guard response.result.isSuccess else {
+                callback(.Failure(AMPError.Code.NoData))
                 return
             }
 
             // patch last_updated into response
-            let patchedResult:Result<JSONObject> = .Success(self.augmentJSONWithChangeDate(json, urlString: urlString))
+            let patchedResult:Result<JSONObject?, AMPError.Code> = .Success(self.augmentJSONWithChangeDate(response.result.value!, urlString: urlString))
             // call callback in correct queue
             dispatch_async(AMP.config.responseQueue) {
                 callback(patchedResult)
@@ -80,7 +79,7 @@ public class AMPRequest {
     /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String?, AMPError.Code> -> Void)) {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
@@ -114,7 +113,7 @@ public class AMPRequest {
             if cached && NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
                 // return from cache instantly
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(Result.Success(cacheName))
+                    callback(.Success(cacheName))
                 }
                 return
             }
@@ -129,7 +128,7 @@ public class AMPRequest {
         let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             
             // check for download errors
-            if let err = error {
+            if error != nil {
                 // remove file
                 do {
                     try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url))
@@ -138,11 +137,11 @@ public class AMPRequest {
                 }
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(Result.Failure(data, err))
+                    callback(.Failure(AMPError.Code.NoData))
                 }
             } else {
                 // no error, save file to cache db
-                self.saveToCache(request, response, checksumMethod: checksumMethod, checksum: checksum)
+                self.saveToCache(request!, checksumMethod: checksumMethod, checksum: checksum)
                 
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
@@ -161,16 +160,16 @@ public class AMPRequest {
     /// - Parameter queryParameters: any get parameters to include in the query or nil
     /// - Parameter body: dictionary with parameters (will be JSON encoded)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: ((NSHTTPURLResponse?, Result<JSONObject>) -> Void)) {
+    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONObject, AMPError.Code> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         var headers = self.headers()
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
         
-        AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers).responseDEJSON { (request, response, result) in
+        AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers).responseDEJSON { response in
             // call callback in correct queue
             dispatch_async(AMP.config.responseQueue) {
-                callback(response, result)
+                callback(response.result)
             }
         }
     }

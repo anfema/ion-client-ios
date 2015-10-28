@@ -66,9 +66,9 @@ public class AMP {
                 "username": username,
                 "password": password
             ]
-        ]) { (response, result) in
-            guard let response = response where response.statusCode == 200,
-                  case .Success(let json) = result,
+        ]) { result in
+            guard result.isSuccess,
+                  let json = result.value,
                   case .JSONDictionary(let dict) = json where dict["login"] != nil,
                   case .JSONDictionary(let loginDict) = dict["login"]! where loginDict["token"] != nil,
                   case .JSONString(let token) = loginDict["token"]! else {
