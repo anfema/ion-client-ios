@@ -18,6 +18,10 @@ public class AMPPageMeta {
     var parent:String?      /// parent identifier
     var lastChanged:NSDate! /// last change date
     
+    var title:String?
+    var layout:String!
+    var thumbnail:String?
+    
     /// Init metadata from JSON object
     ///
     /// - Parameter json: serialized JSON object of page metadata
@@ -27,8 +31,10 @@ public class AMPPageMeta {
             throw AMPError.Code.JSONObjectExpected(json)
         }
         
-        guard (dict["last_changed"] != nil) && (dict["parent"] != nil) && (dict["identifier"] != nil),
+        guard (dict["last_changed"] != nil) && (dict["parent"] != nil) &&
+              (dict["identifier"] != nil) && (dict["layout"] != nil),
               case .JSONString(let lastChanged) = dict["last_changed"]!,
+              case .JSONString(let layout) = dict["layout"]!,
               case .JSONString(let identifier)  = dict["identifier"]! else {
                 throw AMPError.Code.InvalidJSON(json)
         }
@@ -43,7 +49,20 @@ public class AMPPageMeta {
         
         self.lastChanged = AMPPageMeta.formatter.dateFromString(lastChanged)
         self.identifier  = identifier
+        self.layout = layout
         
+        if (dict["title"]  != nil) {
+            if case .JSONString(let title) = dict["title"]! {
+                self.title = title
+            }
+        }
+
+        if (dict["thumbnail"]  != nil) {
+            if case .JSONString(let thumbnail) = dict["thumbnail"]! {
+                self.thumbnail = thumbnail
+            }
+        }
+
         switch(dict["parent"]!) {
         case .JSONNull:
             self.parent = nil
@@ -182,13 +201,16 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 if needsUpdate {
                     // fetch page update
                     let parent = self.getParentForPage(identifier)
-                    AMP.cachePage(AMPPage(collection: self, identifier: identifier, parent:parent) { page in
+                    let layout = self.getLayoutForPage(identifier)
+
+                    AMP.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
                         self.callCallbacks(identifier, value: page, error: nil)
                     })
                 }
             } else {
                 let parent = self.getParentForPage(identifier)
-                AMP.cachePage(AMPPage(collection: self, identifier: identifier, parent:parent) { page in
+                let layout = self.getLayoutForPage(identifier)
+                AMP.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
                     self.callCallbacks(identifier, value: page, error: nil)
                 })
             }
@@ -223,10 +245,12 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         
         if fetch {
             // search metadata
+            // FIXME: 2 runs for searching metadata
             let parent = self.getParentForPage(identifier)
+            let layout = self.getLayoutForPage(identifier)
             
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier, parent: parent) { page in
+            let page = AMPPage(collection: self, identifier: identifier, layout:layout, parent: parent) { page in
                 self.callCallbacks(identifier, value: page, error: nil)
             }
             AMP.cachePage(page)
@@ -290,7 +314,18 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         }
         return parent
     }
-    
+
+    private func getLayoutForPage(identifier: String) -> String {
+        var layout: String = ""
+        for meta in self.pageMeta {
+            if meta.identifier == identifier {
+                layout = meta.layout
+                break
+            }
+        }
+        return layout
+    }
+
     private func getMetaUpdate(page: AMPPage) -> NSDate? {
         var update: NSDate? = nil
         for meta in self.pageMeta {

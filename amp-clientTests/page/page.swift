@@ -19,6 +19,7 @@ class pageTests: LoggedInXCTestCase {
             let page = collection.page("page_001")
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
+            XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
         }.onError() { error in
             XCTFail()
@@ -36,6 +37,7 @@ class pageTests: LoggedInXCTestCase {
         }.page("page_001") { page in
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
+            XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
         }
         
@@ -66,6 +68,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
+            XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
         }
         
@@ -77,6 +80,7 @@ class pageTests: LoggedInXCTestCase {
         XCTAssertNotNil(page)
         XCTAssert(page.identifier == "subpage_001")
         XCTAssert(page.parent == "page_002")
+        XCTAssert(page.layout == "Layout 001")
     }
 
     func testPageChild() {
@@ -86,6 +90,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
+            XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
         }
         

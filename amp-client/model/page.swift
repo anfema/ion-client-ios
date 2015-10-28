@@ -15,15 +15,29 @@ public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
 }
 
 public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equatable, Hashable {
-    public var identifier:String            /// page identifier
-    public var parent:String?               /// page parent identifier
-    public var collection:AMPCollection     /// collection of this page
-    public var lastUpdate:NSDate!           /// last update date of this page
-    public var locale:String                /// locale code for the page
+    /// page identifier
+    public var identifier:String
+    
+    /// page parent identifier
+    public var parent:String?
+    
+    /// collection of this page
+    public var collection:AMPCollection
+    
+    /// last update date of this page
+    public var lastUpdate:NSDate!
+    
+    /// locale code for the page
+    public var locale:String
 
-    public var content = [AMPContent]()     /// content list
+    /// layout identifier (name of the toplevel container outlet)
+    public var layout:String
+    
+    /// content list
+    public var content = [AMPContent]()
 
-    private var useCache = false            /// set to true to avoid fetching from cache
+    /// set to true to avoid fetching from cache
+    private var useCache = false
 
     /// CustomStringConvertible
     public var description: String {
@@ -43,8 +57,9 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
-    convenience init(collection: AMPCollection, identifier: String, parent: String?) {
-        self.init(collection: collection, identifier: identifier, useCache: true, parent: parent)
+    /// - Parameter layout: the page layout
+    convenience init(collection: AMPCollection, identifier: String, layout: String, parent: String?) {
+        self.init(collection: collection, identifier: identifier, layout:layout, useCache: true, parent: parent)
     }
 
     /// Initialize page for collection (uses cache, initializes real object)
@@ -53,9 +68,10 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
+    /// - Parameter layout: the page layout
     /// - Parameter callback: the block to call when initialization finished
-    convenience init(collection: AMPCollection, identifier: String, parent: String?, callback:(AMPPage -> Void)) {
-        self.init(collection: collection, identifier:identifier, useCache: true, parent: parent, callback:callback)
+    convenience init(collection: AMPCollection, identifier: String, layout: String, parent: String?, callback:(AMPPage -> Void)) {
+        self.init(collection: collection, identifier:identifier, layout:layout, useCache: true, parent: parent, callback:callback)
     }
     
     /// Initialize page for collection
@@ -64,11 +80,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
+    /// - Parameter layout: the page layout
     /// - Parameter useCache: set to false to force a page refresh
-    init(collection: AMPCollection, identifier: String, useCache: Bool, parent: String?) {
+    init(collection: AMPCollection, identifier: String, layout: String, useCache: Bool, parent: String?) {
         // Lazy initializer, if this is used the page is not loaded but loading will start
         // in background
         self.identifier = identifier
+        self.layout = layout
         self.collection = collection
         self.useCache = useCache
         self.parent = parent
@@ -81,11 +99,13 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter collection: the collection this page belongs to
     /// - Parameter identifier: the page identifier
+    /// - Parameter layout: the page layout
     /// - Parameter useCache: set to false to force a page refresh
     /// - Parameter callback: the block to call when initialization finished
-    init(collection: AMPCollection, identifier: String, useCache: Bool, parent: String?, callback:(AMPPage -> Void)) {
+    init(collection: AMPCollection, identifier: String, layout: String, useCache: Bool, parent: String?, callback:(AMPPage -> Void)) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
+        self.layout = layout
         self.collection = collection
         self.useCache = useCache
         self.parent = parent
@@ -95,6 +115,11 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         // fetch page async
         self.fetch(identifier) {
             self.isReady = true
+            if self.content.count > 0 {
+                if case let container as AMPContainerContent = self.content.first! {
+                    self.layout = container.outlet
+                }
+            }
             for o in self.content {
                 self.callCallbacks(o.outlet, value: o, error: nil)
             }
@@ -320,17 +345,17 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// 
     /// - Parameter obj: the content object to append including it's children
     private func appendContent(obj:AMPContent) {
-        // recursively append all content
+        self.content.append(obj)
+
+        // append all toplevel content
         if case let container as AMPContainerContent = obj {
             if let children = container.children {
                 for child in children {
                     // container's children are appended on base level to be able to find them quicker
-                    // FIXME: Is this always a good idea or just for the default "layout" container
-                    self.appendContent(child)
+                    self.content.append(child)
                 }
             }
         }
-        self.content.append(obj)
     }
 }
 
