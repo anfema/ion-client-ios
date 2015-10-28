@@ -22,7 +22,7 @@ public class AMPRequest {
     /// - Parameter queryParameters: any query parameters to include in the query or nil
     /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject?, AMPError.Code> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject, AMPError.Code> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
         
@@ -64,7 +64,7 @@ public class AMPRequest {
             }
 
             // patch last_updated into response
-            let patchedResult:Result<JSONObject?, AMPError.Code> = .Success(self.augmentJSONWithChangeDate(response.result.value!, urlString: urlString))
+            let patchedResult:Result<JSONObject, AMPError.Code> = .Success(self.augmentJSONWithChangeDate(response.result.value!, urlString: urlString))
             // call callback in correct queue
             dispatch_async(AMP.config.responseQueue) {
                 callback(patchedResult)
@@ -79,7 +79,7 @@ public class AMPRequest {
     /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String?, AMPError.Code> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String, AMPError.Code> -> Void)) {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
