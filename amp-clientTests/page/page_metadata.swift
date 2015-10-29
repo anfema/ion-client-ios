@@ -64,4 +64,24 @@ class pageMetadataTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
+    func testMetadataListAsync() {
+        let expectation = self.expectationWithDescription("enumerate metadata")
+        
+        AMP.collection("test").metadataList(nil) { list in
+            XCTAssert(list.count == 2)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataListAsync2() {
+        let expectation = self.expectationWithDescription("enumerate metadata")
+        
+        AMP.collection("test").metadataList("page_002") { list in
+            XCTAssert(list.count == 1)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
 }

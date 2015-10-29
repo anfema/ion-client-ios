@@ -352,31 +352,44 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter parent: parent to enumerate metadata for, nil == top level
     /// - Parameter callback: callback to call with metadata
     public func enumerateMetadata(parent: String?, callback: (AMPPageMeta -> Void)) -> AMPCollection {
+        self.metadataList(parent) { list in
+            for listItem in list {
+                callback(listItem)
+            }
+        }
+        
+        return self
+    }
+    
+    /// Fetch metadata as list
+    ///
+    /// - Parameter parent: parent to enumerate metadata for, nil == top level
+    /// - Parameter callback: callback to call with metadata
+    public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         // this block fetches the page metadata after the collection is ready
         let block:(String -> Void) = { identifier in
-            var found = false
+            var result = [AMPPageMeta]()
             for meta in self.pageMeta {
                 if meta.parent == parent {
-                    found = true
-                    callback(meta)
+                    result.append(meta)
                 }
             }
-            if !found {
+            if result.count == 0 {
                 if let parent = parent {
                     AMP.callError(self.identifier, error: AMPError.Code.PageNotFound(parent))
                 } else {
                     AMP.callError(self.identifier, error: AMPError.Code.CollectionNotFound(self.identifier))
                 }
+            } else {
+                callback(result)
             }
         }
         
         // append the task to fetch the pages
-        self.appendTask("pageMetadataEnumeration", deduplicate:false, block: block)
+        self.appendTask("pageMetadataList", deduplicate:false, block: block)
         
         return self
     }
-    
-    // TODO: metadata list
     
     /// Error handler to chain to the collection
     ///
