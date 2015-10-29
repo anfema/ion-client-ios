@@ -13,14 +13,40 @@ import Foundation
 #elseif os(iOS)
     import UIKit
 #endif
+import ImageIO
 
+/// Implement this protocol to gain dataProvider, cgImage and image functionality for a image URL
 public protocol CanLoadImage {
+    /// checksumming method used
     var checksumMethod:String! { get }
+    
+    /// checksum for the image
     var checksum:String! { get }
+    
+    /// url of the image
     var imageURL:NSURL? { get }
 }
 
 extension CanLoadImage {
+    
+    /// default implementation for checksum method (returns "null" if url not cached)
+    public var checksumMethod:String! {
+        guard let thumbnail = self.imageURL,
+            let _ = AMPRequest.cachedFile(thumbnail.URLString) else {
+                return "null"
+        }
+        return "sha256"
+    }
+    
+    /// default implementation for checksum (returns "invalid" if url not cached)
+    public var checksum:String! {
+        guard let thumbnail = self.imageURL,
+            let data = AMPRequest.cachedFile(thumbnail.URLString) else {
+                return "invalid"
+        }
+        return data.cryptoHash(.SHA256).hexString()
+    }
+    
     /// get a `CGDataProvider` for the image
     ///
     /// - Parameter callback: block to run when the provider becomes available

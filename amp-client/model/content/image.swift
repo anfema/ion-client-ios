@@ -13,7 +13,6 @@ import Foundation
     import UIKit
 #endif
 import DEjson
-import ImageIO
 
 public class AMPImageContent : AMPContent, CanLoadImage {
     var mimeType:String!                        /// mime type of the image

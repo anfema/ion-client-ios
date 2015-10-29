@@ -89,23 +89,6 @@ public class AMPPageMeta: CanLoadImage {
         }
         return nil
     }
-    
-    public var checksumMethod:String! {
-        guard let thumbnail = self.thumbnail,
-            let _ = AMPRequest.cachedFile(thumbnail) else {
-            return "null"
-        }
-        return "sha256"
-    }
-    
-    public var checksum:String! {
-        guard let thumbnail = self.thumbnail,
-              let data = AMPRequest.cachedFile(thumbnail) else {
-            return "invalid"
-        }
-        return data.cryptoHash(.SHA256).hexString()
-    }
-
 }
 
 public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
