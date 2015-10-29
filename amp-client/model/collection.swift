@@ -15,22 +15,23 @@ public class AMPPageMeta {
     static var formatterInstanciated = false
     
     /// page identifier
-    var identifier:String!
+    public var identifier:String!
     
     /// parent identifier, nil == top level
-    var parent:String?
+    public var parent:String?
     
     /// last change date
-    var lastChanged:NSDate!
+    public var lastChanged:NSDate!
     
     /// page title if available
-    var title:String?
+    public var title:String?
     
     /// page layout
-    var layout:String!
+    public var layout:String!
     
     /// thumbnail URL if available, if you want the UIImage use convenience functions below
-    var thumbnail:String?
+    public var thumbnail:String?
+    // TODO: Load thumbnail from cache and return UIImage/NSImage
     
     /// Init metadata from JSON object
     ///
