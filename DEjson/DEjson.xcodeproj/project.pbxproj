@@ -8,19 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		8F499FD61BA19F1F00E1AC15 /* DEjson.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F499FD51BA19F1F00E1AC15 /* DEjson.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F499FDD1BA19F2000E1AC15 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F499FD21BA19F1F00E1AC15 /* DEjson.framework */; settings = {ASSET_TAGS = (); }; };
+		8F499FDD1BA19F2000E1AC15 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F499FD21BA19F1F00E1AC15 /* DEjson.framework */; };
 		8F499FE21BA19F2000E1AC15 /* DEjsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FE11BA19F2000E1AC15 /* DEjsonTests.swift */; };
-		8F499FEF1BA19F4F00E1AC15 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; settings = {ASSET_TAGS = (); }; };
-		8F499FF01BA19F4F00E1AC15 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; settings = {ASSET_TAGS = (); }; };
-		8F499FF11BA19F4F00E1AC15 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; settings = {ASSET_TAGS = (); }; };
-		8F499FF21BA19F4F00E1AC15 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; settings = {ASSET_TAGS = (); }; };
-		8F499FF31BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; settings = {ASSET_TAGS = (); }; };
-		8F499FF41BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; settings = {ASSET_TAGS = (); }; };
-		8FC26A1F1BB9435D00E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A151BB9435D00E38569 /* DEjson.framework */; settings = {ASSET_TAGS = (); }; };
+		8F499FEF1BA19F4F00E1AC15 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; };
+		8F499FF01BA19F4F00E1AC15 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; };
+		8F499FF11BA19F4F00E1AC15 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; };
+		8F499FF21BA19F4F00E1AC15 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; };
+		8F499FF31BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; };
+		8F499FF41BA19F4F00E1AC15 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; };
+		8FC26A1F1BB9435D00E38569 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC26A151BB9435D00E38569 /* DEjson.framework */; };
 		8FC26A2C1BB943A400E38569 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */; };
 		8FC26A2D1BB943A400E38569 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */; };
 		8FC26A2E1BB943A400E38569 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */; };
-		8FC26A731BB9524700E38569 /* DEjsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FE11BA19F2000E1AC15 /* DEjsonTests.swift */; settings = {ASSET_TAGS = (); }; };
+		8FC26A731BB9524700E38569 /* DEjsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F499FE11BA19F2000E1AC15 /* DEjsonTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -452,6 +452,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = DEjson/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.ios;
 				PRODUCT_NAME = DEjson;
@@ -470,6 +471,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = DEjson/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.DEjson.ios;
 				PRODUCT_NAME = DEjson;

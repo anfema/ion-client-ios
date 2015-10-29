@@ -8,21 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		8F64FD8E1BC51F9500112167 /* Markdown.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F64FD8D1BC51F9500112167 /* Markdown.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F64FD951BC51F9500112167 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F64FD8A1BC51F9500112167 /* Markdown.framework */; settings = {ASSET_TAGS = (); }; };
+		8F64FD951BC51F9500112167 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F64FD8A1BC51F9500112167 /* Markdown.framework */; };
 		8F64FD9A1BC51F9500112167 /* markdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FD991BC51F9500112167 /* markdownTests.swift */; };
 		8F64FDAC1BC51FB300112167 /* Markdown.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F64FDAB1BC51FB300112167 /* Markdown.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F64FDB31BC51FB300112167 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F64FDA91BC51FB300112167 /* Markdown.framework */; settings = {ASSET_TAGS = (); }; };
-		8F64FDC31BC5471100112167 /* markdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FD991BC51F9500112167 /* markdownTests.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDC51BC5478B00112167 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC41BC5478B00112167 /* markdown.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDC61BC5478B00112167 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC41BC5478B00112167 /* markdown.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDC81BC5479900112167 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC71BC5479900112167 /* html_renderer.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDC91BC5479900112167 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC71BC5479900112167 /* html_renderer.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDCB1BC547AA00112167 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCA1BC547AA00112167 /* attributedstring_renderer.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDCC1BC547AA00112167 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCA1BC547AA00112167 /* attributedstring_renderer.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDCE1BC57B2C00112167 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCD1BC57B2C00112167 /* helper.swift */; settings = {ASSET_TAGS = (); }; };
-		8F64FDCF1BC57B2C00112167 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCD1BC57B2C00112167 /* helper.swift */; settings = {ASSET_TAGS = (); }; };
-		8FE01BA71BC7F2AD00D91F48 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BA61BC7F2AD00D91F48 /* text_renderer.swift */; settings = {ASSET_TAGS = (); }; };
-		8FE01BA81BC7F2AD00D91F48 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BA61BC7F2AD00D91F48 /* text_renderer.swift */; settings = {ASSET_TAGS = (); }; };
+		8F64FDB31BC51FB300112167 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F64FDA91BC51FB300112167 /* Markdown.framework */; };
+		8F64FDC31BC5471100112167 /* markdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FD991BC51F9500112167 /* markdownTests.swift */; };
+		8F64FDC51BC5478B00112167 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC41BC5478B00112167 /* markdown.swift */; };
+		8F64FDC61BC5478B00112167 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC41BC5478B00112167 /* markdown.swift */; };
+		8F64FDC81BC5479900112167 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC71BC5479900112167 /* html_renderer.swift */; };
+		8F64FDC91BC5479900112167 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDC71BC5479900112167 /* html_renderer.swift */; };
+		8F64FDCB1BC547AA00112167 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCA1BC547AA00112167 /* attributedstring_renderer.swift */; };
+		8F64FDCC1BC547AA00112167 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCA1BC547AA00112167 /* attributedstring_renderer.swift */; };
+		8F64FDCE1BC57B2C00112167 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCD1BC57B2C00112167 /* helper.swift */; };
+		8F64FDCF1BC57B2C00112167 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F64FDCD1BC57B2C00112167 /* helper.swift */; };
+		8FE01BA71BC7F2AD00D91F48 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BA61BC7F2AD00D91F48 /* text_renderer.swift */; };
+		8FE01BA81BC7F2AD00D91F48 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BA61BC7F2AD00D91F48 /* text_renderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -528,6 +528,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/support/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.markdown;
 				PRODUCT_NAME = Markdown;
@@ -546,6 +547,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/support/ios/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.markdown;
 				PRODUCT_NAME = Markdown;
