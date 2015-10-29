@@ -23,7 +23,7 @@ public struct AMPConfig {
     public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
     /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
-    var errorHandler:((String, AMPError.Code) -> Void)!
+    public var errorHandler:((String, AMPError.Code) -> Void)!
     
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?

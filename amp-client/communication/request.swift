@@ -11,6 +11,8 @@ import Foundation
 import Alamofire
 import DEjson
 
+// TODO: Export interface and make generic to use cache for other requests
+
 public class AMPRequest {
     private static var cacheDB:[JSONObject]?
     

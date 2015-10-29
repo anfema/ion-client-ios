@@ -376,6 +376,8 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         return self
     }
     
+    // TODO: metadata list
+    
     /// Error handler to chain to the collection
     ///
     /// - Parameter callback: the block to call in case of an error
