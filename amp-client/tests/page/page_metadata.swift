@@ -84,4 +84,17 @@ class pageMetadataTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
+    func testMetadataThumbnailAsync() {
+        let expectation = self.expectationWithDescription("get thumbnail")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            metadata.image { image in
+                XCTAssertNotNil(image)
+                XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
 }

@@ -143,7 +143,14 @@ public class AMPRequest {
                 }
             } else {
                 // no error, save file to cache db
-                self.saveToCache(request!, checksumMethod: checksumMethod, checksum: checksum)
+                var ckSumMethod = checksumMethod
+                var ckSum = checksum
+                if ckSumMethod == "null" {
+                    // update checksum if method was "null"
+                    ckSumMethod = "sha256"
+                    ckSum = self.cachedFile(urlString)!.cryptoHash(.SHA256).hexString()
+                }
+                self.saveToCache(request!, checksumMethod: ckSumMethod, checksum: ckSum)
                 
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
@@ -155,7 +162,26 @@ public class AMPRequest {
         // Register the download with the global progress handler
         AMP.registerProgress(downloadTask.progress, urlString: urlString)
     }
-       
+    
+    /// Fetch a file from the cache or return nil
+    ///
+    /// - Parameter urlString: url of the file to fetch from cache
+    /// - Returns: NSData with memory mapped file or nil if not in cache
+    public class func cachedFile(urlString:String) -> NSData? {
+        let url = NSURL(string: urlString)!
+        let cacheName = self.cacheName(url)
+
+        var data:NSData? = nil
+        if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+            do {
+                data = try NSData(contentsOfFile: cacheName, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+            } catch {
+                // file could not be loaded, do nothing
+            }
+        }
+        return data
+    }
+    
     /// Async POST JSON to AMP Server
     ///
     /// - Parameter endpoint: the API endpoint to post to

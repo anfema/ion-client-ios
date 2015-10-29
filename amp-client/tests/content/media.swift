@@ -11,7 +11,7 @@ class mediaContentTests: LoggedInXCTestCase {
         super.tearDown()
     }
     
-    func testFileOutletFetchAsync() {
+    func testMediaOutletFetchAsync() {
         let expectation = self.expectationWithDescription("fetch outlet")
         
         AMP.collection("test").page("page_001").mediaData("Media") { data in
@@ -27,4 +27,26 @@ class mediaContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+
+    func testMediaOutletImageFetchAsync() {
+        let expectation = self.expectationWithDescription("fetch outlet")
+        
+        AMP.collection("test").page("page_001").outlet("Media") { outlet in
+            guard case let mediaOutlet as AMPMediaContent = outlet else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            XCTAssert(mediaOutlet.mimeType == "image/jpeg")
+            
+            mediaOutlet.image { image in
+                XCTAssertNotNil(image)
+                XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
 }

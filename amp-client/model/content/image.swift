@@ -15,7 +15,7 @@ import Foundation
 import DEjson
 import ImageIO
 
-public class AMPImageContent : AMPContent {
+public class AMPImageContent : AMPContent, CanLoadImage {
     var mimeType:String!                        /// mime type of the image
     var size:CGSize				= CGSizeZero    /// dimensions of the image
     var fileSize:Int			= 0             /// file size in bytes
@@ -27,8 +27,8 @@ public class AMPImageContent : AMPContent {
     var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
     var scale:Float				= 1.0           /// image scale factor before cropping
     
-    var checksumMethod:String   = "null:"
-    var checksum:String         = ""
+    public var checksumMethod:String!   = "null:"
+    public var checksum:String!         = ""
 
     var originalChecksumMethod:String = "null:"
     var originalChecksum:String       = ""
@@ -89,62 +89,9 @@ public class AMPImageContent : AMPContent {
 
     }
     
-    /// get a `CGDataProvider` for the image
-    ///
-    /// - Parameter callback: block to run when the provider becomes available
-    public func dataProvider(callback: (CGDataProviderRef -> Void)) {
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
-            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
-            guard case .Success(let filename) = result else {
-                return
-            }
-            if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(dataProvider)
-                }
-            } else {
-                print("AMP: Could not create dataprovider from file \(filename)")
-            }
-        }
+    public var imageURL:NSURL? {
+        return self.url
     }
-
-    /// create a `CGImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func cgImage(callback: (CGImageRef -> Void)) {
-        self.dataProvider() { provider in
-            let options = Dictionary<String, AnyObject>()
-            if let src = CGImageSourceCreateWithDataProvider(provider, options) {
-                if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
-                    callback(img)
-                }
-            }
-        }
-    }
-    
-    #if os(iOS)
-    /// create `UIImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func image(callback: (UIImage -> Void)) {
-        self.cgImage() { img in
-            let uiImage = UIImage(CGImage: img)
-            callback(uiImage)
-        }
-    }
-    #endif
-    
-    #if os(OSX)
-    /// create `NSImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func image(callback: (NSImage -> Void)) {
-        self.cgImage() { img in
-            let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
-                callback(nsImage)
-            }
-        }
-    #endif
 }
 
 extension AMPPage {

@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import DEjson
 
-public class AMPPageMeta {
+public class AMPPageMeta: CanLoadImage {
     static let formatter:NSDateFormatter = NSDateFormatter()
     static var formatterInstanciated = false
     
@@ -31,7 +31,6 @@ public class AMPPageMeta {
     
     /// thumbnail URL if available, if you want the UIImage use convenience functions below
     public var thumbnail:String?
-    // TODO: Load thumbnail from cache and return UIImage/NSImage
     
     /// Init metadata from JSON object
     ///
@@ -83,6 +82,30 @@ public class AMPPageMeta {
             throw AMPError.Code.InvalidJSON(json)
         }
     }
+    
+    public var imageURL:NSURL? {
+        if let thumbnail = self.thumbnail {
+            return NSURL(string: thumbnail)!
+        }
+        return nil
+    }
+    
+    public var checksumMethod:String! {
+        guard let thumbnail = self.thumbnail,
+            let _ = AMPRequest.cachedFile(thumbnail) else {
+            return "null"
+        }
+        return "sha256"
+    }
+    
+    public var checksum:String! {
+        guard let thumbnail = self.thumbnail,
+              let data = AMPRequest.cachedFile(thumbnail) else {
+            return "invalid"
+        }
+        return data.cryptoHash(.SHA256).hexString()
+    }
+
 }
 
 public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {

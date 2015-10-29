@@ -10,12 +10,12 @@ import Foundation
 import DEjson
 
 
-public class AMPMediaContent : AMPContent {
-    var mimeType:String!        /// mime type of media file
+public class AMPMediaContent : AMPContent, CanLoadImage {
+    public var mimeType:String!        /// mime type of media file
     var size = CGSizeZero       /// dimensions of the media file if applicable
     var fileSize = 0            /// file size in bytes
-    var checksumMethod:String!  /// checksumming method used
-    var checksum:String!        /// checksum of the file
+    public var checksumMethod:String!  /// checksumming method used
+    public var checksum:String!        /// checksum of the file
     var length = Float(0.0)     /// length in seconds of the media file if applicable
     var url:NSURL!              /// url to the media file
     
@@ -97,6 +97,13 @@ public class AMPMediaContent : AMPContent {
                 print("AMP: Could not read file \(filename)")
             }
         }
+    }
+    
+    public var imageURL:NSURL? {
+        if self.mimeType.hasPrefix("image/") {
+            return self.url
+        }
+        return nil
     }
 }
 
