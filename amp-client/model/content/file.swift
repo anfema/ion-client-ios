@@ -10,13 +10,13 @@ import Foundation
 import DEjson
 
 
-public class AMPFileContent : AMPContent {
-    var mimeType:String!        /// mime type of file
-    var fileName:String!        /// file name
-    var size:Int = 0            /// file size in bytes
-    var checksumMethod:String!  /// checksumming method used
-    var checksum:String!        /// checksum as hex encoded string
-    var url:NSURL!              /// url to file
+public class AMPFileContent : AMPContent, CanLoadImage {
+    public var mimeType:String!        /// mime type of file
+    public var fileName:String!        /// file name
+    public var size:Int = 0            /// file size in bytes
+    public var checksumMethod:String!  /// checksumming method used
+    public var checksum:String!        /// checksum as hex encoded string
+    public var url:NSURL!              /// url to file
     
     /// Initialize file content object from JSON
     ///
@@ -66,6 +66,13 @@ public class AMPFileContent : AMPContent {
                 print("AMP: Could not read file \(filename)")
             }
         }
+    }
+    
+    public var imageURL:NSURL? {
+        if self.mimeType.hasPrefix("image/") {
+            return self.url
+        }
+        return nil
     }
 }
 

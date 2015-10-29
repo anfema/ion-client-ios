@@ -11,7 +11,7 @@ import DEjson
 
 
 public class AMPOptionContent : AMPContent {
-    var value:String! /// value for the selected option
+    public var value:String! /// value for the selected option
     
     /// Initialize option content object from JSON
     ///

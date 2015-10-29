@@ -15,10 +15,10 @@ import Foundation
 import DEjson
 
 public class AMPColorContent : AMPContent {
-    var r:Int!
-    var g:Int!
-    var b:Int!
-    var alpha:Int!
+    public var r:Int!
+    public var g:Int!
+    public var b:Int!
+    public var alpha:Int!
     
     /// Initialize color content object from JSON
     ///

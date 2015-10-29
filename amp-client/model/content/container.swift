@@ -10,7 +10,7 @@ import Foundation
 import DEjson
 
 public class AMPContainerContent : AMPContent {
-    var children:[AMPContent]!
+    public var children:[AMPContent]!
     
     /// Initialize container content object from JSON
     ///

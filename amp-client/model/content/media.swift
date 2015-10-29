@@ -12,20 +12,20 @@ import DEjson
 
 public class AMPMediaContent : AMPContent, CanLoadImage {
     public var mimeType:String!        /// mime type of media file
-    var size = CGSizeZero       /// dimensions of the media file if applicable
-    var fileSize = 0            /// file size in bytes
+    public var size = CGSizeZero       /// dimensions of the media file if applicable
+    public var fileSize = 0            /// file size in bytes
     public var checksumMethod:String!  /// checksumming method used
     public var checksum:String!        /// checksum of the file
-    var length = Float(0.0)     /// length in seconds of the media file if applicable
-    var url:NSURL!              /// url to the media file
+    public var length = Float(0.0)     /// length in seconds of the media file if applicable
+    public var url:NSURL!              /// url to the media file
     
-    var originalMimeType:String!        /// original media file mime type
-    var originalSize = CGSizeZero       /// dimensions of the original media file if applicable
-    var originalFileSize = 0            /// original media file size in bytes
-    var originalChecksumMethod:String!  /// checksumming method used
-    var originalChecksum:String!        /// checksum of the original file
-    var originalLength = Float(0.0)     /// length in seconds of the original media file if applicable
-    var originalURL:NSURL!              /// url to the original file
+    public var originalMimeType:String!        /// original media file mime type
+    public var originalSize = CGSizeZero       /// dimensions of the original media file if applicable
+    public var originalFileSize = 0            /// original media file size in bytes
+    public var originalChecksumMethod:String!  /// checksumming method used
+    public var originalChecksum:String!        /// checksum of the original file
+    public var originalLength = Float(0.0)     /// length in seconds of the original media file if applicable
+    public var originalURL:NSURL!              /// url to the original file
     
     /// Initialize media content object from JSON
     ///

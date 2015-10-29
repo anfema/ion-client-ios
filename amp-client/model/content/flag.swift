@@ -11,7 +11,7 @@ import DEjson
 
 
 public class AMPFlagContent : AMPContent {
-    var enabled:Bool! /// status of the flag
+    public var enabled:Bool! /// status of the flag
     
     /// Initialize flag content object from JSON
     ///

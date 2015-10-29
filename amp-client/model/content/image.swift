@@ -15,22 +15,22 @@ import Foundation
 import DEjson
 
 public class AMPImageContent : AMPContent, CanLoadImage {
-    var mimeType:String!                        /// mime type of the image
-    var size:CGSize				= CGSizeZero    /// dimensions of the image
-    var fileSize:Int			= 0             /// file size in bytes
-    var url:NSURL!                              /// URL of the image
-    var originalMimeType:String!                /// original image mime type
-    var originalSize:CGSize		= CGSizeZero    /// original image dimensions
-    var originalFileSize:Int	= 0             /// original image file size
-    var originalURL:NSURL!                      /// original image URL
-    var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
-    var scale:Float				= 1.0           /// image scale factor before cropping
+    public var mimeType:String!                         /// mime type of the image
+    public var size:CGSize				= CGSizeZero    /// dimensions of the image
+    public var fileSize:Int			    = 0             /// file size in bytes
+    public var url:NSURL!                               /// URL of the image
+    public var originalMimeType:String!                 /// original image mime type
+    public var originalSize:CGSize		= CGSizeZero    /// original image dimensions
+    public var originalFileSize:Int	    = 0             /// original image file size
+    public var originalURL:NSURL!                       /// original image URL
+    public var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
+    public var scale:Float				= 1.0           /// image scale factor before cropping
     
     public var checksumMethod:String!   = "null:"
     public var checksum:String!         = ""
 
-    var originalChecksumMethod:String = "null:"
-    var originalChecksum:String       = ""
+    public var originalChecksumMethod:String = "null:"
+    public var originalChecksum:String       = ""
 
     /// Initialize image content object from JSON
     ///
