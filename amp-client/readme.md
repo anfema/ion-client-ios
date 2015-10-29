@@ -9,6 +9,8 @@
   - [Getting pages](#getting-pages)
     - [Fetch a single page from a collection](#fetch-a-single-page-from-a-collection)
     - [Fetch multiple pages from the same collection](#fetch-multiple-pages-from-the-same-collection)
+    - [Get child pages from a page](#get-child-pages-from-a-page)
+    - [Get meta data for a page without downloading the page](#get-meta-data-for-a-page-without-downloading-the-page)
   - [Getting outlets](#getting-outlets)
     - [Fetch a single outlet](#fetch-a-single-outlet)
     - [Fetch multiple outlets](#fetch-multiple-outlets)
@@ -122,6 +124,23 @@ Variant 2:
     }
 
 
+### Get child pages from a page
+
+    AMP.collection("collection001").page("page001").child("subpage001") { page in
+        print("sub-page \(page.identifier) loaded")
+    }
+
+
+### Get meta data for a page without downloading the page
+
+    AMP.collection("collection001").metadata("page001") { metadata in
+        print("page title \(metadata.title)")
+        metadata.image { thumbnail in
+            print("thumbnail size: \(image.size.width) x \(image.size.height)")
+        }
+    }
+
+
 ## Getting outlets
 
 This works analogous to pages but has some convenience functionality.
@@ -163,10 +182,10 @@ Variant 1:
 
     AMP.collection("collection001").page("page001") { page in
         page.outlet("title") { content in
-            print("outlet \(content.getBaseObject().outlet) loaded")
+            print("outlet \(content.outlet) loaded")
         }
         page.outlet("text") { content in
-            print("outlet \(content.getBaseObject().outlet) loaded")
+            print("outlet \(content.outlet) loaded")
         }
     }
 
@@ -174,9 +193,9 @@ Variant 1:
 Variant 2:
 
     AMP.collection("collection001").page("page001").outlet("title") { content in
-        print("outlet \(content.getBaseObject().outlet) loaded")
+        print("outlet \(content.outlet) loaded")
     }.outlet("text") { content in
-        print("outlet \(content.getBaseObject().outlet) loaded")
+        print("outlet \(content.outlet) loaded")
     }
 
 
@@ -184,7 +203,7 @@ Variant 2:
 
     AMP.collection("collection001").page("page001") { page in
         for content in page.content {
-            print("outlet \(content.getBaseObject().outlet) loaded")
+            print("outlet \(content.outlet) loaded")
         }
     }
 
@@ -204,8 +223,7 @@ The following content types are defined:
 - Option
 - Text
 
-All content types have the base class of `AMPContentBase` and are always encapsulated in the `AMPContent` enum. All content types extend the `AMPPage` object with some convenience functions to make getting their values easier,
-following is a list with all available functions.
+All content types have the base class of `AMPContentBase`. All content types extend the `AMPPage` object with some convenience functions to make getting their values easier, following is a list with all available functions.
 
 
 ### Color
@@ -310,7 +328,14 @@ Content object:
 
 - `data(callback: (NSData -> Void))`:
   Calls a callback with memory mapped `NSData` for the media file, **Warning**: this downloads the file!
+- `dataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the image data
+- `cgImage(callback: (CGImageRef -> Void))`
+  Calls a callback with a `CGImage` for the image data
+- `image(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the image data
 - Use `url` property to get the URL of the file!
+
 
 Page extension:
 
