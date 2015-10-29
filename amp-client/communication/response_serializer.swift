@@ -9,6 +9,7 @@
 import Alamofire
 import DEjson
 
+/// Extend Alamofire Request with JSON response serializer of own JSON parser
 extension Request {
     
     /// Creates a response serializer that returns an JSON object constructed from the response data

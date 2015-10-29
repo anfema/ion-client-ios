@@ -13,6 +13,7 @@ import DEjson
 
 // TODO: Export interface and make generic to use cache for other requests
 
+/// Base Request class that handles caching
 public class AMPRequest {
     private static var cacheDB:[JSONObject]?
     

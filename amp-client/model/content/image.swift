@@ -14,22 +14,49 @@ import Foundation
 #endif
 import DEjson
 
+/// Image content, has OS specific image loading functionality
 public class AMPImageContent : AMPContent, CanLoadImage {
-    public var mimeType:String!                         /// mime type of the image
-    public var size:CGSize				= CGSizeZero    /// dimensions of the image
-    public var fileSize:Int			    = 0             /// file size in bytes
-    public var url:NSURL!                               /// URL of the image
-    public var originalMimeType:String!                 /// original image mime type
-    public var originalSize:CGSize		= CGSizeZero    /// original image dimensions
-    public var originalFileSize:Int	    = 0             /// original image file size
-    public var originalURL:NSURL!                       /// original image URL
-    public var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
-    public var scale:Float				= 1.0           /// image scale factor before cropping
     
+    /// mime type of the image
+    public var mimeType:String!
+    
+    /// dimensions of the image
+    public var size:CGSize				= CGSizeZero
+    
+    /// file size in bytes
+    public var fileSize:Int			    = 0
+    
+    /// URL of the image
+    public var url:NSURL!
+    
+    /// original image mime type
+    public var originalMimeType:String!
+    
+    /// original image dimensions
+    public var originalSize:CGSize		= CGSizeZero
+    
+    /// original image file size
+    public var originalFileSize:Int	    = 0
+    
+    /// original image URL
+    public var originalURL:NSURL!
+    
+    /// image translation before cropping to final size
+    public var translation:CGPoint		= CGPointZero
+    
+    /// image scale factor before cropping
+    public var scale:Float				= 1.0
+    
+    /// checksumming method used
     public var checksumMethod:String!   = "null:"
+    
+    /// checksum of the file
     public var checksum:String!         = ""
 
+    /// original file checksumming method
     public var originalChecksumMethod:String = "null:"
+    
+    /// original file checksum
     public var originalChecksum:String       = ""
 
     /// Initialize image content object from JSON
@@ -88,11 +115,13 @@ public class AMPImageContent : AMPContent, CanLoadImage {
 
     }
     
+    /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         return self.url
     }
 }
 
+/// Image extension to AMPPage
 extension AMPPage {
     #if os(iOS)
     /// Allocate `UIImage` for named outlet async

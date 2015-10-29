@@ -11,6 +11,7 @@ import Foundation
 import Alamofire
 import DEjson
 
+/// Caching extension for AMPRequest
 extension AMPRequest {
     private static var cacheDB:[JSONObject]?
     
@@ -43,6 +44,9 @@ extension AMPRequest {
         self.saveCacheDB()
     }
 
+    /// Reset complete AMP cache for a specific language and all hosts
+    ///
+    /// - Parameter locale: locale to clear cache for
     public class func resetCache(locale locale: String) {
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)

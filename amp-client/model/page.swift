@@ -10,11 +10,14 @@ import Foundation
 import Alamofire
 import DEjson
 
+/// compare two pages for equality
 public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
     return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
 }
 
+/// Page class, contains functionality to fetch outlet content
 public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equatable, Hashable {
+    
     /// page identifier
     public var identifier:String
     

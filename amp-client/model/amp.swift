@@ -31,7 +31,8 @@ public struct AMPConfig {
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
     
-    init() {
+    /// only the AMP class may init this
+    internal init() {
         let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
         configuration.HTTPCookieAcceptPolicy = .Never
@@ -41,6 +42,7 @@ public struct AMPConfig {
         self.resetErrorHandler()
     }
     
+    /// Reset the error handler to the default logging handler
     public mutating func resetErrorHandler() {
         self.errorHandler = { (collection, error) in
             print("AMP unhandled error in collection '\(collection)': \(error)")
@@ -48,6 +50,7 @@ public struct AMPConfig {
     }
 }
 
+/// AMP base class, use all AMP functionality by using this object's class methods
 public class AMP {
     /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
     static public var config = AMPConfig()

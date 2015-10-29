@@ -9,8 +9,9 @@
 import Foundation
 import DEjson
 
-
+/// Key/Value storage content
 public class AMPKeyValueContent : AMPContent {
+    /// value dictionary
     private var values:Dictionary<String, AnyObject>!
     
     /// Initialize key value content object from JSON
@@ -60,7 +61,7 @@ public class AMPKeyValueContent : AMPContent {
     }
 }
 
-
+/// Key/Value extension to AMPPage
 extension AMPPage {
     
     /// Return value for key in named outlet

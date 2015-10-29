@@ -9,9 +9,10 @@
 import Foundation
 import DEjson
 
-
+/// DateTime content
 public class AMPDateTimeContent : AMPContent {
-    public var date:NSDate? /// parsed date
+    /// parsed date
+    public var date:NSDate?
     
     /// Initialize datetime content object from JSON
     ///
@@ -37,6 +38,7 @@ public class AMPDateTimeContent : AMPContent {
     }
 }
 
+/// Date extension to AMPPage
 extension AMPPage {
     
     /// Fetch `NSDate` object from named outlet

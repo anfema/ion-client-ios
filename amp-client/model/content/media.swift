@@ -9,23 +9,50 @@
 import Foundation
 import DEjson
 
-
+/// Media content, may be image, audio or video content
 public class AMPMediaContent : AMPContent, CanLoadImage {
-    public var mimeType:String!        /// mime type of media file
-    public var size = CGSizeZero       /// dimensions of the media file if applicable
-    public var fileSize = 0            /// file size in bytes
-    public var checksumMethod:String!  /// checksumming method used
-    public var checksum:String!        /// checksum of the file
-    public var length = Float(0.0)     /// length in seconds of the media file if applicable
-    public var url:NSURL!              /// url to the media file
     
-    public var originalMimeType:String!        /// original media file mime type
-    public var originalSize = CGSizeZero       /// dimensions of the original media file if applicable
-    public var originalFileSize = 0            /// original media file size in bytes
-    public var originalChecksumMethod:String!  /// checksumming method used
-    public var originalChecksum:String!        /// checksum of the original file
-    public var originalLength = Float(0.0)     /// length in seconds of the original media file if applicable
-    public var originalURL:NSURL!              /// url to the original file
+    /// mime type of media file
+    public var mimeType:String!
+    
+    /// dimensions of the media file if applicable
+    public var size = CGSizeZero
+    
+    /// file size in bytes
+    public var fileSize = 0
+
+    /// checksumming method used
+    public var checksumMethod:String!
+
+    /// checksum of the file
+    public var checksum:String!
+    
+    /// length in seconds of the media file if applicable
+    public var length = Float(0.0)
+    
+    /// url to the media file
+    public var url:NSURL!
+    
+    /// original media file mime type
+    public var originalMimeType:String!
+    
+    /// dimensions of the original media file if applicable
+    public var originalSize = CGSizeZero
+
+    /// original media file size in bytes
+    public var originalFileSize = 0
+    
+    /// checksumming method used
+    public var originalChecksumMethod:String!
+    
+    /// checksum of the original file
+    public var originalChecksum:String!
+    
+    /// length in seconds of the original media file if applicable
+    public var originalLength = Float(0.0)
+
+    /// url to the original file
+    public var originalURL:NSURL!
     
     /// Initialize media content object from JSON
     ///
@@ -99,6 +126,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         }
     }
     
+    /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
@@ -107,6 +135,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     }
 }
 
+/// Media content extensions to AMPPage
 extension AMPPage {
     
     /// Fetch URL from named outlet

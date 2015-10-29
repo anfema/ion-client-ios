@@ -10,11 +10,16 @@ import Foundation
 import DEjson
 import Markdown
 
+/// Text content, may be rendered in different markup
 public class AMPTextContent : AMPContent {
-    public var mimeType:String = "text/plain"  /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
-    public var multiLine:Bool  = false         /// multi line hint
+    /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
+    public var mimeType:String = "text/plain"
+    
+    /// multi line hint
+    public var multiLine:Bool  = false
 
-    private var text:String!                   /// text, private because of conversion functions
+    /// text, private because of conversion functions
+    private var text:String!
     
     /// Initialize text content object from JSON
     ///
@@ -127,6 +132,7 @@ public class AMPTextContent : AMPContent {
     }
 }
 
+/// Text rendering extensions for AMPPage
 extension AMPPage {
     
     /// Fetch plaintext string from named outlet

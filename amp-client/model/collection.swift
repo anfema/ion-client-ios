@@ -10,8 +10,12 @@ import Foundation
 import Alamofire
 import DEjson
 
+/// Page metadata, used if only small samples of a page have to be used instead of downloading the whole thing
 public class AMPPageMeta: CanLoadImage {
+    /// static date formatter to save allocation times
     static let formatter:NSDateFormatter = NSDateFormatter()
+
+    /// flag if the date formatter has already been instanciated
     static var formatterInstanciated = false
     
     /// page identifier
@@ -91,11 +95,14 @@ public class AMPPageMeta: CanLoadImage {
     }
 }
 
+/// compare two collections
 public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
     return (lhs.identifier == rhs.identifier)
 }
 
+/// Collection class, contains pages, has functionality to async fetch data
 public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equatable, Hashable {
+    
     /// identifier
     public var identifier:String!
     

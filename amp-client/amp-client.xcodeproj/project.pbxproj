@@ -57,6 +57,10 @@
 		8F86E7301BE28B34002CE986 /* imageloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F86E72E1BE28B34002CE986 /* imageloader.swift */; settings = {ASSET_TAGS = (); }; };
 		8F86E7321BE29A63002CE986 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7311BE29A63002CE986 /* Alamofire.framework */; };
 		8F86E7331BE29A6D002CE986 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7311BE29A63002CE986 /* Alamofire.framework */; };
+		8F86E7351BE2A6C9002CE986 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7341BE2A6C9002CE986 /* DEjson.framework */; };
+		8F86E7361BE2A6CF002CE986 /* DEjson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7341BE2A6C9002CE986 /* DEjson.framework */; };
+		8F86E7381BE2A6DB002CE986 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7371BE2A6DB002CE986 /* Markdown.framework */; };
+		8F86E7391BE2A6E1002CE986 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F86E7371BE2A6DB002CE986 /* Markdown.framework */; };
 		8FC2698E1BB0452800E38569 /* base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269831BB0452800E38569 /* base.swift */; };
 		8FC2698F1BB0452800E38569 /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269841BB0452800E38569 /* color.swift */; };
 		8FC269901BB0452800E38569 /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269851BB0452800E38569 /* container.swift */; };
@@ -155,6 +159,8 @@
 		8F6F6FE01BE1349200C31045 /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8F86E72E1BE28B34002CE986 /* imageloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = imageloader.swift; path = helper/imageloader.swift; sourceTree = "<group>"; };
 		8F86E7311BE29A63002CE986 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../Library/Developer/Xcode/DerivedData/workspace-fypqfeiwyqutiuddktcynvctzbqd/Build/Products/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
+		8F86E7341BE2A6C9002CE986 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "../../../Library/Developer/Xcode/DerivedData/workspace-fypqfeiwyqutiuddktcynvctzbqd/Build/Products/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
+		8F86E7371BE2A6DB002CE986 /* Markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Markdown.framework; path = "../../../Library/Developer/Xcode/DerivedData/workspace-fypqfeiwyqutiuddktcynvctzbqd/Build/Products/Debug-iphoneos/Markdown.framework"; sourceTree = "<group>"; };
 		8FABD49A1BBC244A006F6806 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		8FC269831BB0452800E38569 /* base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = base.swift; sourceTree = "<group>"; };
 		8FC269841BB0452800E38569 /* color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = color.swift; sourceTree = "<group>"; };
@@ -195,6 +201,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F86E7381BE2A6DB002CE986 /* Markdown.framework in Frameworks */,
+				8F86E7351BE2A6C9002CE986 /* DEjson.framework in Frameworks */,
 				8F86E7321BE29A63002CE986 /* Alamofire.framework in Frameworks */,
 				8FC26A6E1BB9476F00E38569 /* CommonCrypto.framework in Frameworks */,
 			);
@@ -219,6 +227,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F86E7391BE2A6E1002CE986 /* Markdown.framework in Frameworks */,
+				8F86E7361BE2A6CF002CE986 /* DEjson.framework in Frameworks */,
 				8F86E7331BE29A6D002CE986 /* Alamofire.framework in Frameworks */,
 				8FC26A6D1BB9476300E38569 /* CommonCrypto.framework in Frameworks */,
 			);
@@ -326,6 +336,8 @@
 		8F49A0101BA1B46B00E1AC15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8F86E7371BE2A6DB002CE986 /* Markdown.framework */,
+				8F86E7341BE2A6C9002CE986 /* DEjson.framework */,
 				8F86E7311BE29A63002CE986 /* Alamofire.framework */,
 				8FC269B61BB1A0B600E38569 /* CommonCrypto */,
 			);

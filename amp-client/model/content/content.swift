@@ -9,10 +9,17 @@
 import Foundation
 import DEjson
 
+/// AMPContent base class, carries common values
 public class AMPContent {
-	public var variation:String!            /// variation name
-	public var outlet:String!               /// outlet name
-	public var isSearchable = false         /// searchable?
+    
+    /// variation name
+    public var variation:String!
+    
+    /// outlet name
+    public var outlet:String!
+    
+    /// searchable?
+	public var isSearchable = false
 
     // TODO: Array index?
     

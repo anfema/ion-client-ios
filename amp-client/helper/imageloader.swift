@@ -15,7 +15,7 @@ import Foundation
 #endif
 import ImageIO
 
-/// Implement this protocol to gain dataProvider, cgImage and image functionality for a image URL
+/// Implement this protocol to gain `dataProvider`, `cgImage` and `image` functionality for a image URL
 public protocol CanLoadImage {
     /// checksumming method used
     var checksumMethod:String! { get }
@@ -27,6 +27,7 @@ public protocol CanLoadImage {
     var imageURL:NSURL? { get }
 }
 
+/// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
 extension CanLoadImage {
     
     /// default implementation for checksum method (returns "null" if url not cached)

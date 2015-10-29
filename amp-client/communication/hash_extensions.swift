@@ -10,18 +10,36 @@
 import Foundation
 import CommonCrypto
 
+/// Hash types supported by the hashing extensions
 public enum HashTypes : String {
+    /// Internal typealias to avoid brain injuries
     typealias HashFunction = (UnsafePointer<Void>, CC_LONG, UnsafeMutablePointer<UInt8>) -> UnsafeMutablePointer<UInt8>
 
+    /// MD2 checksums (do not use)
     case MD2 = "md2"
+    
+    /// MD4 checksums (do not use)
     case MD4 = "md4"
+    
+    /// MD5 checksums (avoid using if possible)
     case MD5 = "md5"
+    
+    /// SHA1 checksums
     case SHA1 = "sha1"
+    
+    /// SHA 224 checksums
     case SHA224 = "sha224"
+    
+    /// SHA 256 checksums
     case SHA256 = "sha256"
+    
+    /// SHA 384 checksums
     case SHA384 = "sha384"
+    
+    /// SHA 512 checksums
     case SHA512 = "sha512"
     
+    /// returns the length of the checksum in bytes
     var digestLength: Int {
         get {
             switch self {
@@ -45,6 +63,7 @@ public enum HashTypes : String {
         }
     }
     
+    /// return the hashing function from common crypto
     var hashFunction: HashFunction {
         get {
             switch self {
@@ -69,6 +88,7 @@ public enum HashTypes : String {
     }
 }
 
+/// Extension to convert number to hex string
 extension UInt8 {
     /// Convert value into 2 byte hex-string
     ///
@@ -78,6 +98,7 @@ extension UInt8 {
     }
 }
 
+/// Extension to calculate cryptographic checksums on data
 extension NSData {
     
     /// Convert bytes into hex-string
@@ -115,7 +136,7 @@ extension NSData {
     }
 }
 
-
+/// Extension to calculate cryptographic checksums on strings
 extension String {
     
     /// Calculate cryptographic hash

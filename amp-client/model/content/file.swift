@@ -9,14 +9,25 @@
 import Foundation
 import DEjson
 
-
+/// File content
 public class AMPFileContent : AMPContent, CanLoadImage {
-    public var mimeType:String!        /// mime type of file
-    public var fileName:String!        /// file name
-    public var size:Int = 0            /// file size in bytes
-    public var checksumMethod:String!  /// checksumming method used
-    public var checksum:String!        /// checksum as hex encoded string
-    public var url:NSURL!              /// url to file
+    /// mime type of file
+    public var mimeType:String!
+    
+    /// file name
+    public var fileName:String!
+    
+    /// file size in bytes
+    public var size:Int = 0
+    
+    /// checksumming method used
+    public var checksumMethod:String!
+
+    /// checksum as hex encoded string
+    public var checksum:String!
+    
+    /// url to file
+    public var url:NSURL!
     
     /// Initialize file content object from JSON
     ///
@@ -68,6 +79,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         }
     }
     
+    /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
@@ -76,6 +88,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     }
 }
 
+/// File data extension to AMPPage
 extension AMPPage {
     
     /// Fetch data for file async

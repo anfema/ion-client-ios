@@ -9,9 +9,10 @@
 import Foundation
 import DEjson
 
-
+/// Flag content, can be enabled or not
 public class AMPFlagContent : AMPContent {
-    public var enabled:Bool! /// status of the flag
+    /// status of the flag
+    public var enabled:Bool!
     
     /// Initialize flag content object from JSON
     ///
@@ -32,6 +33,7 @@ public class AMPFlagContent : AMPContent {
     }
 }
 
+/// Flag extension to AMPPage
 extension AMPPage {
 
     /// Check if flag is set for named outlet

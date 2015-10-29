@@ -14,10 +14,18 @@ import Foundation
 #endif
 import DEjson
 
+/// Color content
 public class AMPColorContent : AMPContent {
+    /// red component (0-255)
     public var r:Int!
+    
+    /// green component (0-255)
     public var g:Int!
+
+    /// blue component (0-255)
     public var b:Int!
+
+    /// alpha component (0-255), zero is fully transparent
     public var alpha:Int!
     
     /// Initialize color content object from JSON
@@ -66,6 +74,7 @@ public class AMPColorContent : AMPContent {
     #endif
 }
 
+/// Color extension to AMPPage
 extension AMPPage {
     
     #if os(OSX)

@@ -9,9 +9,11 @@
 import Foundation
 import DEjson
 
-
+/// Option content, just carries the selected value not the options
 public class AMPOptionContent : AMPContent {
-    public var value:String! /// value for the selected option
+    
+    /// value for the selected option
+    public var value:String!
     
     /// Initialize option content object from JSON
     ///
@@ -32,6 +34,7 @@ public class AMPOptionContent : AMPContent {
     }
 }
 
+/// Option extensions to AMPPage
 extension AMPPage {
     
     /// Fetch selected option for named outlet

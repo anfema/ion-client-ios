@@ -9,19 +9,44 @@
 import Foundation
 import DEjson
 
+// TODO: refactor as Alamofire now uses `ErrorType` too
+
+/// Error type for AMP
 public struct AMPError {
+    
+    /// error domain for `NSError` conversion
 	public static let Domain = "com.anfema.amp"
 	
+    /// Error codes used by AMP
 	public enum Code: ErrorType {
+        /// No data received error
 		case NoData
+        
+        /// Invalid json error, probably a transmission error
 		case InvalidJSON(JSONObject?)
+        
+        /// Expected a JSON object but found another thing
 		case JSONObjectExpected(JSONObject?)
+        
+        /// Expected a JSON array but found another thing
 		case JSONArrayExpected(JSONObject?)
+        
+        /// Expected top level JSON object or array but found something other
         case JSONArrayOrObjectExpected(JSONObject?)
+        
+        /// Unknown content type returned (AMPContent subclass not found)
 		case UnknownContentType(String)
+        
+        /// Collection with that name is not available
         case CollectionNotFound(String)
+        
+        /// Page with that name is not available
         case PageNotFound(String)
+        
+        /// Page `child` is not a sub page of `parent`
         case InvalidPageHierarchy(parent: String, child: String)
+        
+        /// Outlet with that name not found
         case OutletNotFound(String)
 	}
 

@@ -9,7 +9,9 @@
 import Foundation
 import DEjson
 
+/// Container content, contains other content objects
 public class AMPContainerContent : AMPContent {
+    /// children to this container
     public var children:[AMPContent]!
     
     /// Initialize container content object from JSON
@@ -48,6 +50,7 @@ public class AMPContainerContent : AMPContent {
     }
 }
 
+/// Container extension to AMPPage
 extension AMPPage {
     
     /// Fetch `AMPContent`-Array from named outlet
