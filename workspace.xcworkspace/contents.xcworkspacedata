@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:amp-client.xcodeproj">
+      location = "group:amp-client/amp-client.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Alamofire/Alamofire.xcodeproj">
@@ -14,6 +14,6 @@
       location = "container:markdown/Markdown.xcodeproj">
    </FileRef>
    <FileRef
-      location = "container:amp-client-demo.xcodeproj">
+      location = "group:amp-client-demo/amp-client-demo.xcodeproj">
    </FileRef>
 </Workspace>

@@ -319,8 +319,6 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         return self
     }
     
-    // TODO: public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
-
     /// Fetch metadata
     ///
     /// - Parameter identifier: page identifier to get metadata for

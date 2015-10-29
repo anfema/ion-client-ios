@@ -22,7 +22,7 @@ extension ContentNode {
             return content
             
         // Block level
-        case .Heading(let level):
+        case .Heading:
             return "\n\(content)\n\n"
             
         case .UnorderedList:
@@ -62,10 +62,10 @@ extension ContentNode {
         case .InlineCode:
             return content
 
-        case .Link(let location):
+        case .Link:
             return content
 
-        case .Image(let location):
+        case .Image:
             return content
         }
     }
