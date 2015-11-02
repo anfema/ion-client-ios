@@ -72,7 +72,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testPageParent() {
@@ -94,7 +94,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     func testPageChildFail() {
@@ -115,7 +115,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
         AMP.config.resetErrorHandler()
     }
     
@@ -145,7 +145,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
 }
