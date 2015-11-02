@@ -27,7 +27,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     public var checksum:String!
     
     /// url to file
-    public var url:NSURL!
+    public var url:NSURL?
+    
+    /// is this a valid file
+    public var isValid = false
     
     /// Initialize file content object from JSON
     ///
@@ -44,8 +47,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             case .JSONString(let mimeType) = dict["mime_type"]!,
             case .JSONString(let fileName) = dict["name"]!,
             case .JSONNumber(let size)     = dict["file_size"]!,
-            case .JSONString(let checksum) = dict["checksum"]!,
-            case .JSONString(let fileUrl)  = dict["file"]! // FIXME: May be .JSONNull too
+            case .JSONString(let checksum) = dict["checksum"]!
             else {
                 throw AMPError.Code.InvalidJSON(json)
         }
@@ -56,7 +58,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         let checksumParts = checksum.componentsSeparatedByString(":")
         self.checksumMethod = checksumParts[0]
         self.checksum = checksumParts[1]
-        self.url      = NSURL(string: fileUrl)
+        if case .JSONString(let fileUrl) = dict["file"]! {
+            self.url     = NSURL(string: fileUrl)
+            self.isValid = true
+        }
     }
     
     /// Load the file binary data and return memory mapped `NSData`
@@ -64,7 +69,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     /// - Parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
+        guard self.isValid else {
+            return
+        }
+        AMPRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: true,
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return

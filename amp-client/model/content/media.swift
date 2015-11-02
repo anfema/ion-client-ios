@@ -54,6 +54,9 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     /// url to the original file
     public var originalURL:NSURL!
     
+    /// is this a valid media content object
+    public var isValid = false
+    
     /// Initialize media content object from JSON
     ///
     /// - Parameter json: `JSONObject` that contains serialized media content object
@@ -71,8 +74,6 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             (dict["length"] != nil) && (dict["original_length"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let fileUrl)   = dict["file"]!, // FIXME: May be .JSONNull too
-            case .JSONString(let oFileUrl)  = dict["original_file"]!, // FIXME: May be .JSONNull too
             case .JSONNumber(let width)     = dict["width"]!,
             case .JSONNumber(let height)    = dict["height"]!,
             case .JSONNumber(let oWidth)    = dict["original_width"]!,
@@ -89,7 +90,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         self.mimeType = mimeType
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
-        self.url      = NSURL(string: fileUrl)
+        if case .JSONString(let fileUrl) = dict["file"]! {
+            self.url     = NSURL(string: fileUrl)
+            self.isValid = true
+        }
         let checksumParts = checksum.componentsSeparatedByString(":")
         self.checksumMethod = checksumParts[0]
         self.checksum = checksumParts[1]
@@ -98,7 +102,9 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
-        self.originalURL      = NSURL(string: oFileUrl)
+        if case .JSONString(let oFileUrl) = dict["original_file"]! {
+            self.originalURL      = NSURL(string: oFileUrl)
+        }
         let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
         self.originalChecksumMethod = originalChecksumParts[0]
         self.originalChecksum = originalChecksumParts[1]

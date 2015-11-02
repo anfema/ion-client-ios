@@ -27,7 +27,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     public var fileSize:Int			    = 0
     
     /// URL of the image
-    public var url:NSURL!
+    public var url:NSURL?
     
     /// original image mime type
     public var originalMimeType:String!
@@ -39,7 +39,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     public var originalFileSize:Int	    = 0
     
     /// original image URL
-    public var originalURL:NSURL!
+    public var originalURL:NSURL?
     
     /// image translation before cropping to final size
     public var translation:CGPoint		= CGPointZero
@@ -58,6 +58,9 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     
     /// original file checksum
     public var originalChecksum:String       = ""
+    
+    /// is this a valid image
+    public var isValid = false
 
     /// Initialize image content object from JSON
     ///
@@ -76,8 +79,6 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let fileUrl)   = dict["image"]!, // FIXME: May be .JSONNull too
-            case .JSONString(let oFileUrl)  = dict["original_image"]!, // FIXME: May be .JSONNull too
             case .JSONString(let checksum)  = dict["checksum"]!,
             case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let width)     = dict["width"]!,
@@ -95,7 +96,11 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         self.mimeType = mimeType
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
-        self.url      = NSURL(string: fileUrl)
+        
+        if case .JSONString(let fileUrl) = dict["image"]! {
+            self.url = NSURL(string: fileUrl)
+            self.isValid = true
+        }
         
         self.translation = CGPointMake(CGFloat(transX), CGFloat(transY))
         self.scale       = Float(scale)
@@ -103,7 +108,10 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
-        self.originalURL      = NSURL(string: oFileUrl)
+
+        if case .JSONString(let oFileUrl)  = dict["original_image"]! {
+            self.originalURL  = NSURL(string: oFileUrl)
+        }
         
         let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
         self.originalChecksumMethod = originalChecksumParts[0]
