@@ -9,6 +9,8 @@
 import Foundation
 import DEjson
 
+// TODO: Add NumberContent
+
 /// AMPContent base class, carries common values
 public class AMPContent {
     

@@ -248,6 +248,51 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             return cObj
         }
     }
+
+    /// Check if an Outlet exists
+    ///
+    /// - Parameter name: outlet to check
+    /// - Parameter callback: callback to call
+    /// - Returns: self for chaining
+    public func outletExists(name: String, callback: (Bool -> Void)) -> AMPPage {
+        // resolve instantly if possible
+        self.appendCallback(name) { outlet in
+            callback(true)
+        }
+        
+        if self.isReady {
+            // search content
+            var found = false
+            for content in self.content {
+                if content.outlet == name {
+                    found = true
+                    break
+                }
+            }
+            callback(found)
+        }
+        return self
+    }
+
+    
+    /// Check if an Outlet exists
+    ///
+    /// - Parameter name: outlet to check
+    /// - Returns: true if outlet exists else false, nil if page not loaded
+    public func outletExists(name: String) -> Bool? {
+        if !self.isReady {
+            // cannot return outlet synchronously from a async loading page
+            return nil
+        } else {
+            // search content
+            for content in self.content {
+                if content.outlet == name {
+                    return true
+                }
+            }
+            return false
+        }
+    }
     
     // MARK: Private
     

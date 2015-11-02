@@ -76,8 +76,8 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let fileUrl)   = dict["image"]!,
-            case .JSONString(let oFileUrl)  = dict["original_image"]!,
+            case .JSONString(let fileUrl)   = dict["image"]!, // FIXME: May be .JSONNull too
+            case .JSONString(let oFileUrl)  = dict["original_image"]!, // FIXME: May be .JSONNull too
             case .JSONString(let checksum)  = dict["checksum"]!,
             case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let width)     = dict["width"]!,

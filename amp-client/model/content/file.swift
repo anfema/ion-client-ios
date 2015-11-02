@@ -45,7 +45,8 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             case .JSONString(let fileName) = dict["name"]!,
             case .JSONNumber(let size)     = dict["file_size"]!,
             case .JSONString(let checksum) = dict["checksum"]!,
-            case .JSONString(let fileUrl)  = dict["file"]! else {
+            case .JSONString(let fileUrl)  = dict["file"]! // FIXME: May be .JSONNull too
+            else {
                 throw AMPError.Code.InvalidJSON(json)
         }
         

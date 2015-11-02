@@ -71,8 +71,8 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             (dict["length"] != nil) && (dict["original_length"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let fileUrl)   = dict["file"]!,
-            case .JSONString(let oFileUrl)  = dict["original_file"]!,
+            case .JSONString(let fileUrl)   = dict["file"]!, // FIXME: May be .JSONNull too
+            case .JSONString(let oFileUrl)  = dict["original_file"]!, // FIXME: May be .JSONNull too
             case .JSONNumber(let width)     = dict["width"]!,
             case .JSONNumber(let height)    = dict["height"]!,
             case .JSONNumber(let oWidth)    = dict["original_width"]!,
