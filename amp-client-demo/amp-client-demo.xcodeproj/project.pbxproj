@@ -21,7 +21,7 @@
 		8F578B761BE253D700969FB0 /* CommonCrypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F578B4A1BE2538F00969FB0 /* CommonCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8F578B771BE253D700969FB0 /* DEjson.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F578B521BE2538F00969FB0 /* DEjson.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8F578B781BE253D700969FB0 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F578B2E1BE2538F00969FB0 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8FE01BD71BC7F72100D91F48 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BD61BC7F72100D91F48 /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		8FE01BD71BC7F72100D91F48 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE01BD61BC7F72100D91F48 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -792,6 +792,7 @@
 				);
 				INFOPLIST_FILE = "amp-client-demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -810,6 +811,7 @@
 				);
 				INFOPLIST_FILE = "amp-client-demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client-demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
