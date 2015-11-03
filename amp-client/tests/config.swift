@@ -11,7 +11,7 @@ import XCTest
 @testable import ampclient
 
 struct DefaultConfig {
-    static let serverURL = "http://monaco.local:8000/client/v1/"
+    static let serverURL = "http://rodriguez.local:8000/client/v1/"
     static let locale    = "de_DE"
 }
 
