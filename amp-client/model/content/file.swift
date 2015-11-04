@@ -24,10 +24,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     public var size:Int = 0
     
     /// checksumming method used
-    public var checksumMethod:String!
+    public var checksumMethod:String = "null"
 
     /// checksum as hex encoded string
-    public var checksum:String!
+    public var checksum:String = ""
     
     /// url to file
     public var url:NSURL?
@@ -59,11 +59,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         
         if case .JSONString(let checksum)  = dict["checksum"]! {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            self.checksumMethod = checksumParts[0]
-            self.checksum = checksumParts[1]
-        } else {
-            self.checksumMethod = "null"
-            self.checksum = ""
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
+            }
         }
         
         if case .JSONString(let fileUrl) = dict["file"]! {

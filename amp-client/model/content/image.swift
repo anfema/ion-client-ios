@@ -51,13 +51,13 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     public var scale:Float				= 1.0
     
     /// checksumming method used
-    public var checksumMethod:String!   = "null:"
+    public var checksumMethod:String   = "null"
     
     /// checksum of the file
-    public var checksum:String!         = ""
+    public var checksum:String         = ""
 
     /// original file checksumming method
-    public var originalChecksumMethod:String = "null:"
+    public var originalChecksumMethod:String = "null"
     
     /// original file checksum
     public var originalChecksum:String       = ""
@@ -116,20 +116,18 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         
         if case .JSONString(let checksum)  = dict["checksum"]! {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            self.checksumMethod = checksumParts[0]
-            self.checksum = checksumParts[1]
-        } else {
-            self.checksumMethod = "null"
-            self.checksum = ""
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
+            }
         }
         
         if case .JSONString(let oChecksum) = dict["original_checksum"]! {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-            self.originalChecksumMethod = originalChecksumParts[0]
-            self.originalChecksum = originalChecksumParts[1]
-        } else {
-            self.originalChecksumMethod = "null"
-            self.originalChecksum = ""
+            if originalChecksumParts.count > 1 {
+                self.originalChecksumMethod = originalChecksumParts[0]
+                self.originalChecksum = originalChecksumParts[1]
+            }
         }
     }
     

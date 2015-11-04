@@ -25,10 +25,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     public var fileSize = 0
 
     /// checksumming method used
-    public var checksumMethod:String!
+    public var checksumMethod:String = "null"
 
     /// checksum of the file
-    public var checksum:String!
+    public var checksum:String = ""
     
     /// length in seconds of the media file if applicable
     public var length = Float(0.0)
@@ -46,10 +46,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     public var originalFileSize = 0
     
     /// checksumming method used
-    public var originalChecksumMethod:String!
+    public var originalChecksumMethod:String = "null"
     
     /// checksum of the original file
-    public var originalChecksum:String!
+    public var originalChecksum:String = ""
     
     /// length in seconds of the original media file if applicable
     public var originalLength = Float(0.0)
@@ -98,11 +98,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         
         if case .JSONString(let checksum)  = dict["checksum"]! {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            self.checksumMethod = checksumParts[0]
-            self.checksum = checksumParts[1]
-        } else {
-            self.checksumMethod = "null"
-            self.checksum = ""
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
+            }
         }
         self.length   = Float(length)
         
@@ -115,11 +114,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         
         if case .JSONString(let oChecksum) = dict["original_checksum"]! {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-            self.originalChecksumMethod = originalChecksumParts[0]
-            self.originalChecksum = originalChecksumParts[1]
-        } else {
-            self.originalChecksumMethod = "null"
-            self.originalChecksum = ""
+            if originalChecksumParts.count > 1 {
+                self.originalChecksumMethod = originalChecksumParts[0]
+                self.originalChecksum = originalChecksumParts[1]
+            }
         }
         self.originalLength   = Float(oLength)
     }
