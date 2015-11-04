@@ -28,8 +28,8 @@ public class AMPRequest {
     public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject, AMPError.Code> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
-        
-        if cached {
+
+        let fromCache:(String -> Result<JSONObject, AMPError.Code>) = { cacheName in
             // Check disk cache before running HTTP request
             if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
                 // return from cache instantly
@@ -40,15 +40,22 @@ public class AMPRequest {
                     
                     // patch last_updated into response
                     json = self.augmentJSONWithChangeDate(json, urlString: urlString)
-                    
-                    // call callback in correct queue
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(.Success(json))
-                    }
-                    return
+                    return .Success(json)
                 } catch {
                     // do nothing, fallthrough to HTTP request
                 }
+            }
+            return .Failure(AMPError.Code.NoData)
+        }
+        
+        if cached {
+            let result = fromCache(cacheName)
+            if case .Success(let json) = result {
+                // call callback in correct queue
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(.Success(json))
+                }
+                return
             }
         }
         
@@ -59,10 +66,10 @@ public class AMPRequest {
             // save response to cache
             self.saveToCache(response.request!, response.result)
             
-            
             // object can only be saved if there is a request url and the status code of the response is a 200
             guard response.result.isSuccess else {
-                callback(.Failure(AMPError.Code.NoData))
+                // fallback to cache
+                callback(fromCache(cacheName))
                 return
             }
 

@@ -28,6 +28,12 @@ public struct AMPConfig {
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?
     
+    /// last collection fetch
+    public var lastOnlineUpdate: NSDate?
+    
+    /// collection cache timeout
+    public var cacheTimeout: NSTimeInterval = 600
+    
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
     
@@ -99,12 +105,17 @@ public class AMP {
     /// - Parameter identifier: the identifier of the collection
     /// - Returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
-        for c in self.collectionCache {
-            if c.identifier == identifier {
-                return c
+        if !self.hasCacheTimedOut() {
+            for c in self.collectionCache {
+                if c.identifier == identifier {
+                    return c
+                }
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut())
+        if self.hasCacheTimedOut() {
+            self.config.lastOnlineUpdate = NSDate()
+        }
         self.collectionCache.append(newCollection)
         return newCollection
     }
@@ -115,19 +126,24 @@ public class AMP {
     /// - Parameter callback: the block to call when the collection is fully initialized
     /// - Returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
-        for c in self.collectionCache {
-            if c.identifier == identifier {
-                if c.hasFailed {
-                    self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
-                } else {
-                    dispatch_async(self.config.responseQueue) {
-                        callback(c)
+        if !self.hasCacheTimedOut() {
+            for c in self.collectionCache {
+                if c.identifier == identifier {
+                    if c.hasFailed {
+                        self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                    } else {
+                        dispatch_async(self.config.responseQueue) {
+                            callback(c)
+                        }
                     }
+                    return c
                 }
-                return c
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, callback:callback)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(), callback:callback)
+        if self.hasCacheTimedOut() {
+            self.config.lastOnlineUpdate = NSDate()
+        }
         self.collectionCache.append(newCollection)
         return newCollection
     }
@@ -156,6 +172,7 @@ public class AMP {
     ///
     /// Removes all cached requests and files for the configured server, does not affect memory cache so be careful
     public class func resetDiskCache() {
+        self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(self.config.serverURL!.host!, locale:self.config.locale)
     }
     
@@ -164,6 +181,7 @@ public class AMP {
     /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
     /// - Parameter host: a hostname to empty the cache for
     public class func resetDiskCache(host host:String) {
+        self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host)
     }
 
@@ -173,6 +191,7 @@ public class AMP {
     /// - Parameter host: a hostname to empty the cache for
     /// - Parameter locale: the locale to reset
     public class func resetDiskCache(host host:String, locale:String) {
+        self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host, locale:locale)
     }
 
@@ -181,6 +200,7 @@ public class AMP {
     /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
     /// - Parameter locale: a locale code to empty the cache for
     public class func resetDiskCache(locale locale: String) {
+        self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(locale: locale)
     }
     
@@ -281,6 +301,22 @@ public class AMP {
     }
     
     // MARK: - Private
+    
+    /// Determine if collection cache has timed out
+    ///
+    /// - Returns: true if cache is old
+    private class func hasCacheTimedOut() -> Bool {
+        var timeout = false
+        if let lastUpdate = self.config.lastOnlineUpdate {
+            let currentDate = NSDate()
+            if lastUpdate.dateByAddingTimeInterval(self.config.cacheTimeout).compare(currentDate) == NSComparisonResult.OrderedAscending {
+                timeout = true
+            }
+        } else {
+            timeout = true
+        }
+        return timeout
+    }
     
     /// Init is private because only class functions should be used
     private init() {

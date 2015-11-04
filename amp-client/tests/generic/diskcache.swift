@@ -13,6 +13,7 @@ class diskcacheTests: LoggedInXCTestCase {
     
     func testCollectionDiskCache() {
         let expectation = self.expectationWithDescription("fetch collection")
+        AMP.resetMemCache()
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
             AMP.resetMemCache()
