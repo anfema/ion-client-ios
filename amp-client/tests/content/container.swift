@@ -16,7 +16,7 @@ class containerContentTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_001") { page in
             if let children = page.children("Layout 001") {
-                XCTAssertEqual(children.count, 9)
+                XCTAssertEqual(children.count, 10)
             } else {
                 XCTFail("container content 'Layout 001' returned nil")
             }
@@ -29,7 +29,7 @@ class containerContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("fetch outlet")
         
         AMP.collection("test").page("page_001").children("Layout 001") { children in
-            XCTAssertEqual(children.count, 9)
+            XCTAssertEqual(children.count, 10)
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
