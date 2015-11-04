@@ -50,7 +50,6 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             case .JSONString(let mimeType) = dict["mime_type"]!,
             case .JSONString(let fileName) = dict["name"]!,
             case .JSONNumber(let size)     = dict["file_size"]!,
-            case .JSONString(let checksum) = dict["checksum"]!
             else {
                 throw AMPError.Code.InvalidJSON(json)
         }
@@ -58,9 +57,16 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         self.mimeType = mimeType
         self.fileName = fileName
         self.size     = Int(size)
-        let checksumParts = checksum.componentsSeparatedByString(":")
-        self.checksumMethod = checksumParts[0]
-        self.checksum = checksumParts[1]
+        
+        if case .JSONString(let checksum)  = dict["checksum"]! {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            self.checksumMethod = checksumParts[0]
+            self.checksum = checksumParts[1]
+        } else {
+            self.checksumMethod = "null"
+            self.checksum = ""
+        }
+        
         if case .JSONString(let fileUrl) = dict["file"]! {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true

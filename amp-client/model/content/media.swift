@@ -83,8 +83,6 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             case .JSONNumber(let oHeight)   = dict["original_height"]!,
             case .JSONNumber(let fileSize)  = dict["file_size"]!,
             case .JSONNumber(let oFileSize) = dict["original_file_size"]!,
-            case .JSONString(let checksum)  = dict["checksum"]!,
-            case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let length)    = dict["length"]!,
             case .JSONNumber(let oLength)   = dict["original_length"]! else {
                 throw AMPError.Code.InvalidJSON(json)
@@ -97,9 +95,15 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
-        let checksumParts = checksum.componentsSeparatedByString(":")
-        self.checksumMethod = checksumParts[0]
-        self.checksum = checksumParts[1]
+        
+        if case .JSONString(let checksum)  = dict["checksum"]! {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            self.checksumMethod = checksumParts[0]
+            self.checksum = checksumParts[1]
+        } else {
+            self.checksumMethod = "null"
+            self.checksum = ""
+        }
         self.length   = Float(length)
         
         self.originalMimeType = oMimeType
@@ -108,9 +112,15 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         if case .JSONString(let oFileUrl) = dict["original_file"]! {
             self.originalURL      = NSURL(string: oFileUrl)
         }
-        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-        self.originalChecksumMethod = originalChecksumParts[0]
-        self.originalChecksum = originalChecksumParts[1]
+        
+        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+            let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+            self.originalChecksumMethod = originalChecksumParts[0]
+            self.originalChecksum = originalChecksumParts[1]
+        } else {
+            self.originalChecksumMethod = "null"
+            self.originalChecksum = ""
+        }
         self.originalLength   = Float(oLength)
     }
     
