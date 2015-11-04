@@ -14,6 +14,7 @@ import DEjson
 public class AMPPageMeta: CanLoadImage {
     /// static date formatter to save allocation times
     static let formatter:NSDateFormatter = NSDateFormatter()
+    static let formatter2:NSDateFormatter = NSDateFormatter()
 
     /// flag if the date formatter has already been instanciated
     static var formatterInstanciated = false
@@ -55,13 +56,22 @@ public class AMPPageMeta: CanLoadImage {
         
 
         if !AMPPageMeta.formatterInstanciated {
-            AMPPageMeta.formatter.dateFormat  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            AMPPageMeta.formatter.dateFormat  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSSSSS'Z'"
             AMPPageMeta.formatter.timeZone    = NSTimeZone(forSecondsFromGMT: 0)
             AMPPageMeta.formatter.locale      = NSLocale(localeIdentifier: "en_US_POSIX")
+
+            AMPPageMeta.formatter2.dateFormat  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            AMPPageMeta.formatter2.timeZone    = NSTimeZone(forSecondsFromGMT: 0)
+            AMPPageMeta.formatter2.locale      = NSLocale(localeIdentifier: "en_US_POSIX")
             AMPPageMeta.formatterInstanciated = true
         }
         
-        self.lastChanged = AMPPageMeta.formatter.dateFromString(lastChanged)
+        // avoid crashing if microseconds are not there
+        var lc = AMPPageMeta.formatter.dateFromString(lastChanged)
+        if lc == nil {
+           lc = AMPPageMeta.formatter2.dateFromString(lastChanged)
+        }
+        self.lastChanged = lc
         self.identifier  = identifier
         self.layout = layout
         
