@@ -1,3 +1,14 @@
+//
+//  datetime.swift
+//  amp-client
+//
+//  Created by Johannes Schriewer on 28.09.15.
+//  Copyright © 2015 anfema. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
+
 import XCTest
 import Foundation
 @testable import ampclient

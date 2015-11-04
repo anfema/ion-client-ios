@@ -150,6 +150,7 @@
 		755D8C121B9F407C00AB10C8 /* amp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amp.swift; sourceTree = "<group>"; };
 		8F4DD93F1BEA45BB000F917A /* number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = number.swift; sourceTree = "<group>"; };
 		8F4DD9421BEA4866000F917A /* auto_cache_invalidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auto_cache_invalidation.swift; sourceTree = "<group>"; };
+		8F4DD9451BEA5BCE000F917A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		8F52CD2C1BA86812004588F4 /* color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = color.swift; sourceTree = "<group>"; };
 		8F52CD2D1BA86812004588F4 /* container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = container.swift; sourceTree = "<group>"; };
 		8F52CD2E1BA86812004588F4 /* datetime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = datetime.swift; sourceTree = "<group>"; };
@@ -382,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				8FABD49A1BBC244A006F6806 /* readme.md */,
+				8F4DD9451BEA5BCE000F917A /* LICENSE.txt */,
 			);
 			name = documentation;
 			sourceTree = "<group>";

@@ -242,6 +242,7 @@
 		755D8B881B9DDB4C00AB10C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		755D8B8A1B9DDB4C00AB10C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		755D8B8F1B9DDB4D00AB10C8 /* amp-client-demoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "amp-client-demoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F4DD9481BEA5CBC000F917A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = SOURCE_ROOT; };
 		8F52CCFB1BA6D630004588F4 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		8F52CD0D1BA6D65D004588F4 /* DEjson.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DEjson.xcodeproj; path = ../DEjson/DEjson.xcodeproj; sourceTree = "<group>"; };
 		8F52CD161BA6D66B004588F4 /* amp-client.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "amp-client.xcodeproj"; path = "../amp-client/amp-client.xcodeproj"; sourceTree = "<group>"; };
@@ -302,6 +303,7 @@
 				755D8B851B9DDB4C00AB10C8 /* Assets.xcassets */,
 				755D8B871B9DDB4C00AB10C8 /* LaunchScreen.storyboard */,
 				755D8B8A1B9DDB4C00AB10C8 /* Info.plist */,
+				8F4DD9481BEA5CBC000F917A /* LICENSE.txt */,
 			);
 			path = "amp-client-demo";
 			sourceTree = "<group>";

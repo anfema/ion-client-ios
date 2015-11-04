@@ -50,6 +50,7 @@
 		8F499FEC1BA19F4F00E1AC15 /* JSONDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		8F499FED1BA19F4F00E1AC15 /* JSONEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
+		8F4DD9461BEA5C7B000F917A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = SOURCE_ROOT; };
 		8FC26A151BB9435D00E38569 /* DEjson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DEjson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC26A1E1BB9435D00E38569 /* DEjson_osx_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DEjson_osx_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -116,6 +117,7 @@
 				8F499FEE1BA19F4F00E1AC15 /* JSONObject.swift */,
 				8F499FD51BA19F1F00E1AC15 /* DEjson.h */,
 				8F499FD71BA19F1F00E1AC15 /* Info.plist */,
+				8F4DD9461BEA5C7B000F917A /* LICENSE.txt */,
 			);
 			path = DEjson;
 			sourceTree = "<group>";

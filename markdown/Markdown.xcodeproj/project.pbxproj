@@ -43,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8F4DD9471BEA5CA3000F917A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = SOURCE_ROOT; };
 		8F64FD8A1BC51F9500112167 /* Markdown.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Markdown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F64FD8D1BC51F9500112167 /* Markdown.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Markdown.h; sourceTree = "<group>"; };
 		8F64FD8F1BC51F9500112167 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -118,6 +119,7 @@
 		8F64FD8C1BC51F9500112167 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8F4DD9471BEA5CA3000F917A /* LICENSE.txt */,
 				8F64FDAA1BC51FB300112167 /* osx */,
 				8F64FDC11BC5208A00112167 /* ios */,
 			);
