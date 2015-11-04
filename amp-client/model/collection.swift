@@ -55,7 +55,7 @@ public class AMPPageMeta: CanLoadImage {
         
 
         if !AMPPageMeta.formatterInstanciated {
-            AMPPageMeta.formatter.dateFormat  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSSSSS'Z'"
+            AMPPageMeta.formatter.dateFormat  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
             AMPPageMeta.formatter.timeZone    = NSTimeZone(forSecondsFromGMT: 0)
             AMPPageMeta.formatter.locale      = NSLocale(localeIdentifier: "en_US_POSIX")
             AMPPageMeta.formatterInstanciated = true
