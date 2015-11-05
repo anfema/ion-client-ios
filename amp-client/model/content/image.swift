@@ -51,13 +51,13 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     public var scale:Float				= 1.0
     
     /// checksumming method used
-    public var checksumMethod:String!   = "null:"
+    public var checksumMethod:String   = "null"
     
     /// checksum of the file
-    public var checksum:String!         = ""
+    public var checksum:String         = ""
 
     /// original file checksumming method
-    public var originalChecksumMethod:String = "null:"
+    public var originalChecksumMethod:String = "null"
     
     /// original file checksum
     public var originalChecksum:String       = ""
@@ -82,8 +82,6 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let checksum)  = dict["checksum"]!,
-            case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let width)     = dict["width"]!,
             case .JSONNumber(let height)    = dict["height"]!,
             case .JSONNumber(let oWidth)    = dict["original_width"]!,
@@ -116,14 +114,21 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             self.originalURL  = NSURL(string: oFileUrl)
         }
         
-        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-        self.originalChecksumMethod = originalChecksumParts[0]
-        self.originalChecksum = originalChecksumParts[1]
-
-        let checksumParts = checksum.componentsSeparatedByString(":")
-        self.checksumMethod = checksumParts[0]
-        self.checksum = checksumParts[1]
-
+        if case .JSONString(let checksum)  = dict["checksum"]! {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
+            }
+        }
+        
+        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+            let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+            if originalChecksumParts.count > 1 {
+                self.originalChecksumMethod = originalChecksumParts[0]
+                self.originalChecksum = originalChecksumParts[1]
+            }
+        }
     }
     
     /// image url for `CanLoadImage`

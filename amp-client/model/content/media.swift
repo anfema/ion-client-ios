@@ -25,10 +25,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     public var fileSize = 0
 
     /// checksumming method used
-    public var checksumMethod:String!
+    public var checksumMethod:String = "null"
 
     /// checksum of the file
-    public var checksum:String!
+    public var checksum:String = ""
     
     /// length in seconds of the media file if applicable
     public var length = Float(0.0)
@@ -46,10 +46,10 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     public var originalFileSize = 0
     
     /// checksumming method used
-    public var originalChecksumMethod:String!
+    public var originalChecksumMethod:String = "null"
     
     /// checksum of the original file
-    public var originalChecksum:String!
+    public var originalChecksum:String = ""
     
     /// length in seconds of the original media file if applicable
     public var originalLength = Float(0.0)
@@ -83,8 +83,6 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             case .JSONNumber(let oHeight)   = dict["original_height"]!,
             case .JSONNumber(let fileSize)  = dict["file_size"]!,
             case .JSONNumber(let oFileSize) = dict["original_file_size"]!,
-            case .JSONString(let checksum)  = dict["checksum"]!,
-            case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let length)    = dict["length"]!,
             case .JSONNumber(let oLength)   = dict["original_length"]! else {
                 throw AMPError.Code.InvalidJSON(json)
@@ -97,9 +95,14 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
-        let checksumParts = checksum.componentsSeparatedByString(":")
-        self.checksumMethod = checksumParts[0]
-        self.checksum = checksumParts[1]
+        
+        if case .JSONString(let checksum)  = dict["checksum"]! {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
+            }
+        }
         self.length   = Float(length)
         
         self.originalMimeType = oMimeType
@@ -108,9 +111,14 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         if case .JSONString(let oFileUrl) = dict["original_file"]! {
             self.originalURL      = NSURL(string: oFileUrl)
         }
-        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-        self.originalChecksumMethod = originalChecksumParts[0]
-        self.originalChecksum = originalChecksumParts[1]
+        
+        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+            let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+            if originalChecksumParts.count > 1 {
+                self.originalChecksumMethod = originalChecksumParts[0]
+                self.originalChecksum = originalChecksumParts[1]
+            }
+        }
         self.originalLength   = Float(oLength)
     }
     
