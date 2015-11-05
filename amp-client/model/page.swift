@@ -57,17 +57,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     
     // MARK: Initializer
     
-    /// Initialize page for collection (uses cache)
-    ///
-    /// Use the `page` function from `AMPCollection`
-    ///
-    /// - Parameter collection: the collection this page belongs to
-    /// - Parameter identifier: the page identifier
-    /// - Parameter layout: the page layout
-    convenience init(collection: AMPCollection, identifier: String, layout: String, parent: String?) {
-        self.init(collection: collection, identifier: identifier, layout:layout, useCache: true, parent: parent)
-    }
-
     /// Initialize page for collection (uses cache, initializes real object)
     ///
     /// Use the `page` function from `AMPCollection`
@@ -80,26 +69,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         self.init(collection: collection, identifier:identifier, layout:layout, useCache: true, parent: parent, callback:callback)
     }
     
-    /// Initialize page for collection
-    ///
-    /// Use the `page` function from `AMPCollection`
-    ///
-    /// - Parameter collection: the collection this page belongs to
-    /// - Parameter identifier: the page identifier
-    /// - Parameter layout: the page layout
-    /// - Parameter useCache: set to false to force a page refresh
-    // FIXME: Why is this in there if unused?
-    init(collection: AMPCollection, identifier: String, layout: String, useCache: Bool, parent: String?) {
-        // Lazy initializer, if this is used the page is not loaded but loading will start
-        // in background
-        self.identifier = identifier
-        self.layout = layout
-        self.collection = collection
-        self.useCache = useCache
-        self.parent = parent
-        self.locale = self.collection.locale
-    }
-
     /// Initialize page for collection (initializes real object)
     ///
     /// Use the `page` function from `AMPCollection`
