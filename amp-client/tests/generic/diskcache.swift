@@ -75,7 +75,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
 
     func testPageDiskCache() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageDiskCache")
         AMP.collection("test").page("page_001") { page in
             XCTAssertNotNil(page.lastUpdate)
             AMP.resetMemCache()
@@ -91,7 +91,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
     
     func testPageDiskCacheClean() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageDiskCacheClean")
         AMP.collection("test").page("page_001") { page in
             XCTAssertNotNil(page.lastUpdate)
             AMP.resetMemCache()

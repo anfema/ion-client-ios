@@ -23,7 +23,7 @@ class errorHandlerTests: LoggedInXCTestCase {
     }
     
     func testPageFetchDuplicatedErrorhandler() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchDuplicatedErrorhandler")
         
         AMP.collection("test").onError() { error in
             // this one should be overridden by the second one
@@ -45,7 +45,7 @@ class errorHandlerTests: LoggedInXCTestCase {
     }
 
     func testPageFetchDuplicatedErrorhandler2() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchDuplicatedErrorhandler2")
         var errorCount = 0
         
         AMP.collection("test").onError() { error in
@@ -74,7 +74,7 @@ class errorHandlerTests: LoggedInXCTestCase {
     }
 
     func testPageFetchDuplicatedErrorhandler3() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchDuplicatedErrorhandler3")
         
         AMP.collection("test").onError() { error in
             XCTFail()
@@ -98,7 +98,7 @@ class errorHandlerTests: LoggedInXCTestCase {
     }
 
     func testPageFetchDuplicatedErrorhandler4() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchDuplicatedErrorhandler4 1")
         var expectFail = true
         
         AMP.collection("test").onError() { error in
@@ -118,7 +118,7 @@ class errorHandlerTests: LoggedInXCTestCase {
 
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
 
-        let expectation2 = self.expectationWithDescription("fetch page")
+        let expectation2 = self.expectationWithDescription("testPageFetchDuplicatedErrorhandler4 2")
         expectFail = false
 
         AMP.collection("test").onError() { error in
@@ -137,7 +137,7 @@ class errorHandlerTests: LoggedInXCTestCase {
     }
     
 //    func testBubblingToCollection() {
-//        let expectation = self.expectationWithDescription("fetch page")
+//        let expectation = self.expectationWithDescription("testBubblingToCollection")
 //
 //        AMP.collection("test").onError() { error in
 //            if case .OutletNotFound = error {
@@ -157,7 +157,7 @@ class errorHandlerTests: LoggedInXCTestCase {
 //    }
     
     func testBubblingToAMP() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testBubblingToAMP")
         
         AMP.config.errorHandler = { (collection, error) in
             if case .OutletNotFound = error {

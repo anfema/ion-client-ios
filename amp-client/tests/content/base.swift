@@ -23,7 +23,7 @@ class contentBaseTests: LoggedInXCTestCase {
     }
 
     func testOutletFetchSync() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testOutletFetchSync")
         
         AMP.collection("test").page("page_001"){ page in
             if let _ = page.outlet("Text") {
@@ -37,7 +37,7 @@ class contentBaseTests: LoggedInXCTestCase {
     }
 
     func testOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testOutletFetchAsync")
         
         AMP.collection("test").page("page_001").outlet("Text") { text in
             XCTAssertNotNil(text)
@@ -47,7 +47,7 @@ class contentBaseTests: LoggedInXCTestCase {
     }
 
     func testOutletFetchFail() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testOutletFetchFail")
         
         AMP.collection("test").page("page_001").onError() { error in
             if case .OutletNotFound(let name) = error {

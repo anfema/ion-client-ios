@@ -25,7 +25,8 @@ class DefaultXCTestCase: XCTestCase {
     func configure(callback: (Void -> Void)) {
         AMP.config.serverURL = NSURL(string: DefaultConfig.serverURL)
         AMP.config.locale = DefaultConfig.locale
-
+        AMP.config.responseQueue = dispatch_queue_create("com.anfema.amp.responsequeue.test", DISPATCH_QUEUE_SERIAL)
+        
         dispatch_async(AMP.config.responseQueue) {
             callback()
         }

@@ -288,9 +288,9 @@ public class AMP {
     /// - Parameter page: the page to add to the cache
     class func cachePage(page: AMPPage) {
         // check if we need to overwrite an old page
-        self.pageCache = self.pageCache.filter({ p -> Bool in
-            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
-        })
+//        self.pageCache = self.pageCache.filter({ p -> Bool in
+//            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
+//        })
         
         self.pageCache.append(page)
     }

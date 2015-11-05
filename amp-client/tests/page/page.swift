@@ -23,7 +23,7 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageFetchSync() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchSync")
         AMP.resetMemCache()
         
         AMP.collection("test") { collection in
@@ -40,7 +40,7 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchAsync")
         
         AMP.collection("test").onError() { error in
             XCTFail()
@@ -56,7 +56,7 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageFetchFail() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageFetchFail")
         
         AMP.collection("test").onError() { error in
             if case .PageNotFound(let name) = error {
@@ -73,7 +73,7 @@ class pageTests: LoggedInXCTestCase {
     }
     
     func testPageParentAsync() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageParentAsync")
         
         AMP.collection("test").page("subpage_001") { page in
             XCTAssertNotNil(page)
@@ -95,7 +95,7 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageChild() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageChild")
         
         AMP.collection("test").page("page_002").child("subpage_001") { page in
             XCTAssertNotNil(page)
@@ -109,7 +109,7 @@ class pageTests: LoggedInXCTestCase {
     }
     
     func testPageChildFail() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageChildFail")
         
         AMP.config.errorHandler = { (collection, error) in
             if case .InvalidPageHierarchy(let parent, let child) = error {
@@ -131,7 +131,7 @@ class pageTests: LoggedInXCTestCase {
     }
     
     func testPageEnumeration() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testPageEnumeration")
 
         var pageCount = 0;
         AMP.collection("test").pages { page in
@@ -139,17 +139,19 @@ class pageTests: LoggedInXCTestCase {
             if (page.identifier != "page_001") && (page.identifier != "page_002") {
                 XCTFail()
             }
-            if pageCount == 2 {
-                expectation.fulfill()
+            if (pageCount == 2) {
+                dispatch_async(AMP.config.responseQueue) {
+                    expectation.fulfill()
+                }
             }
         }
-        
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+
+        self.waitForExpectationsWithTimeout(4.0, handler: nil)
         XCTAssert(pageCount == 2)
     }
     
     func testSubPageEnumeration() {
-        let expectation = self.expectationWithDescription("fetch page")
+        let expectation = self.expectationWithDescription("testSubPageEnumeration")
         
         AMP.collection("test").page("page_002").children { page in
             XCTAssert(page.identifier == "subpage_001")
