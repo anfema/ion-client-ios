@@ -86,6 +86,15 @@ class pageTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    func testPageCount() {
+        AMP.collection("test").pageCount(nil) { count in
+            XCTAssert(count == 2)
+        }
+        AMP.collection("test").pageCount("page_002") { count in
+            XCTAssert(count == 1)
+        }
+    }
+
     func testPageParent() {
         let page = AMP.collection("test").page("subpage_001")
         XCTAssertNotNil(page)
