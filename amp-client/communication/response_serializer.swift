@@ -20,7 +20,7 @@ extension Request {
     /// - Returns: A `JSONObject` response serializer
     public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError.Code> {
         return ResponseSerializer { _, response, data, error in
-            guard let validData = data else {
+            guard let validData = data where response != nil else {
                 return .Failure(AMPError.Code.NoData)
             }
             
