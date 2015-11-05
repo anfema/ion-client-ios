@@ -11,6 +11,8 @@
 
 import Foundation
 
+// TODO: Add tests for text renderer
+
 extension ContentNode {
     
     public func renderText() -> String {

@@ -17,6 +17,7 @@ private class AMPCallstack<T> {
     
     let callbackLock = NSRecursiveLock()
     
+    // FIXME: Apparently never called?
     var queuedIdentifiers:[String] {
         get {
             var identifiers:[String] = []

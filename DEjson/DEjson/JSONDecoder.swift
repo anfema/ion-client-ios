@@ -73,6 +73,7 @@ public class JSONDecoder {
         return .JSONInvalid
     }
     
+    // TODO: Add tests for escaped characters
     func parseString(inout generator: String.UnicodeScalarView.Generator) -> (String) {
         var stringEnded = false
         var slash = false
@@ -192,6 +193,7 @@ public class JSONDecoder {
         return arr
     }
 
+    // TODO: Add tests for negative numbers and exponential notations
     func parseNumber(inout generator: String.UnicodeScalarView.Generator, currentChar: UnicodeScalar) -> (Double?) {
         var numberEnded = false
         var numberStarted = false
@@ -289,6 +291,7 @@ public class JSONDecoder {
         return number
     }
 
+    // TODO: Add tests for true, false and null
     func parseStatement(inout generator: String.UnicodeScalarView.Generator, currentChar: UnicodeScalar) -> (Bool?) {
         enum parseState {
             case ParseStateUnknown

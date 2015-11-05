@@ -58,6 +58,7 @@ public class AMPTextContent : AMPContent {
     /// - markdown: convert to html and wrap in div (TODO)
     ///
     /// - Returns: String with HTML encoded text
+    // TODO: Write tests for htmlText() function in TextContent
     public func htmlText() -> String? {
         var text: String = ""
         switch (self.mimeType) {
@@ -81,6 +82,7 @@ public class AMPTextContent : AMPContent {
     /// - markdown: try to make best efford representation as attributed string (TODO)
     ///
     /// - Returns: attributed string version of text
+    // TODO: Write tests for attributedString() function in TextContent
     public func attributedString() -> NSAttributedString? {
         // TODO: Setup default styling
         switch (self.mimeType) {
@@ -119,6 +121,7 @@ public class AMPTextContent : AMPContent {
     /// - markdown: strip markup (asterisk, underscore, links, heading markers) (TODO)
     ///
     /// - Returns: plaintext string of text
+    // TODO: Write tests for plainText() function in TextContent (probably we need more test-data for this)
     public func plainText() -> String? {
         switch(self.mimeType) {
         case "text/plain":
@@ -172,6 +175,7 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: html string if the outlet was a text outlet and the page was already cached, else nil
+    // TODO: Write tests for page's html function
     public func html(name: String) -> String? {
         if let content = self.outlet(name) {
             if case let content as AMPTextContent = content {
@@ -202,6 +206,7 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
+    // TODO: Write tests for page's attributedString function
     public func attributedString(name: String) -> NSAttributedString? {
         if let content = self.outlet(name) {
             if case let content as AMPTextContent = content {

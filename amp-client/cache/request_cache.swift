@@ -50,6 +50,7 @@ extension AMPRequest {
     /// Reset complete AMP cache for a specific language and all hosts
     ///
     /// - Parameter locale: locale to clear cache for
+    // TODO: Write test for resetCache(locale:)
     public class func resetCache(locale locale: String) {
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)

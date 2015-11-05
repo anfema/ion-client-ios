@@ -22,6 +22,7 @@ extension String {
         return nil
     }
     
+    // FIXME: Is this dead code?
     func range(start: Int, length: Int) -> Range<String.Index>? {
         let from16 = utf16.startIndex.advancedBy(start, limit: utf16.endIndex)
         let to16 = from16.advancedBy(length, limit: utf16.endIndex)

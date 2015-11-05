@@ -13,6 +13,8 @@
 import Foundation
 import CommonCrypto
 
+// TODO: Write tests for hash_extensions
+
 /// Hash types supported by the hashing extensions
 public enum HashTypes : String {
     /// Internal typealias to avoid brain injuries

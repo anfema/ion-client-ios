@@ -183,6 +183,7 @@ public class AMP {
     ///
     /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
     /// - Parameter host: a hostname to empty the cache for
+    // TODO: Write test for resetDiskCache(host:)
     public class func resetDiskCache(host host:String) {
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host)
@@ -193,6 +194,7 @@ public class AMP {
     /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
     /// - Parameter host: a hostname to empty the cache for
     /// - Parameter locale: the locale to reset
+    // TODO: Write test for resetDiskCache(host:locale:)
     public class func resetDiskCache(host host:String, locale:String) {
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host, locale:locale)
@@ -202,6 +204,7 @@ public class AMP {
     ///
     /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
     /// - Parameter locale: a locale code to empty the cache for
+    // TODO: Write test for resetDiskCache(locale:)
     public class func resetDiskCache(locale locale: String) {
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(locale: locale)
@@ -275,11 +278,11 @@ public class AMP {
     /// - Parameter identifier: the identifier of the page to fetch
     /// - Returns: page object or nil if not found
     class func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
-//        for p in self.pageCache {
-//            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
-//                return p
-//            }
-//        }
+        for p in self.pageCache {
+            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
+                return p
+            }
+        }
         return nil
     }
     
@@ -288,11 +291,11 @@ public class AMP {
     /// - Parameter page: the page to add to the cache
     class func cachePage(page: AMPPage) {
         // check if we need to overwrite an old page
-//        self.pageCache = self.pageCache.filter({ p -> Bool in
-//            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
-//        })
-//        
-//        self.pageCache.append(page)
+        self.pageCache = self.pageCache.filter({ p -> Bool in
+            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
+        })
+        
+        self.pageCache.append(page)
     }
     
     /// Downloader calls this function to register a progress item with the global progress toolbar

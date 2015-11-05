@@ -159,6 +159,7 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
+    // TODO: Write test for mediaURL functions
     public func mediaURL(name: String) -> NSURL? {
         if let content = self.outlet(name) {
             if case let content as AMPMediaContent = content {

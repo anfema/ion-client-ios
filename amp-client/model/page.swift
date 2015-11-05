@@ -88,6 +88,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter identifier: the page identifier
     /// - Parameter layout: the page layout
     /// - Parameter useCache: set to false to force a page refresh
+    // FIXME: Why is this in there if unused?
     init(collection: AMPCollection, identifier: String, layout: String, useCache: Bool, parent: String?) {
         // Lazy initializer, if this is used the page is not loaded but loading will start
         // in background
@@ -174,6 +175,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter identifier: identifier of child page
     /// - Returns: page object that resolves async or nil if page not child of self
+    // TODO: Write test for sync child call
     public func child(identifier: String) -> AMPPage? {
         let page = self.collection.page(identifier)
         if page.parent == self.identifier {
@@ -259,6 +261,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter name: outlet to check
     /// - Parameter callback: callback to call
     /// - Returns: self for chaining
+    // TODO: Write test for outletExists
     public func outletExists(name: String, callback: (Bool -> Void)) -> AMPPage {
         // resolve instantly if possible
         self.appendCallback(name) { outlet in

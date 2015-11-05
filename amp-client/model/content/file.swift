@@ -95,6 +95,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         }
     }
     
+    // TODO: Test image loading in FileContent
     /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         if self.mimeType.hasPrefix("image/") {

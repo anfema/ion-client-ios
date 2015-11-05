@@ -28,6 +28,7 @@ func -(left: String.Index, right: Int) -> String.Index {
 	return left.advancedBy(-right)
 }
 
+// TODO: Add tests for JSONEncoder
 public class JSONEncoder {
     let jsonObject: JSONObject
     
