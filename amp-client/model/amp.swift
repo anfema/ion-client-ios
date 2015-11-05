@@ -275,11 +275,11 @@ public class AMP {
     /// - Parameter identifier: the identifier of the page to fetch
     /// - Returns: page object or nil if not found
     class func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
-        for p in self.pageCache {
-            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
-                return p
-            }
-        }
+//        for p in self.pageCache {
+//            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
+//                return p
+//            }
+//        }
         return nil
     }
     
@@ -291,8 +291,8 @@ public class AMP {
 //        self.pageCache = self.pageCache.filter({ p -> Bool in
 //            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
 //        })
-        
-        self.pageCache.append(page)
+//        
+//        self.pageCache.append(page)
     }
     
     /// Downloader calls this function to register a progress item with the global progress toolbar

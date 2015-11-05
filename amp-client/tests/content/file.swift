@@ -25,16 +25,18 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsync() {
         let expectation = self.expectationWithDescription("fetch outlet")
         
-        AMP.collection("test").page("page_001").fileData("File") { data in
-            guard let outlet = AMP.collection("test").page("page_001").outlet("File"),
-                  case let file as AMPFileContent = outlet else {
-                    XCTFail("File outlet not found or of wrong type")
-                    expectation.fulfill()
-                    return
+        AMP.collection("test").page("page_001").outlet("File") { outlet in
+
+            AMP.collection("test").page("page_001").fileData("File") { data in
+                guard case let file as AMPFileContent = outlet else {
+                        XCTFail("File outlet not found or of wrong type \(outlet)")
+                        expectation.fulfill()
+                        return
+                }
+                XCTAssert(file.checksumMethod == "sha256")
+                XCTAssert(data.cryptoHash(HashTypes(rawValue: file.checksumMethod)!).hexString() == file.checksum)
+                expectation.fulfill()
             }
-            XCTAssert(file.checksumMethod == "sha256")
-            XCTAssert(data.cryptoHash(HashTypes(rawValue: file.checksumMethod)!).hexString() == file.checksum)
-            expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }   
