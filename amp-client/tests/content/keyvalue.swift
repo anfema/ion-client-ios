@@ -23,7 +23,7 @@ class keyValueContentTests: LoggedInXCTestCase {
     }
     
     func testKVOutletFetchDictionarySync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testKVOutletFetchDictionarySync")
         
         AMP.collection("test").page("page_001") { page in
             if let dict = page.keyValue("KeyValue") {
@@ -39,7 +39,7 @@ class keyValueContentTests: LoggedInXCTestCase {
     }
     
     func testKVOutletFetchDictionaryAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testKVOutletFetchDictionaryAsync")
         
         AMP.collection("test").page("page_001").keyValue("KeyValue") { dict in
             XCTAssertNotNil(dict["foo"])
@@ -51,7 +51,7 @@ class keyValueContentTests: LoggedInXCTestCase {
     }
 
     func testKVOutletFetchValueSync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testKVOutletFetchValueSync")
         
         AMP.collection("test").page("page_001") { page in
             if let value = page.valueForKey("KeyValue", key: "foo") {
@@ -65,7 +65,7 @@ class keyValueContentTests: LoggedInXCTestCase {
     }
     
     func testKVOutletFetchValueAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testKVOutletFetchValueAsync")
         
         AMP.collection("test").page("page_001").valueForKey("KeyValue", key: "foo") { value in
             XCTAssertEqual(value as? String, "bar")

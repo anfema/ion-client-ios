@@ -23,7 +23,7 @@ class flagContentTests: LoggedInXCTestCase {
     }
     
     func testFlagOutletFetchSync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testFlagOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
             if let value = page.isSet("Flag") {
@@ -37,7 +37,7 @@ class flagContentTests: LoggedInXCTestCase {
     }
     
     func testFlagOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testFlagOutletFetchAsync")
         
         AMP.collection("test").page("page_001").isSet("Flag") { value in
             XCTAssertEqual(value, false)

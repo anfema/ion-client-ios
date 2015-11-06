@@ -23,7 +23,7 @@ class autoCacheTests: LoggedInXCTestCase {
     }
     
     func testCollectionFetchNoTimeout() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionFetchNoTimeout")
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
             AMP.collection("test") { collection2 in
@@ -35,7 +35,7 @@ class autoCacheTests: LoggedInXCTestCase {
     }
 
     func testCollectionFetchWithTimeout() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionFetchWithTimeout")
         AMP.config.cacheTimeout = 2
         AMP.config.lastOnlineUpdate = nil
         AMP.collection("test") { collection in

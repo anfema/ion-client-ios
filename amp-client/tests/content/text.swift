@@ -23,7 +23,7 @@ class textContentTests: LoggedInXCTestCase {
     }
     
     func testTextOutletFetchSync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testTextOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
             if let text = page.text("Text") {
@@ -37,7 +37,7 @@ class textContentTests: LoggedInXCTestCase {
     }
     
     func testTextOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testTextOutletFetchAsync")
         
         AMP.collection("test").page("page_001").text("Text") { text in
             XCTAssert(text.hasPrefix("Donec ullamcorper nulla non"))

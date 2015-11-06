@@ -24,7 +24,7 @@ class optionContentTests: LoggedInXCTestCase {
     
     
     func testOptionOutletFetchSync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testOptionOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
             if let value = page.selectedOption("Option") {
@@ -38,7 +38,7 @@ class optionContentTests: LoggedInXCTestCase {
     }
     
     func testOptionOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testOptionOutletFetchAsync")
         
         AMP.collection("test").page("page_001").selectedOption("Option") { value in
             XCTAssertEqual(value, "Green")

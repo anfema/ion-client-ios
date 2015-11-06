@@ -24,7 +24,7 @@ class authTests: DefaultXCTestCase {
     }
     
     func testLoginSuccess() {
-        let expectation = self.expectationWithDescription("login")
+        let expectation = self.expectationWithDescription("testLoginSuccess")
         
         AMP.login("admin@anfe.ma", password: "test") { success in
             XCTAssert(success)
@@ -35,7 +35,7 @@ class authTests: DefaultXCTestCase {
     }
 
     func testLoginFailure() {
-        let expectation = self.expectationWithDescription("login")
+        let expectation = self.expectationWithDescription("testLoginFailure")
         
         AMP.login("admin@anfe.ma", password: "wrongpassword") { success in
             XCTAssert(!success)

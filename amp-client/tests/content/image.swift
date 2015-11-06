@@ -23,7 +23,7 @@ class imageContentTests: LoggedInXCTestCase {
     }
     
     func testImageOutletFetchAsyncCGImage() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
         
         AMP.collection("test").page("page_001").image("Image") { image in
             XCTAssertNotNil(image)

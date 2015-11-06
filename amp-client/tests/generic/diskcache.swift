@@ -23,7 +23,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
     
     func testCollectionDiskCache() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionDiskCache")
         AMP.resetMemCache()
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
@@ -39,7 +39,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
 
     func testCollectionDiskCacheClean() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionDiskCacheClean")
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
             AMP.resetMemCache()
@@ -56,7 +56,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
 
     func testCollectionDiskCacheUpdate() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionDiskCacheUpdate")
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
             AMP.refreshCache() { updatedCollection in
@@ -108,7 +108,7 @@ class diskcacheTests: LoggedInXCTestCase {
     }
     
     func testPageDiskCacheUpdate() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testPageDiskCacheUpdate")
         AMP.collection("test").page("page_001") { page in
             XCTAssertNotNil(page.lastUpdate)
             AMP.refreshCache() { updatedCollection in

@@ -25,7 +25,7 @@ class datetimeContentTests: LoggedInXCTestCase {
  
     
     func testDateOutletFetchSync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testDateOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
             if let value = page.date("Datetime") {
@@ -39,7 +39,7 @@ class datetimeContentTests: LoggedInXCTestCase {
     }
     
     func testDateOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testDateOutletFetchAsync")
         
         AMP.collection("test").page("page_001").date("Datetime") { value in
             XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)

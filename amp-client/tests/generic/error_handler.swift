@@ -136,25 +136,25 @@ class errorHandlerTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
-//    func testBubblingToCollection() {
-//        let expectation = self.expectationWithDescription("testBubblingToCollection")
-//
-//        AMP.collection("test").onError() { error in
-//            if case .OutletNotFound = error {
-//                // all ok, we expected this
-//            } else {
-//                XCTFail()
-//            }
+    func testBubblingToCollection() {
+        let expectation = self.expectationWithDescription("testBubblingToCollection")
+
+        AMP.collection("test").onError() { error in
+            if case .OutletNotFound = error {
+                // all ok, we expected this
+            } else {
+                XCTFail()
+            }
 //            expectation.fulfill()
-//        }.page("page_001").outlet("unknown_outlet") { outlet in
-//            XCTFail()
-//            expectation.fulfill()
-//        }
-//        
-//        // Test fails because page callback did work (outlet callback does not retain error callback of collection)
-//        
-//        self.waitForExpectationsWithTimeout(1.0, handler: nil)
-//    }
+        }.page("page_001").outlet("unknown_outlet") { outlet in
+            XCTFail()
+            expectation.fulfill()
+        }
+        
+        // Test fails because page callback did work (outlet callback does not retain error callback of collection)
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
     
     func testBubblingToAMP() {
         let expectation = self.expectationWithDescription("testBubblingToAMP")

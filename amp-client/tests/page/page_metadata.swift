@@ -23,7 +23,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
     
     func testMetadataFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch metadata")
+        let expectation = self.expectationWithDescription("testMetadataFetchAsync")
         AMP.resetMemCache()
         
         AMP.collection("test").metadata("page_001") { metadata in
@@ -37,7 +37,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataFetchAsync2() {
-        let expectation = self.expectationWithDescription("fetch metadata")
+        let expectation = self.expectationWithDescription("testMetadataFetchAsync2")
         AMP.resetMemCache()
         
         AMP.collection("test").metadata("page_002") { metadata in
@@ -51,7 +51,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataEnumerateAsync() {
-        let expectation = self.expectationWithDescription("enumerate metadata")
+        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync")
        
         var count = 0
         AMP.collection("test").enumerateMetadata(nil) { metadata in
@@ -66,7 +66,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataEnumerateAsync2() {
-        let expectation = self.expectationWithDescription("enumerate metadata")
+        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync2")
         
         AMP.collection("test").enumerateMetadata("page_002") { metadata in
             XCTAssert(metadata.parent == "page_002")
@@ -76,7 +76,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataListAsync() {
-        let expectation = self.expectationWithDescription("enumerate metadata")
+        let expectation = self.expectationWithDescription("testMetadataListAsync")
         
         AMP.collection("test").metadataList(nil) { list in
             XCTAssert(list.count == 2)
@@ -86,7 +86,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataListAsync2() {
-        let expectation = self.expectationWithDescription("enumerate metadata")
+        let expectation = self.expectationWithDescription("testMetadataListAsync2")
         
         AMP.collection("test").metadataList("page_002") { list in
             XCTAssert(list.count == 1)
@@ -96,7 +96,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
 
     func testMetadataThumbnailAsync() {
-        let expectation = self.expectationWithDescription("get thumbnail")
+        let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
         
         AMP.collection("test").metadata("page_002") { metadata in
             metadata.image { image in
