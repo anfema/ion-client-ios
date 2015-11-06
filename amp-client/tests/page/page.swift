@@ -106,6 +106,24 @@ class pageTests: LoggedInXCTestCase {
     func testPageChild() {
         let expectation = self.expectationWithDescription("testPageChild")
         
+        AMP.collection("test").page("page_002") { page in
+            guard let child = page.child("subpage_001") else {
+                XCTFail("Child not found")
+                expectation.fulfill()
+                return
+            }
+            XCTAssert(child.identifier == "subpage_001")
+            XCTAssert(child.parent == "page_002")
+            XCTAssert(child.layout == "Layout 001")
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
+    func testPageChildAsync() {
+        let expectation = self.expectationWithDescription("testPageChildAsync")
+        
         AMP.collection("test").page("page_002").child("subpage_001") { page in
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
@@ -116,7 +134,7 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
-    
+
     func testPageChildFail() {
         let expectation = self.expectationWithDescription("testPageChildFail")
         

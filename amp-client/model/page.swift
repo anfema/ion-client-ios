@@ -144,7 +144,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter identifier: identifier of child page
     /// - Returns: page object that resolves async or nil if page not child of self
-    // TODO: Write test for sync child call
     public func child(identifier: String) -> AMPPage? {
         let page = self.collection.page(identifier)
         if page.parent == self.identifier {
