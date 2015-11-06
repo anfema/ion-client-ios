@@ -23,7 +23,7 @@ class fileContentTests: LoggedInXCTestCase {
     }
        
     func testFileOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testFileOutletFetchAsync")
         
         AMP.collection("test").page("page_001").outlet("File") { outlet in
 
@@ -39,5 +39,29 @@ class fileContentTests: LoggedInXCTestCase {
             }
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
-    }   
+    }
+    
+    func testFileOutletFetchAsyncCGImage() {
+        let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")
+
+        AMP.collection("test").page("page_001").outlet("File") { outlet in
+            guard case let img as AMPFileContent = outlet else {
+                XCTFail("File outlet not found or of wrong type \(outlet)")
+                expectation.fulfill()
+                return
+            }
+            if img.mimeType.hasPrefix("image/") {
+                img.image() { image in
+                    XCTAssertNotNil(image)
+                    XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
+                    expectation.fulfill()
+                }
+            } else {
+                print("Skipping file image loading test as the file is not an image")
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
 }
