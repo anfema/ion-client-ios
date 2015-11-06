@@ -23,7 +23,7 @@ class mediaContentTests: LoggedInXCTestCase {
     }
     
     func testMediaOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testMediaOutletFetchAsync")
         
         AMP.collection("test").page("page_001").outlet("Media") { outlet in
             AMP.collection("test").page("page_001").mediaData("Media") { data in
@@ -41,7 +41,7 @@ class mediaContentTests: LoggedInXCTestCase {
     }
 
     func testMediaOutletImageFetchAsync() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testMediaOutletImageFetchAsync")
         
         AMP.collection("test").page("page_001").outlet("Media") { outlet in
             guard case let mediaOutlet as AMPMediaContent = outlet else {
@@ -59,6 +59,28 @@ class mediaContentTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
+    func testMediaOutletURLFetchAsync() {
+        let expectation = self.expectationWithDescription("testMediaOutletURLFetchAsync")
+        
+        AMP.collection("test").page("page_001").mediaURL("Media") { url in
+            XCTAssertNotNil(url)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testMediaOutletURLFetch() {
+        let expectation = self.expectationWithDescription("fetch outlet")
+        
+        AMP.collection("test").page("page_001") { page in
+            let mediaURL = page.mediaURL("Media")
+            XCTAssertNotNil(mediaURL)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
 }
