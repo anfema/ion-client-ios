@@ -127,7 +127,7 @@ class pageTests: LoggedInXCTestCase {
             } else {
                 XCTFail()
             }
-            expectation.fulfill()
+            //expectation.fulfill()
         }
         
         AMP.collection("test").page("page_002").child("page_001") { page in
@@ -170,4 +170,38 @@ class pageTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    func testOutletExists() {
+        let expectation = self.expectationWithDescription("testOutletExists")
+        
+        AMP.collection("test").page("page_001") { page in
+            XCTAssertNotNil(page)
+            XCTAssert(page.outletExists("Text") == true)
+            XCTAssert(page.outletExists("Unknown_Outlet") == false)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testOutletExistsAsync() {
+        let expectation = self.expectationWithDescription("testOutletExistsAsync")
+        
+        AMP.collection("test").page("page_001").outletExists("Text") { exists in
+            XCTAssertTrue(exists)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
+    func testOutletDoesNotExistAsync() {
+        let expectation = self.expectationWithDescription("testOutletDoesNotExistAsync")
+        
+        AMP.collection("test").page("page_001").outletExists("Unknown_Outlet") { exists in
+            XCTAssertFalse(exists)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }

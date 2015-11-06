@@ -230,7 +230,6 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Parameter name: outlet to check
     /// - Parameter callback: callback to call
     /// - Returns: self for chaining
-    // TODO: Write test for outletExists
     public func outletExists(name: String, callback: (Bool -> Void)) -> AMPPage {
         // resolve instantly if possible
         self.appendCallback(name) { outlet in
