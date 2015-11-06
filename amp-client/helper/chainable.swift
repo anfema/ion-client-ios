@@ -12,7 +12,7 @@
 import Foundation
 
 private class AMPCallstack<T> {
-    private var errorCallback:(AMPError.Code -> Void)? = nil
+    private var errorCallback:(AMPError -> Void)? = nil
     private var callbacks:[(identifier: String, block: (T -> Void))] = []
     
     let callbackLock = NSRecursiveLock()
@@ -29,7 +29,7 @@ private class AMPCallstack<T> {
         }
     }
 
-    init(errorCallback: (AMPError.Code -> Void)?) {
+    init(errorCallback: (AMPError -> Void)?) {
         self.errorCallback = errorCallback
     }
     
@@ -39,7 +39,7 @@ private class AMPCallstack<T> {
         self.callbackLock.unlock()
     }
     
-    func callCallbacks(identifier: String, value: T?, error: AMPError.Code?) {
+    func callCallbacks(identifier: String, value: T?, error: AMPError?) {
         // filter identifier from callback list and call the callbacks in process
         self.callbackLock.lock()
         self.callbacks = self.callbacks.filter { (currentIdentifier: String, block: (T -> Void)) -> Bool in
@@ -107,7 +107,7 @@ public class AMPChainable<TReturn> {
         }
     }
     
-    func callError(identifier: String, error: AMPError.Code) {
+    func callError(identifier: String, error: AMPError) {
         self.callCallbacks(identifier, value: nil, error: error)
     }
     
@@ -122,7 +122,7 @@ public class AMPChainable<TReturn> {
     }
     
     // MARK: Stack handling
-    func appendErrorCallback(callback: (AMPError.Code -> Void)?) {
+    func appendErrorCallback(callback: (AMPError -> Void)?) {
         self.callStackLock.lock()
         self.callStack.append(AMPCallstack<TReturn>(errorCallback: callback))
         self.callStackLock.unlock()
@@ -141,7 +141,7 @@ public class AMPChainable<TReturn> {
         callStack!.appendCallback(identifier, callback: callback)
     }
     
-    func defaultErrorCallback(error: AMPError.Code) {
+    func defaultErrorCallback(error: AMPError) {
         // overridden by subclass if needed
     }
     
@@ -150,7 +150,7 @@ public class AMPChainable<TReturn> {
     /// - Parameter identifier: the identifier of the callbacks to run (if set `error` is ignored)
     /// - Parameter value: value to submit with the callback (if set `error` is ignored)
     /// - Parameter error: an error to call the error callbacks for (if set `identifier` and `value` are ignored)
-    func callCallbacks(identifier: String, value: TReturn?, error: AMPError.Code?) {
+    func callCallbacks(identifier: String, value: TReturn?, error: AMPError?) {
         self.callStackLock.lock()
         if (error != nil) && (self.callStack.count == 0) {
             self.defaultErrorCallback(error!)

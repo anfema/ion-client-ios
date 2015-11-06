@@ -72,7 +72,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["mime_type"] != nil) && (dict["original_mime_type"] != nil) && (dict["image"] != nil) &&
@@ -91,7 +91,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             case .JSONNumber(let scale)     = dict["scale"]!,
             case .JSONNumber(let transX)    = dict["translation_x"]!,
             case .JSONNumber(let transY)    = dict["translation_y"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType

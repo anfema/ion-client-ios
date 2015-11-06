@@ -46,7 +46,7 @@ public class AMPPageMeta: CanLoadImage {
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
     internal init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["last_changed"] != nil) && (dict["parent"] != nil) &&
@@ -54,7 +54,7 @@ public class AMPPageMeta: CanLoadImage {
               case .JSONString(let lastChanged) = dict["last_changed"]!,
               case .JSONString(let layout) = dict["layout"]!,
               case .JSONString(let identifier)  = dict["identifier"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
 
@@ -96,7 +96,7 @@ public class AMPPageMeta: CanLoadImage {
         case .JSONString(let parent):
             self.parent = parent
         default:
-            throw AMPError.Code.InvalidJSON(json)
+            throw AMPError.InvalidJSON(json)
         }
     }
     
@@ -362,7 +362,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 }
             }
             if !found {
-                AMP.callError(self.identifier, error: AMPError.Code.PageNotFound(identifier))
+                AMP.callError(self.identifier, error: .PageNotFound(identifier))
             }
         }
         
@@ -401,9 +401,9 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             }
             if result.count == 0 {
                 if let parent = parent {
-                    AMP.callError(self.identifier, error: AMPError.Code.PageNotFound(parent))
+                    AMP.callError(self.identifier, error: .PageNotFound(parent))
                 } else {
-                    AMP.callError(self.identifier, error: AMPError.Code.CollectionNotFound(self.identifier))
+                    AMP.callError(self.identifier, error: .CollectionNotFound(self.identifier))
                 }
             } else {
                 callback(result)
@@ -420,14 +420,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the collection
-    public func onError(callback: (AMPError.Code -> Void)?) -> AMPCollection {
+    public func onError(callback: (AMPError -> Void)?) -> AMPCollection {
         // enqueue error callback for lazy resolving
         self.appendErrorCallback(callback)
         return self
     }
     
     /// override default error callback to bubble error up to AMP object
-    override func defaultErrorCallback(error: AMPError.Code) {
+    override func defaultErrorCallback(error: AMPError) {
         AMP.callError(self.identifier, error: error)
     }
     
@@ -485,7 +485,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     private func fetch(identifier: String, callback:(Void -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                AMP.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                AMP.callError(identifier, error: .CollectionNotFound(identifier))
                 self.hasFailed = true
                 return
             }
@@ -493,7 +493,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    AMP.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    AMP.callError(identifier, error: .JSONObjectExpected(result.value!))
                     self.hasFailed = true
                     return
             }
@@ -502,7 +502,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             guard dict["collection"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["collection"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    AMP.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    AMP.callError(identifier, error: .JSONObjectExpected(result.value!))
                     self.hasFailed = true
                     return
             }
@@ -516,7 +516,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                       case .JSONString(let id)    = dict["identifier"]!,
                       case .JSONString(let defaultLocale) = dict["default_locale"]!,
                       case .JSONArray(let pages)          = dict["pages"]! else {
-                        AMP.callError(identifier, error: AMPError.Code.InvalidJSON(result.value!))
+                        AMP.callError(identifier, error: .InvalidJSON(result.value!))
                         self.hasFailed = true
                         return
                 }

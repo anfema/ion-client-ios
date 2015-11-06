@@ -18,24 +18,24 @@ extension Request {
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - Returns: A `JSONObject` response serializer
-    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError.Code> {
+    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError> {
         return ResponseSerializer { _, response, data, error in
             guard let validData = data where response != nil else {
-                return .Failure(AMPError.Code.NoData)
+                return .Failure(.NoData)
             }
             
             if response!.statusCode != 200 {
-                return .Failure(AMPError.Code.NoData)
+                return .Failure(.NoData)
             }
             
             if let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) {
                 let JSON = JSONDecoder(jsonString).jsonObject
                 if case .JSONInvalid = JSON {
-                    return .Failure(AMPError.Code.InvalidJSON(nil))
+                    return .Failure(.InvalidJSON(nil))
                 }
                 return .Success(JSON)
             } else {
-                return .Failure(AMPError.Code.InvalidJSON(nil))
+                return .Failure(.InvalidJSON(nil))
             }
         }
     }
@@ -47,7 +47,7 @@ extension Request {
     ///                                creating the JSON object.
     /// - Returns: The request.
     public func responseDEJSON(
-        completionHandler: Response<JSONObject, AMPError.Code> -> Void)
+        completionHandler: Response<JSONObject, AMPError> -> Void)
         -> Self
     {
         return response(

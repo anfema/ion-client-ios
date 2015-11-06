@@ -33,13 +33,13 @@ public class AMPContent {
     /// - Parameter json: `JSONObject` that contains serialized content content object
 	init(json:JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
-			throw AMPError.Code.JSONObjectExpected(json)
+			throw AMPError.JSONObjectExpected(json)
 		}
 		
 		guard (dict["variation"] != nil) && (dict["outlet"] != nil),
               case .JSONString(let variation) = dict["variation"]!,
               case .JSONString(let outlet)    = dict["outlet"]! else {
-			throw AMPError.Code.InvalidJSON(json)
+			throw AMPError.InvalidJSON(json)
 		}
 		
 		self.variation = variation
@@ -61,13 +61,13 @@ public class AMPContent {
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON, AMPError.Code.UnknownContentType
     public class func factory(json:JSONObject) throws -> AMPContent {
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["type"] != nil),
             case let contentTypeObj = dict["type"]!,
             case .JSONString(let contentType) = contentTypeObj else {
-                throw AMPError.Code.JSONObjectExpected(json)
+                throw AMPError.JSONObjectExpected(json)
         }
         
         switch(contentType) {
@@ -94,7 +94,7 @@ public class AMPContent {
         case "textcontent":
             return try AMPTextContent(json: json)
         default:
-            throw AMPError.Code.UnknownContentType(contentType)
+            throw AMPError.UnknownContentType(contentType)
         }
     }
 }

@@ -26,12 +26,12 @@ public class AMPContainerContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard dict["children"] != nil,
             case .JSONArray(let children) = dict["children"]! else {
-                throw AMPError.Code.JSONArrayExpected(json)
+                throw AMPError.JSONArrayExpected(json)
         }
         
         self.children = []

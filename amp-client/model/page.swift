@@ -102,7 +102,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             
             let failedIdentifiers = self.getQueuedIdentifiers()
             for identifier in failedIdentifiers {
-                self.callError(identifier, error: AMPError.Code.OutletNotFound(identifier))
+                self.callError(identifier, error: .OutletNotFound(identifier))
             }
 
             callback(self)
@@ -115,7 +115,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the page
-    public func onError(callback: (AMPError.Code -> Void)) -> AMPPage {
+    public func onError(callback: (AMPError -> Void)) -> AMPPage {
         // enqueue error callback for lazy resolving
         if let original = AMP.getCachedPage(self.collection, identifier: self.identifier) {
             original.appendErrorCallback(callback)
@@ -133,7 +133,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             if page.parent == self.identifier {
                 callback(page)
             } else {
-                self.collection.callError(identifier, error: AMPError.Code.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+                self.collection.callError(identifier, error: .InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
             }
         }
         
@@ -150,7 +150,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
         if page.parent == self.identifier {
             return page
         }
-        self.collection.callError(identifier, error: AMPError.Code.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+        self.collection.callError(identifier, error: .InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
         return nil
     }
     
@@ -169,7 +169,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     
     
     /// override default error callback to bubble error up to collection
-    override func defaultErrorCallback(error: AMPError.Code) {
+    override func defaultErrorCallback(error: AMPError) {
         self.collection.callError(self.identifier, error: error)
     }
     
@@ -195,7 +195,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             if let c = cObj {
                 callback(c)
             } else {
-                self.callError(name, error: AMPError.Code.OutletNotFound(name))
+                self.callError(name, error: .OutletNotFound(name))
             }
         }
         return self
@@ -219,7 +219,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                 }
             }
             if cObj == nil {
-                self.callError(name, error: AMPError.Code.OutletNotFound(name))
+                self.callError(name, error: .OutletNotFound(name))
             }
             return cObj
         }
@@ -280,7 +280,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     private func fetch(identifier: String, callback:(Void -> Void)) {
         AMPRequest.fetchJSON("pages/\(self.collection.identifier)/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                self.collection.callError(identifier, error: AMPError.Code.PageNotFound(identifier))
+                self.collection.callError(identifier, error: .PageNotFound(identifier))
                 self.hasFailed = true
                 return
             }
@@ -288,7 +288,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(result.value!))
+                    self.collection.callError(identifier, error: .JSONObjectExpected(result.value!))
                     self.hasFailed = true
                     return
             }
@@ -297,7 +297,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
             guard dict["page"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["page"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    self.collection.callError(identifier, error: AMPError.Code.JSONObjectExpected(dict["page"]))
+                    self.collection.callError(identifier, error: .JSONObjectExpected(dict["page"]))
                     self.hasFailed = true
                     return
             }
@@ -311,7 +311,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                       case .JSONString(let id) = dict["identifier"]!,
                       let parent = dict["parent"],
                       case .JSONArray(let translations) = dict["translations"]! else {
-                        self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(result.value))
+                        self.collection.callError(identifier, error: .InvalidJSON(result.value))
                         self.hasFailed = true
                         return
                 }
@@ -329,7 +329,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     
                     // guard against garbage data
                     guard case .JSONDictionary(let t) = translation else {
-                        self.collection.callError(identifier, error:AMPError.Code.JSONObjectExpected(translation))
+                        self.collection.callError(identifier, error: .JSONObjectExpected(translation))
                         self.hasFailed = true
                         return
                     }
@@ -338,7 +338,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
                     guard (t["locale"] != nil) && (t["content"] != nil),
                         case .JSONString(let localeCode) = t["locale"]!,
                         case .JSONArray(let content)     = t["content"]! else {
-                            self.collection.callError(identifier, error: AMPError.Code.InvalidJSON(translation))
+                            self.collection.callError(identifier, error: .InvalidJSON(translation))
                             self.hasFailed = true
                             return
                     }

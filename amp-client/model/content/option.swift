@@ -25,12 +25,12 @@ public class AMPOptionContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["value"] != nil),
             case .JSONString(let value) = dict["value"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.value = value

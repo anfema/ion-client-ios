@@ -118,7 +118,7 @@ extension AMPRequest {
     /// - Parameter optRequest: optional request (used for request url)
     /// - Parameter optResponse: optional response, checked for status code 200
     /// - Parameter result: the object to save
-    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError.Code>) {
+    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,

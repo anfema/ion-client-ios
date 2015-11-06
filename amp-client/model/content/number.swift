@@ -12,8 +12,6 @@
 import Foundation
 import DEjson
 
-// TODO: Write unittests for Number
-
 /// Number content, has a float value
 public class AMPNumberContent : AMPContent {
     /// value
@@ -26,12 +24,12 @@ public class AMPNumberContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["value"] != nil),
             case .JSONNumber(let value) = dict["value"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.value = value

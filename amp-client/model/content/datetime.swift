@@ -24,12 +24,12 @@ public class AMPDateTimeContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["datetime"] != nil),
             case .JSONString(let datetime) = dict["datetime"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         let fmt = NSDateFormatter()

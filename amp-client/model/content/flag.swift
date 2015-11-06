@@ -24,12 +24,12 @@ public class AMPFlagContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["is_enabled"] != nil),
             case .JSONBoolean(let enabled) = dict["is_enabled"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.enabled = enabled

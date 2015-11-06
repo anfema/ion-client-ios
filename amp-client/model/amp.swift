@@ -26,7 +26,7 @@ public struct AMPConfig {
     public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
     /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
-    public var errorHandler:((String, AMPError.Code) -> Void)!
+    public var errorHandler:((String, AMPError) -> Void)!
     
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?
@@ -133,7 +133,7 @@ public class AMP {
             for c in self.collectionCache {
                 if c.identifier == identifier {
                     if c.hasFailed {
-                        self.callError(identifier, error: AMPError.Code.CollectionNotFound(identifier))
+                        self.callError(identifier, error: .CollectionNotFound(identifier))
                     } else {
                         dispatch_async(self.config.responseQueue) {
                             callback(c)
@@ -155,7 +155,7 @@ public class AMP {
     ///
     /// - Parameter identifier: the collection identifier that caused the error
     /// - Parameter error: An error object
-    class func callError(identifier: String, error: AMPError.Code) {
+    class func callError(identifier: String, error: AMPError) {
         dispatch_async(AMP.config.responseQueue) {
             AMP.config.errorHandler(identifier, error)
         }

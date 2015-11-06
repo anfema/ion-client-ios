@@ -31,14 +31,14 @@ public class AMPTextContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["mime_type"] != nil) && (dict["is_multiline"] != nil) && (dict["text"] != nil),
             case .JSONString(let mimeType) = dict["mime_type"]!,
             case .JSONBoolean(let multiLine) = dict["is_multiline"]!,
             case .JSONString(let text) = dict["text"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType

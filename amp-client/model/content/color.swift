@@ -39,7 +39,7 @@ public class AMPColorContent : AMPContent {
         
         // make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         // make sure all data is there
@@ -48,7 +48,7 @@ public class AMPColorContent : AMPContent {
             case .JSONNumber(let g) = dict["g"]!,
             case .JSONNumber(let b) = dict["b"]!,
             case .JSONNumber(let a) = dict["a"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         // init from deserialized data
