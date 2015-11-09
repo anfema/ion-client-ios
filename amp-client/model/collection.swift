@@ -135,7 +135,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     internal var pageMeta = [AMPPageMeta]()
 
     /// memory cache for pages
-    internal var pageCache:[AMPPage] = []
+    internal var pageCache = [String:AMPPage]()
 
     /// CustomStringConvertible requirement
     public var description: String {
@@ -487,24 +487,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter identifier: the identifier of the page to fetch
     /// - Returns: page object or nil if not found
     internal func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
-        for p in self.pageCache {
-            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
-                return p
-            }
-        }
-        return nil
+        return self.pageCache[identifier]
     }
     
     /// Save page to the page cache overwriting older versions
     ///
     /// - Parameter page: the page to add to the cache
     private func cachePage(page: AMPPage) {
-        // check if we need to overwrite an old page
-        self.pageCache = self.pageCache.filter({ p -> Bool in
-            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
-        })
-        
-        self.pageCache.append(page)
+        self.pageCache[page.identifier] = page
     }
 
     /// Fetch collection from cache or web
