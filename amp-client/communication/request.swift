@@ -48,7 +48,7 @@ public class AMPRequest {
                     // do nothing, fallthrough to HTTP request
                 }
             }
-            return .Failure(AMPError.NoData)
+            return .Failure(AMPError.NoData(nil))
         }
         
         if cached {
@@ -150,7 +150,7 @@ public class AMPRequest {
                 }
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(.Failure(AMPError.NoData))
+                    callback(.Failure(AMPError.NoData(error)))
                 }
             } else {
                 // no error, save file to cache db

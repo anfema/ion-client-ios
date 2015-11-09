@@ -21,11 +21,11 @@ extension Request {
     public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError> {
         return ResponseSerializer { _, response, data, error in
             guard let validData = data where response != nil else {
-                return .Failure(.NoData)
+                return .Failure(.NoData(error))
             }
             
             if response!.statusCode != 200 {
-                return .Failure(.NoData)
+                return .Failure(.NoData(error))
             }
             
             if let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) {

@@ -14,8 +14,8 @@ import DEjson
 
 /// Error codes used by AMP
 public enum AMPError: ErrorType {
-    /// No data received error
-    case NoData
+    /// No data received error (underlying error in associated value)
+    case NoData(ErrorType?)
     
     /// Invalid json error, probably a transmission error
     case InvalidJSON(JSONObject?)
