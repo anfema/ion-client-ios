@@ -94,6 +94,8 @@ public class JSONDecoder {
                     string.append(UnicodeScalar(13))
                 case 116: // t -> tab
                     string.append(UnicodeScalar(9))
+                case 92: // \ -> \
+                    string.append(UnicodeScalar(92))
                 case 117: // u -> unicode value
                     // gather 4 chars
                     let d1 = self.parseHexDigit(generator.next())
@@ -123,7 +125,6 @@ public class JSONDecoder {
                 break
             }
         }
-        // TODO: parse backslash escaped characters
         return string.stringByReplacingOccurrencesOfString("\\n", withString: "\n")
     }
 

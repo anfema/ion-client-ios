@@ -131,6 +131,9 @@ public class JSONEncoder {
             case 34: // "
                 result.append(UnicodeScalar(92))
                 result.append(c)
+            case 92: // \ -> \
+                result.append(UnicodeScalar(92))
+                result.append(c)
             default:
                 if c.value > 128 {
                     result.append(UnicodeScalar(92))
