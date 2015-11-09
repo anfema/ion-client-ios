@@ -63,8 +63,9 @@ public struct AMPConfig {
 public class AMP {
     /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
     static public var config = AMPConfig()
-    
-    static private var collectionCache = [String:AMPCollection]()
+
+    // Internal cache for collections
+    static internal var collectionCache = [String:AMPCollection]()
 
     /// Login user
     ///
@@ -112,11 +113,10 @@ public class AMP {
                 return cachedObject
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut())
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(), callback: nil)
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
-        self.collectionCache[identifier] = newCollection
         return newCollection
     }
     
@@ -142,7 +142,6 @@ public class AMP {
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
-        self.collectionCache[identifier] = newCollection
         return newCollection
     }
 
@@ -162,10 +161,11 @@ public class AMP {
     /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
     /// cache and have a parsing and initialization penalty on next call.
     public class func resetMemCache() {
-        self.collectionCache.removeAll()
+        // FIXME: collection needs resetMemCache()
         for collection in self.collectionCache.values {
             collection.pageCache.removeAll()
         }
+        self.collectionCache.removeAll()
     }
     
     /// Clear disk cache

@@ -108,13 +108,8 @@ public class AMPPageMeta: CanLoadImage {
     }
 }
 
-/// compare two collections
-public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
-    return (lhs.identifier == rhs.identifier)
-}
-
 /// Collection class, contains pages, has functionality to async fetch data
-public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equatable, Hashable {
+public class AMPCollection {
     
     /// identifier
     public var identifier:String!
@@ -128,24 +123,24 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// last update date
     public var lastUpdate:NSDate?
 
-    /// set to false to avoid using the cache (refreshes, etc.)
-    private var useCache = true
-    
+    /// this instance produced an error while fetching from net
+    public var hasFailed: Bool = false
+
     /// page metadata
     internal var pageMeta = [AMPPageMeta]()
 
     /// memory cache for pages
     internal var pageCache = [String:AMPPage]()
 
-    /// CustomStringConvertible requirement
-    public var description: String {
-        return "AMPCollection: \(identifier!), \(pageMeta.count) pages"
-    }
+    /// internal lock for errorhandler
+    internal var parentLock = NSLock()
     
-    /// Hashable requirement
-    public var hashValue: Int {
-        return identifier.hashValue
-    }
+    /// set to false to avoid using the cache (refreshes, etc.)
+    private var useCache = true
+
+    /// work queue
+    private var workQueue: dispatch_queue_t
+    
 
     // MARK: - Initializer
     
@@ -157,65 +152,45 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter locale: locale code to fetch
     /// - Parameter useCache: set to false to force a refresh
     /// - Parameter callback: block to call when collection is fully loaded
-    init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)) {
-        super.init()
+    init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)?) {
         self.locale = locale
         self.useCache = useCache
         self.identifier = identifier
         
-        // here we can call the callback directly
-        self.fetch(identifier) {
-            self.isReady = true
-            callback(self)
+        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
+       
+        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
+        dispatch_barrier_async(self.workQueue) {
+            self.parentLock.lock()
+            let semaphore = dispatch_semaphore_create(0)
+            self.fetch(identifier) { error in
+                if let error = error {
+                    // set error state, this forces all blocks in the work queue to cancel themselves
+                    self.callErrorHandler(error)
+                    self.hasFailed = true
+                } else if let cb = callback {
+                    cb(self)
+                }
+                dispatch_semaphore_signal(semaphore)
+            }
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+            self.parentLock.unlock()
         }
-    }
-
-    /// Initialize collection
-    ///
-    /// use `collection` method of `AMP` class instead!
-    ///
-    /// This one queues all actions until it has been fully loaded.
-    ///
-    /// - Parameter identifier: the collection identifier
-    /// - Parameter locale: locale code to fetch
-    /// - Parameter useCache: set to false to force a refresh
-    init(identifier: String, locale: String, useCache: Bool) {
-        super.init()
-        self.locale = locale
-        self.useCache = useCache
-        self.identifier = identifier
         
-        // there is no callback so there may be queued tasks
-        self.fetch(identifier) {
-            self.isReady = true
-            self.executeTasks()
-        }
+        AMP.collectionCache[identifier] = self
+    }
+    
+    private init(forErrorHandlerWithIdentifier identifier: String, locale: String) {
+        self.locale = locale
+        self.useCache = true
+        self.identifier = identifier
+        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).withErrorHandler.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+
+        // FIXME: How to remove this from the collection cache again?
+        AMP.collectionCache[identifier + "-" + NSUUID().UUIDString] = self
     }
 
-    /// Initialize collection using cache
-    ///
-    /// use `collection` method of `AMP` class instead!
-    ///
-    /// - Parameter identifier: the collection identifier
-    /// - Parameter locale: locale code to fetch
-    /// - Parameter callback: block to call when collection is fully loaded
-    convenience init(identifier: String, locale: String, callback:(AMPCollection -> Void)) {
-        self.init(identifier: identifier, locale: locale, useCache: true, callback: callback)
-    }
-
-    /// Initialize collection using cache
-    ///
-    /// use `collection` method of `AMP` class instead!
-    ///
-    /// This one queues all actions until it has been fully loaded.
-    ///
-    /// - Parameter identifier: the collection identifier
-    /// - Parameter locale: locale code to fetch
-    convenience init(identifier: String, locale: String) {
-        self.init(identifier: identifier, locale: locale, useCache: true)
-    }
-
-    // MARK: - API
+     // MARK: - API
     
     /// Fetch a page from this collection
     ///
@@ -223,24 +198,23 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter callback: the callback to call when the page becomes available
     /// - Returns: self, to be able to chain more actions to the collection
     public func page(identifier: String, callback:(AMPPage -> Void)) -> AMPCollection {
-        // register callback with async queue
-        self.appendCallback(identifier, callback: callback)
-        
-        // this block fetches the page from the cache or web and calls the associated callbacks
-        let block:(String -> Void) = { identifier in
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             if let page = self.getCachedPage(self, identifier: identifier) {
                 var needsUpdate:Bool = false
                 // ready, check if we need to update
                 if page.isReady {
-                    if let lastUpdate = self.getMetaUpdate(page) {
-                        if page.lastUpdate.compare(lastUpdate) == NSComparisonResult.OrderedAscending {
+                    if let meta = self.getPageMetaForPage(page.identifier) {
+                        if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
                             // page out of date, force update
                             needsUpdate = true
                         }
                     }
                     if !needsUpdate {
                         // no update return instantly
-                        self.callCallbacks(identifier, value: page, error: nil)
+                        callback(page)
                     }
                 }
                 if page.hasFailed {
@@ -248,24 +222,23 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 }
                 if needsUpdate {
                     // fetch page update
-                    let parent = self.getParentForPage(identifier)
-                    let layout = self.getLayoutForPage(identifier)
-
-                    self.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
-                        self.callCallbacks(identifier, value: page, error: nil)
+                    guard let meta = self.getPageMetaForPage(identifier) else {
+                        return
+                    }
+                    self.cachePage(AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                        callback(page)
                     })
                 }
             } else {
-                let parent = self.getParentForPage(identifier)
-                let layout = self.getLayoutForPage(identifier)
-                self.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
-                    self.callCallbacks(identifier, value: page, error: nil)
+                guard let meta = self.getPageMetaForPage(identifier) else {
+                    self.callErrorHandler(.PageNotFound(identifier))
+                    return
+                }
+                self.cachePage(AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                    callback(page)
                 })
             }
         }
-        
-        // append the task to fetch the page, if a similar block is already in the task queue it will be discarded
-        self.appendTask(identifier, block: block)
         
         // allow further chaining
         return self
@@ -277,10 +250,9 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// all actions chained to the page will be queued until the data is available
     ///
     /// - Parameter identifier: page identifier
-    /// - Returns: a page that resolves automatically if the underlying page becomes available
+    /// - Returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
     public func page(identifier: String) -> AMPPage {
         // fetch page and resume processing when ready
-        self.appendCallback(identifier, callback: { page in }) // have at least one callback, even if it does nothing
         var fetch = true
         
         if let page = self.getCachedPage(self, identifier: identifier) {
@@ -293,13 +265,15 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         
         if fetch {
             // search metadata
-            // FIXME: 2 runs for searching metadata
-            let parent = self.getParentForPage(identifier)
-            let layout = self.getLayoutForPage(identifier)
+            var layout: String? = nil
+            var parent: String? = nil
+            if let meta = self.getPageMetaForPage(identifier) {
+                layout = meta.layout
+                parent = meta.parent
+            }
             
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier, layout:layout, parent: parent) { page in
-                self.callCallbacks(identifier, value: page, error: nil)
+            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: true, parent: parent) { page in
             }
             self.cachePage(page)
             return page
@@ -312,17 +286,18 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter callback: block to call for each page
     public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
-        // this block fetches the page list after the collection is ready
-        let block:(String -> Void) = { identifier in
+        // append page listing to work queue
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             for meta in self.pageMeta {
+                // only pages where no parent is set will be returned (top level)
                 if meta.parent == nil {
                     self.page(meta.identifier, callback:callback)
                 }
             }
         }
-        
-        // append the task to fetch the pages
-        self.appendTask("pageList", deduplicate:false, block: block)
         
         return self
     }
@@ -332,8 +307,11 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter parent: parent to get page count for, nil == top level
     /// - Parameter callback: block to call for page count return value
     public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
-        // this block fetches the page count after the collection is ready
-        let block:(String -> Void) = { identifier in
+        // append page count to work queue
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             var count = 0
             for meta in self.pageMeta {
                 if meta.parent == parent {
@@ -343,9 +321,6 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             callback(count)
         }
         
-        // append the task to fetch the pages
-        self.appendTask("pageCount", deduplicate:false, block: block)
-
         return self
     }
     
@@ -355,7 +330,10 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter callback: callback to call with metadata
     public func metadata(identifier: String, callback: (AMPPageMeta -> Void)) -> AMPCollection {
         // this block fetches the page count after the collection is ready
-        let block:(String -> Void) = { _ in
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             var found = false
             for meta in self.pageMeta {
                 if meta.identifier == identifier {
@@ -365,13 +343,10 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                 }
             }
             if !found {
-                AMP.callError(self.identifier, error: .PageNotFound(identifier))
+                self.callErrorHandler(.PageNotFound(identifier))
             }
         }
-        
-        // append the task to fetch the pages
-        self.appendTask("pageMetadata", deduplicate:false, block: block)
-        
+
         return self
     }
 
@@ -394,8 +369,11 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// - Parameter parent: parent to enumerate metadata for, nil == top level
     /// - Parameter callback: callback to call with metadata
     public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
-        // this block fetches the page metadata after the collection is ready
-        let block:(String -> Void) = { identifier in
+        // fetch the page metadata after the collection is ready
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             var result = [AMPPageMeta]()
             for meta in self.pageMeta {
                 if meta.parent == parent {
@@ -404,17 +382,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             }
             if result.count == 0 {
                 if let parent = parent {
-                    AMP.callError(self.identifier, error: .PageNotFound(parent))
+                    self.callErrorHandler(.PageNotFound(parent))
                 } else {
-                    AMP.callError(self.identifier, error: .CollectionNotFound(self.identifier))
+                    self.callErrorHandler(.CollectionNotFound(self.identifier))
                 }
             } else {
                 callback(result)
             }
         }
-        
-        // append the task to fetch the pages
-        self.appendTask("pageMetadataList", deduplicate:false, block: block)
         
         return self
     }
@@ -423,62 +398,39 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter callback: the block to call in case of an error
     /// - Returns: self, to be able to chain more actions to the collection
-    public func onError(callback: (AMPError -> Void)?) -> AMPCollection {
-        // enqueue error callback for lazy resolving
-        self.appendErrorCallback(callback)
-        return self
+    public func onError(callback: (AMPError -> Void)) -> AMPCollection {
+        return ErrorHandlingAMPCollection(collection: self, errorHandler: callback)
     }
     
     /// override default error callback to bubble error up to AMP object
-    override func defaultErrorCallback(error: AMPError) {
+    internal func callErrorHandler(error: AMPError) {
         AMP.callError(self.identifier, error: error)
     }
     
     // MARK: - Internal
     
-    internal func getChildIdentifiersForPage(parent: String) -> [String] {
-        var result:[String] = []
-        for meta in self.pageMeta {
-            if meta.parent == parent {
-                result.append(meta.identifier)
+    internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
+        dispatch_async(self.workQueue) {
+            var result:[String] = []
+            for meta in self.pageMeta {
+                if meta.parent == parent {
+                    result.append(meta.identifier)
+                }
             }
+            callback(result)
         }
-        return result
     }
    
     // MARK: - Private
-    
-    private func getParentForPage(identifier: String) -> String? {
-        var parent: String? = nil
+    private func getPageMetaForPage(identifier: String) -> AMPPageMeta? {
+        var result: AMPPageMeta? = nil
         for meta in self.pageMeta {
             if meta.identifier == identifier {
-                parent = meta.parent
+                result = meta
                 break
             }
         }
-        return parent
-    }
-
-    private func getLayoutForPage(identifier: String) -> String {
-        var layout: String = ""
-        for meta in self.pageMeta {
-            if meta.identifier == identifier {
-                layout = meta.layout
-                break
-            }
-        }
-        return layout
-    }
-
-    private func getMetaUpdate(page: AMPPage) -> NSDate? {
-        var update: NSDate? = nil
-        for meta in self.pageMeta {
-            if meta.identifier == page.identifier {
-                update = meta.lastChanged
-                break
-            }
-        }
-        return update
+        return result
     }
     
     /// Fetch page from cached page list
@@ -501,19 +453,17 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     ///
     /// - Parameter identifier: collection identifier to get
     /// - Parameter callback: block to call when the fetch finished
-    private func fetch(identifier: String, callback:(Void -> Void)) {
+    private func fetch(identifier: String, callback:(AMPError? -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             if case .Failure = result {
-                AMP.callError(identifier, error: .CollectionNotFound(identifier))
-                self.hasFailed = true
+                callback(AMPError.CollectionNotFound(identifier))
                 return
             }
             
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    AMP.callError(identifier, error: .JSONObjectExpected(result.value!))
-                    self.hasFailed = true
+                    callback(AMPError.JSONObjectExpected(result.value!))
                     return
             }
             
@@ -521,8 +471,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             guard dict["collection"] != nil && dict["last_updated"] != nil,
                   case .JSONArray(let array) = dict["collection"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
-                    AMP.callError(identifier, error: .JSONObjectExpected(result.value!))
-                    self.hasFailed = true
+                    callback(AMPError.JSONObjectExpected(result.value!))
                     return
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -535,8 +484,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                       case .JSONString(let id)    = dict["identifier"]!,
                       case .JSONString(let defaultLocale) = dict["default_locale"]!,
                       case .JSONArray(let pages)          = dict["pages"]! else {
-                        AMP.callError(identifier, error: .InvalidJSON(result.value!))
-                        self.hasFailed = true
+                        callback(AMPError.InvalidJSON(result.value!))
                         return
                 }
             
@@ -563,7 +511,50 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             self.useCache = true
             
             // all finished, call callback
-            callback()
+            callback(nil)
         }
     }
  }
+
+extension AMPCollection: CustomStringConvertible {
+    public var description: String {
+        return "AMPCollection: \(identifier!), \(pageMeta.count) pages"
+    }
+}
+
+public func ==(lhs: AMPCollection, rhs: AMPCollection) -> Bool {
+    return (lhs.identifier == rhs.identifier)
+}
+
+extension AMPCollection: Hashable {
+    public var hashValue: Int {
+        return identifier.hashValue
+    }
+}
+
+
+class ErrorHandlingAMPCollection: AMPCollection {
+    private var errorHandler: (AMPError -> Void)
+    
+    init(collection: AMPCollection, errorHandler: (AMPError -> Void)) {
+        self.errorHandler = errorHandler
+        super.init(forErrorHandlerWithIdentifier: collection.identifier, locale: collection.locale)
+        
+        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
+        dispatch_barrier_async(self.workQueue) {
+            collection.parentLock.lock()
+            self.identifier = collection.identifier
+            self.locale = collection.locale
+            self.defaultLocale = collection.defaultLocale
+            self.lastUpdate = collection.lastUpdate
+            self.pageMeta = collection.pageMeta
+            collection.parentLock.unlock()
+        }
+
+    }
+    
+    /// override default error callback to bubble error up to AMP object
+    override internal func callErrorHandler(error: AMPError) {
+       errorHandler(error)
+    }
+}
