@@ -64,8 +64,7 @@ public class AMP {
     /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
     static public var config = AMPConfig()
     
-    static private var collectionCache:[AMPCollection] = []
-    static private var pageCache:[AMPPage] = []         /// memory cache for pages
+    static private var collectionCache = [String:AMPCollection]()
 
     /// Login user
     ///
@@ -109,17 +108,15 @@ public class AMP {
     /// - Returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
         if !self.hasCacheTimedOut() {
-            for c in self.collectionCache {
-                if c.identifier == identifier {
-                    return c
-                }
+            if let cachedObject = self.collectionCache[identifier] {
+                return cachedObject
             }
         }
         let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut())
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
-        self.collectionCache.append(newCollection)
+        self.collectionCache[identifier] = newCollection
         return newCollection
     }
     
@@ -130,24 +127,22 @@ public class AMP {
     /// - Returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
         if !self.hasCacheTimedOut() {
-            for c in self.collectionCache {
-                if c.identifier == identifier {
-                    if c.hasFailed {
-                        self.callError(identifier, error: .CollectionNotFound(identifier))
-                    } else {
-                        dispatch_async(self.config.responseQueue) {
-                            callback(c)
-                        }
+            if let cachedObject = self.collectionCache[identifier] {
+                if cachedObject.hasFailed {
+                    self.callError(identifier, error: .CollectionNotFound(identifier))
+                } else {
+                    dispatch_async(self.config.responseQueue) {
+                        callback(cachedObject)
                     }
-                    return c
                 }
+                return cachedObject
             }
         }
         let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(), callback:callback)
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
-        self.collectionCache.append(newCollection)
+        self.collectionCache[identifier] = newCollection
         return newCollection
     }
 
@@ -168,7 +163,9 @@ public class AMP {
     /// cache and have a parsing and initialization penalty on next call.
     public class func resetMemCache() {
         self.collectionCache.removeAll()
-        self.pageCache.removeAll()
+        for collection in self.collectionCache.values {
+            collection.pageCache.removeAll()
+        }
     }
     
     /// Clear disk cache
@@ -210,93 +207,8 @@ public class AMP {
         AMPRequest.resetCache(locale: locale)
     }
     
-    /// Refresh disk and memory caches
-    ///
-    /// This only updates disk and memory cache for already loaded collections and pages in memory cache
-    /// So if you want to bulk update a bunch of pages make sure they are loaded in memory already.
-    /// This is done of performance reasons and because the caching system does not currently know what exactly is
-    /// in the cache.
-    ///
-    /// - Parameter callback: Block to call when update of a collection is finished, must not mean the
-    ///                       pages in the collection have been updated already!
-    public class func refreshCache(callback: (AMPCollection -> Void)) {
-       
-        // create new serial queue and suspend it to allow filling before processing
-        let queue = dispatch_queue_create("com.anfema.amp.CacheRefresh", nil)
-        dispatch_suspend(queue)
-        
-        for index in self.collectionCache.indices {
-            let collection = self.collectionCache[index]
-            let name = collection.identifier
-
-            // at first update collection
-            dispatch_async(queue) {
-                let locale = collection.locale
-                
-                // reinitialize cached collection, turning cache off for this call
-                let _ = AMPCollection(identifier: name, locale: locale, useCache: false) { collection in
-                    self.collectionCache.replaceRange(Range<Int>(start: index, end: index + 1), with: [collection])
-                    callback(collection)
-                }
-            }
-        }
-
-        // add fetches to the suspended queue to avoid changing the page cache while iterating over it
-        for page in self.pageCache {
-            dispatch_async(queue) {
-
-                // fetch collection
-                AMP.collection(page.collection.identifier) { collection in
-                    for p in collection.pageMeta {
-                        // validate page last update dates with those from the cache
-                        if (p.identifier == page.identifier) && (p.lastChanged.compare(page.lastUpdate) != .OrderedAscending) {
-                            collection.page(page.identifier) { page in
-                                // do nothing, just download page
-                                // print("AMP: Page refreshed: \(collection.identifier) -> \(page.identifier)")
-                            }
-                        } else {
-                            // print("AMP: Page current: \(collection.identifier) -> \(page.identifier)")
-                        }
-                    }
-                }
-            }
-        }
-        
-        
-        // start the serial queue
-        dispatch_resume(queue)
-    }
-    
-    // TODO: missing collection refresh
-    // TODO: missing page refresh
     
     // MARK: - Internal
-    
-    /// Fetch page from cached page list
-    ///
-    /// - Parameter collection: a collection object
-    /// - Parameter identifier: the identifier of the page to fetch
-    /// - Returns: page object or nil if not found
-    class func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
-        for p in self.pageCache {
-            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
-                return p
-            }
-        }
-        return nil
-    }
-    
-    /// Save page to the page cache overwriting older versions
-    ///
-    /// - Parameter page: the page to add to the cache
-    class func cachePage(page: AMPPage) {
-        // check if we need to overwrite an old page
-        self.pageCache = self.pageCache.filter({ p -> Bool in
-            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
-        })
-        
-        self.pageCache.append(page)
-    }
     
     /// Downloader calls this function to register a progress item with the global progress toolbar
     ///

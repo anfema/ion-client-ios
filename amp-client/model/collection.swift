@@ -134,6 +134,9 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
     /// page metadata
     internal var pageMeta = [AMPPageMeta]()
 
+    /// memory cache for pages
+    internal var pageCache:[AMPPage] = []
+
     /// CustomStringConvertible requirement
     public var description: String {
         return "AMPCollection: \(identifier!), \(pageMeta.count) pages"
@@ -225,7 +228,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         
         // this block fetches the page from the cache or web and calls the associated callbacks
         let block:(String -> Void) = { identifier in
-            if let page = AMP.getCachedPage(self, identifier: identifier) {
+            if let page = self.getCachedPage(self, identifier: identifier) {
                 var needsUpdate:Bool = false
                 // ready, check if we need to update
                 if page.isReady {
@@ -248,14 +251,14 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
                     let parent = self.getParentForPage(identifier)
                     let layout = self.getLayoutForPage(identifier)
 
-                    AMP.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
+                    self.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
                         self.callCallbacks(identifier, value: page, error: nil)
                     })
                 }
             } else {
                 let parent = self.getParentForPage(identifier)
                 let layout = self.getLayoutForPage(identifier)
-                AMP.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
+                self.cachePage(AMPPage(collection: self, identifier: identifier, layout: layout, parent:parent) { page in
                     self.callCallbacks(identifier, value: page, error: nil)
                 })
             }
@@ -280,7 +283,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         self.appendCallback(identifier, callback: { page in }) // have at least one callback, even if it does nothing
         var fetch = true
         
-        if let page = AMP.getCachedPage(self, identifier: identifier) {
+        if let page = self.getCachedPage(self, identifier: identifier) {
             // well page is cached, just return cached version
             if page.isReady {
                 fetch = false
@@ -298,7 +301,7 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
             let page = AMPPage(collection: self, identifier: identifier, layout:layout, parent: parent) { page in
                 self.callCallbacks(identifier, value: page, error: nil)
             }
-            AMP.cachePage(page)
+            self.cachePage(page)
             return page
         }
     }
@@ -478,6 +481,32 @@ public class AMPCollection : AMPChainable<AMPPage>, CustomStringConvertible, Equ
         return update
     }
     
+    /// Fetch page from cached page list
+    ///
+    /// - Parameter collection: a collection object
+    /// - Parameter identifier: the identifier of the page to fetch
+    /// - Returns: page object or nil if not found
+    internal func getCachedPage(collection: AMPCollection, identifier: String) -> AMPPage? {
+        for p in self.pageCache {
+            if (p.collection.identifier == collection.identifier) && (p.identifier == identifier) {
+                return p
+            }
+        }
+        return nil
+    }
+    
+    /// Save page to the page cache overwriting older versions
+    ///
+    /// - Parameter page: the page to add to the cache
+    private func cachePage(page: AMPPage) {
+        // check if we need to overwrite an old page
+        self.pageCache = self.pageCache.filter({ p -> Bool in
+            return !((p.identifier == page.identifier) && (p.collection.identifier == page.collection.identifier))
+        })
+        
+        self.pageCache.append(page)
+    }
+
     /// Fetch collection from cache or web
     ///
     /// - Parameter identifier: collection identifier to get

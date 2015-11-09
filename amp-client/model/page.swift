@@ -117,7 +117,7 @@ public class AMPPage : AMPChainable<AMPContent>, CustomStringConvertible, Equata
     /// - Returns: self, to be able to chain more actions to the page
     public func onError(callback: (AMPError -> Void)) -> AMPPage {
         // enqueue error callback for lazy resolving
-        if let original = AMP.getCachedPage(self.collection, identifier: self.identifier) {
+        if let original = self.collection.getCachedPage(self.collection, identifier: self.identifier) {
             original.appendErrorCallback(callback)
         }
         return self

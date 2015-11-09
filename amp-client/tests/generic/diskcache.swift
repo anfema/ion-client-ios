@@ -55,25 +55,6 @@ class diskcacheTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
-    func testCollectionDiskCacheUpdate() {
-        let expectation = self.expectationWithDescription("testCollectionDiskCacheUpdate")
-        AMP.collection("test") { collection in
-            XCTAssertNotNil(collection.lastUpdate)
-            AMP.refreshCache() { updatedCollection in
-                if collection.identifier == updatedCollection.identifier {
-                    XCTAssertNotNil(updatedCollection.lastUpdate)
-                    XCTAssert(updatedCollection !== collection)
-                    XCTAssert(updatedCollection == collection)
-                    XCTAssert(updatedCollection.lastUpdate!.compare(collection.lastUpdate!) == .OrderedDescending)
-                    let collection2 = AMP.collection("test")
-                    XCTAssert(collection2 === updatedCollection)
-                    expectation.fulfill()
-                }
-            }
-        }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
-    }
-
     func testPageDiskCache() {
         let expectation = self.expectationWithDescription("testPageDiskCache")
         AMP.collection("test").page("page_001") { page in
@@ -106,31 +87,4 @@ class diskcacheTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
-    
-    func testPageDiskCacheUpdate() {
-        let expectation = self.expectationWithDescription("testPageDiskCacheUpdate")
-        AMP.collection("test").page("page_001") { page in
-            XCTAssertNotNil(page.lastUpdate)
-            AMP.refreshCache() { updatedCollection in
-                if updatedCollection.identifier == "test" {
-                    updatedCollection.page("page_001") { updatedPage in
-                        XCTAssertNotNil(updatedPage.lastUpdate)
-                        XCTAssert(updatedPage === page)
-                        
-                        // This works different from collection:
-                        // - Collection is always updated, page not
-                        // - Page will be refetched if it actually changed
-                        // As nobody is changing the page we assume it will not be refetched!
-                        // TODO: Test other case (page has changed)
-                        XCTAssert(updatedPage.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
-                        let page2 = AMP.collection("test").page("page_001")
-                        XCTAssert(page2 === updatedPage)
-                        expectation.fulfill()
-                    }
-                }
-            }
-        }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
-    }
-
 }
