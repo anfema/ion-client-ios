@@ -96,11 +96,15 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageParent() {
-        let page = AMP.collection("test").page("subpage_001")
-        XCTAssertNotNil(page)
-        XCTAssert(page.identifier == "subpage_001")
-        XCTAssert(page.parent == "page_002")
-        XCTAssert(page.layout == "Layout 001")
+        let expectation = self.expectationWithDescription("testPageParent")
+        AMP.collection("test").page("subpage_001") { page in
+            XCTAssertNotNil(page)
+            XCTAssert(page.identifier == "subpage_001")
+            XCTAssert(page.parent == "page_002")
+            XCTAssert(page.layout == "Layout 001")
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
     func testPageChild() {
@@ -124,7 +128,11 @@ class pageTests: LoggedInXCTestCase {
     func testPageChildAsync() {
         let expectation = self.expectationWithDescription("testPageChildAsync")
         
-        AMP.collection("test").page("page_002").child("subpage_001") { page in
+        AMP.collection("test").page("page_002").onError() { error in
+            print(error)
+            XCTFail()
+            expectation.fulfill()
+        }.child("subpage_001") { page in
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
@@ -145,7 +153,7 @@ class pageTests: LoggedInXCTestCase {
             } else {
                 XCTFail()
             }
-            //expectation.fulfill()
+            expectation.fulfill()
         }
         
         AMP.collection("test").page("page_002").child("page_001") { page in
@@ -167,9 +175,7 @@ class pageTests: LoggedInXCTestCase {
                 XCTFail()
             }
             if (pageCount == 2) {
-                dispatch_async(AMP.config.responseQueue) {
-                    expectation.fulfill()
-                }
+                expectation.fulfill()
             }
         }
 

@@ -145,7 +145,7 @@ class errorHandlerTests: LoggedInXCTestCase {
             } else {
                 XCTFail()
             }
-//            expectation.fulfill()
+            expectation.fulfill()
         }.page("page_001").outlet("unknown_outlet") { outlet in
             XCTFail()
             expectation.fulfill()
