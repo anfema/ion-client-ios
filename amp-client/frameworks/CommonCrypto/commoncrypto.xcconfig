@@ -1,3 +1,0 @@
-MODULEMAP_FILE[sdk=iphoneos*]        = $(SRCROOT)/frameworks/CommonCrypto/commoncrypto.modulemap
-MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/frameworks/CommonCrypto/commoncrypto.modulemap
-MODULEMAP_FILE[sdk=macosx*]          = $(SRCROOT)/frameworks/CommonCrypto/commoncrypto.modulemap

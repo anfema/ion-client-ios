@@ -11,8 +11,6 @@
 		755D8B611B9DDAF700AB10C8 /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8B561B9DDAF700AB10C8 /* ampclient.framework */; };
 		8F4D42971BEBECAB005C4167 /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4D42961BEBECAB005C4167 /* number.swift */; };
 		8F4D42981BEBECAB005C4167 /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4D42961BEBECAB005C4167 /* number.swift */; };
-		8F4D429A1BECF2A6005C4167 /* hashes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4D42991BECF2A6005C4167 /* hashes.swift */; };
-		8F4D429B1BECF2A6005C4167 /* hashes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4D42991BECF2A6005C4167 /* hashes.swift */; };
 		8F4DD9401BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
 		8F4DD9411BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
 		8F4DD9431BEA4866000F917A /* auto_cache_invalidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD9421BEA4866000F917A /* auto_cache_invalidation.swift */; };
@@ -153,7 +151,6 @@
 		755D8C0F1B9F3B4400AB10C8 /* error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = error.swift; sourceTree = "<group>"; };
 		755D8C121B9F407C00AB10C8 /* amp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amp.swift; sourceTree = "<group>"; };
 		8F4D42961BEBECAB005C4167 /* number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = number.swift; sourceTree = "<group>"; };
-		8F4D42991BECF2A6005C4167 /* hashes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hashes.swift; sourceTree = "<group>"; };
 		8F4DD93F1BEA45BB000F917A /* number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = number.swift; sourceTree = "<group>"; };
 		8F4DD9421BEA4866000F917A /* auto_cache_invalidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auto_cache_invalidation.swift; sourceTree = "<group>"; };
 		8F4DD9451BEA5BCE000F917A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
@@ -192,7 +189,6 @@
 		8FC2699B1BB0465A00E38569 /* page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page.swift; sourceTree = "<group>"; };
 		8FC2699E1BB16E6D00E38569 /* memcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = memcache.swift; sourceTree = "<group>"; };
 		8FC269A01BB17B6600E38569 /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
-		8FC269A31BB19B1200E38569 /* hash_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hash_extensions.swift; sourceTree = "<group>"; };
 		8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC269B91BB1A0B600E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../amp-client/frameworks/CommonCrypto/Info.plist"; sourceTree = "<group>"; };
 		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
@@ -335,7 +331,6 @@
 		755D8BF11B9F362300AB10C8 /* communication */ = {
 			isa = PBXGroup;
 			children = (
-				8FC269A31BB19B1200E38569 /* hash_extensions.swift */,
 				755D8BF21B9F364600AB10C8 /* response_serializer.swift */,
 				8FC269A01BB17B6600E38569 /* request.swift */,
 			);
@@ -348,7 +343,6 @@
 				8F86E7371BE2A6DB002CE986 /* Markdown.framework */,
 				8F86E7341BE2A6C9002CE986 /* DEjson.framework */,
 				8F86E7311BE29A63002CE986 /* Alamofire.framework */,
-				8FC269B61BB1A0B600E38569 /* CommonCrypto */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -425,7 +419,6 @@
 				8FC269D61BB93C2C00E38569 /* auth.swift */,
 				8F5B03741BBEBDE500B11422 /* error_handler.swift */,
 				8F4DD9421BEA4866000F917A /* auto_cache_invalidation.swift */,
-				8F4D42991BECF2A6005C4167 /* hashes.swift */,
 				8F7D45451BF203C4008D622C /* error.swift */,
 			);
 			path = generic;
@@ -438,17 +431,6 @@
 				8F6F6FE01BE1349200C31045 /* page_metadata.swift */,
 			);
 			path = page;
-			sourceTree = "<group>";
-		};
-		8FC269B61BB1A0B600E38569 /* CommonCrypto */ = {
-			isa = PBXGroup;
-			children = (
-				8F62FC4A1BF239F8001E518D /* commoncrypto.modulemap */,
-				8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */,
-				8FC269B91BB1A0B600E38569 /* Info.plist */,
-			);
-			name = CommonCrypto;
-			path = ../CommonCrypto;
 			sourceTree = "<group>";
 		};
 		8FC269DE1BB9413500E38569 /* osx */ = {
@@ -762,7 +744,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F86E7021BE25CDF002CE986 /* response_serializer.swift in Sources */,
-				8F86E7011BE25CDF002CE986 /* hash_extensions.swift in Sources */,
 				8F86E7111BE25CE5002CE986 /* content.swift in Sources */,
 				8F4DD9401BEA45BC000F917A /* number.swift in Sources */,
 				8F86E70C1BE25CE5002CE986 /* image.swift in Sources */,
@@ -797,7 +778,6 @@
 				8FC269911BB0452800E38569 /* datetime.swift in Sources */,
 				8FC269941BB0452800E38569 /* image.swift in Sources */,
 				8FC269921BB0452800E38569 /* file.swift in Sources */,
-				8F4D429A1BECF2A6005C4167 /* hashes.swift in Sources */,
 				8FC2698F1BB0452800E38569 /* color.swift in Sources */,
 				8FC269901BB0452800E38569 /* container.swift in Sources */,
 				8F4D42971BEBECAB005C4167 /* number.swift in Sources */,
@@ -827,7 +807,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F86E7051BE25CDF002CE986 /* response_serializer.swift in Sources */,
-				8F86E7041BE25CDF002CE986 /* hash_extensions.swift in Sources */,
 				8F86E7201BE25CE5002CE986 /* content.swift in Sources */,
 				8F4DD9411BEA45BC000F917A /* number.swift in Sources */,
 				8F86E71B1BE25CE5002CE986 /* image.swift in Sources */,
@@ -862,7 +841,6 @@
 				8FC26A401BB944DD00E38569 /* page.swift in Sources */,
 				8FC26A3E1BB944DD00E38569 /* diskcache.swift in Sources */,
 				8FC26A3D1BB944DD00E38569 /* memcache.swift in Sources */,
-				8F4D429B1BECF2A6005C4167 /* hashes.swift in Sources */,
 				8FC26A381BB944DD00E38569 /* image.swift in Sources */,
 				8FC26A361BB944DD00E38569 /* file.swift in Sources */,
 				8F4D42981BEBECAB005C4167 /* number.swift in Sources */,
@@ -1098,7 +1076,6 @@
 		};
 		8FC269C71BB1A0B700E38569 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1116,7 +1093,6 @@
 		};
 		8FC269C81BB1A0B700E38569 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1202,7 +1178,6 @@
 		};
 		8FC26A661BB9469000E38569 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1223,7 +1198,6 @@
 		};
 		8FC26A671BB9469000E38569 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
