@@ -26,7 +26,9 @@
 - (NSData *)cryptoHash:(HashType)hash {
     NSMutableData *result = [[NSMutableData alloc] initWithLength:digestLength(hash)];
     hashFunctionType func = hashFunction(hash);
-    func(self.bytes, (CC_LONG)self.length, result.mutableBytes);
+    if (func != NULL) {
+        func(self.bytes, (CC_LONG)self.length, result.mutableBytes);
+    }
     return [NSData dataWithData:result];
 }
 
