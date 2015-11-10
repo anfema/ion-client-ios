@@ -55,9 +55,10 @@ public enum AMPError: ErrorType {
         var userInfo = [NSLocalizedFailureReasonErrorKey: "Unknown Error"]
         var numericalCode = -7000
         switch self {
-        case .NoData:
+        case .NoData(let error):
             numericalCode = -7001
             userInfo[NSLocalizedFailureReasonErrorKey] = "No data received"
+            userInfo["error"] = error.debugDescription
         case .InvalidJSON(let obj):
             numericalCode = -7002
             userInfo[NSLocalizedFailureReasonErrorKey] = "Invalid JSON response"
