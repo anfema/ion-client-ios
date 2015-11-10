@@ -9,7 +9,7 @@
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for HashExtensions.
 FOUNDATION_EXPORT double HashExtensionsVersionNumber;
