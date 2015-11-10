@@ -203,31 +203,46 @@ public class AMPCollection {
                 return
             }
             if let page = self.getCachedPage(self, identifier: identifier) {
-                var needsUpdate:Bool = false
-                // ready, check if we need to update
-                if page.isReady {
-                    if let meta = self.getPageMetaForPage(page.identifier) {
-                        if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
-                            // page out of date, force update
-                            needsUpdate = true
-                        }
-                    }
-                    if !needsUpdate {
-                        // no update return instantly
-                        callback(page)
-                    }
-                }
-                if page.hasFailed {
-                    needsUpdate = true
-                }
-                if needsUpdate {
+                let updateBlock:(Void -> Void) = {
                     // fetch page update
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
                     self.cachePage(AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
                         callback(page)
-                    })
+                        })
+                }
+                
+                let checkNeedsUpdate:(Void -> Bool) = {
+                    // ready, check if we need to update
+                    if page.hasFailed {
+                        return true
+                    } else {
+                        if let meta = self.getPageMetaForPage(page.identifier) {
+                            if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
+                                // page out of date, force update
+                                return true
+                            }
+                        }
+                    }
+                    return false
+                    
+                }
+                
+                if page.isReady {
+                    if checkNeedsUpdate() {
+                        updateBlock()
+                    } else {
+                        callback(page)
+                    }
+                } else {
+                    dispatch_async(page.workQueue) {
+                        if checkNeedsUpdate() {
+                            updateBlock()
+                        } else {
+                            callback(page)
+                        }
+                    }
                 }
             } else {
                 guard let meta = self.getPageMetaForPage(identifier) else {

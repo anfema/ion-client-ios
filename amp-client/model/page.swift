@@ -47,11 +47,11 @@ public class AMPPage {
     /// internal lock for errorhandler
     internal var parentLock = NSLock()
 
+    /// work queue
+    internal var workQueue: dispatch_queue_t
+
     /// set to true to avoid fetching from cache
     private var useCache = false
-
-    /// work queue
-    private var workQueue: dispatch_queue_t
     
     
     // MARK: Initializer
@@ -123,17 +123,6 @@ public class AMPPage {
         self.collection.pageCache[identifier + "-" + NSUUID().UUIDString] = self
     }
 
-    
-    init(invalidPageWithCollection collection: AMPCollection) {
-        self.identifier = "invalid"
-        self.layout = "invalid"
-        self.collection = collection
-        self.useCache = true
-        self.parent = nil
-        self.locale = self.collection.locale
-        self.workQueue = AMP.config.responseQueue
-    }
-    
     // MARK: Async API
     
     /// Error handler to chain to the page
