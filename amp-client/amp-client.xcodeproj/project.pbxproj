@@ -170,6 +170,8 @@
 		8F5B03741BBEBDE500B11422 /* error_handler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = error_handler.swift; sourceTree = "<group>"; };
 		8F6F6FE01BE1349200C31045 /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8F7D45451BF203C4008D622C /* error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = error.swift; sourceTree = "<group>"; };
+		8F62FC4A1BF239F8001E518D /* commoncrypto.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = commoncrypto.modulemap; path = frameworks/CommonCrypto/commoncrypto.modulemap; sourceTree = SOURCE_ROOT; };
+		8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = commoncrypto.xcconfig; path = frameworks/CommonCrypto/commoncrypto.xcconfig; sourceTree = SOURCE_ROOT; };
 		8F86E72E1BE28B34002CE986 /* imageloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = imageloader.swift; path = helper/imageloader.swift; sourceTree = "<group>"; };
 		8F86E7311BE29A63002CE986 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../Library/Developer/Xcode/DerivedData/workspace-fypqfeiwyqutiuddktcynvctzbqd/Build/Products/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
 		8F86E7341BE2A6C9002CE986 /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "../../../Library/Developer/Xcode/DerivedData/workspace-fypqfeiwyqutiuddktcynvctzbqd/Build/Products/Debug-iphoneos/DEjson.framework"; sourceTree = "<group>"; };
@@ -191,13 +193,8 @@
 		8FC2699E1BB16E6D00E38569 /* memcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = memcache.swift; sourceTree = "<group>"; };
 		8FC269A01BB17B6600E38569 /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		8FC269A31BB19B1200E38569 /* hash_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hash_extensions.swift; sourceTree = "<group>"; };
-		8FC269AB1BB19FB000E38569 /* iphoneos.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = iphoneos.modulemap; path = "../amp-client/frameworks/CommonCrypto/iphoneos.modulemap"; sourceTree = "<group>"; };
-		8FC269AC1BB19FB000E38569 /* iphonesimulator.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = iphonesimulator.modulemap; path = "../amp-client/frameworks/CommonCrypto/iphonesimulator.modulemap"; sourceTree = "<group>"; };
-		8FC269AD1BB19FB000E38569 /* macosx.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = macosx.modulemap; path = "../amp-client/frameworks/CommonCrypto/macosx.modulemap"; sourceTree = "<group>"; };
-		8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = modulesettings.xcconfig; path = "../amp-client/frameworks/modulesettings.xcconfig"; sourceTree = "<group>"; };
 		8FC269B51BB1A0B600E38569 /* CommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC269B91BB1A0B600E38569 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../amp-client/frameworks/CommonCrypto/Info.plist"; sourceTree = "<group>"; };
-		8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
 		8FC269D21BB2E51000E38569 /* diskcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = diskcache.swift; sourceTree = "<group>"; };
 		8FC269D41BB429BF00E38569 /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request_cache.swift; sourceTree = "<group>"; };
 		8FC269D61BB93C2C00E38569 /* auth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = auth.swift; sourceTree = "<group>"; };
@@ -446,11 +443,8 @@
 		8FC269B61BB1A0B600E38569 /* CommonCrypto */ = {
 			isa = PBXGroup;
 			children = (
-				8FC269CE1BB1A16D00E38569 /* libcommonCrypto.tbd */,
-				8FC269AB1BB19FB000E38569 /* iphoneos.modulemap */,
-				8FC269AC1BB19FB000E38569 /* iphonesimulator.modulemap */,
-				8FC269AD1BB19FB000E38569 /* macosx.modulemap */,
-				8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */,
+				8F62FC4A1BF239F8001E518D /* commoncrypto.modulemap */,
+				8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */,
 				8FC269B91BB1A0B600E38569 /* Info.plist */,
 			);
 			name = CommonCrypto;
@@ -1104,7 +1098,7 @@
 		};
 		8FC269C71BB1A0B700E38569 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1122,7 +1116,7 @@
 		};
 		8FC269C81BB1A0B700E38569 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1208,7 +1202,7 @@
 		};
 		8FC26A661BB9469000E38569 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1229,7 +1223,7 @@
 		};
 		8FC26A671BB9469000E38569 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8FC269AE1BB1A04100E38569 /* modulesettings.xcconfig */;
+			baseConfigurationReference = 8F62FC4B1BF23A09001E518D /* commoncrypto.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
