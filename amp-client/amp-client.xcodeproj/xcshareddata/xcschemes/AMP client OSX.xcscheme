@@ -47,9 +47,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8FC269E51BB9413500E38569"
-               BuildableName = "ampclient_osx_Tests.xctest"
-               BlueprintName = "ampclient_osx_Tests"
+               BlueprintIdentifier = "8F62FC851BF26287001E518D"
+               BuildableName = "ampclient_tests_osx.xctest"
+               BlueprintName = "ampclient_tests_osx"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </TestableReference>

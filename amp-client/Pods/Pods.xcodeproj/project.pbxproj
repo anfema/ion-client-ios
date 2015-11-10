@@ -1,0 +1,1835 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00C8299C13386728F029F264FDCF147A /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCC1F444B70D6EBFCA03D75B312590B /* Request.swift */; };
+		01E43B2F930ADAA2D25C8E52B9BE9013 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4C16A962180A48273703DE63F82C3 /* Upload.swift */; };
+		02BB7DCA871E1ACF725BD4F0F06E60A9 /* NSString+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E7F543C8D81DCBD4C4B91D1767A77D1 /* NSString+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0377CC8AC7F26A69820F5BFB4EEE9658 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3518B8CD354944D6CAA823BAFA2F1BB6 /* Download.swift */; };
+		062DA69A8D02609FC8362BB36689BD14 /* Pods-ampclient_ios-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 576B0B10464A57E7ABAD4BF14A832C9B /* Pods-ampclient_ios-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0674610A73107A4802F43888260D9519 /* NSData+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 31726D70C537C94DDE2017DA047177FF /* NSData+Hashing.m */; };
+		09662BA9EFAC032C8A2D349D9C17AFD8 /* Pods-ampclient_osx-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DAAEFA3B9236A42E96CA1C92C009C6F /* Pods-ampclient_osx-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		099D97321E8E4C339B4D4E8800019CB0 /* Pods-ampclient_osx-HashExtensions-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6930EB1B03613A09FA06E4133D6A8F5F /* Pods-ampclient_osx-HashExtensions-dummy.m */; };
+		0CA0146FBA76C921EFF652F43AF0BB27 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97782E059E8D3599309C5E0713E5FBFA /* Manager.swift */; };
+		0CBA78E5B297085CA6414D86AF8018B5 /* Pods-ampclient_ios-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A80F7334CFEAB0678DE22AC14388782D /* Pods-ampclient_ios-dummy.m */; };
+		12C7928F3A16771647CFD2E1B7327255 /* Pods-ampclient_ios-HashExtensions-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EDA92A5ED7704E15EA3E931E35057B2D /* Pods-ampclient_ios-HashExtensions-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		12E2EC42FECBC8689C93857965B23A77 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */; };
+		13030018B1383EB35D18EC8874FE51C4 /* Pods-ampclient_ios-Markdown-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 075A7EFAFFE127C58A0F40D29EC2ADF8 /* Pods-ampclient_ios-Markdown-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1534B24F78C88BA4B9B92B6BCE55905E /* Pods-ampclient_osx-Markdown-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5540ABB7B3195742ECF5F5159070CB48 /* Pods-ampclient_osx-Markdown-dummy.m */; };
+		1A960C2EB77938BC673BE8E66E8DD48A /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A990481C523AFCBB28B0507AC1F944 /* MultipartFormData.swift */; };
+		1C8F23058BCDB20F1878C2FAF7BCA9D2 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288E9EF74F3CA17E45D74B7F8E554C10 /* JSONObject.swift */; };
+		1D35F92EBD06095E0CDEBA752C3474B7 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F1159C58C1D9375E3784452C454761 /* JSONDecoder.swift */; };
+		20E6B5C924B9B6A1576635426F699018 /* Pods-ampclient_ios-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C850FA67CC2264205E61A13F7454997B /* Pods-ampclient_ios-Alamofire-dummy.m */; };
+		22CB0AF42E56272AE5E7E423BD87165C /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97782E059E8D3599309C5E0713E5FBFA /* Manager.swift */; };
+		2923BAEC97BA374E784AFDD253763540 /* HashExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9983C6452D2F01CF2B207F3351D758 /* HashExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29373E59F2E658E8AE01485036F36089 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C459FC5A4AD3B6703C3B165A710BB589 /* ParameterEncoding.swift */; };
+		29A88CA357376096185D043EF3F8DFA4 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23494207367D6FE1AA589AAFCAF4A4DA /* Alamofire.swift */; };
+		2C31DBF608991F226E196010B2C0889C /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74C1EF3BE874F34B60A837B198AF5A /* JSONEncoder.swift */; };
+		2E19D08D7213737EB58BF6E75212279F /* NSData+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 31726D70C537C94DDE2017DA047177FF /* NSData+Hashing.m */; };
+		2F85B0AAD1DC51EFFBB954242E7751A6 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD70AB25B5686A4DECAA0CCDCB1CA /* attributedstring_renderer.swift */; };
+		30EA35B5E9C87ABDE6B19525FA1DE227 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */; };
+		37A847AF04D2FEAF08D0DBE3BEF62C86 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCC1F444B70D6EBFCA03D75B312590B /* Request.swift */; };
+		37B6BF9A2BBE364364A808F592F451E7 /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA3DB7767EC8A712A2AF50A02E3796 /* helper.swift */; };
+		3B9C859A76443990816BFC6969B194F9 /* NSString+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8227A5DE32A481743867D3F46238A1BF /* NSString+Hashing.m */; };
+		481D5CA4E867A8539B61A065BBFE9F65 /* HashExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C964B50CADBB7CECACFCDAF15AD0BD6 /* HashExtensions.m */; };
+		4856E2E15579BBDC2D5EBFEE0FF41AEF /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236DAB5333904453594922E9643D288C /* Response.swift */; };
+		4F1241A36D37C7BD51CF182E44B1B8AD /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F4A5F8BB9AD9CA16AC1B813742FD78 /* Error.swift */; };
+		51C89D5B604AD03B3ADB5911C90513CA /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F4A5F8BB9AD9CA16AC1B813742FD78 /* Error.swift */; };
+		54059B5FAAFC818AA59CF1C6258F659D /* Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B9094FB50F011E637F8AA65EBC0FCA8 /* Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		57700AC9CAFB8DCEC9EB3B5D83EB150C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */; };
+		5FB9B2D96050207E9F098FE2E8799A72 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74C1EF3BE874F34B60A837B198AF5A /* JSONEncoder.swift */; };
+		61B697A7E7928DC8F9DE69B34B2D70E2 /* Pods-ampclient_osx-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DEEBF5AF909665441A62CF3170E5FDE2 /* Pods-ampclient_osx-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6231410AE7CAD5AE0BA52D0F0E3F2E26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */; };
+		6526A2A7FBA130F49D62DCB0BD174715 /* Pods-ampclient_osx-HashExtensions-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8989AC40FA4FCC428F87BD6644A092B4 /* Pods-ampclient_osx-HashExtensions-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6575E8240C87C54C638432ACA2D535DF /* NSData+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = 56256C440B72A7837044E0B046B7A0CC /* NSData+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6962BDA6E85182E42D6713CF39F51EC1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */; };
+		6DF3D23EBA94E599F7251957D207648C /* NSData+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = 56256C440B72A7837044E0B046B7A0CC /* NSData+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DF42CDA0DFB0CDA31E6986ECC7D5AC4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */; };
+		7015BBF7D51B7C5ED3C4FE4722C9EDB4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */; };
+		70484DCBC89367180D3B433610C43701 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71421791F2F1CB2B9F8F501CAE25571 /* Result.swift */; };
+		743D251259F0C177DA8AA14C6F7BF599 /* Pods-ampclient_osx-DEjson-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8AE3BF4A65C9F22C4DB8342DCF8A837E /* Pods-ampclient_osx-DEjson-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7F7F62045C5DC3B18E11EF26B289DE68 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF4C16A962180A48273703DE63F82C3 /* Upload.swift */; };
+		7F89A0361BD0CF9EA0A76BB5728284ED /* Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B9094FB50F011E637F8AA65EBC0FCA8 /* Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7F924834C06FF8486300CFCABCAAFF75 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7BDFE53DCDEA6E0F1EF6E102BF624 /* html_renderer.swift */; };
+		80EEB99DE4FAB8C3AFD775FB4F66ED78 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23494207367D6FE1AA589AAFCAF4A4DA /* Alamofire.swift */; };
+		84204AE0968AA047DDAC3C94CDFE7B7B /* Pods-ampclient_ios-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BA133E386A55FAB6767E4F3FA114BA81 /* Pods-ampclient_ios-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		851EC43715ADA4980EA74AE229F0D45D /* Pods-ampclient_ios-HashExtensions-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A130F4F09549211BE025DA914A7E6E1 /* Pods-ampclient_ios-HashExtensions-dummy.m */; };
+		89F63BB4B5C993AFB3CF71BFC7D5FDCB /* helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BA3DB7767EC8A712A2AF50A02E3796 /* helper.swift */; };
+		8C3C66B87610728C443AE6C440E553EA /* ServerTrustPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932707489F159AD47C8F1B8F7BC3EE05 /* ServerTrustPolicy.swift */; };
+		8F7135211DC84B1D278829C8990173E8 /* Pods-ampclient_ios-DEjson-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A2136A1AC46B035B831C459C4FC5DD7B /* Pods-ampclient_ios-DEjson-dummy.m */; };
+		91F018F6E5D946A14BCB80D97063D8E9 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3518B8CD354944D6CAA823BAFA2F1BB6 /* Download.swift */; };
+		9268E2E8E135B06FDEACF9551226DFB2 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73AA292BD768F39BFBFF9DB1C2E238A /* ResponseSerialization.swift */; };
+		93412F2F6E654FF80FAA630A9AFB21DC /* ServerTrustPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932707489F159AD47C8F1B8F7BC3EE05 /* ServerTrustPolicy.swift */; };
+		9744C55132BDC90FD40BBD8C573D50F1 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26BEFA72DCED45475EEC885C64F6C79 /* Validation.swift */; };
+		9995174E1AED250924ABD497712BC9C4 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 236DAB5333904453594922E9643D288C /* Response.swift */; };
+		9A189E6F3E3FF1D23C86BE2430612445 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B4BFF5B489696E6A13AF26EEB7939D /* markdown.swift */; };
+		9EA51018C0613F4EEC098A728E230D1F /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288E9EF74F3CA17E45D74B7F8E554C10 /* JSONObject.swift */; };
+		9EC7D4B09CFD99D764B8768C1A4E34E3 /* attributedstring_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD70AB25B5686A4DECAA0CCDCB1CA /* attributedstring_renderer.swift */; };
+		9FB95211A72A6066B9D79169AF820062 /* Pods-ampclient_osx-DEjson-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D50DDD42FCD724750F4233CDD410B4C /* Pods-ampclient_osx-DEjson-dummy.m */; };
+		A0062805B9BCDA53F9192FF45F92E409 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */; };
+		A16D48C9129CF1F28EBF5C6D7C03481C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */; };
+		A402C22C9497FCB0AD43810ACA00F372 /* NSString+Hashing.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E7F543C8D81DCBD4C4B91D1767A77D1 /* NSString+Hashing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A6EE9D03D64FFEFDA25471DAA30BD83F /* HashExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C964B50CADBB7CECACFCDAF15AD0BD6 /* HashExtensions.m */; };
+		A8CE325CEAC66F316C86BE7B1C022B60 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26BEFA72DCED45475EEC885C64F6C79 /* Validation.swift */; };
+		B213A9206DA0672A239D03765682A984 /* NSString+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8227A5DE32A481743867D3F46238A1BF /* NSString+Hashing.m */; };
+		BABF4E824233F5A7367CAA7B456DF1F5 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C211D77AED681B60E8BF5523EA02441B /* text_renderer.swift */; };
+		BF04D938E8F1F72B48220C12CD183ADB /* Pods-ampclient_osx-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B50230A67F380CEDE6CD41AB03FA2D8 /* Pods-ampclient_osx-Alamofire-dummy.m */; };
+		BF19DBB271E3A38081907D952593879C /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF065F16CA500B85C4C5034198944B92 /* Stream.swift */; };
+		C529E4C8C5C58B301875B6F7575753A3 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F1159C58C1D9375E3784452C454761 /* JSONDecoder.swift */; };
+		CA0DDC2843FF1CAFE647EDB9F81A3DA5 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71421791F2F1CB2B9F8F501CAE25571 /* Result.swift */; };
+		CE6587336687D193314E92055BFB2F4C /* Pods-ampclient_osx-Markdown-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 55B951E24C0994D5FEFEE5F6468EF6E5 /* Pods-ampclient_osx-Markdown-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D913F011EBDF8443CF2AFA08AA25FC03 /* Pods-ampclient_ios-Markdown-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7DFCD6C9BBA47D99FB7FB6FABB3650 /* Pods-ampclient_ios-Markdown-dummy.m */; };
+		DE6E131CF0F674DEEF60F500E3D56B89 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */; };
+		E25D44D7C9CD94B229FEE8D9592864D3 /* markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B4BFF5B489696E6A13AF26EEB7939D /* markdown.swift */; };
+		E2A101BAAED525E54E337BCBA51D1C87 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73AA292BD768F39BFBFF9DB1C2E238A /* ResponseSerialization.swift */; };
+		E66ECECBE3F6D351D9B837E5333CC7C5 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF065F16CA500B85C4C5034198944B92 /* Stream.swift */; };
+		E92A862CA528D94094C88F2BB5886214 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C459FC5A4AD3B6703C3B165A710BB589 /* ParameterEncoding.swift */; };
+		EB84745B9AF5FDFCFC760D316793D639 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A990481C523AFCBB28B0507AC1F944 /* MultipartFormData.swift */; };
+		EF19AABCA18CC9953A89697695121F55 /* html_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7BDFE53DCDEA6E0F1EF6E102BF624 /* html_renderer.swift */; };
+		F8BD1D206BC802F2DC0F140863211BC0 /* text_renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C211D77AED681B60E8BF5523EA02441B /* text_renderer.swift */; };
+		F9D7B8610667ADE9E4CD996C76E9AE10 /* Pods-ampclient_ios-DEjson-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E152241CB0E2F6F473FE76822556D337 /* Pods-ampclient_ios-DEjson-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FC6D7E3C7A420C23D6EF32464D051D4A /* HashExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F9983C6452D2F01CF2B207F3351D758 /* HashExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FE8F23845C315B28A3A249D9C3645698 /* Pods-ampclient_osx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F9C9E0078A342115D42FEF545C3F9485 /* Pods-ampclient_osx-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0532276A752B527B0605757B77D2DA67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75023E5C7E5E38F20EA350C483C8BAB2;
+			remoteInfo = "Pods-ampclient_osx-Alamofire";
+		};
+		06DC3E565A2648EC196CF4AF04BB8937 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 844CCE4C7967BEC2EAA76D3AD8BE815F;
+			remoteInfo = "Pods-ampclient_ios-DEjson";
+		};
+		0E3BC5774697F266C51C5A6FBF432468 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F431D9A04511B64431E70C10FEFCF623;
+			remoteInfo = "Pods-ampclient_ios-Markdown";
+		};
+		8BFDF2712F20E944F04FBC9B4772C2ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6A62A3B48CBBCFED866A51094C1AEC3;
+			remoteInfo = "Pods-ampclient_osx-Markdown";
+		};
+		8E42547487475082D61974F098E0C614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 97CDA2A67C42A4068DA35BC0C5D2A64B;
+			remoteInfo = "Pods-ampclient_ios-Alamofire";
+		};
+		91BB4EC9DF7D761EB2CDD85503B80836 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0B68EFC7DB2FBCA83FD2DCF083E83362;
+			remoteInfo = "Pods-ampclient_osx-HashExtensions";
+		};
+		AF54345FCED236E1710159D99E7944D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E78B35DE2AE4AF4B3D8E1B9717A92E48;
+			remoteInfo = "Pods-ampclient_osx-DEjson";
+		};
+		CB18328ADCAD9C729D11172DE0F2D68C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1C851AD88E1DC27EBB9CD0E53201BD83;
+			remoteInfo = "Pods-ampclient_ios-HashExtensions";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02F7C9C16AE4FD419FD736C75BC2CA2D /* Pods-ampclient_osx-DEjson.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampclient_osx-DEjson.xcconfig"; path = "../Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson.xcconfig"; sourceTree = "<group>"; };
+		039DF3A08F423DBE57BA6A6329872803 /* HashExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HashExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		075A7EFAFFE127C58A0F40D29EC2ADF8 /* Pods-ampclient_ios-Markdown-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-Markdown-umbrella.h"; sourceTree = "<group>"; };
+		091DBC11DD13B0E03E3D83D9853F3128 /* Pods-ampclient_ios-HashExtensions.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios-HashExtensions.xcconfig"; sourceTree = "<group>"; };
+		0A5CF66291424EECABB6F527AD86B347 /* Pods-ampclient_ios-Markdown-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-Markdown-prefix.pch"; sourceTree = "<group>"; };
+		0BCC1F444B70D6EBFCA03D75B312590B /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
+		0DD6ACD212C8103F2EE22C998CD0D660 /* Pods-ampclient_osx-HashExtensions-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-HashExtensions-prefix.pch"; path = "../Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions-prefix.pch"; sourceTree = "<group>"; };
+		1247A94BDEB7B985F60FD1C870229BA8 /* Pods-ampclient_osx-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-Alamofire-prefix.pch"; path = "../Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		13D1F301B019CE088B36749429CCC49D /* Pods-ampclient_osx-HashExtensions.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-ampclient_osx-HashExtensions.modulemap"; path = "../Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions.modulemap"; sourceTree = "<group>"; };
+		14C279246E19392E46E5C66F5F9C1EB2 /* Pods-ampclient_osx-Markdown-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-Markdown-prefix.pch"; path = "../Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown-prefix.pch"; sourceTree = "<group>"; };
+		1740CB9C6D81C4C81D19B3742B5F71E4 /* Pods-ampclient_ios-Markdown.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_ios-Markdown.modulemap"; sourceTree = "<group>"; };
+		18A53FBF5C90FE09766951A2B92D4EF9 /* Pods-ampclient_osx-Markdown.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampclient_osx-Markdown.xcconfig"; path = "../Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown.xcconfig"; sourceTree = "<group>"; };
+		23494207367D6FE1AA589AAFCAF4A4DA /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
+		236DAB5333904453594922E9643D288C /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Response.swift; sourceTree = "<group>"; };
+		240B3D88B5DACE6DE7D6CED9B0020B9E /* Pods-ampclient_osx-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ampclient_osx-frameworks.sh"; sourceTree = "<group>"; };
+		258B1811A657C2A5F318988E5F7F8899 /* Markdown.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Markdown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		288E9EF74F3CA17E45D74B7F8E554C10 /* JSONObject.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JSONObject.swift; path = DEjson/DEjson/JSONObject.swift; sourceTree = "<group>"; };
+		2A58F4116F6173692DFCEF45DA5F11CF /* Pods-ampclient_ios-HashExtensions-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-HashExtensions-prefix.pch"; sourceTree = "<group>"; };
+		2AF9DF675D86E739C98E41F777153E54 /* Pods-ampclient_ios-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ampclient_ios-resources.sh"; sourceTree = "<group>"; };
+		2B50230A67F380CEDE6CD41AB03FA2D8 /* Pods-ampclient_osx-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-ampclient_osx-Alamofire-dummy.m"; path = "../Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		2BC67F193AE39C4EF813AC816A186D10 /* Pods-ampclient_ios-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ampclient_ios-acknowledgements.markdown"; sourceTree = "<group>"; };
+		2DAAEFA3B9236A42E96CA1C92C009C6F /* Pods-ampclient_osx-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_osx-umbrella.h"; sourceTree = "<group>"; };
+		2E238EE93EB5882C7F5910E9FE8016F8 /* Pods-ampclient_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios.release.xcconfig"; sourceTree = "<group>"; };
+		2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		2F9983C6452D2F01CF2B207F3351D758 /* HashExtensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HashExtensions.h; path = HashExtensions/HashExtensions/HashExtensions.h; sourceTree = "<group>"; };
+		31726D70C537C94DDE2017DA047177FF /* NSData+Hashing.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+Hashing.m"; path = "HashExtensions/HashExtensions/NSData+Hashing.m"; sourceTree = "<group>"; };
+		3518B8CD354944D6CAA823BAFA2F1BB6 /* Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Source/Download.swift; sourceTree = "<group>"; };
+		36C6E4470660747244D38F776EB8BFB3 /* Pods-ampclient_osx-Markdown.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-ampclient_osx-Markdown.modulemap"; path = "../Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown.modulemap"; sourceTree = "<group>"; };
+		38EEDF1CA8557AC5BF5333C0AC0C7600 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		41D837F7950A32CA6E3FA9516EB651E0 /* Pods-ampclient_osx.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_osx.modulemap"; sourceTree = "<group>"; };
+		423849645F230BAC1CBD7BE750EC1A4C /* Pods_ampclient_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ampclient_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		449D5452A2E575D414629883E2132D98 /* Pods-ampclient_ios-HashExtensions.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_ios-HashExtensions.modulemap"; sourceTree = "<group>"; };
+		47EB233E8C37588F9C8AA0FC0307DE83 /* Pods-ampclient_osx-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampclient_osx-Alamofire.xcconfig"; path = "../Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		4D50DDD42FCD724750F4233CDD410B4C /* Pods-ampclient_osx-DEjson-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-ampclient_osx-DEjson-dummy.m"; path = "../Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson-dummy.m"; sourceTree = "<group>"; };
+		4DE3A44341CFDC1AC8D025E68EF2937A /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FF7BDFE53DCDEA6E0F1EF6E102BF624 /* html_renderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = html_renderer.swift; path = markdown/src/html_renderer.swift; sourceTree = "<group>"; };
+		5540ABB7B3195742ECF5F5159070CB48 /* Pods-ampclient_osx-Markdown-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-ampclient_osx-Markdown-dummy.m"; path = "../Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown-dummy.m"; sourceTree = "<group>"; };
+		55B951E24C0994D5FEFEE5F6468EF6E5 /* Pods-ampclient_osx-Markdown-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-Markdown-umbrella.h"; path = "../Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown-umbrella.h"; sourceTree = "<group>"; };
+		56256C440B72A7837044E0B046B7A0CC /* NSData+Hashing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+Hashing.h"; path = "HashExtensions/HashExtensions/NSData+Hashing.h"; sourceTree = "<group>"; };
+		576B0B10464A57E7ABAD4BF14A832C9B /* Pods-ampclient_ios-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		5A130F4F09549211BE025DA914A7E6E1 /* Pods-ampclient_ios-HashExtensions-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_ios-HashExtensions-dummy.m"; sourceTree = "<group>"; };
+		5C3752A33BCD2A26C4846E1D56C7D0F7 /* Pods-ampclient_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_osx.debug.xcconfig"; sourceTree = "<group>"; };
+		5D4D998B3654B09C3C405C9FF5217556 /* Pods-ampclient_osx-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-ampclient_osx-Alamofire.modulemap"; path = "../Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire.modulemap"; sourceTree = "<group>"; };
+		60BA3DB7767EC8A712A2AF50A02E3796 /* helper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = helper.swift; path = markdown/src/helper.swift; sourceTree = "<group>"; };
+		611E3367F9486D85D2470B118AA81F83 /* Pods-ampclient_osx-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ampclient_osx-acknowledgements.plist"; sourceTree = "<group>"; };
+		6425E9F4CA27DE023298400FB09EF963 /* Pods-ampclient_ios-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		68F4A5F8BB9AD9CA16AC1B813742FD78 /* Error.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Source/Error.swift; sourceTree = "<group>"; };
+		6930EB1B03613A09FA06E4133D6A8F5F /* Pods-ampclient_osx-HashExtensions-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-ampclient_osx-HashExtensions-dummy.m"; path = "../Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions-dummy.m"; sourceTree = "<group>"; };
+		69A990481C523AFCBB28B0507AC1F944 /* MultipartFormData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipartFormData.swift; path = Source/MultipartFormData.swift; sourceTree = "<group>"; };
+		6C964B50CADBB7CECACFCDAF15AD0BD6 /* HashExtensions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HashExtensions.m; path = HashExtensions/HashExtensions/HashExtensions.m; sourceTree = "<group>"; };
+		6D2DD70AB25B5686A4DECAA0CCDCB1CA /* attributedstring_renderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = attributedstring_renderer.swift; path = markdown/src/attributedstring_renderer.swift; sourceTree = "<group>"; };
+		72C93F53F05B3C78F7BFCC2B0838A14D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73DFFF17095915D4DD75B553940BBBC6 /* Pods-ampclient_ios.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_ios.modulemap"; sourceTree = "<group>"; };
+		755A7F71DEAF8CFB2A4B0B47E4CC375F /* Pods-ampclient_ios-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_ios-Alamofire.modulemap"; sourceTree = "<group>"; };
+		77B4BFF5B489696E6A13AF26EEB7939D /* markdown.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = markdown.swift; path = markdown/src/markdown.swift; sourceTree = "<group>"; };
+		7B9094FB50F011E637F8AA65EBC0FCA8 /* Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Internal.h; path = HashExtensions/HashExtensions/Internal.h; sourceTree = "<group>"; };
+		7CB73BD20737053376AEDC2669205E9E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-ampclient_osx-Alamofire/Info.plist"; sourceTree = "<group>"; };
+		8227A5DE32A481743867D3F46238A1BF /* NSString+Hashing.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+Hashing.m"; path = "HashExtensions/HashExtensions/NSString+Hashing.m"; sourceTree = "<group>"; };
+		838F5A41DA2B8852945DCAD065696A5A /* Pods-ampclient_ios-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ampclient_ios-frameworks.sh"; sourceTree = "<group>"; };
+		8989AC40FA4FCC428F87BD6644A092B4 /* Pods-ampclient_osx-HashExtensions-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-HashExtensions-umbrella.h"; path = "../Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions-umbrella.h"; sourceTree = "<group>"; };
+		8AE3BF4A65C9F22C4DB8342DCF8A837E /* Pods-ampclient_osx-DEjson-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-DEjson-umbrella.h"; path = "../Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson-umbrella.h"; sourceTree = "<group>"; };
+		8E7F543C8D81DCBD4C4B91D1767A77D1 /* NSString+Hashing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+Hashing.h"; path = "HashExtensions/HashExtensions/NSString+Hashing.h"; sourceTree = "<group>"; };
+		91BDF33961E1E5FC246A905122608601 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-ampclient_osx-DEjson/Info.plist"; sourceTree = "<group>"; };
+		932707489F159AD47C8F1B8F7BC3EE05 /* ServerTrustPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerTrustPolicy.swift; path = Source/ServerTrustPolicy.swift; sourceTree = "<group>"; };
+		97782E059E8D3599309C5E0713E5FBFA /* Manager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Source/Manager.swift; sourceTree = "<group>"; };
+		9B1F485A14B2C8E62957678A58B6519B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B319DDC01BE05E3AA18F15A9EB150A2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-ampclient_osx-Markdown/Info.plist"; sourceTree = "<group>"; };
+		A2136A1AC46B035B831C459C4FC5DD7B /* Pods-ampclient_ios-DEjson-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_ios-DEjson-dummy.m"; sourceTree = "<group>"; };
+		A2C20ACA78D64708F279773B622F941A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3C0E91CE382D1C158F835196FAB9CC9 /* Pods-ampclient_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios.debug.xcconfig"; sourceTree = "<group>"; };
+		A80F7334CFEAB0678DE22AC14388782D /* Pods-ampclient_ios-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_ios-dummy.m"; sourceTree = "<group>"; };
+		AC38E717265C284CEA6F9BAC62D400D7 /* Pods_ampclient_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ampclient_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFDDA15D5525271EA559C8DFC8470B45 /* Pods-ampclient_osx-HashExtensions.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampclient_osx-HashExtensions.xcconfig"; path = "../Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions.xcconfig"; sourceTree = "<group>"; };
+		B84B615668E31E67CF7059FEB865BD8F /* Pods-ampclient_ios-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		BA133E386A55FAB6767E4F3FA114BA81 /* Pods-ampclient_ios-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-umbrella.h"; sourceTree = "<group>"; };
+		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		BBD811C0CC89F5342DD7811BB296C898 /* Pods-ampclient_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_osx.release.xcconfig"; sourceTree = "<group>"; };
+		BF334C55EA8DB535E30BE72C9CBD8A0F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF74C1EF3BE874F34B60A837B198AF5A /* JSONEncoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JSONEncoder.swift; path = DEjson/DEjson/JSONEncoder.swift; sourceTree = "<group>"; };
+		C211D77AED681B60E8BF5523EA02441B /* text_renderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = text_renderer.swift; path = markdown/src/text_renderer.swift; sourceTree = "<group>"; };
+		C459FC5A4AD3B6703C3B165A710BB589 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		C586C371DDB88569BDC39F89D3C97B55 /* Pods-ampclient_ios-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ampclient_ios-acknowledgements.plist"; sourceTree = "<group>"; };
+		C71421791F2F1CB2B9F8F501CAE25571 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
+		C7BFB1C72983B59518F2DBA970CCC78B /* Pods-ampclient_osx-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ampclient_osx-resources.sh"; sourceTree = "<group>"; };
+		C7FA6BC5B2DD9EAF6B14E12394009297 /* DEjson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DEjson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C850FA67CC2264205E61A13F7454997B /* Pods-ampclient_ios-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_ios-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		CF7DFCD6C9BBA47D99FB7FB6FABB3650 /* Pods-ampclient_ios-Markdown-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_ios-Markdown-dummy.m"; sourceTree = "<group>"; };
+		D26BEFA72DCED45475EEC885C64F6C79 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
+		D2DC727F33A60B43440FAA3AA513FBD1 /* Pods-ampclient_ios-DEjson-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-DEjson-prefix.pch"; sourceTree = "<group>"; };
+		D5BE4241CD8D50E420E8637E3FB8E0AE /* Pods-ampclient_ios-Markdown.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios-Markdown.xcconfig"; sourceTree = "<group>"; };
+		D84677BD49D467E74ECBFBE38BFF3EA8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-ampclient_osx-HashExtensions/Info.plist"; sourceTree = "<group>"; };
+		D9E99A4D4D960C57ECD3D74761C402CA /* Pods-ampclient_ios-DEjson.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ampclient_ios-DEjson.xcconfig"; sourceTree = "<group>"; };
+		DB64B550129322DADFE0F034FE702525 /* Pods-ampclient_osx-DEjson.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-ampclient_osx-DEjson.modulemap"; path = "../Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson.modulemap"; sourceTree = "<group>"; };
+		DBBAA024918A7A5F130F55C443D5879D /* Pods-ampclient_osx-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ampclient_osx-acknowledgements.markdown"; sourceTree = "<group>"; };
+		DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		DEEBF5AF909665441A62CF3170E5FDE2 /* Pods-ampclient_osx-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-Alamofire-umbrella.h"; path = "../Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		E152241CB0E2F6F473FE76822556D337 /* Pods-ampclient_ios-DEjson-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-DEjson-umbrella.h"; sourceTree = "<group>"; };
+		E73AA292BD768F39BFBFF9DB1C2E238A /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
+		E9F1159C58C1D9375E3784452C454761 /* JSONDecoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JSONDecoder.swift; path = DEjson/DEjson/JSONDecoder.swift; sourceTree = "<group>"; };
+		EDA92A5ED7704E15EA3E931E35057B2D /* Pods-ampclient_ios-HashExtensions-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ampclient_ios-HashExtensions-umbrella.h"; sourceTree = "<group>"; };
+		EEF4C16A962180A48273703DE63F82C3 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
+		EF065F16CA500B85C4C5034198944B92 /* Stream.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Stream.swift; path = Source/Stream.swift; sourceTree = "<group>"; };
+		F4F2D7F8FD6DE827B464FCB72BA739E2 /* Pods-ampclient_ios-DEjson.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ampclient_ios-DEjson.modulemap"; sourceTree = "<group>"; };
+		F9C9E0078A342115D42FEF545C3F9485 /* Pods-ampclient_osx-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ampclient_osx-dummy.m"; sourceTree = "<group>"; };
+		FD77AAACE6A8CC06ED0A68FF990EDA72 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FDB57DDCE4A48C96990A218D58BD8731 /* Pods-ampclient_osx-DEjson-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-ampclient_osx-DEjson-prefix.pch"; path = "../Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson-prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12D0BA974793C6B08022E1390EB9933C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12E2EC42FECBC8689C93857965B23A77 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		18FA90CEC6E994359A382516394AE5B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30EA35B5E9C87ABDE6B19525FA1DE227 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		249237FE563CA89E08274A28DC4CA110 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A16D48C9129CF1F28EBF5C6D7C03481C /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		37F126BBE89337D622F802B26C3F5619 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE6E131CF0F674DEEF60F500E3D56B89 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A67E6D23E625A197913A90C2B1147FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57700AC9CAFB8DCEC9EB3B5D83EB150C /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FC4AFB6E7C6F73ED28F2E25E43BDFA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6962BDA6E85182E42D6713CF39F51EC1 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8465D396CB6FE94912EB6B524ED3D7CE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6231410AE7CAD5AE0BA52D0F0E3F2E26 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A93D4C2F3047FC82997A0FBF54C9A0D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7015BBF7D51B7C5ED3C4FE4722C9EDB4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B97E61BE4D9E0142D22D5C085336B9EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0062805B9BCDA53F9192FF45F92E409 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E59444CDE6AA0CA98313D764E6019712 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DF42CDA0DFB0CDA31E6986ECC7D5AC4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1B317247966A96981BA41235F3608387 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				7CB73BD20737053376AEDC2669205E9E /* Info.plist */,
+				72C93F53F05B3C78F7BFCC2B0838A14D /* Info.plist */,
+				755A7F71DEAF8CFB2A4B0B47E4CC375F /* Pods-ampclient_ios-Alamofire.modulemap */,
+				6425E9F4CA27DE023298400FB09EF963 /* Pods-ampclient_ios-Alamofire.xcconfig */,
+				C850FA67CC2264205E61A13F7454997B /* Pods-ampclient_ios-Alamofire-dummy.m */,
+				B84B615668E31E67CF7059FEB865BD8F /* Pods-ampclient_ios-Alamofire-prefix.pch */,
+				576B0B10464A57E7ABAD4BF14A832C9B /* Pods-ampclient_ios-Alamofire-umbrella.h */,
+				5D4D998B3654B09C3C405C9FF5217556 /* Pods-ampclient_osx-Alamofire.modulemap */,
+				47EB233E8C37588F9C8AA0FC0307DE83 /* Pods-ampclient_osx-Alamofire.xcconfig */,
+				2B50230A67F380CEDE6CD41AB03FA2D8 /* Pods-ampclient_osx-Alamofire-dummy.m */,
+				1247A94BDEB7B985F60FD1C870229BA8 /* Pods-ampclient_osx-Alamofire-prefix.pch */,
+				DEEBF5AF909665441A62CF3170E5FDE2 /* Pods-ampclient_osx-Alamofire-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-ampclient_ios-Alamofire";
+			sourceTree = "<group>";
+		};
+		3AEF7D761E8EA8419BB4A7000AB770CB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7AD470ACF4E5545C3E4A621BD6E0A529 /* iOS */,
+				9304B30CB87FDB77B6CEE9FB6B800855 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		53B4B515830EE9D5079A237565D91834 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD3A910E3A7384A91D2C3A03BC91975C /* Pods-ampclient_ios */,
+				EA49071BC3F3C7307A59C314E1DAB304 /* Pods-ampclient_osx */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		6B1878399B0D8EB3C8A68EEFAECA58CA /* DEjson */ = {
+			isa = PBXGroup;
+			children = (
+				E9F1159C58C1D9375E3784452C454761 /* JSONDecoder.swift */,
+				BF74C1EF3BE874F34B60A837B198AF5A /* JSONEncoder.swift */,
+				288E9EF74F3CA17E45D74B7F8E554C10 /* JSONObject.swift */,
+				C35720C382ED3B69FDBFB18DD7D3F362 /* Support Files */,
+			);
+			path = DEjson;
+			sourceTree = "<group>";
+		};
+		7AD470ACF4E5545C3E4A621BD6E0A529 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				2F426C20791C2C776D6B81F15C1EA8A5 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
+				3AEF7D761E8EA8419BB4A7000AB770CB /* Frameworks */,
+				9DDAE81481590E30A2A809B3EBAE1A1A /* Pods */,
+				94F3BE13F01111C23FAEFDDCCF278243 /* Products */,
+				53B4B515830EE9D5079A237565D91834 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		8F65CA332A3F25E64B7EA70B978FD83F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				9B319DDC01BE05E3AA18F15A9EB150A2 /* Info.plist */,
+				38EEDF1CA8557AC5BF5333C0AC0C7600 /* Info.plist */,
+				1740CB9C6D81C4C81D19B3742B5F71E4 /* Pods-ampclient_ios-Markdown.modulemap */,
+				D5BE4241CD8D50E420E8637E3FB8E0AE /* Pods-ampclient_ios-Markdown.xcconfig */,
+				CF7DFCD6C9BBA47D99FB7FB6FABB3650 /* Pods-ampclient_ios-Markdown-dummy.m */,
+				0A5CF66291424EECABB6F527AD86B347 /* Pods-ampclient_ios-Markdown-prefix.pch */,
+				075A7EFAFFE127C58A0F40D29EC2ADF8 /* Pods-ampclient_ios-Markdown-umbrella.h */,
+				36C6E4470660747244D38F776EB8BFB3 /* Pods-ampclient_osx-Markdown.modulemap */,
+				18A53FBF5C90FE09766951A2B92D4EF9 /* Pods-ampclient_osx-Markdown.xcconfig */,
+				5540ABB7B3195742ECF5F5159070CB48 /* Pods-ampclient_osx-Markdown-dummy.m */,
+				14C279246E19392E46E5C66F5F9C1EB2 /* Pods-ampclient_osx-Markdown-prefix.pch */,
+				55B951E24C0994D5FEFEE5F6468EF6E5 /* Pods-ampclient_osx-Markdown-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-ampclient_ios-Markdown";
+			sourceTree = "<group>";
+		};
+		9304B30CB87FDB77B6CEE9FB6B800855 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				DE25DD04263CA735DBC0065D686C708D /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		94F3BE13F01111C23FAEFDDCCF278243 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4DE3A44341CFDC1AC8D025E68EF2937A /* Alamofire.framework */,
+				C7FA6BC5B2DD9EAF6B14E12394009297 /* DEjson.framework */,
+				039DF3A08F423DBE57BA6A6329872803 /* HashExtensions.framework */,
+				258B1811A657C2A5F318988E5F7F8899 /* Markdown.framework */,
+				AC38E717265C284CEA6F9BAC62D400D7 /* Pods_ampclient_ios.framework */,
+				423849645F230BAC1CBD7BE750EC1A4C /* Pods_ampclient_osx.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9ADA4FFA7DC877DEBACA767255D7C723 /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				23494207367D6FE1AA589AAFCAF4A4DA /* Alamofire.swift */,
+				3518B8CD354944D6CAA823BAFA2F1BB6 /* Download.swift */,
+				68F4A5F8BB9AD9CA16AC1B813742FD78 /* Error.swift */,
+				97782E059E8D3599309C5E0713E5FBFA /* Manager.swift */,
+				69A990481C523AFCBB28B0507AC1F944 /* MultipartFormData.swift */,
+				C459FC5A4AD3B6703C3B165A710BB589 /* ParameterEncoding.swift */,
+				0BCC1F444B70D6EBFCA03D75B312590B /* Request.swift */,
+				236DAB5333904453594922E9643D288C /* Response.swift */,
+				E73AA292BD768F39BFBFF9DB1C2E238A /* ResponseSerialization.swift */,
+				C71421791F2F1CB2B9F8F501CAE25571 /* Result.swift */,
+				932707489F159AD47C8F1B8F7BC3EE05 /* ServerTrustPolicy.swift */,
+				EF065F16CA500B85C4C5034198944B92 /* Stream.swift */,
+				EEF4C16A962180A48273703DE63F82C3 /* Upload.swift */,
+				D26BEFA72DCED45475EEC885C64F6C79 /* Validation.swift */,
+				1B317247966A96981BA41235F3608387 /* Support Files */,
+			);
+			path = Alamofire;
+			sourceTree = "<group>";
+		};
+		9DDAE81481590E30A2A809B3EBAE1A1A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9ADA4FFA7DC877DEBACA767255D7C723 /* Alamofire */,
+				6B1878399B0D8EB3C8A68EEFAECA58CA /* DEjson */,
+				EC8348FABD6A1E20995C88B307BD789F /* HashExtensions */,
+				C7DFA391F8A0837F1C188A177F21BA9F /* Markdown */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AD3A910E3A7384A91D2C3A03BC91975C /* Pods-ampclient_ios */ = {
+			isa = PBXGroup;
+			children = (
+				BF334C55EA8DB535E30BE72C9CBD8A0F /* Info.plist */,
+				73DFFF17095915D4DD75B553940BBBC6 /* Pods-ampclient_ios.modulemap */,
+				2BC67F193AE39C4EF813AC816A186D10 /* Pods-ampclient_ios-acknowledgements.markdown */,
+				C586C371DDB88569BDC39F89D3C97B55 /* Pods-ampclient_ios-acknowledgements.plist */,
+				A80F7334CFEAB0678DE22AC14388782D /* Pods-ampclient_ios-dummy.m */,
+				838F5A41DA2B8852945DCAD065696A5A /* Pods-ampclient_ios-frameworks.sh */,
+				2AF9DF675D86E739C98E41F777153E54 /* Pods-ampclient_ios-resources.sh */,
+				BA133E386A55FAB6767E4F3FA114BA81 /* Pods-ampclient_ios-umbrella.h */,
+				A3C0E91CE382D1C158F835196FAB9CC9 /* Pods-ampclient_ios.debug.xcconfig */,
+				2E238EE93EB5882C7F5910E9FE8016F8 /* Pods-ampclient_ios.release.xcconfig */,
+			);
+			name = "Pods-ampclient_ios";
+			path = "Target Support Files/Pods-ampclient_ios";
+			sourceTree = "<group>";
+		};
+		C35720C382ED3B69FDBFB18DD7D3F362 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				91BDF33961E1E5FC246A905122608601 /* Info.plist */,
+				9B1F485A14B2C8E62957678A58B6519B /* Info.plist */,
+				F4F2D7F8FD6DE827B464FCB72BA739E2 /* Pods-ampclient_ios-DEjson.modulemap */,
+				D9E99A4D4D960C57ECD3D74761C402CA /* Pods-ampclient_ios-DEjson.xcconfig */,
+				A2136A1AC46B035B831C459C4FC5DD7B /* Pods-ampclient_ios-DEjson-dummy.m */,
+				D2DC727F33A60B43440FAA3AA513FBD1 /* Pods-ampclient_ios-DEjson-prefix.pch */,
+				E152241CB0E2F6F473FE76822556D337 /* Pods-ampclient_ios-DEjson-umbrella.h */,
+				DB64B550129322DADFE0F034FE702525 /* Pods-ampclient_osx-DEjson.modulemap */,
+				02F7C9C16AE4FD419FD736C75BC2CA2D /* Pods-ampclient_osx-DEjson.xcconfig */,
+				4D50DDD42FCD724750F4233CDD410B4C /* Pods-ampclient_osx-DEjson-dummy.m */,
+				FDB57DDCE4A48C96990A218D58BD8731 /* Pods-ampclient_osx-DEjson-prefix.pch */,
+				8AE3BF4A65C9F22C4DB8342DCF8A837E /* Pods-ampclient_osx-DEjson-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-ampclient_ios-DEjson";
+			sourceTree = "<group>";
+		};
+		C7DFA391F8A0837F1C188A177F21BA9F /* Markdown */ = {
+			isa = PBXGroup;
+			children = (
+				6D2DD70AB25B5686A4DECAA0CCDCB1CA /* attributedstring_renderer.swift */,
+				60BA3DB7767EC8A712A2AF50A02E3796 /* helper.swift */,
+				4FF7BDFE53DCDEA6E0F1EF6E102BF624 /* html_renderer.swift */,
+				77B4BFF5B489696E6A13AF26EEB7939D /* markdown.swift */,
+				C211D77AED681B60E8BF5523EA02441B /* text_renderer.swift */,
+				8F65CA332A3F25E64B7EA70B978FD83F /* Support Files */,
+			);
+			path = Markdown;
+			sourceTree = "<group>";
+		};
+		EA49071BC3F3C7307A59C314E1DAB304 /* Pods-ampclient_osx */ = {
+			isa = PBXGroup;
+			children = (
+				FD77AAACE6A8CC06ED0A68FF990EDA72 /* Info.plist */,
+				41D837F7950A32CA6E3FA9516EB651E0 /* Pods-ampclient_osx.modulemap */,
+				DBBAA024918A7A5F130F55C443D5879D /* Pods-ampclient_osx-acknowledgements.markdown */,
+				611E3367F9486D85D2470B118AA81F83 /* Pods-ampclient_osx-acknowledgements.plist */,
+				F9C9E0078A342115D42FEF545C3F9485 /* Pods-ampclient_osx-dummy.m */,
+				240B3D88B5DACE6DE7D6CED9B0020B9E /* Pods-ampclient_osx-frameworks.sh */,
+				C7BFB1C72983B59518F2DBA970CCC78B /* Pods-ampclient_osx-resources.sh */,
+				2DAAEFA3B9236A42E96CA1C92C009C6F /* Pods-ampclient_osx-umbrella.h */,
+				5C3752A33BCD2A26C4846E1D56C7D0F7 /* Pods-ampclient_osx.debug.xcconfig */,
+				BBD811C0CC89F5342DD7811BB296C898 /* Pods-ampclient_osx.release.xcconfig */,
+			);
+			name = "Pods-ampclient_osx";
+			path = "Target Support Files/Pods-ampclient_osx";
+			sourceTree = "<group>";
+		};
+		EC8348FABD6A1E20995C88B307BD789F /* HashExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				2F9983C6452D2F01CF2B207F3351D758 /* HashExtensions.h */,
+				6C964B50CADBB7CECACFCDAF15AD0BD6 /* HashExtensions.m */,
+				7B9094FB50F011E637F8AA65EBC0FCA8 /* Internal.h */,
+				56256C440B72A7837044E0B046B7A0CC /* NSData+Hashing.h */,
+				31726D70C537C94DDE2017DA047177FF /* NSData+Hashing.m */,
+				8E7F543C8D81DCBD4C4B91D1767A77D1 /* NSString+Hashing.h */,
+				8227A5DE32A481743867D3F46238A1BF /* NSString+Hashing.m */,
+				EF2F0992560C53637A5AD5847727C274 /* Support Files */,
+			);
+			path = HashExtensions;
+			sourceTree = "<group>";
+		};
+		EF2F0992560C53637A5AD5847727C274 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				D84677BD49D467E74ECBFBE38BFF3EA8 /* Info.plist */,
+				A2C20ACA78D64708F279773B622F941A /* Info.plist */,
+				449D5452A2E575D414629883E2132D98 /* Pods-ampclient_ios-HashExtensions.modulemap */,
+				091DBC11DD13B0E03E3D83D9853F3128 /* Pods-ampclient_ios-HashExtensions.xcconfig */,
+				5A130F4F09549211BE025DA914A7E6E1 /* Pods-ampclient_ios-HashExtensions-dummy.m */,
+				2A58F4116F6173692DFCEF45DA5F11CF /* Pods-ampclient_ios-HashExtensions-prefix.pch */,
+				EDA92A5ED7704E15EA3E931E35057B2D /* Pods-ampclient_ios-HashExtensions-umbrella.h */,
+				13D1F301B019CE088B36749429CCC49D /* Pods-ampclient_osx-HashExtensions.modulemap */,
+				AFDDA15D5525271EA559C8DFC8470B45 /* Pods-ampclient_osx-HashExtensions.xcconfig */,
+				6930EB1B03613A09FA06E4133D6A8F5F /* Pods-ampclient_osx-HashExtensions-dummy.m */,
+				0DD6ACD212C8103F2EE22C998CD0D660 /* Pods-ampclient_osx-HashExtensions-prefix.pch */,
+				8989AC40FA4FCC428F87BD6644A092B4 /* Pods-ampclient_osx-HashExtensions-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-ampclient_ios-HashExtensions";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		26E3916A7BD897447DAE9F23E65ACBC1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09662BA9EFAC032C8A2D349D9C17AFD8 /* Pods-ampclient_osx-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4B1543FF9C2A2E4DAB40FBEB5760453A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE6587336687D193314E92055BFB2F4C /* Pods-ampclient_osx-Markdown-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5C96F6C190673F690B2EDC98F84600F1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61B697A7E7928DC8F9DE69B34B2D70E2 /* Pods-ampclient_osx-Alamofire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CD521CDFF9DB00E7C696AC62F303ACF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84204AE0968AA047DDAC3C94CDFE7B7B /* Pods-ampclient_ios-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61FCF1DF7C41048953FF3A35F55D56AC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				062DA69A8D02609FC8362BB36689BD14 /* Pods-ampclient_ios-Alamofire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		661F2460B07023D40476FB3287FB4B12 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2923BAEC97BA374E784AFDD253763540 /* HashExtensions.h in Headers */,
+				7F89A0361BD0CF9EA0A76BB5728284ED /* Internal.h in Headers */,
+				6575E8240C87C54C638432ACA2D535DF /* NSData+Hashing.h in Headers */,
+				A402C22C9497FCB0AD43810ACA00F372 /* NSString+Hashing.h in Headers */,
+				12C7928F3A16771647CFD2E1B7327255 /* Pods-ampclient_ios-HashExtensions-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A5D276A6FC213627720A9EED663C2FFA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC6D7E3C7A420C23D6EF32464D051D4A /* HashExtensions.h in Headers */,
+				54059B5FAAFC818AA59CF1C6258F659D /* Internal.h in Headers */,
+				6DF3D23EBA94E599F7251957D207648C /* NSData+Hashing.h in Headers */,
+				02BB7DCA871E1ACF725BD4F0F06E60A9 /* NSString+Hashing.h in Headers */,
+				6526A2A7FBA130F49D62DCB0BD174715 /* Pods-ampclient_osx-HashExtensions-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD3BF8D7530AF13EC71128B8252A8AE2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13030018B1383EB35D18EC8874FE51C4 /* Pods-ampclient_ios-Markdown-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3ADD5E44A1D9B776E3AA8BA2799C9C2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F9D7B8610667ADE9E4CD996C76E9AE10 /* Pods-ampclient_ios-DEjson-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9C9C57076896C60C139832519DDA59A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				743D251259F0C177DA8AA14C6F7BF599 /* Pods-ampclient_osx-DEjson-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		0B68EFC7DB2FBCA83FD2DCF083E83362 /* Pods-ampclient_osx-HashExtensions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC52B3B74ECC29B6E64B47F9982765AF /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-HashExtensions" */;
+			buildPhases = (
+				10AE8634BE5C63EF8F1012F0A3E3B053 /* Sources */,
+				249237FE563CA89E08274A28DC4CA110 /* Frameworks */,
+				A5D276A6FC213627720A9EED663C2FFA /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_osx-HashExtensions";
+			productName = "Pods-ampclient_osx-HashExtensions";
+			productReference = 039DF3A08F423DBE57BA6A6329872803 /* HashExtensions.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		1C851AD88E1DC27EBB9CD0E53201BD83 /* Pods-ampclient_ios-HashExtensions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8CB394784304406728E2812BF985EEC /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-HashExtensions" */;
+			buildPhases = (
+				6F550C300B524B27384E1B181A56AFB4 /* Sources */,
+				E59444CDE6AA0CA98313D764E6019712 /* Frameworks */,
+				661F2460B07023D40476FB3287FB4B12 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_ios-HashExtensions";
+			productName = "Pods-ampclient_ios-HashExtensions";
+			productReference = 039DF3A08F423DBE57BA6A6329872803 /* HashExtensions.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		24E92FD3FBA6140B5E5D5E0C8725FA38 /* Pods-ampclient_ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6722D03658C7E2EA163BF64201EEA379 /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios" */;
+			buildPhases = (
+				E37E459AD99E60217B4803B1806D7E48 /* Sources */,
+				37F126BBE89337D622F802B26C3F5619 /* Frameworks */,
+				5CD521CDFF9DB00E7C696AC62F303ACF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				733C8899F026E362C1DC24F9D1473F6E /* PBXTargetDependency */,
+				8AA5B9D9F6E495946C4E6CF85C01627D /* PBXTargetDependency */,
+				7F9E0EB3D285243570E133FEBB2D5212 /* PBXTargetDependency */,
+				A70BF03F4285C070B847B020579CB2B1 /* PBXTargetDependency */,
+			);
+			name = "Pods-ampclient_ios";
+			productName = "Pods-ampclient_ios";
+			productReference = AC38E717265C284CEA6F9BAC62D400D7 /* Pods_ampclient_ios.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		75023E5C7E5E38F20EA350C483C8BAB2 /* Pods-ampclient_osx-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5BC4839094854D08982722E64D2BBF1 /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-Alamofire" */;
+			buildPhases = (
+				DE9D97A585C5DD0F35B0FEDD288CA3A2 /* Sources */,
+				3A67E6D23E625A197913A90C2B1147FB /* Frameworks */,
+				5C96F6C190673F690B2EDC98F84600F1 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_osx-Alamofire";
+			productName = "Pods-ampclient_osx-Alamofire";
+			productReference = 4DE3A44341CFDC1AC8D025E68EF2937A /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		844CCE4C7967BEC2EAA76D3AD8BE815F /* Pods-ampclient_ios-DEjson */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF1644AB85573763D2D015F714D844B7 /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-DEjson" */;
+			buildPhases = (
+				7082C43E2D2C07E31B73E174148EB190 /* Sources */,
+				18FA90CEC6E994359A382516394AE5B5 /* Frameworks */,
+				D3ADD5E44A1D9B776E3AA8BA2799C9C2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_ios-DEjson";
+			productName = "Pods-ampclient_ios-DEjson";
+			productReference = C7FA6BC5B2DD9EAF6B14E12394009297 /* DEjson.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		97CDA2A67C42A4068DA35BC0C5D2A64B /* Pods-ampclient_ios-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B477F37B179BD2AFA39425C65F53CFBB /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-Alamofire" */;
+			buildPhases = (
+				9CEABFCA20EFA1B237D78A24D5B66331 /* Sources */,
+				8465D396CB6FE94912EB6B524ED3D7CE /* Frameworks */,
+				61FCF1DF7C41048953FF3A35F55D56AC /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_ios-Alamofire";
+			productName = "Pods-ampclient_ios-Alamofire";
+			productReference = 4DE3A44341CFDC1AC8D025E68EF2937A /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		BA9C7FD31E3778DCA614779567F430F3 /* Pods-ampclient_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C756621BF8CFD0CB54B19DEA1035238B /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx" */;
+			buildPhases = (
+				64E54DCE4D9EFE10977CE0FDDE137735 /* Sources */,
+				3FC4AFB6E7C6F73ED28F2E25E43BDFA8 /* Frameworks */,
+				26E3916A7BD897447DAE9F23E65ACBC1 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C1DEE7346CB57221401A4DCFDCD3C92E /* PBXTargetDependency */,
+				9ADC23504AD22B1B09DF326506E12504 /* PBXTargetDependency */,
+				FC20BEEA27302B927AD08F50B0282BDF /* PBXTargetDependency */,
+				77B91629DE5C9F016197B3CA50D69CA1 /* PBXTargetDependency */,
+			);
+			name = "Pods-ampclient_osx";
+			productName = "Pods-ampclient_osx";
+			productReference = 423849645F230BAC1CBD7BE750EC1A4C /* Pods_ampclient_osx.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D6A62A3B48CBBCFED866A51094C1AEC3 /* Pods-ampclient_osx-Markdown */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2B2F1BD978296997D56164F18A9643F /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-Markdown" */;
+			buildPhases = (
+				0EB4FAE26D7DA3522FB183EC4AC4A29D /* Sources */,
+				B97E61BE4D9E0142D22D5C085336B9EE /* Frameworks */,
+				4B1543FF9C2A2E4DAB40FBEB5760453A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_osx-Markdown";
+			productName = "Pods-ampclient_osx-Markdown";
+			productReference = 258B1811A657C2A5F318988E5F7F8899 /* Markdown.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E78B35DE2AE4AF4B3D8E1B9717A92E48 /* Pods-ampclient_osx-DEjson */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50B79F30E7A8A862C2BA64B2F1A56C60 /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-DEjson" */;
+			buildPhases = (
+				D307522011D30A20A14F7A7DF843A36B /* Sources */,
+				12D0BA974793C6B08022E1390EB9933C /* Frameworks */,
+				F9C9C57076896C60C139832519DDA59A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_osx-DEjson";
+			productName = "Pods-ampclient_osx-DEjson";
+			productReference = C7FA6BC5B2DD9EAF6B14E12394009297 /* DEjson.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F431D9A04511B64431E70C10FEFCF623 /* Pods-ampclient_ios-Markdown */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 336D86EA071DE6C01093561611B12B9D /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-Markdown" */;
+			buildPhases = (
+				BAEC7B24120D0574944A3EAD7E8E3CD4 /* Sources */,
+				A93D4C2F3047FC82997A0FBF54C9A0D5 /* Frameworks */,
+				BD3BF8D7530AF13EC71128B8252A8AE2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-ampclient_ios-Markdown";
+			productName = "Pods-ampclient_ios-Markdown";
+			productReference = 258B1811A657C2A5F318988E5F7F8899 /* Markdown.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = 94F3BE13F01111C23FAEFDDCCF278243 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				24E92FD3FBA6140B5E5D5E0C8725FA38 /* Pods-ampclient_ios */,
+				97CDA2A67C42A4068DA35BC0C5D2A64B /* Pods-ampclient_ios-Alamofire */,
+				844CCE4C7967BEC2EAA76D3AD8BE815F /* Pods-ampclient_ios-DEjson */,
+				1C851AD88E1DC27EBB9CD0E53201BD83 /* Pods-ampclient_ios-HashExtensions */,
+				F431D9A04511B64431E70C10FEFCF623 /* Pods-ampclient_ios-Markdown */,
+				BA9C7FD31E3778DCA614779567F430F3 /* Pods-ampclient_osx */,
+				75023E5C7E5E38F20EA350C483C8BAB2 /* Pods-ampclient_osx-Alamofire */,
+				E78B35DE2AE4AF4B3D8E1B9717A92E48 /* Pods-ampclient_osx-DEjson */,
+				0B68EFC7DB2FBCA83FD2DCF083E83362 /* Pods-ampclient_osx-HashExtensions */,
+				D6A62A3B48CBBCFED866A51094C1AEC3 /* Pods-ampclient_osx-Markdown */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0EB4FAE26D7DA3522FB183EC4AC4A29D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F85B0AAD1DC51EFFBB954242E7751A6 /* attributedstring_renderer.swift in Sources */,
+				89F63BB4B5C993AFB3CF71BFC7D5FDCB /* helper.swift in Sources */,
+				EF19AABCA18CC9953A89697695121F55 /* html_renderer.swift in Sources */,
+				E25D44D7C9CD94B229FEE8D9592864D3 /* markdown.swift in Sources */,
+				1534B24F78C88BA4B9B92B6BCE55905E /* Pods-ampclient_osx-Markdown-dummy.m in Sources */,
+				BABF4E824233F5A7367CAA7B456DF1F5 /* text_renderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		10AE8634BE5C63EF8F1012F0A3E3B053 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6EE9D03D64FFEFDA25471DAA30BD83F /* HashExtensions.m in Sources */,
+				2E19D08D7213737EB58BF6E75212279F /* NSData+Hashing.m in Sources */,
+				B213A9206DA0672A239D03765682A984 /* NSString+Hashing.m in Sources */,
+				099D97321E8E4C339B4D4E8800019CB0 /* Pods-ampclient_osx-HashExtensions-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		64E54DCE4D9EFE10977CE0FDDE137735 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE8F23845C315B28A3A249D9C3645698 /* Pods-ampclient_osx-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F550C300B524B27384E1B181A56AFB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				481D5CA4E867A8539B61A065BBFE9F65 /* HashExtensions.m in Sources */,
+				0674610A73107A4802F43888260D9519 /* NSData+Hashing.m in Sources */,
+				3B9C859A76443990816BFC6969B194F9 /* NSString+Hashing.m in Sources */,
+				851EC43715ADA4980EA74AE229F0D45D /* Pods-ampclient_ios-HashExtensions-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7082C43E2D2C07E31B73E174148EB190 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C529E4C8C5C58B301875B6F7575753A3 /* JSONDecoder.swift in Sources */,
+				2C31DBF608991F226E196010B2C0889C /* JSONEncoder.swift in Sources */,
+				1C8F23058BCDB20F1878C2FAF7BCA9D2 /* JSONObject.swift in Sources */,
+				8F7135211DC84B1D278829C8990173E8 /* Pods-ampclient_ios-DEjson-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CEABFCA20EFA1B237D78A24D5B66331 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80EEB99DE4FAB8C3AFD775FB4F66ED78 /* Alamofire.swift in Sources */,
+				91F018F6E5D946A14BCB80D97063D8E9 /* Download.swift in Sources */,
+				51C89D5B604AD03B3ADB5911C90513CA /* Error.swift in Sources */,
+				0CA0146FBA76C921EFF652F43AF0BB27 /* Manager.swift in Sources */,
+				EB84745B9AF5FDFCFC760D316793D639 /* MultipartFormData.swift in Sources */,
+				E92A862CA528D94094C88F2BB5886214 /* ParameterEncoding.swift in Sources */,
+				20E6B5C924B9B6A1576635426F699018 /* Pods-ampclient_ios-Alamofire-dummy.m in Sources */,
+				00C8299C13386728F029F264FDCF147A /* Request.swift in Sources */,
+				4856E2E15579BBDC2D5EBFEE0FF41AEF /* Response.swift in Sources */,
+				9268E2E8E135B06FDEACF9551226DFB2 /* ResponseSerialization.swift in Sources */,
+				CA0DDC2843FF1CAFE647EDB9F81A3DA5 /* Result.swift in Sources */,
+				93412F2F6E654FF80FAA630A9AFB21DC /* ServerTrustPolicy.swift in Sources */,
+				BF19DBB271E3A38081907D952593879C /* Stream.swift in Sources */,
+				7F7F62045C5DC3B18E11EF26B289DE68 /* Upload.swift in Sources */,
+				9744C55132BDC90FD40BBD8C573D50F1 /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAEC7B24120D0574944A3EAD7E8E3CD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9EC7D4B09CFD99D764B8768C1A4E34E3 /* attributedstring_renderer.swift in Sources */,
+				37B6BF9A2BBE364364A808F592F451E7 /* helper.swift in Sources */,
+				7F924834C06FF8486300CFCABCAAFF75 /* html_renderer.swift in Sources */,
+				9A189E6F3E3FF1D23C86BE2430612445 /* markdown.swift in Sources */,
+				D913F011EBDF8443CF2AFA08AA25FC03 /* Pods-ampclient_ios-Markdown-dummy.m in Sources */,
+				F8BD1D206BC802F2DC0F140863211BC0 /* text_renderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D307522011D30A20A14F7A7DF843A36B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D35F92EBD06095E0CDEBA752C3474B7 /* JSONDecoder.swift in Sources */,
+				5FB9B2D96050207E9F098FE2E8799A72 /* JSONEncoder.swift in Sources */,
+				9EA51018C0613F4EEC098A728E230D1F /* JSONObject.swift in Sources */,
+				9FB95211A72A6066B9D79169AF820062 /* Pods-ampclient_osx-DEjson-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9D97A585C5DD0F35B0FEDD288CA3A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29A88CA357376096185D043EF3F8DFA4 /* Alamofire.swift in Sources */,
+				0377CC8AC7F26A69820F5BFB4EEE9658 /* Download.swift in Sources */,
+				4F1241A36D37C7BD51CF182E44B1B8AD /* Error.swift in Sources */,
+				22CB0AF42E56272AE5E7E423BD87165C /* Manager.swift in Sources */,
+				1A960C2EB77938BC673BE8E66E8DD48A /* MultipartFormData.swift in Sources */,
+				29373E59F2E658E8AE01485036F36089 /* ParameterEncoding.swift in Sources */,
+				BF04D938E8F1F72B48220C12CD183ADB /* Pods-ampclient_osx-Alamofire-dummy.m in Sources */,
+				37A847AF04D2FEAF08D0DBE3BEF62C86 /* Request.swift in Sources */,
+				9995174E1AED250924ABD497712BC9C4 /* Response.swift in Sources */,
+				E2A101BAAED525E54E337BCBA51D1C87 /* ResponseSerialization.swift in Sources */,
+				70484DCBC89367180D3B433610C43701 /* Result.swift in Sources */,
+				8C3C66B87610728C443AE6C440E553EA /* ServerTrustPolicy.swift in Sources */,
+				E66ECECBE3F6D351D9B837E5333CC7C5 /* Stream.swift in Sources */,
+				01E43B2F930ADAA2D25C8E52B9BE9013 /* Upload.swift in Sources */,
+				A8CE325CEAC66F316C86BE7B1C022B60 /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E37E459AD99E60217B4803B1806D7E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CBA78E5B297085CA6414D86AF8018B5 /* Pods-ampclient_ios-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		733C8899F026E362C1DC24F9D1473F6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_ios-Alamofire";
+			target = 97CDA2A67C42A4068DA35BC0C5D2A64B /* Pods-ampclient_ios-Alamofire */;
+			targetProxy = 8E42547487475082D61974F098E0C614 /* PBXContainerItemProxy */;
+		};
+		77B91629DE5C9F016197B3CA50D69CA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_osx-Markdown";
+			target = D6A62A3B48CBBCFED866A51094C1AEC3 /* Pods-ampclient_osx-Markdown */;
+			targetProxy = 8BFDF2712F20E944F04FBC9B4772C2ED /* PBXContainerItemProxy */;
+		};
+		7F9E0EB3D285243570E133FEBB2D5212 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_ios-HashExtensions";
+			target = 1C851AD88E1DC27EBB9CD0E53201BD83 /* Pods-ampclient_ios-HashExtensions */;
+			targetProxy = CB18328ADCAD9C729D11172DE0F2D68C /* PBXContainerItemProxy */;
+		};
+		8AA5B9D9F6E495946C4E6CF85C01627D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_ios-DEjson";
+			target = 844CCE4C7967BEC2EAA76D3AD8BE815F /* Pods-ampclient_ios-DEjson */;
+			targetProxy = 06DC3E565A2648EC196CF4AF04BB8937 /* PBXContainerItemProxy */;
+		};
+		9ADC23504AD22B1B09DF326506E12504 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_osx-DEjson";
+			target = E78B35DE2AE4AF4B3D8E1B9717A92E48 /* Pods-ampclient_osx-DEjson */;
+			targetProxy = AF54345FCED236E1710159D99E7944D2 /* PBXContainerItemProxy */;
+		};
+		A70BF03F4285C070B847B020579CB2B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_ios-Markdown";
+			target = F431D9A04511B64431E70C10FEFCF623 /* Pods-ampclient_ios-Markdown */;
+			targetProxy = 0E3BC5774697F266C51C5A6FBF432468 /* PBXContainerItemProxy */;
+		};
+		C1DEE7346CB57221401A4DCFDCD3C92E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_osx-Alamofire";
+			target = 75023E5C7E5E38F20EA350C483C8BAB2 /* Pods-ampclient_osx-Alamofire */;
+			targetProxy = 0532276A752B527B0605757B77D2DA67 /* PBXContainerItemProxy */;
+		};
+		FC20BEEA27302B927AD08F50B0282BDF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-ampclient_osx-HashExtensions";
+			target = 0B68EFC7DB2FBCA83FD2DCF083E83362 /* Pods-ampclient_osx-HashExtensions */;
+			targetProxy = 91BB4EC9DF7D761EB2CDD85503B80836 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		10B74638BE9AAF663017E729F373B872 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBD811C0CC89F5342DD7811BB296C898 /* Pods-ampclient_osx.release.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx/Pods-ampclient_osx.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_ampclient_osx;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		1F2068E655A02175182CF5B6ADFFC5BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A3C0E91CE382D1C158F835196FAB9CC9 /* Pods-ampclient_ios.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios/Pods-ampclient_ios.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_ampclient_ios;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		2067AFEC88C00CC723D71BFC57D768A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5C3752A33BCD2A26C4846E1D56C7D0F7 /* Pods-ampclient_osx.debug.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx/Pods-ampclient_osx.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_ampclient_osx;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		2C215BEFFEF82433B8A75B881F3A88C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3370EABB75FFF582E05BE7EAF883E559 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 18A53FBF5C90FE09766951A2B92D4EF9 /* Pods-ampclient_osx-Markdown.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-Markdown/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Markdown;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		50D04B494E403A2D7842421624B140E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9E99A4D4D960C57ECD3D74761C402CA /* Pods-ampclient_ios-DEjson.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-DEjson/Pods-ampclient_ios-DEjson-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-DEjson/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-DEjson/Pods-ampclient_ios-DEjson.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		58F84415758D769F1727AE567E022520 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		66CC7619109CA72C7BC9682FDFD7C571 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47EB233E8C37588F9C8AA0FC0307DE83 /* Pods-ampclient_osx-Alamofire.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		6A7E0FDF030C9F4978A5CED97FCFEA97 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5BE4241CD8D50E420E8637E3FB8E0AE /* Pods-ampclient_ios-Markdown.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-Markdown/Pods-ampclient_ios-Markdown-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-Markdown/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-Markdown/Pods-ampclient_ios-Markdown.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Markdown;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7F5744E330C3979F23CDEBB6DD55A36D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 02F7C9C16AE4FD419FD736C75BC2CA2D /* Pods-ampclient_osx-DEjson.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-DEjson/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		84638954EE2BB64D160B0581E86AE422 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E238EE93EB5882C7F5910E9FE8016F8 /* Pods-ampclient_ios.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios/Pods-ampclient_ios.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_ampclient_ios;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		97845A9545E132E5C3367CDCF24ADAE8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9E99A4D4D960C57ECD3D74761C402CA /* Pods-ampclient_ios-DEjson.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-DEjson/Pods-ampclient_ios-DEjson-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-DEjson/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-DEjson/Pods-ampclient_ios-DEjson.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		9CB6C1B67FE8C171671AF6CE663C2572 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 091DBC11DD13B0E03E3D83D9853F3128 /* Pods-ampclient_ios-HashExtensions.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-HashExtensions/Pods-ampclient_ios-HashExtensions-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-HashExtensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-HashExtensions/Pods-ampclient_ios-HashExtensions.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = HashExtensions;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A11BE2E2D2FE47823A1D66294846B562 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6425E9F4CA27DE023298400FB09EF963 /* Pods-ampclient_ios-Alamofire.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-Alamofire/Pods-ampclient_ios-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-Alamofire/Pods-ampclient_ios-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AD8B30AB378B956E889481C75D7508FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D5BE4241CD8D50E420E8637E3FB8E0AE /* Pods-ampclient_ios-Markdown.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-Markdown/Pods-ampclient_ios-Markdown-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-Markdown/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-Markdown/Pods-ampclient_ios-Markdown.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Markdown;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AEED1568370D8F8206CB954AAA329C33 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 18A53FBF5C90FE09766951A2B92D4EF9 /* Pods-ampclient_osx-Markdown.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-Markdown/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-Markdown/Pods-ampclient_osx-Markdown.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Markdown;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B42947C8DA6852948213A6EEB0789F81 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFDDA15D5525271EA559C8DFC8470B45 /* Pods-ampclient_osx-HashExtensions.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-HashExtensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = HashExtensions;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CDD77BD81936485C6368B6384B4D2511 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 02F7C9C16AE4FD419FD736C75BC2CA2D /* Pods-ampclient_osx-DEjson.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-DEjson/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-DEjson/Pods-ampclient_osx-DEjson.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = DEjson;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D0CE4DA01D22960BCCB23D18871127A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6425E9F4CA27DE023298400FB09EF963 /* Pods-ampclient_ios-Alamofire.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-Alamofire/Pods-ampclient_ios-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-Alamofire/Pods-ampclient_ios-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DFE5663C850D242D0CB9C6F7A3FDD366 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47EB233E8C37588F9C8AA0FC0307DE83 /* Pods-ampclient_osx-Alamofire.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-Alamofire/Pods-ampclient_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		ECECB8773122B44EAD4BC191D5FA1E72 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 091DBC11DD13B0E03E3D83D9853F3128 /* Pods-ampclient_ios-HashExtensions.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_ios-HashExtensions/Pods-ampclient_ios-HashExtensions-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_ios-HashExtensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_ios-HashExtensions/Pods-ampclient_ios-HashExtensions.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = HashExtensions;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		F3AE87D1AC72B86E75A76B6DF93C2952 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFDDA15D5525271EA559C8DFC8470B45 /* Pods-ampclient_osx-HashExtensions.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-ampclient_osx-HashExtensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Target Support Files/Pods-ampclient_osx-HashExtensions/Pods-ampclient_osx-HashExtensions.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = HashExtensions;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58F84415758D769F1727AE567E022520 /* Debug */,
+				2C215BEFFEF82433B8A75B881F3A88C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		336D86EA071DE6C01093561611B12B9D /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-Markdown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD8B30AB378B956E889481C75D7508FA /* Debug */,
+				6A7E0FDF030C9F4978A5CED97FCFEA97 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50B79F30E7A8A862C2BA64B2F1A56C60 /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-DEjson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F5744E330C3979F23CDEBB6DD55A36D /* Debug */,
+				CDD77BD81936485C6368B6384B4D2511 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6722D03658C7E2EA163BF64201EEA379 /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F2068E655A02175182CF5B6ADFFC5BC /* Debug */,
+				84638954EE2BB64D160B0581E86AE422 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B477F37B179BD2AFA39425C65F53CFBB /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A11BE2E2D2FE47823A1D66294846B562 /* Debug */,
+				D0CE4DA01D22960BCCB23D18871127A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C2B2F1BD978296997D56164F18A9643F /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-Markdown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3370EABB75FFF582E05BE7EAF883E559 /* Debug */,
+				AEED1568370D8F8206CB954AAA329C33 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C756621BF8CFD0CB54B19DEA1035238B /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2067AFEC88C00CC723D71BFC57D768A5 /* Debug */,
+				10B74638BE9AAF663017E729F373B872 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5BC4839094854D08982722E64D2BBF1 /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFE5663C850D242D0CB9C6F7A3FDD366 /* Debug */,
+				66CC7619109CA72C7BC9682FDFD7C571 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8CB394784304406728E2812BF985EEC /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-HashExtensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECECB8773122B44EAD4BC191D5FA1E72 /* Debug */,
+				9CB6C1B67FE8C171671AF6CE663C2572 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC52B3B74ECC29B6E64B47F9982765AF /* Build configuration list for PBXNativeTarget "Pods-ampclient_osx-HashExtensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B42947C8DA6852948213A6EEB0789F81 /* Debug */,
+				F3AE87D1AC72B86E75A76B6DF93C2952 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF1644AB85573763D2D015F714D844B7 /* Build configuration list for PBXNativeTarget "Pods-ampclient_ios-DEjson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50D04B494E403A2D7842421624B140E5 /* Debug */,
+				97845A9545E132E5C3367CDCF24ADAE8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

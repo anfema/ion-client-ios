@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import HashExtensions
 @testable import ampclient
 
 class fileContentTests: LoggedInXCTestCase {
@@ -34,7 +35,7 @@ class fileContentTests: LoggedInXCTestCase {
                         return
                 }
                 XCTAssert(file.checksumMethod == "sha256")
-                XCTAssert(data.cryptoHash(HashTypes(rawValue: file.checksumMethod)!).hexString() == file.checksum)
+                XCTAssert(data.cryptoHash(hashTypeFromName(file.checksumMethod)).hexString() == file.checksum)
                 expectation.fulfill()
             }
         }

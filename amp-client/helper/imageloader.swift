@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
+import HashExtensions
 
 #if os(OSX)
     import AppKit
@@ -48,6 +49,7 @@ extension CanLoadImage {
             let data = AMPRequest.cachedFile(thumbnail.URLString) else {
                 return "invalid"
         }
+        
         return data.cryptoHash(.SHA256).hexString()
     }
     

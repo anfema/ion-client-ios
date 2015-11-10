@@ -26,15 +26,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "755D8B5F1B9DDAF700AB10C8"
-               BuildableName = "ampclient_ios_Tests.xctest"
-               BlueprintName = "ampclient_ios_Tests"
+               BlueprintIdentifier = "8F62FCD51BF2652A001E518D"
+               BuildableName = "ampclient_tests_ios.xctest"
+               BlueprintName = "ampclient_tests_ios"
                ReferencedContainer = "container:amp-client.xcodeproj">
             </BuildableReference>
          </TestableReference>

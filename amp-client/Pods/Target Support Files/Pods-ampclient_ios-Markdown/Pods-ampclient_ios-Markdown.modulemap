@@ -1,0 +1,6 @@
+framework module Markdown {
+  umbrella header "Pods-ampclient_ios-Markdown-umbrella.h"
+
+  export *
+  module * { export * }
+}
