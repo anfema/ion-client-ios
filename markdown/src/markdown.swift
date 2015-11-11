@@ -17,13 +17,13 @@ public enum NodeType {
     
     // Block level
     case Heading(level: Int)
-    case UnorderedList
+    case UnorderedList(nestingDepth: Int)
     case UnorderedListItem
-    case OrderedList
+    case OrderedList(nestingDepth: Int)
     case OrderedListItem(index: Int)
-    case CodeBlock(language: String)
-    case Paragraph
-    case Quote
+    case CodeBlock(language: String, nestingDepth: Int)
+    case Paragraph(nestingDepth: Int)
+    case Quote(nestingDepth: Int)
 
     // Inline
     case PlainText
@@ -40,20 +40,20 @@ public enum NodeType {
             return "Document-Node"
         case .Heading(let level):
             return "Heading\(level)-Node"
-        case .UnorderedList:
-            return "UnorderedList-Node"
+        case .UnorderedList(let nestingDepth):
+            return "UnorderedList-Node (depth \(nestingDepth))"
         case .UnorderedListItem:
             return "UnorderedListItem-Node"
-        case .OrderedList:
-            return "OrderedList-Node"
+        case .OrderedList(let nestingDepth):
+            return "OrderedList-Node (depth \(nestingDepth))"
         case .OrderedListItem(let index):
             return "OrderedListItem(\(index))-Node"
-        case .CodeBlock(let language):
-            return "CodeBlock(\(language))-Node"
-        case .Paragraph:
-            return "Paragraph-Node"
-        case .Quote:
-            return "Quote-Node"
+        case .CodeBlock(let language, let nestingDepth):
+            return "CodeBlock-Node (lang: \(language), depth \(nestingDepth))"
+        case .Paragraph(let nestingDepth):
+            return "Paragraph-Node (depth \(nestingDepth))"
+        case .Quote(let nestingDepth):
+            return "Quote-Node (depth \(nestingDepth))"
         case .PlainText:
             return "PlainText-Node"
         case .StrongText:
@@ -107,11 +107,11 @@ public class ContentNode: CustomDebugStringConvertible {
 
 enum Block {
     case Heading(level: Int, content: String)
-    case UnorderedList(content: String)
-    case OrderedList(content: String)
-    case Code(content: String, language: String)
-    case Paragraph(content: String)
-    case Quote(content:String)
+    case UnorderedList(content: String, nestingDepth: Int)
+    case OrderedList(content: String, nestingDepth: Int)
+    case Code(content: String, language: String, nestingDepth: Int)
+    case Paragraph(content: String, nestingDepth: Int)
+    case Quote(content:String, nestingDepth: Int)
 }
 
 public class MDParser {
@@ -125,7 +125,7 @@ public class MDParser {
     public func render() -> ContentNode {
         var result:[ContentNode] = []
         
-        for block in self.splitBlocks(self.markdown) {
+        for block in self.splitBlocks(self.markdown, nestingDepth: 0) {
             result.append(self.renderBlock(block))
         }
         
@@ -134,19 +134,19 @@ public class MDParser {
     
     // MARK: - Block parsers
     
-    func splitBlocks(string: String) -> [Block] {
+    func splitBlocks(string: String, nestingDepth: Int) -> [Block] {
         var blocks:[Block] = []
 
         let blockRegex = try! NSRegularExpression(pattern: "(\\n[^\\n]+)+", options: self.regexOptions)
         blockRegex.enumerateMatchesInString(string, options: [], range: NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))) { (result, _, _) in
             if let result = result {
-                blocks.append(self.identifyBlock(string.substringWithRange(result.range)!))
+                blocks.append(self.identifyBlock(string.substringWithRange(result.range)!, nestingDepth: nestingDepth))
             }
         }
         return blocks
     }
 
-    func splitBlocksByIndent(string: String) -> [Block] {
+    func splitBlocksByIndent(string: String, nestingDepth: Int) -> [Block] {
         var blocks:[Block] = []
         let paddedString = "\n" + string + "\n"
         let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
@@ -155,26 +155,26 @@ public class MDParser {
         blockRegex.enumerateMatchesInString(paddedString, options: [], range: fullString) { (result, _, _) in
             if let result = result {
                 let s = ("\n" + string).substringWithRange(result.range)!.stringByReplacingOccurrencesOfString("\n    ", withString: "\n")
-                blocks.append(self.identifyBlock(s))
+                blocks.append(self.identifyBlock(s, nestingDepth: nestingDepth))
             }
         }
         return blocks
     }
 
-    func identifyBlock(string: String) -> Block {
+    func identifyBlock(string: String, nestingDepth: Int) -> Block {
         let stripped = string.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
         let fullString = NSMakeRange(0, stripped.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
         
         // Identify Headings
         let headingRegexes:[NSRegularExpression] = [
-            try! NSRegularExpression(pattern: "(^#[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[#]+\\n)", options: self.regexOptions),
-            try! NSRegularExpression(pattern: "(^##[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[=]+\\n)", options: self.regexOptions),
-            try! NSRegularExpression(pattern: "(^###[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[\\+]+\\n)", options: self.regexOptions),
+            try! NSRegularExpression(pattern: "(^#####[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[\\^]+\\n)", options: self.regexOptions),
             try! NSRegularExpression(pattern: "(^####[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[\\-]+\\n)", options: self.regexOptions),
-            try! NSRegularExpression(pattern: "(^#####[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[\\^]+\\n)", options: self.regexOptions)
+            try! NSRegularExpression(pattern: "(^###[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[\\+]+\\n)", options: self.regexOptions),
+            try! NSRegularExpression(pattern: "(^##[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[=]+\\n)", options: self.regexOptions),
+            try! NSRegularExpression(pattern: "(^#[ \\t]*([^\\n]*))|(^([^\\n]*)\\n[#]+\\n)", options: self.regexOptions)
         ]
 
-        var level = 1
+        var level = headingRegexes.count
         var resultBlock: Block? = nil
         let hString = stripped + "\n"
         let hStringRange = NSMakeRange(0, hString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
@@ -192,19 +192,19 @@ public class MDParser {
             if resultBlock != nil {
                 return resultBlock!
             }
-            level++
+            level--
         }
         
         // Identify unordered lists
         let unorderedListRegex = try! NSRegularExpression(pattern: "(^[ ]{0,3}[\\-+*][ \\t]+)", options: self.regexOptions)
         if unorderedListRegex.numberOfMatchesInString(stripped, options: [], range: fullString) > 0 {
-            return Block.UnorderedList(content: stripped)
+            return Block.UnorderedList(content: stripped, nestingDepth: nestingDepth)
         }
         
         // Identify ordered lists
         let orderedListRegex = try! NSRegularExpression(pattern: "(^[ ]{0,3}[0-9a-z][.\\)][ \\t]+)", options: self.regexOptions)
         if orderedListRegex.numberOfMatchesInString(stripped, options: [], range: fullString) > 0 {
-            return Block.OrderedList(content: stripped)
+            return Block.OrderedList(content: stripped, nestingDepth: nestingDepth)
         }
 
         // Identify code
@@ -214,11 +214,11 @@ public class MDParser {
         var language:String = "text"
         if codeRegexSpaces.numberOfMatchesInString(stripped, options: [], range: fullString) > 0 {
             let modified = ("\n" + stripped).stringByReplacingOccurrencesOfString("\n    ", withString: "\n").stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            return Block.Code(content: modified, language: language)
+            return Block.Code(content: modified, language: language, nestingDepth: nestingDepth)
         }
         if codeRegexTab.numberOfMatchesInString(stripped, options: [], range: fullString) > 0 {
             let modified = ("\n" + stripped).stringByReplacingOccurrencesOfString("\n\t", withString: "\n").stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            return Block.Code(content: modified, language: language)
+            return Block.Code(content: modified, language: language, nestingDepth: nestingDepth)
         }
         codeRegexFences.enumerateMatchesInString(stripped, options: [], range: fullString) { (result, _, _) in
             if let result = result {
@@ -226,7 +226,7 @@ public class MDParser {
                     language = stripped.substringWithRange(result.rangeAtIndex(2))!
                 }
                 if result.rangeAtIndex(3).location != NSNotFound {
-                    resultBlock = Block.Code(content: stripped.substringWithRange(result.rangeAtIndex(3))!, language: language)
+                    resultBlock = Block.Code(content: stripped.substringWithRange(result.rangeAtIndex(3))!, language: language, nestingDepth: nestingDepth + 1)
                 }
             }
         }
@@ -238,11 +238,11 @@ public class MDParser {
         let quoteRegex = try! NSRegularExpression(pattern: "(^[ ]{0,3}[>]+[ \\t]*)|(\\n[ ]{0,3}[>]+[ \\t]*)", options: self.regexOptions)
         if quoteRegex.numberOfMatchesInString(stripped, options: [], range: fullString) > 0 {
             let modified = quoteRegex.stringByReplacingMatchesInString(stripped, options: [], range: fullString, withTemplate: "\n").stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-            return Block.Quote(content: modified)
+            return Block.Quote(content: modified, nestingDepth: nestingDepth)
         }
         
         // Everything else is just a paragraph
-        return Block.Paragraph(content: stripped)
+        return Block.Paragraph(content: stripped, nestingDepth: nestingDepth)
     }
     
     // MARK: - Block content recursive parsers
@@ -252,20 +252,20 @@ public class MDParser {
         case .Heading(let level, let content):
             let preprocessed = self.parseContent(content)
             return ContentNode(children: preprocessed, type: .Heading(level: level))
-        case .UnorderedList(let content):
-            let items = self.splitUnorderedListItems(content)
-            return ContentNode(children: items, type: .UnorderedList)
-        case .OrderedList(let content):
-            let items = self.splitOrderedListItems(content)
-            return ContentNode(children: items, type: .OrderedList)
-        case .Code(let content, let language):
-            return ContentNode(children: [ContentNode.init(text: content)], type: .CodeBlock(language: language))
-        case .Paragraph(let content):
+        case .UnorderedList(let content, let nestingDepth):
+            let items = self.splitUnorderedListItems(content, nestingDepth: nestingDepth)
+            return ContentNode(children: items, type: .UnorderedList(nestingDepth: nestingDepth))
+        case .OrderedList(let content, let nestingDepth):
+            let items = self.splitOrderedListItems(content, nestingDepth: nestingDepth)
+            return ContentNode(children: items, type: .OrderedList(nestingDepth: nestingDepth))
+        case .Code(let content, let language, let nestingDepth):
+            return ContentNode(children: [ContentNode.init(text: content)], type: .CodeBlock(language: language, nestingDepth: nestingDepth))
+        case .Paragraph(let content, let nestingDepth):
             let preprocessed = self.parseContent(content)
-            return ContentNode(children: preprocessed, type: .Paragraph)
-        case .Quote(let content):
+            return ContentNode(children: preprocessed, type: .Paragraph(nestingDepth: nestingDepth))
+        case .Quote(let content, let nestingDepth):
             let preprocessed = self.parseContent(content)
-            return ContentNode(children: preprocessed, type: .Quote)
+            return ContentNode(children: preprocessed, type: .Quote(nestingDepth: nestingDepth))
         }
     }
     
@@ -314,7 +314,7 @@ public class MDParser {
         }
     }
     
-    func splitUnorderedListItems(string: String) -> [ContentNode] {
+    func splitUnorderedListItems(string: String, nestingDepth: Int) -> [ContentNode] {
         var tokens = [ContentNode]()
         let paddedString = string + "\n"
         let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
@@ -327,7 +327,7 @@ public class MDParser {
             if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                 var result:[ContentNode] = []
                 
-                for block in self.splitBlocksByIndent(multilineItem) {
+                for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
                     result.append(self.renderBlock(block))
                 }
                 
@@ -341,7 +341,7 @@ public class MDParser {
         return tokens
     }
 
-    func splitOrderedListItems(string: String) -> [ContentNode] {
+    func splitOrderedListItems(string: String, nestingDepth: Int) -> [ContentNode] {
         var tokens = [ContentNode]()
         let paddedString = string + "\n"
         let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
@@ -354,7 +354,7 @@ public class MDParser {
             if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                 var result:[ContentNode] = []
                 
-                for block in self.splitBlocksByIndent(multilineItem) {
+                for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
                     result.append(self.renderBlock(block))
                 }
                 

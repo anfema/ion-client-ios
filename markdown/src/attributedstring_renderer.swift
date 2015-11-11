@@ -36,7 +36,7 @@ public struct AttributedStringStyle {
     
     public var writingDirection:NSWritingDirection?
     
-    func makeAttributeDict() -> Dictionary<String, AnyObject> {
+    func makeAttributeDict(nestingDepth nestingDepth: Int = 0) -> Dictionary<String, AnyObject> {
         var result = Dictionary<String, AnyObject>()
         
         if let font = self.font {
@@ -65,8 +65,8 @@ public struct AttributedStringStyle {
 
         if let textIndent = self.textIndent {
             useParagraphStyle = true
-            paragraphStyle.firstLineHeadIndent = CGFloat(textIndent)
-            paragraphStyle.headIndent = CGFloat(textIndent)
+            paragraphStyle.firstLineHeadIndent = CGFloat(textIndent * (nestingDepth + 1))
+            paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1))
         }
 
         if let lineHeightMultiplier = self.lineHeightMultiplier {
@@ -146,7 +146,11 @@ public struct AttributedStringStyling {
         self.unorderedList = indent
         self.orderedList = indent
         
-        let listItems = AttributedStringStyle()
+        var listItems = AttributedStringStyle()
+        listItems.font = font
+        listItems.foregroundColor = baseColor
+        listItems.backgroundColor = backgroundColor
+
         // FIXME: multi line items do not indent correctly
         self.unorderedListItem = listItems
         self.orderedListItem = listItems
@@ -212,8 +216,8 @@ public struct AttributedStringStyling {
             #endif
             var settings = AttributedStringStyle()
             settings.font = f
-            settings.marginTop = fontSize / 2.0
-            settings.marginBottom = fontSize
+            settings.marginTop = fontSize / 4.0
+            settings.marginBottom = fontSize / 2.0
             
             self.heading.append(settings)
         }
@@ -235,57 +239,57 @@ extension ContentNode {
             
             // Block level
         case .Heading(let level):
-            let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
+            let result = NSMutableAttributedString(string: "\n")
+            result.insertAttributedString(content, atIndex: 0)
             result.addAttributes(style.heading[level - 1].makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
-        case .UnorderedList:
-            let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
-            result.addAttributes(style.unorderedList.makeAttributeDict(), range: NSMakeRange(0, result.length))
+        case .UnorderedList(let nestingDepth):
+            let result = NSMutableAttributedString(string: "\n")
+            result.insertAttributedString(content, atIndex: 0)
+            result.addAttributes(style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
         case .UnorderedListItem:
-            let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
+            let result = NSMutableAttributedString(string: "• \n")
+            result.insertAttributedString(content, atIndex: 2)
             result.addAttributes(style.unorderedListItem.makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
-        case .OrderedList:
-            let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
-            result.addAttributes(style.orderedList.makeAttributeDict(), range: NSMakeRange(0, result.length))
+        case .OrderedList(let nestingDepth):
+            let result = NSMutableAttributedString(string: "\n")
+            result.insertAttributedString(content, atIndex: 0)
+            result.addAttributes(style.orderedList.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
         case .OrderedListItem(let index):
-            let result = NSMutableAttributedString(string: "\n\n")
+            let result = NSMutableAttributedString(string: "\n")
 
             let indexLabel = NSAttributedString(string: NSString(format: "%d. ", index) as String)
-            result.insertAttributedString(indexLabel, atIndex: 1)
-            result.insertAttributedString(content, atIndex: 1 + indexLabel.length)
+            result.insertAttributedString(indexLabel, atIndex: 0)
+            result.insertAttributedString(content, atIndex: indexLabel.length)
 
             result.addAttributes(style.orderedListItem.makeAttributeDict(), range: NSMakeRange(0, result.length))
 
             // FIXME: do not convert list index types to arabic numbers
             return result
             
-        case .CodeBlock:
+        case .CodeBlock(_, let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
-            result.addAttributes(style.codeBlock.makeAttributeDict(), range: NSMakeRange(0, result.length))
+            result.insertAttributedString(content, atIndex: 0)
+            result.addAttributes(style.codeBlock.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
-        case .Paragraph:
+        case .Paragraph(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
-            result.addAttributes(style.paragraph.makeAttributeDict(), range: NSMakeRange(0, result.length))
+            result.insertAttributedString(content, atIndex: 0)
+            result.addAttributes(style.paragraph.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
-        case .Quote:
+        case .Quote(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
             result.insertAttributedString(content, atIndex: 1)
-            result.addAttributes(style.quoteBlock.makeAttributeDict(), range: NSMakeRange(0, result.length))
+            result.addAttributes(style.quoteBlock.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
         // Inline
