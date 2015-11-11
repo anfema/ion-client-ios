@@ -169,7 +169,9 @@ public class AMPCollection {
                     self.callErrorHandler(error)
                     self.hasFailed = true
                 } else if let cb = callback {
-                    cb(self)
+                    dispatch_async(AMP.config.responseQueue) {
+                        cb(self)
+                    }
                 }
                 dispatch_semaphore_signal(semaphore)
             }
@@ -233,14 +235,18 @@ public class AMPCollection {
                     if checkNeedsUpdate() {
                         updateBlock()
                     } else {
-                        callback(page)
+                        dispatch_async(AMP.config.responseQueue) {
+                            callback(page)
+                        }
                     }
                 } else {
                     dispatch_async(page.workQueue) {
                         if checkNeedsUpdate() {
                             updateBlock()
                         } else {
-                            callback(page)
+                            dispatch_async(AMP.config.responseQueue) {
+                                callback(page)
+                            }
                         }
                     }
                 }
@@ -333,7 +339,9 @@ public class AMPCollection {
                     count++
                 }
             }
-            callback(count)
+            dispatch_async(AMP.config.responseQueue) {
+                callback(count)
+            }
         }
         
         return self
@@ -352,7 +360,9 @@ public class AMPCollection {
             var found = false
             for meta in self.pageMeta {
                 if meta.identifier == identifier {
-                    callback(meta)
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(meta)
+                    }
                     found = true
                     break
                 }
@@ -402,7 +412,9 @@ public class AMPCollection {
                     self.callErrorHandler(.CollectionNotFound(self.identifier))
                 }
             } else {
-                callback(result)
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(result)
+                }
             }
         }
         
@@ -432,7 +444,9 @@ public class AMPCollection {
                     result.append(meta.identifier)
                 }
             }
-            callback(result)
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
+            }
         }
     }
    

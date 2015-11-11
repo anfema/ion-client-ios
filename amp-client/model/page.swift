@@ -99,7 +99,9 @@ public class AMPPage {
 
                     self.isReady = true
                     if let cb = callback {
-                        cb(self)
+                        dispatch_async(AMP.config.responseQueue) {
+                            cb(self)
+                        }
                     }
                 }
                 dispatch_semaphore_signal(semaphore)
@@ -203,7 +205,9 @@ public class AMPPage {
                 }
             }
             if let c = cObj {
-                callback(c)
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(c)
+                }
             } else {
                 self.callErrorHandler(.OutletNotFound(name))
             }
@@ -254,7 +258,9 @@ public class AMPPage {
                     break
                 }
             }
-            callback(found)
+            dispatch_async(AMP.config.responseQueue) {
+                callback(found)
+            }
         }
         return self
     }
