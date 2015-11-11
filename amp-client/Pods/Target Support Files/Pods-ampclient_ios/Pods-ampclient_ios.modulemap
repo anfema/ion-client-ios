@@ -1,6 +1,0 @@
-framework module Pods_ampclient_ios {
-  umbrella header "Pods-ampclient_ios-umbrella.h"
-
-  export *
-  module * { export * }
-}

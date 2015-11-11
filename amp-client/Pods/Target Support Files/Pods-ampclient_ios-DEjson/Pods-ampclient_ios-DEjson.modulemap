@@ -1,6 +1,0 @@
-framework module DEjson {
-  umbrella header "Pods-ampclient_ios-DEjson-umbrella.h"
-
-  export *
-  module * { export * }
-}

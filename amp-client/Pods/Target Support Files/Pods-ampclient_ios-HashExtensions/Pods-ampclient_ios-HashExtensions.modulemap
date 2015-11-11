@@ -1,8 +1,0 @@
-framework module HashExtensions {
-  umbrella header "Pods-ampclient_ios-HashExtensions-umbrella.h"
-
-  export *
-  module * { export * }
-
-  private header "Internal.h"
-}
