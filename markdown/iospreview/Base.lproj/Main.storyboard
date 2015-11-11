@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="iospreview" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="W4W-Mq-Fyg">
+                                <rect key="frame" x="20" y="28" width="560" height="253"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <mutableString key="text"># AMP Client documentation
+
+## Setup
+
+To use the AMP client you'll need to supply some basic information:
+
+- Base *URL* to the API server
+- __Locale__ to use
+
+Example:
+
+    AMP.config.serverURL = NSURL(string: "http://127.0.0.1:8000/client/v1/")
+    AMP.config.locale = "en_US"
+
+To be sure to produce no conflict with later _AMP_ calls put this in your AppDelegate.
+
+Server **URL** and locale may be changed ~~at any time~~ afterwards, existing data is not deleted and stays cached.
+
+List following:
+
+1. Hallo
+2. Fooo
+3. Bar
+    a. Sublist
+    b. Sublist item 2</mutableString>
+                                <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="12"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhd-Px-MYr">
+                                <rect key="frame" x="20" y="289" width="560" height="30"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="XQV-Wp-LtU"/>
+                                </constraints>
+                                <state key="normal" title="Convert"/>
+                                <connections>
+                                    <action selector="convertMarkdown:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jik-s5-74o"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMm-tZ-OoR">
+                                <rect key="frame" x="20" y="327" width="560" height="253"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="GMm-tZ-OoR" firstAttribute="height" secondItem="W4W-Mq-Fyg" secondAttribute="height" id="1EE-b8-g6F"/>
+                            <constraint firstItem="W4W-Mq-Fyg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="2Rf-pr-d5I"/>
+                            <constraint firstItem="GMm-tZ-OoR" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="3j7-iA-csF"/>
+                            <constraint firstItem="W4W-Mq-Fyg" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="F2d-Tw-Ziy"/>
+                            <constraint firstItem="dhd-Px-MYr" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Rr2-hh-gYz"/>
+                            <constraint firstItem="dhd-Px-MYr" firstAttribute="top" secondItem="W4W-Mq-Fyg" secondAttribute="bottom" constant="8" id="Tx0-tE-7gV"/>
+                            <constraint firstItem="GMm-tZ-OoR" firstAttribute="top" secondItem="dhd-Px-MYr" secondAttribute="bottom" constant="8" id="W29-KW-ffc"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="GMm-tZ-OoR" secondAttribute="bottom" constant="20" id="i4g-59-EJy"/>
+                            <constraint firstItem="W4W-Mq-Fyg" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="vJa-6c-pQk"/>
+                            <constraint firstItem="dhd-Px-MYr" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="xcG-lm-NLf"/>
+                            <constraint firstItem="GMm-tZ-OoR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="yHe-U0-p7c"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="markdownView" destination="W4W-Mq-Fyg" id="1ro-wb-Qz6"/>
+                        <outlet property="renderedView" destination="GMm-tZ-OoR" id="cgY-il-m0N"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="885" y="558"/>
+        </scene>
+    </scenes>
+</document>
