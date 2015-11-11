@@ -18,9 +18,9 @@ public enum NodeType {
     // Block level
     case Heading(level: Int)
     case UnorderedList(nestingDepth: Int)
-    case UnorderedListItem
+    case UnorderedListItem(nestingDepth: Int)
     case OrderedList(nestingDepth: Int)
-    case OrderedListItem(index: Int)
+    case OrderedListItem(index: Int, nestingDepth: Int)
     case CodeBlock(language: String, nestingDepth: Int)
     case Paragraph(nestingDepth: Int)
     case Quote(nestingDepth: Int)
@@ -331,11 +331,11 @@ public class MDParser {
                     result.append(self.renderBlock(block))
                 }
                 
-                tokens.append(ContentNode.init(children: result, type: .UnorderedListItem))
+                tokens.append(ContentNode.init(children: result, type: .UnorderedListItem(nestingDepth: nestingDepth)))
             }
             if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                 let node = self.parseContent(singleLineItem)
-                tokens.append(ContentNode.init(children: node, type: .UnorderedListItem))
+                tokens.append(ContentNode.init(children: node, type: .UnorderedListItem(nestingDepth: nestingDepth)))
             }
         }
         return tokens
@@ -358,11 +358,11 @@ public class MDParser {
                     result.append(self.renderBlock(block))
                 }
                 
-                tokens.append(ContentNode.init(children: result, type: .OrderedListItem(index: index + 1)))
+                tokens.append(ContentNode.init(children: result, type: .OrderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
             if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
                 let node = self.parseContent(singleLineItem)
-                tokens.append(ContentNode.init(children: node, type: .OrderedListItem(index: index + 1)))
+                tokens.append(ContentNode.init(children: node, type: .OrderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
         }
         return tokens
