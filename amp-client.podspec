@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :branch => "feature/j.schriewer/cocoapods" }
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :branch => "develop" }
   s.source_files  = "amp-client/cache/*.swift", "amp-client/communication/*.swift", "amp-client/helper/*.swift", "amp-client/model/**/*.swift"
   
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions"
