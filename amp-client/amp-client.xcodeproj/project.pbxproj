@@ -11,52 +11,6 @@
 		755D8B5A1B9DDAF700AB10C8 /* ampclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 755D8B591B9DDAF700AB10C8 /* ampclient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F4DD9401BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
 		8F4DD9411BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
-		8F62FCAF1BF262EB001E518D /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC951BF262EB001E518D /* collection.swift */; };
-		8F62FCB01BF262EB001E518D /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC961BF262EB001E518D /* config.swift */; };
-		8F62FCB11BF262EB001E518D /* base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC981BF262EB001E518D /* base.swift */; };
-		8F62FCB21BF262EB001E518D /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC991BF262EB001E518D /* color.swift */; };
-		8F62FCB31BF262EB001E518D /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9A1BF262EB001E518D /* container.swift */; };
-		8F62FCB41BF262EB001E518D /* datetime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9B1BF262EB001E518D /* datetime.swift */; };
-		8F62FCB51BF262EB001E518D /* file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9C1BF262EB001E518D /* file.swift */; };
-		8F62FCB61BF262EB001E518D /* flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9D1BF262EB001E518D /* flag.swift */; };
-		8F62FCB71BF262EB001E518D /* image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9E1BF262EB001E518D /* image.swift */; };
-		8F62FCB81BF262EB001E518D /* keyvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9F1BF262EB001E518D /* keyvalue.swift */; };
-		8F62FCB91BF262EB001E518D /* media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA01BF262EB001E518D /* media.swift */; };
-		8F62FCBA1BF262EB001E518D /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA11BF262EB001E518D /* number.swift */; };
-		8F62FCBB1BF262EB001E518D /* option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA21BF262EB001E518D /* option.swift */; };
-		8F62FCBC1BF262EB001E518D /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA31BF262EB001E518D /* text.swift */; };
-		8F62FCBD1BF262EB001E518D /* auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA51BF262EB001E518D /* auth.swift */; };
-		8F62FCBE1BF262EB001E518D /* auto_cache_invalidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA61BF262EB001E518D /* auto_cache_invalidation.swift */; };
-		8F62FCBF1BF262EB001E518D /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA71BF262EB001E518D /* diskcache.swift */; };
-		8F62FCC01BF262EB001E518D /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA81BF262EB001E518D /* error.swift */; };
-		8F62FCC11BF262EB001E518D /* error_handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA91BF262EB001E518D /* error_handler.swift */; };
-		8F62FCC21BF262EB001E518D /* memcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAA1BF262EB001E518D /* memcache.swift */; };
-		8F62FCC41BF262EB001E518D /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAD1BF262EB001E518D /* page.swift */; };
-		8F62FCC51BF262EB001E518D /* page_metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAE1BF262EB001E518D /* page_metadata.swift */; };
-		8F62FCE31BF26576001E518D /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC951BF262EB001E518D /* collection.swift */; };
-		8F62FCE41BF26576001E518D /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC961BF262EB001E518D /* config.swift */; };
-		8F62FCE51BF26576001E518D /* base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC981BF262EB001E518D /* base.swift */; };
-		8F62FCE61BF26576001E518D /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC991BF262EB001E518D /* color.swift */; };
-		8F62FCE71BF26576001E518D /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9A1BF262EB001E518D /* container.swift */; };
-		8F62FCE81BF26576001E518D /* datetime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9B1BF262EB001E518D /* datetime.swift */; };
-		8F62FCE91BF26576001E518D /* file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9C1BF262EB001E518D /* file.swift */; };
-		8F62FCEA1BF26576001E518D /* flag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9D1BF262EB001E518D /* flag.swift */; };
-		8F62FCEB1BF26576001E518D /* image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9E1BF262EB001E518D /* image.swift */; };
-		8F62FCEC1BF26576001E518D /* keyvalue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FC9F1BF262EB001E518D /* keyvalue.swift */; };
-		8F62FCED1BF26576001E518D /* media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA01BF262EB001E518D /* media.swift */; };
-		8F62FCEE1BF26576001E518D /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA11BF262EB001E518D /* number.swift */; };
-		8F62FCEF1BF26576001E518D /* option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA21BF262EB001E518D /* option.swift */; };
-		8F62FCF01BF26576001E518D /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA31BF262EB001E518D /* text.swift */; };
-		8F62FCF11BF26576001E518D /* auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA51BF262EB001E518D /* auth.swift */; };
-		8F62FCF21BF26576001E518D /* auto_cache_invalidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA61BF262EB001E518D /* auto_cache_invalidation.swift */; };
-		8F62FCF31BF26576001E518D /* diskcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA71BF262EB001E518D /* diskcache.swift */; };
-		8F62FCF41BF26576001E518D /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA81BF262EB001E518D /* error.swift */; };
-		8F62FCF51BF26576001E518D /* error_handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCA91BF262EB001E518D /* error_handler.swift */; };
-		8F62FCF61BF26576001E518D /* memcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAA1BF262EB001E518D /* memcache.swift */; };
-		8F62FCF71BF26576001E518D /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAD1BF262EB001E518D /* page.swift */; };
-		8F62FCF81BF26576001E518D /* page_metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62FCAE1BF262EB001E518D /* page_metadata.swift */; };
-		8F62FCFC1BF265F5001E518D /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755D8B561B9DDAF700AB10C8 /* ampclient.framework */; };
-		8F62FCFD1BF265FD001E518D /* ampclient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC269DD1BB9413500E38569 /* ampclient.framework */; };
 		8F86E6FE1BE25CD9002CE986 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; };
 		8F86E7001BE25CD9002CE986 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; };
 		8F86E7021BE25CDF002CE986 /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BF21B9F364600AB10C8 /* response_serializer.swift */; };
@@ -99,23 +53,6 @@
 		EE806A374323DEF2E02305D5 /* Pods_ampclient_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6F7D96DD7562B111BFC1EC6 /* Pods_ampclient_osx.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		8F62FC8C1BF26287001E518D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 755D8B4D1B9DDAF700AB10C8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8FC269DC1BB9413500E38569;
-			remoteInfo = ampclient_osx;
-		};
-		8F62FCDC1BF2652A001E518D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 755D8B4D1B9DDAF700AB10C8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 755D8B551B9DDAF700AB10C8;
-			remoteInfo = ampclient_ios;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		3269EFB8001C704D36E619B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4D4EB2D7AE68303454CFC493 /* Pods-ampclient_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ampclient_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ampclient_ios/Pods-ampclient_ios.debug.xcconfig"; sourceTree = "<group>"; };
@@ -142,7 +79,6 @@
 		8F52CD341BA86812004588F4 /* option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = option.swift; sourceTree = "<group>"; };
 		8F52CD351BA86812004588F4 /* text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		8F62FC7E1BF25FF1001E518D /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
-		8F62FC861BF26287001E518D /* ampclient_tests_osx.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampclient_tests_osx.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F62FC951BF262EB001E518D /* collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = collection.swift; sourceTree = "<group>"; };
 		8F62FC961BF262EB001E518D /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
 		8F62FC981BF262EB001E518D /* base.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = base.swift; sourceTree = "<group>"; };
@@ -172,7 +108,6 @@
 		8F62FCCB1BF264FA001E518D /* DEjson.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DEjson.framework; path = "Pods/../build/Debug/Pods-ampclient_osx/DEjson.framework"; sourceTree = "<group>"; };
 		8F62FCCC1BF264FA001E518D /* HashExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HashExtensions.framework; path = "Pods/../build/Debug/Pods-ampclient_osx/HashExtensions.framework"; sourceTree = "<group>"; };
 		8F62FCCD1BF264FA001E518D /* Markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Markdown.framework; path = "Pods/../build/Debug/Pods-ampclient_osx/Markdown.framework"; sourceTree = "<group>"; };
-		8F62FCD61BF2652A001E518D /* ampclient_tests_ios.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ampclient_tests_ios.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F62FCE11BF26531001E518D /* Pods_ampclient_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_ampclient_ios.framework; path = "Pods/../build/Debug-iphoneos/Pods_ampclient_ios.framework"; sourceTree = "<group>"; };
 		8F62FCFA1BF265D6001E518D /* Pods_ampclient_ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_ampclient_ios.framework; path = "Pods/../build/Debug-iphoneos/Pods_ampclient_ios.framework"; sourceTree = "<group>"; };
 		8F78B15D1BF269FC009D4B67 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "Pods/../build/Debug/Pods-ampclient_osx/Alamofire.framework"; sourceTree = "<group>"; };
@@ -209,22 +144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28997CA07D6B77B3E25FC922 /* Pods_ampclient_ios.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F62FC831BF26287001E518D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F62FCFD1BF265FD001E518D /* ampclient.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F62FCD31BF2652A001E518D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F62FCFC1BF265F5001E518D /* ampclient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,8 +188,6 @@
 			children = (
 				755D8B561B9DDAF700AB10C8 /* ampclient.framework */,
 				8FC269DD1BB9413500E38569 /* ampclient.framework */,
-				8F62FC861BF26287001E518D /* ampclient_tests_osx.xctest */,
-				8F62FCD61BF2652A001E518D /* ampclient_tests_ios.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -500,13 +417,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 755D8B6A1B9DDAF700AB10C8 /* Build configuration list for PBXNativeTarget "ampclient_ios" */;
 			buildPhases = (
-				A4B1F3E16CE304D196ED7A44 /* Check Pods Manifest.lock */,
 				755D8B511B9DDAF700AB10C8 /* Sources */,
 				755D8B521B9DDAF700AB10C8 /* Frameworks */,
 				755D8B531B9DDAF700AB10C8 /* Headers */,
 				755D8B541B9DDAF700AB10C8 /* Resources */,
 				8FC2699D1BB053B900E38569 /* TODOs as warnings */,
-				AF32D7A11F20AD17CB3C1C46 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -517,53 +432,15 @@
 			productReference = 755D8B561B9DDAF700AB10C8 /* ampclient.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		8F62FC851BF26287001E518D /* ampclient_tests_osx */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8F62FC8E1BF26287001E518D /* Build configuration list for PBXNativeTarget "ampclient_tests_osx" */;
-			buildPhases = (
-				8F62FC821BF26287001E518D /* Sources */,
-				8F62FC831BF26287001E518D /* Frameworks */,
-				8F62FC841BF26287001E518D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				8F62FC8D1BF26287001E518D /* PBXTargetDependency */,
-			);
-			name = ampclient_tests_osx;
-			productName = ampclient_tests_osx;
-			productReference = 8F62FC861BF26287001E518D /* ampclient_tests_osx.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		8F62FCD51BF2652A001E518D /* ampclient_tests_ios */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8F62FCDE1BF2652A001E518D /* Build configuration list for PBXNativeTarget "ampclient_tests_ios" */;
-			buildPhases = (
-				8F62FCD21BF2652A001E518D /* Sources */,
-				8F62FCD31BF2652A001E518D /* Frameworks */,
-				8F62FCD41BF2652A001E518D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				8F62FCDD1BF2652A001E518D /* PBXTargetDependency */,
-			);
-			name = ampclient_tests_ios;
-			productName = ampclient_tests_ios;
-			productReference = 8F62FCD61BF2652A001E518D /* ampclient_tests_ios.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		8FC269DC1BB9413500E38569 /* ampclient_osx */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8FC269EE1BB9413500E38569 /* Build configuration list for PBXNativeTarget "ampclient_osx" */;
 			buildPhases = (
-				8F62FC801BF26006001E518D /* Check Pods Manifest.lock */,
 				8FC269D81BB9413500E38569 /* Sources */,
 				8FC269D91BB9413500E38569 /* Frameworks */,
 				8FC269DA1BB9413500E38569 /* Headers */,
 				8FC269DB1BB9413500E38569 /* Resources */,
 				8FC26A081BB9429500E38569 /* TODOs as warnings */,
-				8F62FC811BF26043001E518D /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -587,13 +464,6 @@
 					755D8B551B9DDAF700AB10C8 = {
 						CreatedOnToolsVersion = 7.0;
 					};
-					8F62FC851BF26287001E518D = {
-						CreatedOnToolsVersion = 7.1;
-						TestTargetID = 8F78B17B1BF26D6F009D4B67;
-					};
-					8F62FCD51BF2652A001E518D = {
-						CreatedOnToolsVersion = 7.1;
-					};
 					8FC269DC1BB9413500E38569 = {
 						CreatedOnToolsVersion = 7.0;
 					};
@@ -614,28 +484,12 @@
 			targets = (
 				755D8B551B9DDAF700AB10C8 /* ampclient_ios */,
 				8FC269DC1BB9413500E38569 /* ampclient_osx */,
-				8F62FCD51BF2652A001E518D /* ampclient_tests_ios */,
-				8F62FC851BF26287001E518D /* ampclient_tests_osx */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		755D8B541B9DDAF700AB10C8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F62FC841BF26287001E518D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F62FCD41BF2652A001E518D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -652,35 +506,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8F62FC801BF26006001E518D /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-		};
-		8F62FC811BF26043001E518D /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ampclient_osx/Pods-ampclient_osx-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8FC2699D1BB053B900E38569 /* TODOs as warnings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -709,36 +534,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
-			showEnvVarsInLog = 0;
-		};
-		A4B1F3E16CE304D196ED7A44 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		AF32D7A11F20AD17CB3C1C46 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ampclient_ios/Pods-ampclient_ios-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -771,64 +566,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8F62FC821BF26287001E518D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F62FCBA1BF262EB001E518D /* number.swift in Sources */,
-				8F62FCC11BF262EB001E518D /* error_handler.swift in Sources */,
-				8F62FCBD1BF262EB001E518D /* auth.swift in Sources */,
-				8F62FCB91BF262EB001E518D /* media.swift in Sources */,
-				8F62FCB51BF262EB001E518D /* file.swift in Sources */,
-				8F62FCAF1BF262EB001E518D /* collection.swift in Sources */,
-				8F62FCBE1BF262EB001E518D /* auto_cache_invalidation.swift in Sources */,
-				8F62FCC41BF262EB001E518D /* page.swift in Sources */,
-				8F62FCBB1BF262EB001E518D /* option.swift in Sources */,
-				8F62FCC21BF262EB001E518D /* memcache.swift in Sources */,
-				8F62FCB31BF262EB001E518D /* container.swift in Sources */,
-				8F62FCBF1BF262EB001E518D /* diskcache.swift in Sources */,
-				8F62FCB81BF262EB001E518D /* keyvalue.swift in Sources */,
-				8F62FCC51BF262EB001E518D /* page_metadata.swift in Sources */,
-				8F62FCB41BF262EB001E518D /* datetime.swift in Sources */,
-				8F62FCBC1BF262EB001E518D /* text.swift in Sources */,
-				8F62FCB21BF262EB001E518D /* color.swift in Sources */,
-				8F62FCB01BF262EB001E518D /* config.swift in Sources */,
-				8F62FCB11BF262EB001E518D /* base.swift in Sources */,
-				8F62FCB61BF262EB001E518D /* flag.swift in Sources */,
-				8F62FCC01BF262EB001E518D /* error.swift in Sources */,
-				8F62FCB71BF262EB001E518D /* image.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8F62FCD21BF2652A001E518D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8F62FCEE1BF26576001E518D /* number.swift in Sources */,
-				8F62FCF51BF26576001E518D /* error_handler.swift in Sources */,
-				8F62FCF11BF26576001E518D /* auth.swift in Sources */,
-				8F62FCED1BF26576001E518D /* media.swift in Sources */,
-				8F62FCE91BF26576001E518D /* file.swift in Sources */,
-				8F62FCE31BF26576001E518D /* collection.swift in Sources */,
-				8F62FCF21BF26576001E518D /* auto_cache_invalidation.swift in Sources */,
-				8F62FCF71BF26576001E518D /* page.swift in Sources */,
-				8F62FCEF1BF26576001E518D /* option.swift in Sources */,
-				8F62FCF61BF26576001E518D /* memcache.swift in Sources */,
-				8F62FCE71BF26576001E518D /* container.swift in Sources */,
-				8F62FCF31BF26576001E518D /* diskcache.swift in Sources */,
-				8F62FCEC1BF26576001E518D /* keyvalue.swift in Sources */,
-				8F62FCF81BF26576001E518D /* page_metadata.swift in Sources */,
-				8F62FCE81BF26576001E518D /* datetime.swift in Sources */,
-				8F62FCF01BF26576001E518D /* text.swift in Sources */,
-				8F62FCE61BF26576001E518D /* color.swift in Sources */,
-				8F62FCE41BF26576001E518D /* config.swift in Sources */,
-				8F62FCE51BF26576001E518D /* base.swift in Sources */,
-				8F62FCEA1BF26576001E518D /* flag.swift in Sources */,
-				8F62FCF41BF26576001E518D /* error.swift in Sources */,
-				8F62FCEB1BF26576001E518D /* image.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8FC269D81BB9413500E38569 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -857,19 +594,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		8F62FC8D1BF26287001E518D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8FC269DC1BB9413500E38569 /* ampclient_osx */;
-			targetProxy = 8F62FC8C1BF26287001E518D /* PBXContainerItemProxy */;
-		};
-		8F62FCDD1BF2652A001E518D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 755D8B551B9DDAF700AB10C8 /* ampclient_ios */;
-			targetProxy = 8F62FCDC1BF2652A001E518D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		755D8B681B9DDAF700AB10C8 /* Debug */ = {
@@ -965,7 +689,6 @@
 		};
 		755D8B6B1B9DDAF700AB10C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D4EB2D7AE68303454CFC493 /* Pods-ampclient_ios.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
@@ -992,7 +715,6 @@
 		};
 		755D8B6C1B9DDAF700AB10C8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CAE111C34C74DD0741C3ACFE /* Pods-ampclient_ios.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
@@ -1015,77 +737,8 @@
 			};
 			name = Release;
 		};
-		8F62FC8F1BF26287001E518D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-ampclient_osx",
-				);
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-tests-osx";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/host_osx.app/Contents/MacOS/host_osx";
-			};
-			name = Debug;
-		};
-		8F62FC901BF26287001E518D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-ampclient_osx",
-				);
-				INFOPLIST_FILE = tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-tests-osx";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/host_osx.app/Contents/MacOS/host_osx";
-			};
-			name = Release;
-		};
-		8F62FCDF1BF2652A001E518D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-ampclient_ios",
-				);
-				INFOPLIST_FILE = tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-tests-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		8F62FCE01BF2652A001E518D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-ampclient_ios",
-				);
-				INFOPLIST_FILE = tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ampclient-tests-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		8FC269EF1BB9413500E38569 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CF92EEF5D83604191DF79BDE /* Pods-ampclient_osx.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1108,7 +761,6 @@
 		};
 		8FC269F01BB9413500E38569 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C52643C6A5D13F5856544B58 /* Pods-ampclient_osx.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1146,24 +798,6 @@
 			buildConfigurations = (
 				755D8B6B1B9DDAF700AB10C8 /* Debug */,
 				755D8B6C1B9DDAF700AB10C8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8F62FC8E1BF26287001E518D /* Build configuration list for PBXNativeTarget "ampclient_tests_osx" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8F62FC8F1BF26287001E518D /* Debug */,
-				8F62FC901BF26287001E518D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8F62FCDE1BF2652A001E518D /* Build configuration list for PBXNativeTarget "ampclient_tests_ios" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8F62FCDF1BF2652A001E518D /* Debug */,
-				8F62FCE01BF2652A001E518D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

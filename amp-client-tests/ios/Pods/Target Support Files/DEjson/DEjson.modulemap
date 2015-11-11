@@ -1,0 +1,6 @@
+framework module DEjson {
+  umbrella header "DEjson-umbrella.h"
+
+  export *
+  module * { export * }
+}
