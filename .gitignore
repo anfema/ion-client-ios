@@ -15,3 +15,6 @@ HashExtensions/HashExtensions.xcodeproj/xcuserdata
 DEjson/DEjson.xcodeproj/project.xcworkspace/xcuserdata
 amp-client-tests/ios/amp-tests.xcworkspace/xcuserdata
 amp-client-tests/ios/Pods
+amp-client-tests/osx/amp-tests.xcodeproj/xcuserdata
+amp-client-tests/osx/amp-tests.xcworkspace/xcuserdata
+amp-client-tests/osx/Pods
