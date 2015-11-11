@@ -1,0 +1,19 @@
+PODS:
+  - Alamofire (3.1.2)
+  - DEjson (1.0.0)
+  - HashExtensions (1.0.0)
+  - Markdown (1.0.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.1)
+  - DEjson (~> 1.0)
+  - HashExtensions (~> 1.0)
+  - Markdown (~> 1.0)
+
+SPEC CHECKSUMS:
+  Alamofire: 7c16ca65f3c7e681fd925fd7f2dec7747ff96855
+  DEjson: 6245146906aebc04b34a00d000e9a8966da31b36
+  HashExtensions: df931b425632dae74d6d01dc1a2b8232af443454
+  Markdown: 1d088eef80dbad7b7dd981db64da0c09c1a82aae
+
+COCOAPODS: 0.39.0
