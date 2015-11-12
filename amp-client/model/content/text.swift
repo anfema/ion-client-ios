@@ -84,7 +84,6 @@ public class AMPTextContent : AMPContent {
     /// - Returns: attributed string version of text
     // TODO: Write tests for attributedString() function in TextContent
     public func attributedString() -> NSAttributedString? {
-        // TODO: Setup default styling
         switch (self.mimeType) {
         case "text/html":
             // FIXME: Speed this up
@@ -105,7 +104,7 @@ public class AMPTextContent : AMPContent {
                 return nil
             }
         case "text/markdown":
-            return MDParser(markdown: self.text).render().renderAttributedString(AttributedStringStyling())
+            return MDParser(markdown: self.text).render().renderAttributedString(AMP.config.stringStyling)
         case "text/plain":
             return NSAttributedString(string: self.text)
         default:

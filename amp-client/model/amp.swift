@@ -11,6 +11,7 @@
 
 import Foundation
 import Alamofire
+import Markdown
 
 /// AMP configuration object
 ///
@@ -37,6 +38,9 @@ public struct AMPConfig {
     /// collection cache timeout
     public var cacheTimeout: NSTimeInterval = 600
     
+    /// styling for attributed string conversion of markdown text
+    public var stringStyling: AttributedStringStyling
+    
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
     
@@ -46,6 +50,8 @@ public struct AMPConfig {
         configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
         configuration.HTTPCookieAcceptPolicy = .Never
         configuration.HTTPShouldSetCookies = false
+        
+        self.stringStyling = AttributedStringStyling()
         
         self.alamofire = Alamofire.Manager(configuration: configuration)
         self.resetErrorHandler()
