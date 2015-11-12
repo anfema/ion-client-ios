@@ -138,7 +138,7 @@ public class MDParser {
         var blocks:[Block] = []
 
         let blockRegex = try! NSRegularExpression(pattern: "(\\n[^\\n]+)+", options: self.regexOptions)
-        blockRegex.enumerateMatchesInString(string, options: [], range: NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))) { (result, _, _) in
+        blockRegex.enumerateMatchesInString(string, options: [], range: NSMakeRange(0, string.unicodeScalars.count)) { (result, _, _) in
             if let result = result {
                 blocks.append(self.identifyBlock(string.substringWithRange(result.range)!, nestingDepth: nestingDepth))
             }
@@ -149,7 +149,7 @@ public class MDParser {
     func splitBlocksByIndent(string: String, nestingDepth: Int) -> [Block] {
         var blocks:[Block] = []
         let paddedString = "\n" + string + "\n"
-        let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, paddedString.characters.count)
         
         let blockRegex = try! NSRegularExpression(pattern: "(\\n[ ]{0,3}([^ ][^\\n]+))+|((\\n([ ]{4}|\\t)[^\\n]+)+)", options: self.regexOptions)
         blockRegex.enumerateMatchesInString(paddedString, options: [], range: fullString) { (result, _, _) in
@@ -163,7 +163,7 @@ public class MDParser {
 
     func identifyBlock(string: String, nestingDepth: Int) -> Block {
         let stripped = string.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-        let fullString = NSMakeRange(0, stripped.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, stripped.characters.count)
         
         // Identify Headings
         let headingRegexes:[NSRegularExpression] = [
@@ -177,7 +177,7 @@ public class MDParser {
         var level = headingRegexes.count
         var resultBlock: Block? = nil
         let hString = stripped + "\n"
-        let hStringRange = NSMakeRange(0, hString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let hStringRange = NSMakeRange(0, hString.characters.count)
         for regex in headingRegexes {
             regex.enumerateMatchesInString(hString, options: [], range: hStringRange) { (result, _, _) in
                 if let result = result {
@@ -271,7 +271,7 @@ public class MDParser {
     
     func parseContent(string: String) -> [ContentNode] {
         let trimRegex = try! NSRegularExpression(pattern: "\\n[ ]{0,3}", options: self.regexOptions)
-        let fullString = NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, string.characters.count)
         let trimmedString = trimRegex.stringByReplacingMatchesInString(string, options: [], range: fullString, withTemplate: "\n")
         
         var tokens = self.parseInlineCode(trimmedString)
@@ -317,14 +317,14 @@ public class MDParser {
     func splitUnorderedListItems(string: String, nestingDepth: Int) -> [ContentNode] {
         var tokens = [ContentNode]()
         let paddedString = string + "\n"
-        let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, paddedString.characters.count)
         
         let splitListRegex = try! NSRegularExpression(pattern: "([ ]{0,3}[\\-*+][^\\-*+]([^\\n]*\\n([ \\t]+[^\\n]+\\n)+))|([ ]{0,3}[\\-*+][^\\-*+]([^\\n]*)\\n)", options: self.regexOptions)
         let matches = splitListRegex.matchesInString(paddedString, options: [], range: fullString)
         for index in 0..<matches.count {
             let match = matches[index]
             
-            if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.characters.count > 0 {
                 var result:[ContentNode] = []
                 
                 for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
@@ -333,7 +333,7 @@ public class MDParser {
                 
                 tokens.append(ContentNode.init(children: result, type: .UnorderedListItem(nestingDepth: nestingDepth)))
             }
-            if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.characters.count > 0 {
                 let node = self.parseContent(singleLineItem)
                 tokens.append(ContentNode.init(children: node, type: .UnorderedListItem(nestingDepth: nestingDepth)))
             }
@@ -344,14 +344,14 @@ public class MDParser {
     func splitOrderedListItems(string: String, nestingDepth: Int) -> [ContentNode] {
         var tokens = [ContentNode]()
         let paddedString = string + "\n"
-        let fullString = NSMakeRange(0, paddedString.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, paddedString.characters.count)
         
         let splitListRegex = try! NSRegularExpression(pattern: "([ ]{0,3}[0-9a-z]+[.\\)][ \\t]*([^\\n]*\\n([ \\t]+[^\\n]+\\n)+))|([ ]{0,3}[0-9a-z]+[.\\)][ \\t]*([^\\n]*)\\n)", options: self.regexOptions)
         let matches = splitListRegex.matchesInString(paddedString, options: [], range: fullString)
         for index in 0..<matches.count {
             let match = matches[index]
             
-            if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            if let multilineItem = paddedString.substringWithRange(match.rangeAtIndex(2)) where multilineItem.characters.count > 0 {
                 var result:[ContentNode] = []
                 
                 for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
@@ -360,7 +360,7 @@ public class MDParser {
                 
                 tokens.append(ContentNode.init(children: result, type: .OrderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
-            if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            if let singleLineItem = paddedString.substringWithRange(match.rangeAtIndex(5)) where singleLineItem.characters.count > 0 {
                 let node = self.parseContent(singleLineItem)
                 tokens.append(ContentNode.init(children: node, type: .OrderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
@@ -452,7 +452,7 @@ public class MDParser {
 
     func parseLinks(string: String) -> [ContentNode]? {
         var tokens = [ContentNode]()
-        let fullString = NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, string.characters.count)
 
         let linkRegex = try! NSRegularExpression(pattern: "\\[([^\\]]*)\\]\\(((#|[0-9a-z]+://)[^)\\n]*)\\)", options: self.regexOptions)
         let matches = linkRegex.matchesInString(string, options: [], range: fullString)
@@ -467,7 +467,7 @@ public class MDParser {
                 }
                 // text from last match to this match
                 let t = string.substringWithRange(string.range(lastSplitPoint, end:match.range.location)!)
-                if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+                if t.characters.count > 0 {
                     tokens.append(ContentNode.init(text: t))
                 }
                 // the token match
@@ -477,8 +477,8 @@ public class MDParser {
             
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))!)
-            if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.characters.count)!)
+            if t.characters.count > 0 {
                 tokens.append(ContentNode.init(text: t))
             }
         }
@@ -491,7 +491,7 @@ public class MDParser {
 
     func parseImages(string: String) -> [ContentNode]? {
         var tokens = [ContentNode]()
-        let fullString = NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, string.characters.count)
         
         let linkRegex = try! NSRegularExpression(pattern: "!\\[([^\\]]*)\\]\\(([a-z0-9]+://[^)\\n]*)\\)", options: self.regexOptions)
         let matches = linkRegex.matchesInString(string, options: [], range: fullString)
@@ -506,7 +506,7 @@ public class MDParser {
                 }
                 // text from last match to this match
                 let t = string.substringWithRange(string.range(lastSplitPoint, end:match.range.location)!)
-                if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+                if t.characters.count > 0 {
                     tokens.append(ContentNode.init(text: t))
                 }
                 // the token match
@@ -516,8 +516,8 @@ public class MDParser {
             
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))!)
-            if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.characters.count)!)
+            if t.characters.count > 0 {
                 tokens.append(ContentNode.init(text: t))
             }
         }

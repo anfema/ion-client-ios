@@ -66,7 +66,7 @@ extension NSRegularExpression {
                 }
                 // text from last match to this match
                 let t = string.substringWithRange(string.range(lastSplitPoint, end:match.range.location)!)
-                if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+                if t.characters.count > 0 {
                     callback(token: t, match: false)
                 }
                 // the token match
@@ -75,15 +75,15 @@ extension NSRegularExpression {
 
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))!)
-            if t.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.characters.count)!)
+            if t.characters.count > 0 {
                 callback(token: t, match: false)
             }
         }
     }
     
     func tokenizeString(string: String, callback:((token: String, match: Bool) -> Void)) {
-        let fullString = NSMakeRange(0, string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        let fullString = NSMakeRange(0, string.characters.count)
         self.tokenizeString(string, options: [], range: fullString, callback: callback)
     }
 }
