@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Markdown"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "Markdown parser in swift."
   s.description  = <<-DESC
                    Markdown parser in swift.
@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-1.0.0" }
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-1.0.1" }
   s.source_files  = "Markdown/src/*.swift"  
 end
