@@ -134,12 +134,13 @@ public class AMPCollection {
 
     /// internal lock for errorhandler
     internal var parentLock = NSLock()
-    
+
+    /// work queue
+    internal var workQueue: dispatch_queue_t
+
     /// set to false to avoid using the cache (refreshes, etc.)
     private var useCache = true
 
-    /// work queue
-    private var workQueue: dispatch_queue_t
     
 
     // MARK: - Initializer

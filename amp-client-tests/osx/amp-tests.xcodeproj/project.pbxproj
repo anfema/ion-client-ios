@@ -60,6 +60,10 @@
 		8F78B3811BF36428009D4B67 /* HashExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37C1BF36428009D4B67 /* HashExtensions.framework */; };
 		8F78B3821BF36428009D4B67 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37D1BF36428009D4B67 /* Markdown.framework */; };
 		8F78B3831BF36428009D4B67 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37E1BF36428009D4B67 /* Pods.framework */; };
+		8FAD5CC51BF4EFFA000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC41BF4EFFA000C3119 /* fts.swift */; };
+		8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC71BF4F019000C3119 /* fts.swift */; };
+		8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
+		8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		DAC40154329D6BB7227667DF /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C5F81A940CAE21C579A116 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -154,6 +158,10 @@
 		8F78B37C1BF36428009D4B67 /* HashExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HashExtensions.framework; path = "Pods/../build/Debug-iphoneos/HashExtensions.framework"; sourceTree = "<group>"; };
 		8F78B37D1BF36428009D4B67 /* Markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Markdown.framework; path = "Pods/../build/Debug-iphoneos/Markdown.framework"; sourceTree = "<group>"; };
 		8F78B37E1BF36428009D4B67 /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
+		8FAD5CC41BF4EFFA000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
+		8FAD5CC71BF4F019000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
+		8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		8FAD5CD11BF503B2000C3119 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		B3F9CD87D65234B2DDB8B50D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */,
 				8F78B2E61BF36392009D4B67 /* amp_client.framework in Frameworks */,
 				DAC40154329D6BB7227667DF /* Pods.framework in Frameworks */,
 			);
@@ -178,6 +187,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */,
 				8F78B37F1BF36428009D4B67 /* Alamofire.framework in Frameworks */,
 				8F78B3801BF36428009D4B67 /* DEjson.framework in Frameworks */,
 				8F78B3811BF36428009D4B67 /* HashExtensions.framework in Frameworks */,
@@ -192,6 +202,7 @@
 		000E41D712322764CEB95A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */,
 				8F78B37A1BF36428009D4B67 /* Alamofire.framework */,
 				8F78B37B1BF36428009D4B67 /* DEjson.framework */,
 				8F78B37C1BF36428009D4B67 /* HashExtensions.framework */,
@@ -249,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				8F78B3491BF36405009D4B67 /* Info.plist */,
+				8FAD5CC61BF4F00D000C3119 /* search */,
 				8F78B34A1BF36411009D4B67 /* collection */,
 				8F78B34C1BF36411009D4B67 /* config.swift */,
 				8F78B34D1BF36411009D4B67 /* content */,
@@ -263,6 +275,7 @@
 			children = (
 				8F78B2E11BF36392009D4B67 /* amp_client.h */,
 				8F78B2E31BF36392009D4B67 /* Info.plist */,
+				8FAD5CC31BF4EFE4000C3119 /* search */,
 				8F78B2EC1BF363AA009D4B67 /* cache */,
 				8F78B2EE1BF363AA009D4B67 /* communication */,
 				8F78B2F11BF363AA009D4B67 /* helper */,
@@ -382,6 +395,25 @@
 			);
 			name = page;
 			path = ../../tests/page;
+			sourceTree = "<group>";
+		};
+		8FAD5CC31BF4EFE4000C3119 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				8FAD5CC41BF4EFFA000C3119 /* fts.swift */,
+				8FAD5CD11BF503B2000C3119 /* module.modulemap */,
+			);
+			name = search;
+			path = "../../amp-client/search";
+			sourceTree = "<group>";
+		};
+		8FAD5CC61BF4F00D000C3119 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				8FAD5CC71BF4F019000C3119 /* fts.swift */,
+			);
+			name = search;
+			path = ../../tests/search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -594,6 +626,7 @@
 				8F78B3731BF36411009D4B67 /* auto_cache_invalidation.swift in Sources */,
 				8F78B3781BF36411009D4B67 /* page.swift in Sources */,
 				8F78B3701BF36411009D4B67 /* option.swift in Sources */,
+				8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */,
 				8F78B3771BF36411009D4B67 /* memcache.swift in Sources */,
 				8F78B3681BF36411009D4B67 /* container.swift in Sources */,
 				8F78B3741BF36411009D4B67 /* diskcache.swift in Sources */,
@@ -628,6 +661,7 @@
 				8F78B3111BF363AA009D4B67 /* image.swift in Sources */,
 				8F78B3131BF363AA009D4B67 /* media.swift in Sources */,
 				8F78B3101BF363AA009D4B67 /* flag.swift in Sources */,
+				8FAD5CC51BF4EFFA000C3119 /* fts.swift in Sources */,
 				8F78B3121BF363AA009D4B67 /* keyvalue.swift in Sources */,
 				8F78B3171BF363AA009D4B67 /* error.swift in Sources */,
 				8F78B30C1BF363AA009D4B67 /* container.swift in Sources */,
@@ -804,6 +838,7 @@
 		8F78B2E91BF36392009D4B67 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -815,9 +850,13 @@
 				INFOPLIST_FILE = amp_client/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -826,6 +865,7 @@
 		8F78B2EA1BF36392009D4B67 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -837,9 +877,12 @@
 				INFOPLIST_FILE = amp_client/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

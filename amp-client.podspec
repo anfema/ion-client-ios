@@ -20,10 +20,11 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.10"
 
   s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "client-1.0.1" }
-  s.source_files  = "amp-client/cache/*.swift", "amp-client/communication/*.swift", "amp-client/helper/*.swift", "amp-client/model/**/*.swift"
+  s.source_files  = "amp-client/cache/*.swift", "amp-client/communication/*.swift", "amp-client/helper/*.swift", "amp-client/model/**/*.swift", "amp-client/search/*.swift"
   
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions"
-  
+  s.libraries  = "sqlite3"
+
   s.dependency "Alamofire", "~> 3.0"
   s.dependency "DEjson", "~> 1.0"
   s.dependency "Markdown", "~> 1.0"
