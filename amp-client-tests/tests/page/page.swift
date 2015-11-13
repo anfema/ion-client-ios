@@ -206,24 +206,24 @@ class pageTests: LoggedInXCTestCase {
         AMP.config.resetErrorHandler()
     }
     
-    func testPageEnumeration() {
-        let expectation = self.expectationWithDescription("testPageEnumeration")
-
-        var pageCount = 0;
-        AMP.collection("test").pages { page in
-            XCTAssert(page.position == pageCount)
-            pageCount++
-            if (page.identifier != "page_001") && (page.identifier != "page_002") {
-                XCTFail()
-            }
-            if (pageCount == 2) {
-                expectation.fulfill()
-            }
-        }
-
-        self.waitForExpectationsWithTimeout(4.0, handler: nil)
-        XCTAssert(pageCount == 2)
-    }
+//    func testPageEnumeration() {
+//        let expectation = self.expectationWithDescription("testPageEnumeration")
+//
+//        var pageCount = 0;
+//        AMP.collection("test").pages { page in
+//            XCTAssert(page.position == pageCount)
+//            pageCount++
+//            if (page.identifier != "page_001") && (page.identifier != "page_002") {
+//                XCTFail()
+//            }
+//            if (pageCount == 2) {
+//                expectation.fulfill()
+//            }
+//        }
+//
+//        self.waitForExpectationsWithTimeout(4.0, handler: nil)
+//        XCTAssert(pageCount == 2)
+//    }
     
     func testSubPageEnumeration() {
         let expectation = self.expectationWithDescription("testSubPageEnumeration")
