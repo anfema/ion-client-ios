@@ -137,8 +137,10 @@ public class AMP {
                 if cachedObject.hasFailed {
                     self.callError(identifier, error: .CollectionNotFound(identifier))
                 } else {
-                    dispatch_async(self.config.responseQueue) {
-                        callback(cachedObject)
+                    dispatch_async(cachedObject.workQueue) {
+                        dispatch_async(self.config.responseQueue) {
+                            callback(cachedObject)
+                        }
                     }
                 }
                 return cachedObject

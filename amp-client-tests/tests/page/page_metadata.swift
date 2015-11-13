@@ -80,6 +80,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         
         AMP.collection("test").metadataList(nil) { list in
             XCTAssert(list.count == 2)
+            XCTAssert(list[0].position == 0)
+            XCTAssert(list[0].identifier == "page_001")
+            XCTAssert(list[1].position == 1)
+            XCTAssert(list[1].identifier == "page_002")
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)

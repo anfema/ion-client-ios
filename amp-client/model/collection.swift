@@ -40,11 +40,14 @@ public class AMPPageMeta: CanLoadImage {
     /// thumbnail URL if available, if you want the UIImage use convenience functions below
     public var thumbnail:String?
     
+    /// page position
+    public var position: Int!
+    
     /// Init metadata from JSON object
     ///
     /// - Parameter json: serialized JSON object of page metadata
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
-    internal init(json: JSONObject) throws {
+    internal init(json: JSONObject, position: Int) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw AMPError.JSONObjectExpected(json)
         }
@@ -77,6 +80,7 @@ public class AMPPageMeta: CanLoadImage {
         self.lastChanged = lc
         self.identifier  = identifier
         self.layout = layout
+        self.position = position
         
         if (dict["title"]  != nil) {
             if case .JSONString(let title) = dict["title"]! {
@@ -140,7 +144,6 @@ public class AMPCollection {
 
     /// set to false to avoid using the cache (refreshes, etc.)
     private var useCache = true
-
     
 
     // MARK: - Initializer
@@ -212,6 +215,7 @@ public class AMPCollection {
                         return
                     }
                     self.cachePage(AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                        page.position = meta.position
                         callback(page)
                         })
                 }
@@ -257,6 +261,7 @@ public class AMPCollection {
                     return
                 }
                 self.cachePage(AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                    page.position = meta.position
                     callback(page)
                 })
             }
@@ -289,14 +294,17 @@ public class AMPCollection {
             // search metadata
             var layout: String? = nil
             var parent: String? = nil
+            var position: Int = 0
             if let meta = self.getPageMetaForPage(identifier) {
                 layout = meta.layout
                 parent = meta.parent
+                position = meta.position
             }
             
             // not cached, fetch from web and add it to the cache
             let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: true, parent: parent) { page in
             }
+            page.position = position
             self.cachePage(page)
             return page
         }
@@ -413,6 +421,9 @@ public class AMPCollection {
                     self.callErrorHandler(.CollectionNotFound(self.identifier))
                 }
             } else {
+                result.sortInPlace({ (page1, page2) -> Bool in
+                    return page1.position < page2.position
+                })
                 dispatch_async(AMP.config.responseQueue) {
                     callback(result)
                 }
@@ -440,10 +451,18 @@ public class AMPCollection {
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
         dispatch_async(self.workQueue) {
             var result:[String] = []
+            
+            var temp:[AMPPageMeta] = []
             for meta in self.pageMeta {
                 if meta.parent == parent {
-                    result.append(meta.identifier)
+                    temp.append(meta)
                 }
+            }
+            temp.sortInPlace({ (page1, page2) -> Bool in
+                return page1.position < page2.position
+            })
+            for item in temp {
+                result.append(item.identifier)
             }
             dispatch_async(AMP.config.responseQueue) {
                 callback(result)
@@ -525,7 +544,17 @@ public class AMPCollection {
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
-                        let obj = try AMPPageMeta(json: page)
+                        let obj = try AMPPageMeta(json: page, position: 0)
+
+                        // find max position for current parent
+                        var position = -1
+                        for page in self.pageMeta {
+                            if page.parent == obj.parent && page.position > position {
+                                position = page.position
+                            }
+                        }
+                        obj.position = position + 1
+
                         self.pageMeta.append(obj)
                     } catch {
                         if let json = JSONEncoder(page).prettyJSONString {
