@@ -236,6 +236,18 @@ class pageTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    func testSubPageList() {
+        let expectation = self.expectationWithDescription("testSubPageList")
+        
+        AMP.collection("test").page("page_002").childrenList { list in
+            XCTAssert(list.count == 1)
+            XCTAssert(list[0].identifier == "subpage_001")
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
     func testOutletExists() {
         let expectation = self.expectationWithDescription("testOutletExists")
         
