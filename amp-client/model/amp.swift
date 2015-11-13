@@ -39,10 +39,16 @@ public struct AMPConfig {
     public var cacheTimeout: NSTimeInterval = 600
     
     /// styling for attributed string conversion of markdown text
-    public var stringStyling: AttributedStringStyling
+    public var stringStyling = AttributedStringStyling()
     
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     let alamofire: Alamofire.Manager
+    
+    /// update detected blocks
+    var updateBlocks: [String:(String -> Void)]
+    
+    /// full text search settings
+    private var ftsEnabled:[String:Bool]
     
     /// only the AMP class may init this
     internal init() {
@@ -51,10 +57,60 @@ public struct AMPConfig {
         configuration.HTTPCookieAcceptPolicy = .Never
         configuration.HTTPShouldSetCookies = false
         
-        self.stringStyling = AttributedStringStyling()
-        
+        self.updateBlocks = Dictionary<String, (String -> Void)>()
         self.alamofire = Alamofire.Manager(configuration: configuration)
+        self.ftsEnabled = [String:Bool]()
         self.resetErrorHandler()
+        
+        self.registerUpdateBlock("fts") { collectionIdentifier in
+            if AMP.config.isFTSEnabled(collectionIdentifier) {
+                AMP.downloadFTSDB(collectionIdentifier)
+            }
+        }
+    }
+    
+    /// Register block to be called if something changed in a collection
+    ///
+    /// - parameter identifier: block identifier
+    /// - parameter block:      block to call
+    public mutating func registerUpdateBlock(identifier: String, block: (String -> Void)) {
+        self.updateBlocks[identifier] = block
+    }
+    
+    /// De-Register update notification block
+    ///
+    /// - parameter identifier: block identifier
+    public mutating func removeUpdateBlock(identifier: String) {
+        self.updateBlocks.removeValueForKey(identifier)
+    }
+
+    /// Enable Full text search for a collection (fetches additional data from server)
+    ///
+    /// - parameter collection: collection identifier
+    public mutating func enableFTS(collection: String) {
+        self.ftsEnabled[collection] = true
+        if !NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(collection)) {
+            AMP.downloadFTSDB(collection)
+        }
+    }
+    
+    /// Disable Full text search for a collection
+    ///
+    /// - parameter collection: collection identifier
+    public mutating func disableFTS(collection: String) {
+        self.ftsEnabled[collection] = false
+    }
+    
+    /// Check if full text search is enabled for a collection
+    ///
+    /// - parameter collection: collection identifier
+    ///
+    /// - returns: true if fts is enabled
+    public func isFTSEnabled(collection: String) -> Bool {
+        if let enabled = self.ftsEnabled[collection] {
+            return enabled
+        }
+        return false
     }
     
     /// Reset the error handler to the default logging handler
@@ -114,12 +170,19 @@ public class AMP {
     /// - Parameter identifier: the identifier of the collection
     /// - Returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
+        let cachedCollection = self.collectionCache[identifier]
         if !self.hasCacheTimedOut() {
-            if let cachedObject = self.collectionCache[identifier] {
-                return cachedObject
+            if let cachedCollection = cachedCollection {
+                return cachedCollection
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(), callback: nil)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut()) { collection in
+            guard let cachedCollection = cachedCollection else {
+                return
+            }
+
+            self.notifyForUpdates(collection, collection2: cachedCollection)
+        }
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
@@ -132,21 +195,30 @@ public class AMP {
     /// - Parameter callback: the block to call when the collection is fully initialized
     /// - Returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
+        let cachedCollection = self.collectionCache[identifier]
+
         if !self.hasCacheTimedOut() {
-            if let cachedObject = self.collectionCache[identifier] {
-                if cachedObject.hasFailed {
+            if let cachedCollection = cachedCollection {
+                if cachedCollection.hasFailed {
                     self.callError(identifier, error: .CollectionNotFound(identifier))
                 } else {
-                    dispatch_async(cachedObject.workQueue) {
+                    dispatch_async(cachedCollection.workQueue) {
                         dispatch_async(self.config.responseQueue) {
-                            callback(cachedObject)
+                            callback(cachedCollection)
                         }
                     }
                 }
-                return cachedObject
+                return cachedCollection
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(), callback:callback)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut()) { collection in
+            callback(collection)
+            
+            guard let cachedCollection = cachedCollection else {
+                return
+            }
+            self.notifyForUpdates(collection, collection2: cachedCollection)
+        }
         if self.hasCacheTimedOut() {
             self.config.lastOnlineUpdate = NSDate()
         }
@@ -242,6 +314,44 @@ public class AMP {
             timeout = true
         }
         return timeout
+    }
+    
+    /// Call all update notification blocks
+    ///
+    /// - parameter collectionIdentifier: collection id to send to update block
+    private class func callUpdateBlocks(collectionIdentifier: String) {
+        for block in AMP.config.updateBlocks.values {
+            dispatch_async(AMP.config.responseQueue) {
+                block(collectionIdentifier)
+            }
+        }
+    }
+    
+    /// Check if collection changed and send change notifications
+    ///
+    /// - parameter collection1: first collection
+    /// - parameter collection2: second collection
+    private class func notifyForUpdates(collection1: AMPCollection, collection2: AMPCollection) {
+        var collectionChanged = false
+        
+        // compare metadata count
+        if (collection1.pageMeta.count != collection2.pageMeta.count) {
+            collectionChanged = true
+        } else {
+            // compare old collection and new collection page change dates and identifiers
+            for i in 0..<collection1.pageMeta.count {
+                let c1 = collection1.pageMeta[i]
+                let c2 = collection2.pageMeta[i]
+                if c1.identifier != c2.identifier || c1.lastChanged.compare(c2.lastChanged) != .OrderedSame {
+                    collectionChanged = true
+                    break
+                }
+            }
+        }
+        if collectionChanged {
+            // call change blocks
+            AMP.callUpdateBlocks(collection1.identifier)
+        }
     }
     
     /// Init is private because only class functions should be used

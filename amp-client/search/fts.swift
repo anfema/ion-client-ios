@@ -50,10 +50,6 @@ public class AMPSearchHandle {
     private var stmt: COpaquePointer = nil
     public let collection: AMPCollection
     
-    private func searchIndex() -> String {
-        return "/Users/johannes/Code/amp/amp/project_template/media/fts_db.sqlite3"
-    }
-
     private func fixSearchTerm(text: String) -> String {
         if text.rangeOfString("\"") != nil {
             return text
@@ -67,7 +63,7 @@ public class AMPSearchHandle {
     internal init?(collection: AMPCollection) {
         self.collection = collection
 
-        guard sqlite3_open_v2(self.searchIndex(), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard sqlite3_open_v2(AMP.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return nil
         }
         
@@ -119,6 +115,49 @@ public extension AMPCollection {
         dispatch_async(self.workQueue) {
             if let handle = AMPSearchHandle(collection: self) {
                 callback(handle)
+            }
+        }
+    }
+}
+
+internal extension AMP {
+
+    internal class func searchIndex(collection: String) -> String {
+        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/fts-\(collection).sqlite3")
+        return fileURL.path!
+    }
+
+    internal class func downloadFTSDB(collection: String) {
+        AMP.collection(collection) { c in
+            dispatch_barrier_async(c.workQueue) {
+                let sema = dispatch_semaphore_create(0)
+                
+                var url:String = AMP.config.serverURL.absoluteString
+                // TODO: Make fts db collection specific
+                url = url.stringByReplacingOccurrencesOfString("client/v1/", withString: "protected_media/fts_db.sqlite3")
+                AMPRequest.fetchBinary(url, queryParameters: nil, cached: false, checksumMethod:"null", checksum: "") { result in
+                    defer {
+                        dispatch_semaphore_signal(sema)
+                    }
+                    guard case .Success(let filename) = result else {
+                        return
+                    }
+                    if NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(collection)) {
+                        do {
+                            try NSFileManager.defaultManager().removeItemAtPath(AMP.searchIndex(collection))
+                        } catch {
+                            print("AMP: Could not remove FTS db at '\(AMP.searchIndex(collection))'")
+                        }
+                    }
+                    do {
+                        try NSFileManager.defaultManager().moveItemAtPath(filename, toPath: AMP.searchIndex(collection))
+                    } catch {
+                        print("AMP: Could not save FTS db at '\(AMP.searchIndex(collection))'")
+                    }
+                }
+                
+                dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
             }
         }
     }

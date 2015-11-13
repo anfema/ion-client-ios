@@ -16,6 +16,7 @@ class ftsTests: LoggedInXCTestCase {
     
     override func setUp() {
         super.setUp()
+        AMP.config.enableFTS("test")
     }
     
     override func tearDown() {
@@ -31,7 +32,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
     
     func testCollectionSearchExclusion() {
@@ -43,7 +44,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
     func testCollectionStatement() {
@@ -55,7 +56,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
     func testCollectionPhrase() {
@@ -67,7 +68,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
 }
