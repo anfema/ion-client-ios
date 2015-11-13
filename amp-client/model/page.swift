@@ -41,6 +41,9 @@ public class AMPPage {
     /// content list
     public var content = [AMPContent]()
 
+    /// page position
+    public var position: Int = 0
+    
     /// page has loaded
     internal var isReady = false
 
@@ -424,6 +427,7 @@ class ErrorHandlingAMPPage: AMPPage {
             self.lastUpdate = page.lastUpdate
             self.layout = page.layout
             self.content = page.content
+            self.position = page.position
             page.parentLock.unlock()
         }
     }

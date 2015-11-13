@@ -32,10 +32,30 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(page.identifier == "page_001")
             XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
-        }.onError() { error in
-            XCTFail()
-            expectation.fulfill()
         }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testPagePositionSync() {
+        let expectation1 = self.expectationWithDescription("testPagePositionSync 1")
+        let expectation2 = self.expectationWithDescription("testPagePositionSync 2")
+        
+        AMP.collection("test") { collection in
+            let page = collection.page("page_001")
+            XCTAssertNotNil(page)
+            XCTAssert(page.identifier == "page_001")
+            XCTAssert(page.position == 0)
+            expectation1.fulfill()
+        }
+
+        AMP.collection("test") { collection in
+            let page = collection.page("page_002")
+            XCTAssertNotNil(page)
+            XCTAssert(page.identifier == "page_002")
+            XCTAssert(page.position == 1)
+            expectation2.fulfill()
+        }
+
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -50,6 +70,27 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(page.identifier == "page_001")
             XCTAssert(page.layout == "Layout 001")
             expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testPagePositionAsync() {
+        let expectation1 = self.expectationWithDescription("testPagePositionAync 1")
+        let expectation2 = self.expectationWithDescription("testPagePositionAync 2")
+        
+        AMP.collection("test").page("page_001") { page in
+            XCTAssertNotNil(page)
+            XCTAssert(page.identifier == "page_001")
+            XCTAssert(page.position == 0)
+            expectation1.fulfill()
+        }
+        
+        AMP.collection("test").page("page_002") { page in
+            XCTAssertNotNil(page)
+            XCTAssert(page.identifier == "page_002")
+            XCTAssert(page.position == 1)
+            expectation2.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
