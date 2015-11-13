@@ -180,7 +180,21 @@ public class AMPPage {
             }
         }
     }
-    
+
+    /// list page children
+    ///
+    /// - Parameter callback: the callback to call for children list
+    public func childrenList(callback: ([AMPPage] -> Void)) {
+        self.collection.getChildIdentifiersForPage(self.identifier) { children in
+            var result = [AMPPage]()
+            for child in children {
+                let page = self.collection.page(child)
+                result.append(page)
+            }
+            callback(result)
+        }
+    }
+
     
     /// override default error callback to bubble error up to collection
     internal func callErrorHandler(error: AMPError) {
