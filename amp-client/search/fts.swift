@@ -112,9 +112,22 @@ public class AMPSearchHandle {
 
 public extension AMPCollection {
     public func getSearchHandle(callback: (AMPSearchHandle -> Void)) {
-        dispatch_async(self.workQueue) {
-            if let handle = AMPSearchHandle(collection: self) {
-                callback(handle)
+        guard AMP.config.isFTSEnabled(self.identifier) else {
+            return
+        }
+        if !NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(self.identifier)) {
+            AMP.downloadFTSDB(self.identifier) {
+                dispatch_async(self.workQueue) {
+                    if let handle = AMPSearchHandle(collection: self) {
+                        callback(handle)
+                    }
+                }
+            }
+        } else {
+            dispatch_async(self.workQueue) {
+                if let handle = AMPSearchHandle(collection: self) {
+                    callback(handle)
+                }
             }
         }
     }
@@ -128,7 +141,7 @@ internal extension AMP {
         return fileURL.path!
     }
 
-    internal class func downloadFTSDB(collection: String) {
+    internal class func downloadFTSDB(collection: String, callback:(Void -> Void)? = nil) {
         AMP.collection(collection) { c in
             dispatch_barrier_async(c.workQueue) {
                 let sema = dispatch_semaphore_create(0)
@@ -158,6 +171,9 @@ internal extension AMP {
                 }
                 
                 dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
+                if callback != nil {
+                    callback!()
+                }
             }
         }
     }
