@@ -211,6 +211,7 @@ class pageTests: LoggedInXCTestCase {
 
         var pageCount = 0;
         AMP.collection("test").pages { page in
+            XCTAssert(page.position == pageCount)
             pageCount++
             if (page.identifier != "page_001") && (page.identifier != "page_002") {
                 XCTFail()

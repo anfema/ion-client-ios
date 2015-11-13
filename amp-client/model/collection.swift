@@ -451,10 +451,18 @@ public class AMPCollection {
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
         dispatch_async(self.workQueue) {
             var result:[String] = []
+            
+            var temp:[AMPPageMeta] = []
             for meta in self.pageMeta {
                 if meta.parent == parent {
-                    result.append(meta.identifier)
+                    temp.append(meta)
                 }
+            }
+            temp.sortInPlace({ (page1, page2) -> Bool in
+                return page1.position < page2.position
+            })
+            for item in temp {
+                result.append(item.identifier)
             }
             dispatch_async(AMP.config.responseQueue) {
                 callback(result)
