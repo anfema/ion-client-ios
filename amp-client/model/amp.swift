@@ -13,113 +13,6 @@ import Foundation
 import Alamofire
 import Markdown
 
-/// AMP configuration object
-///
-/// access with `AMP.config`
-public struct AMPConfig {
-    /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
-    public var serverURL:NSURL!
-    
-    /// locale-code to work on, defined by server config
-    public var locale:String = "en_EN"
-    
-    /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
-    public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
-    
-    /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
-    public var errorHandler:((String, AMPError) -> Void)!
-    
-    /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
-    public var sessionToken:String?
-    
-    /// last collection fetch
-    public var lastOnlineUpdate: NSDate?
-    
-    /// collection cache timeout
-    public var cacheTimeout: NSTimeInterval = 600
-    
-    /// styling for attributed string conversion of markdown text
-    public var stringStyling = AttributedStringStyling()
-    
-    /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    let alamofire: Alamofire.Manager
-    
-    /// update detected blocks
-    var updateBlocks: [String:(String -> Void)]
-    
-    /// full text search settings
-    private var ftsEnabled:[String:Bool]
-    
-    /// only the AMP class may init this
-    internal init() {
-        let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
-        configuration.HTTPCookieAcceptPolicy = .Never
-        configuration.HTTPShouldSetCookies = false
-        
-        self.updateBlocks = Dictionary<String, (String -> Void)>()
-        self.alamofire = Alamofire.Manager(configuration: configuration)
-        self.ftsEnabled = [String:Bool]()
-        self.resetErrorHandler()
-        
-        self.registerUpdateBlock("fts") { collectionIdentifier in
-            if AMP.config.isFTSEnabled(collectionIdentifier) {
-                AMP.downloadFTSDB(collectionIdentifier)
-            }
-        }
-    }
-    
-    /// Register block to be called if something changed in a collection
-    ///
-    /// - parameter identifier: block identifier
-    /// - parameter block:      block to call
-    public mutating func registerUpdateBlock(identifier: String, block: (String -> Void)) {
-        self.updateBlocks[identifier] = block
-    }
-    
-    /// De-Register update notification block
-    ///
-    /// - parameter identifier: block identifier
-    public mutating func removeUpdateBlock(identifier: String) {
-        self.updateBlocks.removeValueForKey(identifier)
-    }
-
-    /// Enable Full text search for a collection (fetches additional data from server)
-    ///
-    /// - parameter collection: collection identifier
-    public mutating func enableFTS(collection: String) {
-        self.ftsEnabled[collection] = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(collection)) {
-            AMP.downloadFTSDB(collection)
-        }
-    }
-    
-    /// Disable Full text search for a collection
-    ///
-    /// - parameter collection: collection identifier
-    public mutating func disableFTS(collection: String) {
-        self.ftsEnabled[collection] = false
-    }
-    
-    /// Check if full text search is enabled for a collection
-    ///
-    /// - parameter collection: collection identifier
-    ///
-    /// - returns: true if fts is enabled
-    public func isFTSEnabled(collection: String) -> Bool {
-        if let enabled = self.ftsEnabled[collection] {
-            return enabled
-        }
-        return false
-    }
-    
-    /// Reset the error handler to the default logging handler
-    public mutating func resetErrorHandler() {
-        self.errorHandler = { (collection, error) in
-            print("AMP unhandled error in collection '\(collection)': \(error)")
-        }
-    }
-}
 
 /// AMP base class, use all AMP functionality by using this object's class methods
 public class AMP {
@@ -224,6 +117,8 @@ public class AMP {
         }
         return newCollection
     }
+    
+    // MARK: - Internal
 
     /// Error handler
     ///
@@ -235,61 +130,6 @@ public class AMP {
         }
     }
 
-    
-    /// Clear memory cache
-    ///
-    /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
-    /// cache and have a parsing and initialization penalty on next call.
-    public class func resetMemCache() {
-        // FIXME: collection needs resetMemCache()
-        for collection in self.collectionCache.values {
-            collection.pageCache.removeAll()
-        }
-        self.collectionCache.removeAll()
-    }
-    
-    /// Clear disk cache
-    ///
-    /// Removes all cached requests and files for the configured server, does not affect memory cache so be careful
-    public class func resetDiskCache() {
-        self.config.lastOnlineUpdate = nil
-        AMPRequest.resetCache(self.config.serverURL!.host!, locale:self.config.locale)
-    }
-    
-    /// Clear disk cache for specific host and current locale
-    ///
-    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - Parameter host: a hostname to empty the cache for
-    // TODO: Write test for resetDiskCache(host:)
-    public class func resetDiskCache(host host:String) {
-        self.config.lastOnlineUpdate = nil
-        AMPRequest.resetCache(host)
-    }
-
-    /// Clear disk cache for specific host and locale
-    ///
-    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - Parameter host: a hostname to empty the cache for
-    /// - Parameter locale: the locale to reset
-    // TODO: Write test for resetDiskCache(host:locale:)
-    public class func resetDiskCache(host host:String, locale:String) {
-        self.config.lastOnlineUpdate = nil
-        AMPRequest.resetCache(host, locale:locale)
-    }
-
-    /// Clear disk cache for specific locale and all hosts
-    ///
-    /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
-    /// - Parameter locale: a locale code to empty the cache for
-    // TODO: Write test for resetDiskCache(locale:)
-    public class func resetDiskCache(locale locale: String) {
-        self.config.lastOnlineUpdate = nil
-        AMPRequest.resetCache(locale: locale)
-    }
-    
-    
-    // MARK: - Internal
-    
     /// Downloader calls this function to register a progress item with the global progress toolbar
     ///
     /// - Parameter progressObject: NSProgress of the download
@@ -299,22 +139,6 @@ public class AMP {
     }
     
     // MARK: - Private
-    
-    /// Determine if collection cache has timed out
-    ///
-    /// - Returns: true if cache is old
-    private class func hasCacheTimedOut() -> Bool {
-        var timeout = false
-        if let lastUpdate = self.config.lastOnlineUpdate {
-            let currentDate = NSDate()
-            if lastUpdate.dateByAddingTimeInterval(self.config.cacheTimeout).compare(currentDate) == NSComparisonResult.OrderedAscending {
-                timeout = true
-            }
-        } else {
-            timeout = true
-        }
-        return timeout
-    }
     
     /// Call all update notification blocks
     ///
