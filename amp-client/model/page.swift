@@ -116,19 +116,7 @@ public class AMPPage {
         self.collection.pageCache[identifier] = self
     }
 
-    private init(forErrorHandlerWithCollection collection: AMPCollection, identifier: String, locale: String) {
-        self.locale = locale
-        self.useCache = true
-        self.collection = collection
-        self.identifier = identifier
-        self.layout = ""
-        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).withErrorHandler.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
-        
-        // FIXME: How to remove this from the collection cache again?
-        self.collection.pageCache[identifier + "-" + NSUUID().UUIDString] = self
-    }
-
-    // MARK: Async API
+    // MARK: - API
     
     /// Error handler to chain to the page
     ///
@@ -137,64 +125,6 @@ public class AMPPage {
     public func onError(callback: (AMPError -> Void)) -> AMPPage {
         return ErrorHandlingAMPPage(page: self, errorHandler: callback)
     }
-
-    /// fetch page children
-    ///
-    /// - Parameter identifier: identifier of child page
-    /// - Parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
-    /// - Returns: self, to be able to chain more actions to the page
-    public func child(identifier: String, callback: (AMPPage -> Void)) -> AMPPage {
-        self.collection.page(identifier) { page in
-            if page.parent == self.identifier {
-                callback(page)
-            } else {
-                self.callErrorHandler(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
-            }
-        }
-        
-        return self
-    }
-
-    /// fetch page children
-    ///
-    /// - Parameter identifier: identifier of child page
-    /// - Returns: page object that resolves async or nil if page not child of self
-    public func child(identifier: String) -> AMPPage? {
-        let page = self.collection.page(identifier)
-        
-        if page.parent == self.identifier {
-            return page
-        }
-        self.callErrorHandler(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
-        return nil
-    }
-    
-    
-    /// enumerate page children
-    ///
-    /// - Parameter callback: the callback to call for each child
-    public func children(callback: (AMPPage -> Void)) {
-        self.collection.getChildIdentifiersForPage(self.identifier) { children in
-            for child in children {
-                self.child(child, callback: callback)
-            }
-        }
-    }
-
-    /// list page children
-    ///
-    /// - Parameter callback: the callback to call for children list
-    public func childrenList(callback: ([AMPPage] -> Void)) {
-        self.collection.getChildIdentifiersForPage(self.identifier) { children in
-            var result = [AMPPage]()
-            for child in children {
-                let page = self.collection.page(child)
-                result.append(page)
-            }
-            callback(result)
-        }
-    }
-
     
     /// override default error callback to bubble error up to collection
     internal func callErrorHandler(error: AMPError) {
@@ -304,6 +234,18 @@ public class AMPPage {
     
     // MARK: Private
     
+    private init(forErrorHandlerWithCollection collection: AMPCollection, identifier: String, locale: String) {
+        self.locale = locale
+        self.useCache = true
+        self.collection = collection
+        self.identifier = identifier
+        self.layout = ""
+        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).withErrorHandler.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        
+        // FIXME: How to remove this from the collection cache again?
+        self.collection.pageCache[identifier + "-" + NSUUID().UUIDString] = self
+    }
+
     /// Fetch page from cache or web
     ///
     /// - Parameter identifier: page identifier to get
@@ -409,21 +351,6 @@ public class AMPPage {
     }
 }
 
-extension AMPPage: CustomStringConvertible {
-    public var description: String {
-        return "AMPPage: \(identifier), \(content.count) content items"
-    }
-}
-
-public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
-    return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
-}
-
-extension AMPPage: Hashable {
-    public var hashValue: Int {
-        return self.collection.hashValue + self.identifier.hashValue
-    }
-}
 
 class ErrorHandlingAMPPage: AMPPage {
     private var errorHandler: (AMPError -> Void)
