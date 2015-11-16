@@ -60,7 +60,7 @@
 		8F78B3811BF36428009D4B67 /* HashExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37C1BF36428009D4B67 /* HashExtensions.framework */; };
 		8F78B3821BF36428009D4B67 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37D1BF36428009D4B67 /* Markdown.framework */; };
 		8F78B3831BF36428009D4B67 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37E1BF36428009D4B67 /* Pods.framework */; };
-		8FAD5CC51BF4EFFA000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC41BF4EFFA000C3119 /* fts.swift */; };
+		8FAD5CC51BF4EFFA000C3119 /* search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC41BF4EFFA000C3119 /* search.swift */; };
 		8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC71BF4F019000C3119 /* fts.swift */; };
 		8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
@@ -71,6 +71,8 @@
 		8FF9DB791BF9E5CC00935748 /* page+children.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB781BF9E5CC00935748 /* page+children.swift */; };
 		8FF9DB7D1BF9E7D600935748 /* amp+cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7C1BF9E7D600935748 /* amp+cache.swift */; };
 		8FF9DB7F1BF9E7EA00935748 /* ampconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7E1BF9E7EA00935748 /* ampconfig.swift */; };
+		8FF9DB811BF9EDD000935748 /* amp+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB801BF9EDD000935748 /* amp+search.swift */; };
+		8FF9DB831BF9EDDD00935748 /* collection+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB821BF9EDDD00935748 /* collection+search.swift */; };
 		DAC40154329D6BB7227667DF /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C5F81A940CAE21C579A116 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -165,7 +167,7 @@
 		8F78B37C1BF36428009D4B67 /* HashExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HashExtensions.framework; path = "Pods/../build/Debug-iphoneos/HashExtensions.framework"; sourceTree = "<group>"; };
 		8F78B37D1BF36428009D4B67 /* Markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Markdown.framework; path = "Pods/../build/Debug-iphoneos/Markdown.framework"; sourceTree = "<group>"; };
 		8F78B37E1BF36428009D4B67 /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
-		8FAD5CC41BF4EFFA000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
+		8FAD5CC41BF4EFFA000C3119 /* search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
 		8FAD5CC71BF4F019000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
 		8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8FAD5CD11BF503B2000C3119 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -176,6 +178,8 @@
 		8FF9DB781BF9E5CC00935748 /* page+children.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "page+children.swift"; sourceTree = "<group>"; };
 		8FF9DB7C1BF9E7D600935748 /* amp+cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "amp+cache.swift"; sourceTree = "<group>"; };
 		8FF9DB7E1BF9E7EA00935748 /* ampconfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ampconfig.swift; sourceTree = "<group>"; };
+		8FF9DB801BF9EDD000935748 /* amp+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "amp+search.swift"; sourceTree = "<group>"; };
+		8FF9DB821BF9EDDD00935748 /* collection+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
 		B3F9CD87D65234B2DDB8B50D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -414,8 +418,10 @@
 		8FAD5CC31BF4EFE4000C3119 /* search */ = {
 			isa = PBXGroup;
 			children = (
-				8FAD5CC41BF4EFFA000C3119 /* fts.swift */,
+				8FAD5CC41BF4EFFA000C3119 /* search.swift */,
 				8FAD5CD11BF503B2000C3119 /* module.modulemap */,
+				8FF9DB801BF9EDD000935748 /* amp+search.swift */,
+				8FF9DB821BF9EDDD00935748 /* collection+search.swift */,
 			);
 			name = search;
 			path = "../../amp-client/search";
@@ -708,7 +714,7 @@
 				8F78B3111BF363AA009D4B67 /* image.swift in Sources */,
 				8F78B3131BF363AA009D4B67 /* media.swift in Sources */,
 				8F78B3101BF363AA009D4B67 /* flag.swift in Sources */,
-				8FAD5CC51BF4EFFA000C3119 /* fts.swift in Sources */,
+				8FAD5CC51BF4EFFA000C3119 /* search.swift in Sources */,
 				8F78B3121BF363AA009D4B67 /* keyvalue.swift in Sources */,
 				8F78B3171BF363AA009D4B67 /* error.swift in Sources */,
 				8F78B30C1BF363AA009D4B67 /* container.swift in Sources */,
@@ -717,7 +723,9 @@
 				8FF9DB7F1BF9E7EA00935748 /* ampconfig.swift in Sources */,
 				8FF9DB721BF9E35100935748 /* page_metadata.swift in Sources */,
 				8FF9DB741BF9E38400935748 /* collection+metadata.swift in Sources */,
+				8FF9DB811BF9EDD000935748 /* amp+search.swift in Sources */,
 				8F78B30F1BF363AA009D4B67 /* file.swift in Sources */,
+				8FF9DB831BF9EDDD00935748 /* collection+search.swift in Sources */,
 				8F78B3061BF363AA009D4B67 /* request.swift in Sources */,
 				8F78B30A1BF363AA009D4B67 /* collection.swift in Sources */,
 			);
