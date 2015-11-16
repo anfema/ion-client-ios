@@ -1,0 +1,11 @@
+framework module Pods {
+  umbrella header "Pods-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module sqlite {
+    header "/usr/include/sqlite3.h"
+    export *
+}

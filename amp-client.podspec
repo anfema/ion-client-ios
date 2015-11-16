@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
   
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions"
   s.libraries  = "sqlite3"
+  s.module_map = "amp-client/cocoapods.modulemap"
 
   s.dependency "Alamofire", "~> 3.0"
   s.dependency "DEjson", "~> 1.0"
