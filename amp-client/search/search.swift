@@ -126,7 +126,7 @@ public class AMPSearchHandle {
         var result = text
         result = result.stringByReplacingOccurrencesOfString(" ", withString: "* ")
         result = result.stringByReplacingOccurrencesOfString(" -", withString: " NOT ")
-        return result
+        return result + "*"
     }
 
     deinit {
