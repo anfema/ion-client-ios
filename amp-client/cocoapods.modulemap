@@ -1,4 +1,4 @@
-framework module sqlite {
+module sqlite {
     header "/usr/include/sqlite3.h"
     export *
 }
