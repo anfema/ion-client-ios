@@ -1,11 +1,8 @@
-framework module Pods {
-  umbrella header "Pods-umbrella.h"
-
-  export *
-  module * { export * }
+framework module sqlite {
+    header "/usr/include/sqlite3.h"
+    export *
 }
 
-module sqlite {
-    header "/usr/include/sqlite3.h"
+framework module amp_client {
     export *
 }
