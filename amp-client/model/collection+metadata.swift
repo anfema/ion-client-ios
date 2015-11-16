@@ -114,6 +114,37 @@ extension AMPCollection {
         return self
     }
     
+    /// Fetch a parent->child path
+    ///
+    /// - parameter pageIdentifier: the page identifier to calculate the path for
+    /// - parameter callback: callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
+    /// - returns: self for chaining
+    public func metaPath(pageIdentifier: String, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed,
+                  let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
+                return
+            }
+            
+            var result = [AMPPageMeta]()
+            result.append(pagemeta)
+
+            var parentID = pagemeta.parent
+            while parentID != nil {
+                guard let meta = self.getPageMetaForPage(parentID!) else {
+                    break
+                }
+                result.insert(meta, atIndex: 0)
+                parentID = meta.parent
+            }
+            
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
+            }
+        }
+        return self
+    }
+    
     // MARK: - Internal
     
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {

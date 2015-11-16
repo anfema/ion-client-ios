@@ -23,22 +23,25 @@ class collectionTests: LoggedInXCTestCase {
     }
 
     func testCollectionFetch() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionFetch")
+        
+        AMP.config.errorHandler = { collection, error in
+            XCTFail()
+            expectation.fulfill()
+        }
         
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection)
             XCTAssert(collection.identifier == "test")
             expectation.fulfill()
-        }.onError({ error in
-            XCTFail()
-            expectation.fulfill()
-        })
+        }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        AMP.config.resetErrorHandler()
     }
     
     func testCollectionFetchError() {
-        let expectation = self.expectationWithDescription("fetch collection")
+        let expectation = self.expectationWithDescription("testCollectionFetchError")
         
         AMP.config.errorHandler = { (collectionID, error) in
             XCTAssertEqual(collectionID, "gnarf")
@@ -57,6 +60,22 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
         AMP.config.resetErrorHandler()
+    }
+    
+    func testCollectionMetaPath() {
+        let expectation = self.expectationWithDescription("testCollectionMetaPath")
+
+        AMP.collection("test") { collection in
+            XCTAssertNotNil(collection)
+            collection.metaPath("subpage_001") { path in
+                XCTAssert(path.count == 2)
+                XCTAssert(path[0].identifier == "page_002")
+                XCTAssert(path[1].identifier == "subpage_001")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }
 
