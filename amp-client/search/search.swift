@@ -74,7 +74,6 @@ public class AMPSearchHandle {
     public func search(text: String) -> [AMPSearchResult] {
         let searchTerm = self.fixSearchTerm(text)
         
-        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":collection"), self.collection.identifier, self.collection.identifier.byteLength, SQLITE_TRANSIENT)
         sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), AMP.config.locale, AMP.config.locale.byteLength, SQLITE_TRANSIENT)
         sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, SQLITE_TRANSIENT)
 
@@ -109,7 +108,7 @@ public class AMPSearchHandle {
             return nil
         }
         
-        let sql = "SELECT page, outlet, text FROM (\n\n    SELECT c.page, c.outlet, snippet(s.search, \'**\', \'**\', \'[...]\') as text, offsets(s.search) as off\n    FROM search s\n    JOIN contents c ON s.docid = c.rowid\n    WHERE\n        s.search MATCH :searchTerm AND\n        c.collection = :collection AND\n        c.locale = :locale\n\n) ORDER BY length(text) ASC, (length(off) - length(replace(off, \' \', \'\')) - 1) / 2 DESC"
+        let sql = "SELECT page, outlet, text FROM (\n\n    SELECT c.page, c.outlet, snippet(s.search, \'**\', \'**\', \'[...]\') as text, offsets(s.search) as off\n    FROM search s\n    JOIN contents c ON s.docid = c.rowid\n    WHERE\n        s.search MATCH :searchTerm AND\n        c.locale = :locale\n\n) ORDER BY length(text) ASC, (length(off) - length(replace(off, \' \', \'\')) - 1) / 2 DESC"
         guard sqlite3_prepare_v2(self.dbHandle, sql, sql.byteLength, &self.stmt, nil) == SQLITE_OK else {
             sqlite3_close(dbHandle)
             return nil
