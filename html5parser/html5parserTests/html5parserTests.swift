@@ -166,4 +166,19 @@ class html5parserTests: XCTestCase {
             XCTFail("Not a start tag")
         }
     }
+
+    func testComplexHTML() {
+        let file = NSBundle(forClass: self.dynamicType).pathForResource("html5tokenization", ofType: "html")
+        XCTAssertNotNil(file)
+        do {
+            let string = try String(contentsOfFile: file!)
+            XCTAssertNotNil(string)
+            let tokens = HTML5Tokenizer(htmlString: string).tokenize()
+            for t in tokens {
+                print(t.debugDescription)
+            }
+        } catch {
+            XCTFail("Could not load HTML file")
+        }
+    }
 }
