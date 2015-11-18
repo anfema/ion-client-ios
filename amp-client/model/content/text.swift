@@ -12,6 +12,7 @@
 import Foundation
 import DEjson
 import Markdown
+import html5parser
 
 /// Text content, may be rendered in different markup
 public class AMPTextContent : AMPContent {
@@ -86,23 +87,7 @@ public class AMPTextContent : AMPContent {
     public func attributedString() -> NSAttributedString? {
         switch (self.mimeType) {
         case "text/html":
-            // FIXME: Speed this up
-            if let data = self.text.dataUsingEncoding(NSUTF8StringEncoding) {
-                do {
-                    return try NSAttributedString(
-                        data: data,
-                        options: [
-                            NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding
-                        ],
-                        documentAttributes: nil
-                    )
-                } catch {
-                    return nil
-                }
-            } else {
-                return nil
-            }
+            return HTMLParser(html: self.text).renderAttributedString(AMP.config.stringStyling)
         case "text/markdown":
             return MDParser(markdown: self.text).render().renderAttributedString(AMP.config.stringStyling)
         case "text/plain":
@@ -126,8 +111,7 @@ public class AMPTextContent : AMPContent {
         case "text/plain":
             return self.text
         case "text/html":
-            // TODO: Strip tags
-            return self.text
+            return HTMLParser(html: self.text).renderText()
         case "text/markdown":
             return MDParser(markdown: self.text).render().renderText()
         default:

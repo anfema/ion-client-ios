@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "amp-client"
-  s.version      = "1.0.9"
+  s.version      = "1.0.10"
   s.summary      = "AMP-Client for iOS and OS X clients."
   s.description  = <<-DESC
                    AMP-Client for iOS and OS X clients
@@ -20,10 +20,10 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "client-1.0.9" }
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "client-1.0.10" }
   s.source_files  = "amp-client/cache/*.swift", "amp-client/communication/*.swift", "amp-client/helper/*.swift", "amp-client/model/**/*.swift", "amp-client/search/*.swift"
   
-  s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions"
+  s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions", "html5parser"
   s.libraries  = "sqlite3"
   s.module_map = "amp-client/cocoapods.modulemap"
 
@@ -31,4 +31,5 @@ Pod::Spec.new do |s|
   s.dependency "DEjson", "~> 1.0"
   s.dependency "Markdown", "~> 1.0"
   s.dependency "HashExtensions", "~> 1.0"
+  s.dependency "html5parser", "~> 1.0"
 end

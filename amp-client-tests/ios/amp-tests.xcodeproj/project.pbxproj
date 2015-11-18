@@ -73,6 +73,7 @@
 		8FCFAE401BFCD7E90051981F /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE01BFCD7980051981F /* request.swift */; };
 		8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE11BFCD7980051981F /* response_serializer.swift */; };
 		8FCFAE421BFCD7E90051981F /* imageloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE31BFCD7980051981F /* imageloader.swift */; };
+		8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE41BFCD7980051981F /* htmlparser.swift */; };
 		8FCFAE451BFCDA0F0051981F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
@@ -152,6 +153,7 @@
 		8FCFADE01BFCD7980051981F /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		8FCFADE11BFCD7980051981F /* response_serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = response_serializer.swift; sourceTree = "<group>"; };
 		8FCFADE31BFCD7980051981F /* imageloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageloader.swift; sourceTree = "<group>"; };
+		8FCFADE41BFCD7980051981F /* htmlparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = htmlparser.swift; sourceTree = "<group>"; };
 		8FCFADE61BFCD7980051981F /* amp+cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "amp+cache.swift"; sourceTree = "<group>"; };
 		8FCFADE71BFCD7980051981F /* amp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amp.swift; sourceTree = "<group>"; };
 		8FCFADE81BFCD7980051981F /* ampconfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ampconfig.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				8FCFADE31BFCD7980051981F /* imageloader.swift */,
+				8FCFADE41BFCD7980051981F /* htmlparser.swift */,
 			);
 			name = helper;
 			path = "../../amp-client/helper";
@@ -707,6 +710,7 @@
 				8FCFAE301BFCD7E40051981F /* container.swift in Sources */,
 				8FCFAE331BFCD7E40051981F /* file.swift in Sources */,
 				8FCFAE2A1BFCD7E40051981F /* collection+metadata.swift in Sources */,
+				8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */,
 				8FCFAE401BFCD7E90051981F /* request.swift in Sources */,
 				8FCFAE291BFCD7E40051981F /* collection.swift in Sources */,
 				8FCFAE2F1BFCD7E40051981F /* color.swift in Sources */,
