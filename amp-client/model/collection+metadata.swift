@@ -20,22 +20,33 @@ extension AMPCollection {
     public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
         // append page count to work queue
         dispatch_async(self.workQueue) {
-            guard !self.hasFailed else {
-                return
-            }
-            var count = 0
-            for meta in self.pageMeta {
-                if meta.parent == parent {
-                    count++
+            if let result = self.pageCount(parent) {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(result)
                 }
-            }
-            dispatch_async(AMP.config.responseQueue) {
-                callback(count)
             }
         }
         
         return self
     }
+
+    /// Fetch page count sync
+    ///
+    /// - Parameter parent: parent to get page count for, nil == top level
+    /// - returns: page count for parent or nil if collection is not ready
+    public func pageCount(parent: String?) -> Int? {
+        guard !self.hasFailed && self.lastUpdate != nil else {
+            return nil
+        }
+        var count = 0
+        for meta in self.pageMeta {
+            if meta.parent == parent {
+                count++
+            }
+        }
+        return count
+    }
+
     
     /// Fetch metadata
     ///
@@ -44,25 +55,31 @@ extension AMPCollection {
     public func metadata(identifier: String, callback: (AMPPageMeta -> Void)) -> AMPCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
-            guard !self.hasFailed else {
-                return
-            }
-            var found = false
-            for meta in self.pageMeta {
-                if meta.identifier == identifier {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(meta)
-                    }
-                    found = true
-                    break
+            if let result = self.metadata(identifier) {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(result)
                 }
-            }
-            if !found {
-                self.callErrorHandler(.PageNotFound(identifier))
             }
         }
         
         return self
+    }
+    
+    /// Fetch metadata sync
+    ///
+    /// - Parameter identifier: page identifier to get metadata for
+    /// - returns: AMPPageMeta object or nil if collection is not loaded
+    public func metadata(identifier: String) -> AMPPageMeta? {
+        guard !self.hasFailed && self.lastUpdate != nil else {
+            return nil
+        }
+        for meta in self.pageMeta {
+            if meta.identifier == identifier {
+                return meta
+            }
+        }
+        self.callErrorHandler(.PageNotFound(identifier))
+        return nil
     }
     
     /// Enumerate metadata
@@ -86,25 +103,7 @@ extension AMPCollection {
     public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {
-            guard !self.hasFailed else {
-                return
-            }
-            var result = [AMPPageMeta]()
-            for meta in self.pageMeta {
-                if meta.parent == parent {
-                    result.append(meta)
-                }
-            }
-            if result.count == 0 {
-                if let parent = parent {
-                    self.callErrorHandler(.PageNotFound(parent))
-                } else {
-                    self.callErrorHandler(.CollectionNotFound(self.identifier))
-                }
-            } else {
-                result.sortInPlace({ (page1, page2) -> Bool in
-                    return page1.position < page2.position
-                })
+            if let result = self.metadataList(parent) {
                 dispatch_async(AMP.config.responseQueue) {
                     callback(result)
                 }
@@ -113,7 +112,36 @@ extension AMPCollection {
         
         return self
     }
-    
+
+    /// Fetch metadata as list sync
+    ///
+    /// - Parameter parent: parent to enumerate metadata for, nil == top level
+    /// - returns: metadata or nil if collection is not ready yet
+    public func metadataList(parent: String?) -> [AMPPageMeta]? {
+        guard !self.hasFailed && self.lastUpdate != nil else {
+            return nil
+        }
+        var result = [AMPPageMeta]()
+        for meta in self.pageMeta {
+            if meta.parent == parent {
+                result.append(meta)
+            }
+        }
+        if result.count == 0 {
+            if let parent = parent {
+                self.callErrorHandler(.PageNotFound(parent))
+            } else {
+                self.callErrorHandler(.CollectionNotFound(self.identifier))
+            }
+        } else {
+            result.sortInPlace({ (page1, page2) -> Bool in
+                return page1.position < page2.position
+            })
+            return result
+        }
+        return nil
+    }
+
     /// Fetch a parent->child path
     ///
     /// - parameter pageIdentifier: the page identifier to calculate the path for
@@ -121,30 +149,40 @@ extension AMPCollection {
     /// - returns: self for chaining
     public func metaPath(pageIdentifier: String, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
-            guard !self.hasFailed,
-                  let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
-                return
-            }
-            
-            var result = [AMPPageMeta]()
-            result.append(pagemeta)
-
-            var parentID = pagemeta.parent
-            while parentID != nil {
-                guard let meta = self.getPageMetaForPage(parentID!) else {
-                    break
+            if let result = self.metaPath(pageIdentifier) {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(result)
                 }
-                result.insert(meta, atIndex: 0)
-                parentID = meta.parent
-            }
-            
-            dispatch_async(AMP.config.responseQueue) {
-                callback(result)
             }
         }
         return self
     }
-    
+
+    /// Fetch a parent->child path sync
+    ///
+    /// - parameter pageIdentifier: the page identifier to calculate the path for
+    /// - parameter callback: callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
+    /// - returns: self for chaining
+    public func metaPath(pageIdentifier: String) -> [AMPPageMeta]? {
+        guard !self.hasFailed && self.lastUpdate != nil,
+            let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
+                return nil
+        }
+        
+        var result = [AMPPageMeta]()
+        result.append(pagemeta)
+        
+        var parentID = pagemeta.parent
+        while parentID != nil {
+            guard let meta = self.getPageMetaForPage(parentID!) else {
+                break
+            }
+            result.insert(meta, atIndex: 0)
+            parentID = meta.parent
+        }
+        return result
+    }
+
     // MARK: - Internal
     
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
