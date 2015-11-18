@@ -5,6 +5,9 @@
 //  Created by Johannes Schriewer on 17/11/15.
 //  Copyright © 2015 Johannes Schriewer. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import XCTest
 @testable import html5parser
