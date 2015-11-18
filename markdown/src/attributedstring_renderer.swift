@@ -19,7 +19,7 @@ import Foundation
     public typealias Color = NSColor
 #endif
 
-internal enum RenderMode {
+public enum RenderMode {
     case Normal
     case ExcludeFont
     case FontOnly
@@ -42,7 +42,7 @@ public struct AttributedStringStyle {
     
     public var writingDirection:NSWritingDirection?
     
-    func makeAttributeDict(nestingDepth nestingDepth: Int = 0, renderMode: RenderMode = .Normal) -> Dictionary<String, AnyObject> {
+    public func makeAttributeDict(nestingDepth nestingDepth: Int = 0, renderMode: RenderMode = .Normal) -> Dictionary<String, AnyObject> {
         var result = Dictionary<String, AnyObject>()
         
         if let font = self.font where renderMode != .ExcludeFont {
@@ -118,22 +118,22 @@ public struct AttributedStringStyle {
 }
 
 public struct AttributedStringStyling {
-    var heading:[AttributedStringStyle]
-    var unorderedList:AttributedStringStyle
-    var unorderedListItem:AttributedStringStyle
-    var orderedList:AttributedStringStyle
-    var orderedListItem:AttributedStringStyle
-    var codeBlock:AttributedStringStyle
-    var paragraph:AttributedStringStyle
-    var quoteBlock:AttributedStringStyle
+    public var heading:[AttributedStringStyle]
+    public var unorderedList:AttributedStringStyle
+    public var unorderedListItem:AttributedStringStyle
+    public var orderedList:AttributedStringStyle
+    public var orderedListItem:AttributedStringStyle
+    public var codeBlock:AttributedStringStyle
+    public var paragraph:AttributedStringStyle
+    public var quoteBlock:AttributedStringStyle
 
-    var strongText:AttributedStringStyle
-    var emphasizedText:AttributedStringStyle
-    var deletedText:AttributedStringStyle
-    var inlineCode:AttributedStringStyle
-    var link:AttributedStringStyle
+    public var strongText:AttributedStringStyle
+    public var emphasizedText:AttributedStringStyle
+    public var deletedText:AttributedStringStyle
+    public var inlineCode:AttributedStringStyle
+    public var link:AttributedStringStyle
     
-    var embedImages:Bool
+    public var embedImages:Bool
     
     public init() {
         #if os(iOS)
