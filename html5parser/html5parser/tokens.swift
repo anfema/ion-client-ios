@@ -69,7 +69,7 @@ extension HTML5Token: CustomStringConvertible {
     public var description: String {
         switch self {
             
-        case .DocType(let name, let publicID, let systemID, let forceQuirks):
+        case .DocType(let name, let publicID, let systemID, _):
             return "<!DOCTYPE \(name) \"\(publicID)\" \"\(systemID)\">"
             
         case .StartTag(let name, let selfClosing, let attributes):

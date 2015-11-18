@@ -243,7 +243,6 @@ public class HTML5Tokenizer {
             return self.emitTag(false)
         case "A"..."Z":
             self.tempTagname.append(UnicodeScalar(c.value + 32)) // lower case
-//            self.stateStack.append(self.state)
             self.state = .TagName
         default:
             self.tempTagname.append(c)
