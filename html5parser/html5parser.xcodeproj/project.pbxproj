@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42B1B3321BFBDB9000C502E8 /* html5tokenization.html in Resources */ = {isa = PBXBuildFile; fileRef = 42B1B3311BFBDB9000C502E8 /* html5tokenization.html */; settings = {ASSET_TAGS = (); }; };
+		42B1B3321BFBDB9000C502E8 /* html5tokenization.html in Resources */ = {isa = PBXBuildFile; fileRef = 42B1B3311BFBDB9000C502E8 /* html5tokenization.html */; };
 		8F04A0031BFB7FF100E8832E /* html5parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F04A0021BFB7FF100E8832E /* html5parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F04A00A1BFB7FF100E8832E /* html5parser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F049FFF1BFB7FF100E8832E /* html5parser.framework */; };
 		8F04A00F1BFB7FF100E8832E /* html5parserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F04A00E1BFB7FF100E8832E /* html5parserTests.swift */; };

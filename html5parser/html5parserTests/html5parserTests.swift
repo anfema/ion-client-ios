@@ -181,4 +181,20 @@ class html5parserTests: XCTestCase {
             XCTFail("Could not load HTML file")
         }
     }
+    
+    func testComplexHTMLPerformance() {
+        let file = NSBundle(forClass: self.dynamicType).pathForResource("html5tokenization", ofType: "html")
+        XCTAssertNotNil(file)
+        do {
+            let string = try String(contentsOfFile: file!)
+            XCTAssertNotNil(string)
+            let tokenizer = HTML5Tokenizer(htmlString: string)
+            measureBlock() {
+                let _ = tokenizer.tokenize()
+            }
+        } catch {
+            XCTFail("Could not load HTML file")
+        }
+
+    }
 }
