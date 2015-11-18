@@ -2,18 +2,21 @@ PODS:
   - Alamofire (3.1.2)
   - DEjson (1.0.0)
   - HashExtensions (1.0.0)
-  - Markdown (1.0.1)
+  - html5parser (1.0.0)
+  - Markdown (1.0.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.1)
   - DEjson (~> 1.0)
   - HashExtensions (~> 1.0)
+  - html5parser (~> 1.0)
   - Markdown (~> 1.0)
 
 SPEC CHECKSUMS:
   Alamofire: 7c16ca65f3c7e681fd925fd7f2dec7747ff96855
   DEjson: 18af7d4a4f76f7e7676dffcf21364e1d8a88fc20
   HashExtensions: 9ac81090e6e704fb936da8a4e51bf5331c014bab
-  Markdown: cb4193676c5fbd2870f23d24e0675159b3e5db0c
+  html5parser: 6618edf731a28ef0cdf46c5c5eac395e27c30af9
+  Markdown: f0a6f3f1ada824b6f5514e384e2ecde63b1d4a12
 
 COCOAPODS: 0.39.0
