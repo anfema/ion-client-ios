@@ -37,7 +37,12 @@ internal enum TokenizerState {
     case CommentEnd
     case CommentEndBang
     
-    // Doctype
+    // CDATA
+    case CDATA
+    case CDATAEndBracket
+    case CDATAEndTag
+    
+    // Doctype (not implemented)
     case Doctype
     case DoctypeBeforeName
     case DoctypeName

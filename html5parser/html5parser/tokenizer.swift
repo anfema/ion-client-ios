@@ -122,6 +122,15 @@ public class HTML5Tokenizer {
         case .CommentEnd:
             return self.parseCommentEnd(c)
         
+        case .CDATA:
+            return self.parseCDATA(c)
+            
+        case .CDATAEndBracket:
+            return self.parseCDATAEndBracket(c)
+            
+        case .CDATAEndTag:
+            return self.parseCDATAEndTag(c)
+            
         default:
             // Argh
             break
@@ -402,6 +411,27 @@ public class HTML5Tokenizer {
                 }
             }
             self.state = .BogusComment
+        case "[":
+            var template = "CDATA[".unicodeScalars.generate()
+            var chars = [UnicodeScalar]()
+            var parseError = false
+            for _ in 0..<6 {
+                if let c = generator.next() {
+                    chars.append(c)
+                    if template.next() != c {
+                        parseError = true
+                        break
+                    }
+                }
+            }
+            if (parseError) {
+                self.state = .BogusComment
+                for c in chars {
+                    self.consume(c, generator: &generator)
+                }
+            } else {
+                self.state = .CDATA
+            }
         default:
             self.state = .BogusComment
             return self.consume(c, generator: &generator)
@@ -496,6 +526,42 @@ public class HTML5Tokenizer {
         return nil
     }
 
+    private func parseCDATA(c: UnicodeScalar) -> HTML5Token? {
+        switch c {
+        case "]":
+            self.state = .CDATAEndBracket
+        default:
+            self.tempBuffer.append(c)
+        }
+        return nil
+    }
+
+    private func parseCDATAEndBracket(c: UnicodeScalar) -> HTML5Token? {
+        switch c {
+        case "]":
+            self.state = .CDATAEndTag
+        default:
+            self.tempBuffer.appendContentsOf("]")
+            self.tempBuffer.append(c)
+            self.state = .CDATA
+        }
+        return nil
+    }
+
+    private func parseCDATAEndTag(c: UnicodeScalar) -> HTML5Token? {
+        switch c {
+        case ">":
+            let result = HTML5Token.Text(data: self.tempBuffer)
+            self.tempBuffer = ""
+            self.state = .Data
+            return result
+        default:
+            self.tempBuffer.appendContentsOf("]]")
+            self.tempBuffer.append(c)
+            self.state = .CDATA
+        }
+        return nil
+    }
 
     // MARK: - Helper
     
