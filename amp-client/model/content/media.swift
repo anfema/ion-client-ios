@@ -159,8 +159,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
-    public func mediaURL(name: String) -> NSURL? {
-        if let content = self.outlet(name) {
+    public func mediaURL(name: String, position: Int = 0) -> NSURL? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPMediaContent = content {
                 return content.url
             }
@@ -174,8 +174,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func mediaURL(name: String, callback: (NSURL -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func mediaURL(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPMediaContent = content {
                 if let url = content.url {
                     callback(url)
@@ -191,8 +191,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func mediaData(name: String, callback: (NSData -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func mediaData(name: String, position: Int = 0, callback: (NSData -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPMediaContent = content {
                 content.data(callback)
             }

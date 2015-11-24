@@ -149,7 +149,7 @@ public class AMPPage {
     /// - Parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
     /// - Returns: self to be able to chain another call
-    public func outlet(name: String, callback: (AMPContent -> Void)) -> AMPPage {
+    public func outlet(name: String, position: Int = 0, callback: (AMPContent -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -157,10 +157,14 @@ public class AMPPage {
 
             // search content
             var cObj:AMPContent? = nil
+            var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    cObj = content
-                    break
+                    if count == position {
+                        cObj = content
+                        break
+                    }
+                    count++
                 }
             }
             if let c = cObj {
@@ -178,17 +182,21 @@ public class AMPPage {
     ///
     /// - Parameter name: outlet name to fetch
     /// - Returns: content object if page was loaded and outlet exists
-    public func outlet(name: String) -> AMPContent? {
+    public func outlet(name: String, position: Int = 0) -> AMPContent? {
         if !self.isReady {
             // cannot return outlet synchronously from a async loading page
             return nil
         } else {
             // search content
             var cObj:AMPContent? = nil
+            var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    cObj = content
-                    break
+                    if count == position {
+                        cObj = content
+                        break
+                    }
+                    count++
                 }
             }
             if cObj == nil {
@@ -203,7 +211,7 @@ public class AMPPage {
     /// - Parameter name: outlet to check
     /// - Parameter callback: callback to call
     /// - Returns: self for chaining
-    public func outletExists(name: String, callback: (Bool -> Void)) -> AMPPage {
+    public func outletExists(name: String, position: Int = 0, callback: (Bool -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -211,10 +219,14 @@ public class AMPPage {
        
             // search content
             var found = false
+            var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    found = true
-                    break
+                    if count == position {
+                        found = true
+                        break
+                    }
+                    count++
                 }
             }
             dispatch_async(AMP.config.responseQueue) {
@@ -229,18 +241,69 @@ public class AMPPage {
     ///
     /// - Parameter name: outlet to check
     /// - Returns: true if outlet exists else false, nil if page not loaded
-    public func outletExists(name: String) -> Bool? {
+    public func outletExists(name: String, position: Int = 0) -> Bool? {
         if !self.isReady {
             // cannot return outlet synchronously from a async loading page
             return nil
         } else {
             // search content
+            var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    return true
+                    if (count == position) {
+                        return true
+                    }
+                    count++
                 }
             }
             return false
+        }
+    }
+    
+    /// Number of contents for an outlet (if outlet is an array)
+    ///
+    /// - parameter name:     outlet to check
+    /// - parameter callback: callback with object count
+    ///
+    /// - returns: self for chaining
+    public func numberOfContentsForOutlet(name: String, callback: (Int -> Void)) -> AMPPage {
+        dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
+            
+            // search content
+            var count = 0
+            for content in self.content {
+                if content.outlet == name {
+                    count++
+                }
+            }
+            dispatch_async(AMP.config.responseQueue) {
+                callback(count)
+            }
+        }
+        return self
+    }
+
+    /// Number of contents for an outlet (if outlet is an array)
+    ///
+    /// - parameter name: outlet to check
+    ///
+    /// - returns: count if page was ready, nil if page is not loaded
+    public func numberOfContentsForOutlet(name: String) -> Int? {
+        if !self.isReady {
+            // cannot return outlet synchronously from a async loading page
+            return nil
+        } else {
+            // search content
+            var count = 0
+            for content in self.content {
+                if content.outlet == name {
+                    count++
+                }
+            }
+            return count
         }
     }
     

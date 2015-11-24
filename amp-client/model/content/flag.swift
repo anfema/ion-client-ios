@@ -43,8 +43,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: true or false if the outlet was a flag outlet and the page was already cached, else nil
-    public func isSet(name: String) -> Bool? {
-        if let content = self.outlet(name) {
+    public func isSet(name: String, position: Int = 0) -> Bool? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPFlagContent = content {
                 return content.enabled
             }
@@ -58,8 +58,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the flag becomes available, will not be called if the outlet
     ///                       is not a flag outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func isSet(name: String, callback: (Bool -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func isSet(name: String, position: Int = 0, callback: (Bool -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPFlagContent = content {
                 callback(content.enabled)
             }

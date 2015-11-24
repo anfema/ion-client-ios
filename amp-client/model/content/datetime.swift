@@ -48,8 +48,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
-    public func date(name: String) -> NSDate? {
-        if let content = self.outlet(name) {
+    public func date(name: String, position: Int = 0) -> NSDate? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPDateTimeContent = content {
                 return content.date
             }
@@ -63,8 +63,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the date object becomes available, will not be called if the outlet
     ///                       is not a datetime outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func date(name: String, callback: (NSDate -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func date(name: String, position: Int = 0, callback: (NSDate -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPDateTimeContent = content {
                 if let d = content.date {
                     callback(d)

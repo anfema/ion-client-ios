@@ -113,8 +113,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func fileData(name: String, callback: (NSData -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func fileData(name: String, position: Int = 0, callback: (NSData -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPFileContent = content {
                 content.data(callback)
             }

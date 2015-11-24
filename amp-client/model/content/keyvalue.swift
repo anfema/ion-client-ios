@@ -72,8 +72,8 @@ extension AMPPage {
     /// - Parameter name: the name of the outlet
     /// - Parameter key: name of the value to return
     /// - Returns: value if the key exists, the outlet was a kv outlet and the page was already cached, else nil
-    public func valueForKey(name: String, key: String) -> AnyObject? {
-        if let content = self.outlet(name) {
+    public func valueForKey(name: String, position: Int = 0, key: String) -> AnyObject? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPKeyValueContent = content {
                 return content[key]
             }
@@ -88,8 +88,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the value becomes available, will not be called if the outlet
     ///                       is not a kv outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func valueForKey(name: String, key:String, callback: (AnyObject -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func valueForKey(name: String, key:String, position: Int = 0, callback: (AnyObject -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPKeyValueContent = content {
                 if let value = content[key] {
                     callback(value)
@@ -103,8 +103,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: dict if the outlet was a kv outlet and the page was already cached, else nil
-    public func keyValue(name: String) -> Dictionary<String, AnyObject>? {
-        if let content = self.outlet(name) {
+    public func keyValue(name: String, position: Int = 0) -> Dictionary<String, AnyObject>? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPKeyValueContent = content {
                 return content.values
             }
@@ -118,8 +118,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the dict becomes available, will not be called if the outlet
     ///                       is not a kv outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func keyValue(name: String, callback: (Dictionary<String, AnyObject> -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func keyValue(name: String, position: Int = 0, callback: (Dictionary<String, AnyObject> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPKeyValueContent = content {
                 if let values = content.values {
                     callback(values)

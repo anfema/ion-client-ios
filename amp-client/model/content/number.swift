@@ -43,8 +43,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: value if the outlet was a number outlet and the page was already cached, else nil
-    public func number(name: String) -> Double? {
-        if let content = self.outlet(name) {
+    public func number(name: String, position: Int = 0) -> Double? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPNumberContent = content {
                 return content.value
             }
@@ -58,8 +58,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the number becomes available, will not be called if the outlet
     ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func number(name: String, callback: (Double -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func number(name: String, position: Int = 0, callback: (Double -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPNumberContent = content {
                 callback(content.value)
             }

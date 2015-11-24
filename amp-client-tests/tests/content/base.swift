@@ -63,4 +63,33 @@ class contentBaseTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
+    func testOutletArrayCount() {
+        let expectation = self.expectationWithDescription("testOutletArrayCount")
+        
+        AMP.collection("test").page("page_002").numberOfContentsForOutlet("ColorArray") { count in
+            XCTAssertEqual(count, 32)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testOutletArrayValues() {
+        for i in 0..<32 {
+            let expectation = self.expectationWithDescription("testOutletArrayValues")
+            AMP.collection("test").page("page_002").color("ColorArray", position: i) { color in
+                var r = CGFloat(0)
+                var g = CGFloat(0)
+                var b = CGFloat(0)
+                var a = CGFloat(0)
+                color.getRed(&r, green: &g, blue: &b, alpha: &a)
+                XCTAssertEqual(r, CGFloat(Double(8 * i) / 255.0), "Item at position \(i) wrong red value")
+                XCTAssertEqual(g, CGFloat(Double(8 * i) / 255.0), "Item at position \(i) wrong green value")
+                XCTAssertEqual(b, CGFloat(Double(8 * i) / 255.0), "Item at position \(i) wrong blue value")
+                XCTAssertEqual(a, 1.0, "Item at position \(i) wrong alpha value")
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
 }

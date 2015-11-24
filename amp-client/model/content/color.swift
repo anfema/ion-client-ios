@@ -85,8 +85,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String) -> NSColor? {
-        if let content = self.outlet(name) {
+    public func cachedColor(name: String, position: Int = 0) -> NSColor? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPColorContent = content {
                 return content.color()
             }
@@ -100,8 +100,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, callback: (NSColor -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func color(name: String, position: Int = 0, callback: (NSColor -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
                     callback(c)
@@ -117,8 +117,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String) -> UIColor? {
-        if let content = self.outlet(name) {
+    public func cachedColor(name: String, position: Int = 0) -> UIColor? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPColorContent = content {
                 return content.color()
             }
@@ -132,8 +132,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, callback: (UIColor -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func color(name: String, position: Int = 0, callback: (UIColor -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
                     callback(c)

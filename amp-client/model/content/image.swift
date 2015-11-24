@@ -146,8 +146,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, callback: (UIImage -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func image(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
                 content.image(callback)
             }
@@ -163,8 +163,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, callback: (NSImage -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func image(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
                 content.image(callback)
             }

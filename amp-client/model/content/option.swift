@@ -44,8 +44,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: string if the outlet was an option outlet and the page was already cached, else nil
-    public func selectedOption(name: String) -> String? {
-        if let content = self.outlet(name) {
+    public func selectedOption(name: String, position: Int = 0) -> String? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPOptionContent = content {
                 return content.value
             }
@@ -59,8 +59,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the option becomes available, will not be called if the outlet
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func selectedOption(name: String, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func selectedOption(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPOptionContent = content {
                 if let value = content.value {
                     callback(value)

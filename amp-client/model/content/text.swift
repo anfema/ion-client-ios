@@ -128,8 +128,8 @@ extension AMPPage {
     ///
     /// - Parameter name: the name of the outlet
     /// - Returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
-    public func text(name: String) -> String? {
-        if let content = self.outlet(name) {
+    public func text(name: String, position: Int = 0) -> String? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPTextContent = content {
                 return content.plainText()
             }
@@ -143,8 +143,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func text(name: String, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func text(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPTextContent = content {
                 if let text = content.plainText() {
                     callback(text)
@@ -159,8 +159,8 @@ extension AMPPage {
     /// - Parameter name: the name of the outlet
     /// - Returns: html string if the outlet was a text outlet and the page was already cached, else nil
     // TODO: Write tests for page's html function
-    public func html(name: String) -> String? {
-        if let content = self.outlet(name) {
+    public func html(name: String, position: Int = 0) -> String? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPTextContent = content {
                 return content.htmlText()
             }
@@ -174,8 +174,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func html(name: String, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func html(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPTextContent = content {
                 if let text = content.htmlText() {
                     callback(text)
@@ -190,8 +190,8 @@ extension AMPPage {
     /// - Parameter name: the name of the outlet
     /// - Returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
     // TODO: Write tests for page's attributedString function
-    public func attributedString(name: String) -> NSAttributedString? {
-        if let content = self.outlet(name) {
+    public func attributedString(name: String, position: Int = 0) -> NSAttributedString? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPTextContent = content {
                 return content.attributedString()
             }
@@ -205,8 +205,8 @@ extension AMPPage {
     /// - Parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func attributedString(name: String, callback: (NSAttributedString -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func attributedString(name: String, position: Int = 0, callback: (NSAttributedString -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPTextContent = content {
                 if let text = content.attributedString() {
                     callback(text)
