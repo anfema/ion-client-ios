@@ -99,7 +99,7 @@ class collectionTests: LoggedInXCTestCase {
     func testLeavesList() {
         let expectation = self.expectationWithDescription("testLeavesList")
         
-        AMP.collection("test").getLeaves(nil) { pages in
+        AMP.collection("test").leaves(nil) { pages in
             XCTAssert(pages.count == 2)
             XCTAssert(pages[0].identifier == "page_001")
             XCTAssert(pages[1].identifier == "subpage_001")
