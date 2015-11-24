@@ -55,7 +55,7 @@ extension AMPPage {
         }
     }
     
-    /// list page children
+    /// list page children, Attention: those pages returned are not fully loaded!
     ///
     /// - Parameter callback: the callback to call for children list
     public func childrenList(callback: ([AMPPage] -> Void)) {

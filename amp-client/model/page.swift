@@ -131,6 +131,18 @@ public class AMPPage {
         self.collection.callErrorHandler(error)
     }
     
+    /// Callback when page fully loaded
+    ///
+    /// - parameter callback: callback to call
+    public func waitUntilReady(callback: (AMPPage -> Void)) -> AMPPage {
+        dispatch_async(self.workQueue) {
+            dispatch_async(AMP.config.responseQueue) {
+                callback(self)
+            }
+        }
+        return self
+    }
+    
     /// Fetch an outlet by name (probably deferred by page loading)
     ///
     /// - Parameter name: outlet name to fetch

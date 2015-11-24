@@ -238,6 +238,18 @@ public class AMPCollection {
         AMP.callError(self.identifier, error: error)
     }
     
+    /// Callback when collection fully loaded
+    ///
+    /// - parameter callback: callback to call
+    public func waitUntilReady(callback: (AMPCollection -> Void)) -> AMPCollection {
+        dispatch_async(self.workQueue) {
+            dispatch_async(AMP.config.responseQueue) {
+                callback(self)
+            }
+        }
+        return self
+    }
+
     // MARK: - Private
     
     private init(forErrorHandlerWithIdentifier identifier: String, locale: String) {

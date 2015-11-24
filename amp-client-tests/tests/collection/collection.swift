@@ -77,5 +77,37 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    func testCollectionMetaList() {
+        let expectation = self.expectationWithDescription("testCollectionMetaPath")
+        
+        AMP.collection("test") { collection in
+            XCTAssertNotNil(collection)
+            if let list = collection.metadataList(nil) {
+                XCTAssert(list.count == 2)
+                XCTAssert(list[0].identifier == "page_001")
+                XCTAssert(list[1].identifier == "page_002")
+            } else {
+                XCTFail()
+            }
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testLeavesList() {
+        let expectation = self.expectationWithDescription("testLeavesList")
+        
+        AMP.collection("test").getLeaves(nil) { pages in
+            XCTAssert(pages.count == 2)
+            XCTAssert(pages[0].identifier == "page_001")
+            XCTAssert(pages[1].identifier == "subpage_001")
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
 }
 

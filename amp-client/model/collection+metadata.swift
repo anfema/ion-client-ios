@@ -183,6 +183,32 @@ extension AMPCollection {
         return result
     }
 
+    
+    /// Fetch page tree leaves from parent (walks down the page tree and returns all leaves at the end)
+    ///
+    /// - parameter parent:   parent from where to start the leave search (nil for toplevel)
+    /// - parameter callback: callback called with unrealized page objects
+    public func leaves(parent: String?, callback:([AMPPage] -> Void)) {
+        dispatch_async(self.workQueue) {
+            var toplevel = [AMPPageMeta]()
+            for meta in self.pageMeta {
+                if meta.parent == parent {
+                    toplevel.append(meta)
+                }
+            }
+            
+            let resultMetas = self.leaveRecursive(toplevel)
+            var result = [AMPPage]()
+            for meta in resultMetas {
+                result.append(self.page(meta.identifier))
+            }
+            
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
+            }
+        }
+    }
+
     // MARK: - Internal
     
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
@@ -218,4 +244,26 @@ extension AMPCollection {
         return result
     }
 
+    // MARK: - Private
+    private func leaveRecursive(pages: [AMPPageMeta]) -> [AMPPageMeta] {
+        var result = [AMPPageMeta]()
+        var check = [AMPPageMeta]()
+        for page in pages {
+            var is_leaf = true
+            for meta in self.pageMeta {
+                if meta.parent == page.identifier {
+                    is_leaf = false
+                    check.append(meta)
+                    break
+                }
+            }
+            if is_leaf {
+                result.append(page)
+            }
+        }
+        if check.count > 0 {
+            result.appendContentsOf(self.leaveRecursive(check))
+        }
+        return result
+    }
 }
