@@ -254,7 +254,6 @@ extension AMPCollection {
                 if meta.parent == page.identifier {
                     is_leaf = false
                     check.append(meta)
-                    break
                 }
             }
             if is_leaf {
