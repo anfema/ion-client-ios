@@ -326,7 +326,7 @@ public class AMPPage {
     /// - Parameter identifier: page identifier to get
     /// - Parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
-        AMPRequest.fetchJSON("pages/\(self.collection.identifier)/\(identifier)", queryParameters: [ "locale" : self.collection.locale ], cached:self.useCache) { result in
+        AMPRequest.fetchJSON("pages/\(self.collection.identifier)/\(identifier)", queryParameters: [ "locale" : self.collection.locale, "variation" : AMP.config.variation ], cached:self.useCache) { result in
             if case .Failure = result {
                 callback(.PageNotFound(identifier))
                 return

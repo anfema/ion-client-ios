@@ -32,6 +32,7 @@ public protocol CanLoadImage {
     /// url of the image
     var imageURL:NSURL? { get }
     var originalImageURL:NSURL? { get }
+    var variation:String! { get }
 }
 
 /// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
@@ -121,7 +122,7 @@ extension CanLoadImage {
     ///
     /// - Parameter callback: block to execute when the image has been allocated
     public func cgImage(original original: Bool = false, callback: (CGImageRef -> Void)) {
-        var dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
+        let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         dataProviderFunc() { provider in
             let options = Dictionary<String, AnyObject>()
             if let src = CGImageSourceCreateWithDataProvider(provider, options) {
@@ -143,7 +144,7 @@ extension CanLoadImage {
     /// - Parameter callback: block to execute when the image has been allocated
     public func image(original original: Bool = false, callback: (UIImage -> Void)) {
         self.cgImage(original: original) { img in
-            let uiImage = UIImage(CGImage: img)
+            let uiImage = UIImage(CGImage: img, scale: AMP.config.variationScaleFactors[self.variation]!, orientation: .Up)
             callback(uiImage)
         }
     }

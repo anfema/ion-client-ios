@@ -114,4 +114,8 @@ public class AMPPageMeta: CanLoadImage {
     public var originalImageURL:NSURL? {
         return nil
     }
+    
+    public var variation: String! {
+        return AMP.config.variation
+    }
 }

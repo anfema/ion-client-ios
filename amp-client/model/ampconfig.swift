@@ -20,6 +20,12 @@ public struct AMPConfig {
     /// locale-code to work on, defined by server config
     public var locale:String = "en_EN"
     
+    /// variation code to fetch from server, populated by default, only change if neccessary
+    public var variation:String
+    
+    /// variation code to scale factor table
+    public var variationScaleFactors:[String:CGFloat]
+    
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
     public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
@@ -57,6 +63,8 @@ public struct AMPConfig {
         self.updateBlocks = Dictionary<String, (String -> Void)>()
         self.alamofire = Alamofire.Manager(configuration: configuration)
         self.ftsEnabled = [String:Bool]()
+        self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
+        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
         self.resetErrorHandler()
         
         self.registerUpdateBlock("fts") { collectionIdentifier in
