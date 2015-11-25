@@ -32,5 +32,16 @@ class imageContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
-    
+
+    func testImageOutletFetchAsyncOriginalCGImage() {
+        let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
+        
+        AMP.collection("test").page("page_001").originalImage("Image") { image in
+            XCTAssertNotNil(image)
+            XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
 }

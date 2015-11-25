@@ -150,6 +150,13 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         }
         return nil
     }
+    
+    public var originalImageURL:NSURL? {
+        if self.originalMimeType.hasPrefix("image/") {
+            return self.originalURL
+        }
+        return nil
+    }
 }
 
 /// Media content extensions to AMPPage

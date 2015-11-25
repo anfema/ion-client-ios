@@ -102,6 +102,11 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         }
         return nil
     }
+    
+    public var originalImageURL:NSURL? {
+        return nil
+    }
+
 }
 
 /// File data extension to AMPPage

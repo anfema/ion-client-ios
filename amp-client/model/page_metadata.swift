@@ -110,4 +110,8 @@ public class AMPPageMeta: CanLoadImage {
         }
         return nil
     }
+
+    public var originalImageURL:NSURL? {
+        return nil
+    }
 }

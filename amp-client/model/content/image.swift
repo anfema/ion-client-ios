@@ -135,6 +135,10 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     public var imageURL:NSURL? {
         return self.url
     }
+    
+    public var originalImageURL:NSURL? {
+        return self.originalURL
+    }
 }
 
 /// Image extension to AMPPage
@@ -149,7 +153,22 @@ extension AMPPage {
     public func image(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
         self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
-                content.image(callback)
+                content.image(callback: callback)
+            }
+        }
+        return self
+    }
+    
+    /// Allocate `UIImage` for named outlet (original unmodified image) async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func originalImage(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
+            if case let content as AMPImageContent = content {
+                content.originalImage(callback)
             }
         }
         return self
@@ -166,7 +185,22 @@ extension AMPPage {
     public func image(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
         self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
-                content.image(callback)
+                content.image(callback: callback)
+            }
+        }
+        return self
+    }
+    
+    /// Allocate `NSImage` for named outlet async
+    ///
+    /// - Parameter name: the name of the outlet
+    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func originalImage(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
+            if case let content as AMPImageContent = content {
+                content.originalImage(callback)
             }
         }
         return self
