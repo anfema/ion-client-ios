@@ -44,6 +44,7 @@ public enum AMPError: ErrorType {
     /// Outlet with that name not found
     case OutletNotFound(String)
     
+    /// Error domain for conversion into NSError
     public var errorDomain: String {
         return "com.anfema.amp"
     }
