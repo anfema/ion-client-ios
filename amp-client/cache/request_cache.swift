@@ -23,8 +23,8 @@ extension AMPRequest {
     
     /// Reset the complete AMP cache for a specific host
     ///
-    /// - Parameter host: host to clear cache for
-    /// - Parameter locale: locale to clear cache for
+    /// - parameter host: host to clear cache for
+    /// - parameter locale: locale to clear cache for
     public class func resetCache(host: String, locale: String = AMP.config.locale) {
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(host, locale: locale)
@@ -50,9 +50,10 @@ extension AMPRequest {
 
     /// Reset complete AMP cache for a specific language and all hosts
     ///
-    /// - Parameter locale: locale to clear cache for
-    // TODO: Write test for resetCache(locale:)
+    /// - parameter locale: locale to clear cache for
     public class func resetCache(locale locale: String) {
+        // TODO: Write test for resetCache(locale:)
+
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)
         do {
@@ -72,8 +73,8 @@ extension AMPRequest {
     
     /// Internal function to fetch the cache path for a specific URL
     ///
-    /// - Parameter url: the URL to find in the cache
-    /// - Returns: Path to the cache file (may not exist)
+    /// - parameter url: the URL to find in the cache
+    /// - returns: Path to the cache file (may not exist)
     internal class func cacheName(url: NSURL) -> String {
         var fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
         
@@ -93,8 +94,8 @@ extension AMPRequest {
 
     /// Internal function to fetch a cache DB entry
     ///
-    /// - Parameter urlString: the URL to find in the cache DB
-    /// - Returns: cache db entry (JSON dictionary unpacked into dictionary)
+    /// - parameter urlString: the URL to find in the cache DB
+    /// - returns: cache db entry (JSON dictionary unpacked into dictionary)
     internal class func getCacheDBEntry(urlString: String) -> [String:JSONObject]? {
         // load db if not already loaded
         if self.cacheDB == nil {
@@ -116,9 +117,9 @@ extension AMPRequest {
 
     /// Internal function to save a JSON response to the cache
     ///
-    /// - Parameter optRequest: optional request (used for request url)
-    /// - Parameter optResponse: optional response, checked for status code 200
-    /// - Parameter result: the object to save
+    /// - parameter optRequest: optional request (used for request url)
+    /// - parameter optResponse: optional response, checked for status code 200
+    /// - parameter result: the object to save
     internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
@@ -142,8 +143,8 @@ extension AMPRequest {
     
     /// Internal function to add an object to the cache DB
     ///
-    /// - Parameter request: optional request (used to extract URL)
-    /// - Parameter response: optional response, checked for status code
+    /// - parameter request: optional request (used to extract URL)
+    /// - parameter response: optional response, checked for status code
     internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
@@ -250,8 +251,8 @@ extension AMPRequest {
     
     /// Internal function to return the base directory for the AMP cache
     ///
-    /// - Parameter host: the API host to fetch the cache dir for
-    /// - Returns: File URL to the cache dir
+    /// - parameter host: the API host to fetch the cache dir for
+    /// - returns: File URL to the cache dir
     internal class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(host)")

@@ -12,16 +12,19 @@
 import Foundation
 
 extension AMPPage: CustomStringConvertible {
+    /// Convert page to string representation, only use for debugging purposes
     public var description: String {
         return "AMPPage: \(identifier), \(content.count) content items"
     }
 }
 
+/// Two pages are the same if the identifier and the collection matches
 public func ==(lhs: AMPPage, rhs: AMPPage) -> Bool {
     return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
 }
 
 extension AMPPage: Hashable {
+    /// Combine collection hash value with self identifier hash value to get somewhat unique hash
     public var hashValue: Int {
         return self.collection.hashValue + self.identifier.hashValue
     }

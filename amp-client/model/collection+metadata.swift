@@ -15,8 +15,8 @@ extension AMPCollection {
  
     /// Fetch page count
     ///
-    /// - Parameter parent: parent to get page count for, nil == top level
-    /// - Parameter callback: block to call for page count return value
+    /// - parameter parent: parent to get page count for, nil == top level
+    /// - parameter callback: block to call for page count return value
     public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
         // append page count to work queue
         dispatch_async(self.workQueue) {
@@ -32,7 +32,7 @@ extension AMPCollection {
 
     /// Fetch page count sync
     ///
-    /// - Parameter parent: parent to get page count for, nil == top level
+    /// - parameter parent: parent to get page count for, nil == top level
     /// - returns: page count for parent or nil if collection is not ready
     public func pageCount(parent: String?) -> Int? {
         guard !self.hasFailed && self.lastUpdate != nil else {
@@ -50,8 +50,8 @@ extension AMPCollection {
     
     /// Fetch metadata
     ///
-    /// - Parameter identifier: page identifier to get metadata for
-    /// - Parameter callback: callback to call with metadata
+    /// - parameter identifier: page identifier to get metadata for
+    /// - parameter callback: callback to call with metadata
     public func metadata(identifier: String, callback: (AMPPageMeta -> Void)) -> AMPCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
@@ -67,7 +67,7 @@ extension AMPCollection {
     
     /// Fetch metadata sync
     ///
-    /// - Parameter identifier: page identifier to get metadata for
+    /// - parameter identifier: page identifier to get metadata for
     /// - returns: AMPPageMeta object or nil if collection is not loaded
     public func metadata(identifier: String) -> AMPPageMeta? {
         guard !self.hasFailed && self.lastUpdate != nil else {
@@ -84,8 +84,8 @@ extension AMPCollection {
     
     /// Enumerate metadata
     ///
-    /// - Parameter parent: parent to enumerate metadata for, nil == top level
-    /// - Parameter callback: callback to call with metadata
+    /// - parameter parent: parent to enumerate metadata for, nil == top level
+    /// - parameter callback: callback to call with metadata
     public func enumerateMetadata(parent: String?, callback: (AMPPageMeta -> Void)) -> AMPCollection {
         self.metadataList(parent) { list in
             for listItem in list {
@@ -98,8 +98,8 @@ extension AMPCollection {
     
     /// Fetch metadata as list
     ///
-    /// - Parameter parent: parent to enumerate metadata for, nil == top level
-    /// - Parameter callback: callback to call with metadata
+    /// - parameter parent: parent to enumerate metadata for, nil == top level
+    /// - parameter callback: callback to call with metadata
     public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {
@@ -115,7 +115,7 @@ extension AMPCollection {
 
     /// Fetch metadata as list sync
     ///
-    /// - Parameter parent: parent to enumerate metadata for, nil == top level
+    /// - parameter parent: parent to enumerate metadata for, nil == top level
     /// - returns: metadata or nil if collection is not ready yet
     public func metadataList(parent: String?) -> [AMPPageMeta]? {
         guard !self.hasFailed && self.lastUpdate != nil else {
@@ -161,8 +161,7 @@ extension AMPCollection {
     /// Fetch a parent->child path sync
     ///
     /// - parameter pageIdentifier: the page identifier to calculate the path for
-    /// - parameter callback: callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
-    /// - returns: self for chaining
+    /// - returns: a list of metadata items (last item is requested page, first item is toplevel parent) or nil if collection not ready
     public func metaPath(pageIdentifier: String) -> [AMPPageMeta]? {
         guard !self.hasFailed && self.lastUpdate != nil,
             let pagemeta = self.getPageMetaForPage(pageIdentifier) else {

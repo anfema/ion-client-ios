@@ -23,15 +23,23 @@ import ImageIO
 public protocol CanLoadImage {
     /// checksumming method used
     var checksumMethod:String! { get }
+    
+    /// checksumming method used for original file
     var originalChecksumMethod:String! { get }
     
     /// checksum for the image
     var checksum:String! { get }
+    
+    /// checksum for original file
     var originalChecksum:String! { get }
     
     /// url of the image
     var imageURL:NSURL? { get }
+    
+    /// url of the original image
     var originalImageURL:NSURL? { get }
+    
+    /// variation of this outlet (used for determining scale factor)
     var variation:String! { get }
 }
 
@@ -78,7 +86,7 @@ extension CanLoadImage {
 
     /// get a `CGDataProvider` for the image
     ///
-    /// - Parameter callback: block to run when the provider becomes available
+    /// - parameter callback: block to run when the provider becomes available
     public func dataProvider(callback: (CGDataProviderRef -> Void)) {
         guard let url = self.imageURL else {
             return
@@ -98,6 +106,9 @@ extension CanLoadImage {
         }
     }
 
+    /// get a `CGDataProvider` for the original image
+    ///
+    /// - parameter callback: block to run when the provider becomes available
     public func originalDataProvider(callback: (CGDataProviderRef -> Void)) {
         guard let url = self.originalImageURL else {
             return
@@ -120,7 +131,7 @@ extension CanLoadImage {
     
     /// create a `CGImage` from the image data
     ///
-    /// - Parameter callback: block to execute when the image has been allocated
+    /// - parameter callback: block to execute when the image has been allocated
     public func cgImage(original original: Bool = false, callback: (CGImageRef -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         dataProviderFunc() { provider in
@@ -133,6 +144,9 @@ extension CanLoadImage {
         }
     }
 
+    /// create a `CGImage` from the original image data
+    ///
+    /// - parameter callback: block to execute when the image has been allocated
     public func originalCGImage(callback: (CGImageRef -> Void)) {
         self.cgImage(original:true, callback: callback)
     }
@@ -141,14 +155,17 @@ extension CanLoadImage {
     #if os(iOS)
     /// create `UIImage` from the image data
     ///
-    /// - Parameter callback: block to execute when the image has been allocated
+    /// - parameter callback: block to execute when the image has been allocated
     public func image(original original: Bool = false, callback: (UIImage -> Void)) {
         self.cgImage(original: original) { img in
             let uiImage = UIImage(CGImage: img, scale: AMP.config.variationScaleFactors[self.variation]!, orientation: .Up)
             callback(uiImage)
         }
     }
-    
+
+    /// create `UIImage` from the original image data
+    ///
+    /// - parameter callback: block to execute when the image has been allocated
     public func originalImage(callback: (UIImage -> Void)) {
         self.image(original: true, callback: callback)
     }
@@ -157,14 +174,17 @@ extension CanLoadImage {
     #if os(OSX)
     /// create `NSImage` from the image data
     ///
-    /// - Parameter callback: block to execute when the image has been allocated
+    /// - parameter callback: block to execute when the image has been allocated
     public func image(original original: Bool = false, callback: (NSImage -> Void)) {
         self.cgImage(original: original) { img in
             let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
             callback(nsImage)
         }
     }
-    
+
+    /// create `NSImage` from the original image data
+    ///
+    /// - parameter callback: block to execute when the image has been allocated
     public func originalImage(callback: (NSImage -> Void)) {
         self.image(original: true, callback: callback)
     }

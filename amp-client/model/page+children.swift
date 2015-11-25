@@ -14,9 +14,9 @@ extension AMPPage {
     
     /// fetch page children
     ///
-    /// - Parameter identifier: identifier of child page
-    /// - Parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
-    /// - Returns: self, to be able to chain more actions to the page
+    /// - parameter identifier: identifier of child page
+    /// - parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
+    /// - returns: self, to be able to chain more actions to the page
     public func child(identifier: String, callback: (AMPPage -> Void)) -> AMPPage {
         self.collection.page(identifier) { page in
             if page.parent == self.identifier {
@@ -31,8 +31,8 @@ extension AMPPage {
     
     /// fetch page children
     ///
-    /// - Parameter identifier: identifier of child page
-    /// - Returns: page object that resolves async or nil if page not child of self
+    /// - parameter identifier: identifier of child page
+    /// - returns: page object that resolves async or nil if page not child of self
     public func child(identifier: String) -> AMPPage? {
         let page = self.collection.page(identifier)
         
@@ -46,7 +46,7 @@ extension AMPPage {
     
     /// enumerate page children
     ///
-    /// - Parameter callback: the callback to call for each child
+    /// - parameter callback: the callback to call for each child
     public func children(callback: (AMPPage -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             for child in children {
@@ -57,7 +57,7 @@ extension AMPPage {
     
     /// list page children, Attention: those pages returned are not fully loaded!
     ///
-    /// - Parameter callback: the callback to call for children list
+    /// - parameter callback: the callback to call for children list
     public func childrenList(callback: ([AMPPage] -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             var result = [AMPPage]()

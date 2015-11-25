@@ -21,6 +21,7 @@ internal extension String {
     }
 }
 
+/// Full text search result item
 public class AMPSearchResult {
     
     /// Page metadata object for search result
@@ -57,10 +58,17 @@ public class AMPSearchResult {
     }
 }
 
+
+/// Full text search handle to be re-used for subsequent fast searches
 public class AMPSearchHandle {
+    
+    /// Collection for this handle
     public let collection: AMPCollection
 
+    /// SQLite DB handle
     private var dbHandle: COpaquePointer = nil
+    
+    /// SQLite prepared statement for searching
     private var stmt: COpaquePointer = nil
     
     /// Search for a text

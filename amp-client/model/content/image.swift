@@ -67,7 +67,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
 
     /// Initialize image content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized image content object
+    /// - parameter json: `JSONObject` that contains serialized image content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -136,6 +136,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         return self.url
     }
     
+    /// original image url for `CanLoadImage`
     public var originalImageURL:NSURL? {
         return self.originalURL
     }
@@ -146,8 +147,9 @@ extension AMPPage {
     #if os(iOS)
     /// Allocate `UIImage` for named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func image(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
@@ -161,8 +163,9 @@ extension AMPPage {
     
     /// Allocate `UIImage` for named outlet (original unmodified image) async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func originalImage(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
@@ -178,8 +181,8 @@ extension AMPPage {
     #if os(OSX)
     /// Allocate `NSImage` for named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func image(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
@@ -193,8 +196,8 @@ extension AMPPage {
     
     /// Allocate `NSImage` for named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func originalImage(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {

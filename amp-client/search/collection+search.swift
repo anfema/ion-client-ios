@@ -12,6 +12,10 @@
 import Foundation
 
 public extension AMPCollection {
+    
+    /// Get a fulltext search handle
+    ///
+    /// - parameter callback: callback to be called if the search handle is ready
     public func getSearchHandle(callback: (AMPSearchHandle -> Void)) {
         guard AMP.config.isFTSEnabled(self.identifier) else {
             return

@@ -53,10 +53,10 @@ public class AMPCollection {
     ///
     /// use `collection` method of `AMP` class instead!
     ///
-    /// - Parameter identifier: the collection identifier
-    /// - Parameter locale: locale code to fetch
-    /// - Parameter useCache: set to false to force a refresh
-    /// - Parameter callback: block to call when collection is fully loaded
+    /// - parameter identifier: the collection identifier
+    /// - parameter locale: locale code to fetch
+    /// - parameter useCache: set to false to force a refresh
+    /// - parameter callback: block to call when collection is fully loaded
     init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)?) {
         self.locale = locale
         self.useCache = useCache
@@ -91,9 +91,9 @@ public class AMPCollection {
     
     /// Fetch a page from this collection
     ///
-    /// - Parameter identifier: page identifier
-    /// - Parameter callback: the callback to call when the page becomes available
-    /// - Returns: self, to be able to chain more actions to the collection
+    /// - parameter identifier: page identifier
+    /// - parameter callback: the callback to call when the page becomes available
+    /// - returns: self, to be able to chain more actions to the collection
     public func page(identifier: String, callback:(AMPPage -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -167,8 +167,8 @@ public class AMPCollection {
     /// As there is no callback, this returns a page that resolves async once the page becomes available
     /// all actions chained to the page will be queued until the data is available
     ///
-    /// - Parameter identifier: page identifier
-    /// - Returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
+    /// - parameter identifier: page identifier
+    /// - returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
     public func page(identifier: String) -> AMPPage {
         // fetch page and resume processing when ready
         var fetch = true
@@ -205,7 +205,7 @@ public class AMPCollection {
   
     /// Enumerate pages
     ///
-    /// - Parameter callback: block to call for each page
+    /// - parameter callback: block to call for each page
     public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
         // append page listing to work queue
         dispatch_async(self.workQueue) {
@@ -225,8 +225,8 @@ public class AMPCollection {
     
     /// Error handler to chain to the collection
     ///
-    /// - Parameter callback: the block to call in case of an error
-    /// - Returns: self, to be able to chain more actions to the collection
+    /// - parameter callback: the block to call in case of an error
+    /// - returns: self, to be able to chain more actions to the collection
     public func onError(callback: (AMPError -> Void)) -> AMPCollection {
         return ErrorHandlingAMPCollection(collection: self, errorHandler: callback)
     }
@@ -264,8 +264,8 @@ public class AMPCollection {
 
     /// Fetch collection from cache or web
     ///
-    /// - Parameter identifier: collection identifier to get
-    /// - Parameter callback: block to call when the fetch finished
+    /// - parameter identifier: collection identifier to get
+    /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale ], cached:self.useCache) { result in
             if case .Failure = result {

@@ -10,7 +10,7 @@ import Foundation
 import html5parser
 import Markdown
 
-public class HTMLParser {
+class HTMLParser {
     private let tokens: [HTML5Token]
     private var formatStack = [FormatStackItem]()
     
@@ -19,11 +19,11 @@ public class HTMLParser {
         var styleDict: [String: AnyObject]
     }
 
-    public init(html: String) {
+    init(html: String) {
         self.tokens = HTML5Tokenizer(htmlString: html).tokenize()
     }
     
-    public func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
+    func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
         let result = NSMutableAttributedString()
         var counters = [Int]()
         var depth = 0
@@ -106,7 +106,7 @@ public class HTMLParser {
         return result
     }
     
-    public func renderText() -> String {
+    func renderText() -> String {
         var result = String()
         var counters = [Int]()
         var depth = 0

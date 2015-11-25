@@ -19,7 +19,7 @@ public class AMPDateTimeContent : AMPContent {
     
     /// Initialize datetime content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized datetime content object
+    /// - parameter json: `JSONObject` that contains serialized datetime content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -46,8 +46,9 @@ extension AMPPage {
     
     /// Fetch `NSDate` object from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
     public func date(name: String, position: Int = 0) -> NSDate? {
         if let content = self.outlet(name, position: position) {
             if case let content as AMPDateTimeContent = content {
@@ -59,8 +60,9 @@ extension AMPPage {
     
     /// Fetch `NSDate` object from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the date object becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the date object becomes available, will not be called if the outlet
     ///                       is not a datetime outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func date(name: String, position: Int = 0, callback: (NSDate -> Void)) -> AMPPage {

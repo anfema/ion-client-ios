@@ -62,7 +62,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     
     /// Initialize media content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized media content object
+    /// - parameter json: `JSONObject` that contains serialized media content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -124,7 +124,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     
     /// Load the file binary data and return memory mapped `NSData`
     ///
-    /// - Parameter callback: block to call when file data gets available, will not be called if there was an error
+    /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
@@ -151,6 +151,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         return nil
     }
     
+    /// original image url for `CanLoadImage`
     public var originalImageURL:NSURL? {
         if self.originalMimeType.hasPrefix("image/") {
             return self.originalURL
@@ -164,8 +165,9 @@ extension AMPPage {
     
     /// Fetch URL from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
     public func mediaURL(name: String, position: Int = 0) -> NSURL? {
         if let content = self.outlet(name, position: position) {
             if case let content as AMPMediaContent = content {
@@ -177,8 +179,9 @@ extension AMPPage {
     
     /// Fetch URL from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the media object becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func mediaURL(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
@@ -194,8 +197,8 @@ extension AMPPage {
    
     /// Fetch data for media file async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the data becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func mediaData(name: String, position: Int = 0, callback: (NSData -> Void)) -> AMPPage {

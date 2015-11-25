@@ -63,11 +63,11 @@ public class AMPPage {
     ///
     /// Use the `page` function from `AMPCollection`
     ///
-    /// - Parameter collection: the collection this page belongs to
-    /// - Parameter identifier: the page identifier
-    /// - Parameter layout: the page layout
-    /// - Parameter useCache: set to false to force a page refresh
-    /// - Parameter callback: the block to call when initialization finished
+    /// - parameter collection: the collection this page belongs to
+    /// - parameter identifier: the page identifier
+    /// - parameter layout: the page layout
+    /// - parameter useCache: set to false to force a page refresh
+    /// - parameter callback: the block to call when initialization finished
     init(collection: AMPCollection, identifier: String, layout: String?, useCache: Bool, parent: String?, callback:(AMPPage -> Void)?) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
@@ -120,8 +120,8 @@ public class AMPPage {
     
     /// Error handler to chain to the page
     ///
-    /// - Parameter callback: the block to call in case of an error
-    /// - Returns: self, to be able to chain more actions to the page
+    /// - parameter callback: the block to call in case of an error
+    /// - returns: self, to be able to chain more actions to the page
     public func onError(callback: (AMPError -> Void)) -> AMPPage {
         return ErrorHandlingAMPPage(page: self, errorHandler: callback)
     }
@@ -145,10 +145,11 @@ public class AMPPage {
     
     /// Fetch an outlet by name (probably deferred by page loading)
     ///
-    /// - Parameter name: outlet name to fetch
-    /// - Parameter callback: block to execute when outlet was found, will not be called if no such outlet
+    /// - parameter name: outlet name to fetch
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
-    /// - Returns: self to be able to chain another call
+    /// - returns: self to be able to chain another call
     public func outlet(name: String, position: Int = 0, callback: (AMPContent -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -180,8 +181,9 @@ public class AMPPage {
    
     /// Fetch an outlet by name (from loaded page)
     ///
-    /// - Parameter name: outlet name to fetch
-    /// - Returns: content object if page was loaded and outlet exists
+    /// - parameter name: outlet name to fetch
+    /// - parameter position: (optional) position in the array
+    /// - returns: content object if page was loaded and outlet exists
     public func outlet(name: String, position: Int = 0) -> AMPContent? {
         if !self.isReady {
             // cannot return outlet synchronously from a async loading page
@@ -208,9 +210,10 @@ public class AMPPage {
 
     /// Check if an Outlet exists
     ///
-    /// - Parameter name: outlet to check
-    /// - Parameter callback: callback to call
-    /// - Returns: self for chaining
+    /// - parameter name: outlet to check
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: callback to call
+    /// - returns: self for chaining
     public func outletExists(name: String, position: Int = 0, callback: (Bool -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -239,8 +242,9 @@ public class AMPPage {
     
     /// Check if an Outlet exists
     ///
-    /// - Parameter name: outlet to check
-    /// - Returns: true if outlet exists else false, nil if page not loaded
+    /// - parameter name: outlet to check
+    /// - parameter position: (optional) position in the array
+    /// - returns: true if outlet exists else false, nil if page not loaded
     public func outletExists(name: String, position: Int = 0) -> Bool? {
         if !self.isReady {
             // cannot return outlet synchronously from a async loading page
@@ -323,8 +327,8 @@ public class AMPPage {
 
     /// Fetch page from cache or web
     ///
-    /// - Parameter identifier: page identifier to get
-    /// - Parameter callback: block to call when the fetch finished
+    /// - parameter identifier: page identifier to get
+    /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
         AMPRequest.fetchJSON("pages/\(self.collection.identifier)/\(identifier)", queryParameters: [ "locale" : self.collection.locale, "variation" : AMP.config.variation ], cached:self.useCache) { result in
             if case .Failure = result {
@@ -410,7 +414,7 @@ public class AMPPage {
     
     /// Recursively append all content
     /// 
-    /// - Parameter obj: the content object to append including it's children
+    /// - parameter obj: the content object to append including it's children
     private func appendContent(obj:AMPContent) {
         self.content.append(obj)
 

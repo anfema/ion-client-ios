@@ -32,9 +32,9 @@ extension AMP {
     /// Clear disk cache for specific host and current locale
     ///
     /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - Parameter host: a hostname to empty the cache for
-    // TODO: Write test for resetDiskCache(host:)
+    /// - parameter host: a hostname to empty the cache for
     public class func resetDiskCache(host host:String) {
+        // TODO: Write test for resetDiskCache(host:)
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host)
     }
@@ -42,10 +42,10 @@ extension AMP {
     /// Clear disk cache for specific host and locale
     ///
     /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - Parameter host: a hostname to empty the cache for
-    /// - Parameter locale: the locale to reset
-    // TODO: Write test for resetDiskCache(host:locale:)
+    /// - parameter host: a hostname to empty the cache for
+    /// - parameter locale: the locale to reset
     public class func resetDiskCache(host host:String, locale:String) {
+        // TODO: Write test for resetDiskCache(host:locale:)
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(host, locale:locale)
     }
@@ -53,16 +53,16 @@ extension AMP {
     /// Clear disk cache for specific locale and all hosts
     ///
     /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
-    /// - Parameter locale: a locale code to empty the cache for
-    // TODO: Write test for resetDiskCache(locale:)
+    /// - parameter locale: a locale code to empty the cache for
     public class func resetDiskCache(locale locale: String) {
+        // TODO: Write test for resetDiskCache(locale:)
         self.config.lastOnlineUpdate = nil
         AMPRequest.resetCache(locale: locale)
     }
     
     /// Determine if collection cache has timed out
     ///
-    /// - Returns: true if cache is old
+    /// - returns: true if cache is old
     internal class func hasCacheTimedOut() -> Bool {
         var timeout = false
         if let lastUpdate = self.config.lastOnlineUpdate {

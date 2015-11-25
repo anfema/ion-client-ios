@@ -23,14 +23,12 @@ public class AMPContent {
     
     /// searchable?
 	public var isSearchable = false
-
-    // TODO: Array index?
-    
+   
     /// Initialize content content object from JSON
     ///
     /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!
     ///
-    /// - Parameter json: `JSONObject` that contains serialized content content object
+    /// - parameter json: `JSONObject` that contains serialized content content object
 	init(json:JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
 			throw AMPError.JSONObjectExpected(json)
@@ -57,7 +55,7 @@ public class AMPContent {
     /// This essentially removes the top JSON object casing and determines which object
     /// to instanciate from the name of the key of that JSON object
     ///
-    /// - Parameter json: the JSON object to parse
+    /// - parameter json: the JSON object to parse
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON, AMPError.Code.UnknownContentType
     public class func factory(json:JSONObject) throws -> AMPContent {
         guard case .JSONDictionary(let dict) = json else {

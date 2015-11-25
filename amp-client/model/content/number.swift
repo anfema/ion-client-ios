@@ -19,7 +19,7 @@ public class AMPNumberContent : AMPContent {
     
     /// Initialize number content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized number content object
+    /// - parameter json: `JSONObject` that contains serialized number content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -41,8 +41,9 @@ extension AMPPage {
     
     /// Return value for named number outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: value if the outlet was a number outlet and the page was already cached, else nil
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: value if the outlet was a number outlet and the page was already cached, else nil
     public func number(name: String, position: Int = 0) -> Double? {
         if let content = self.outlet(name, position: position) {
             if case let content as AMPNumberContent = content {
@@ -54,8 +55,9 @@ extension AMPPage {
     
     /// Return value for named number outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the number becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the number becomes available, will not be called if the outlet
     ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func number(name: String, position: Int = 0, callback: (Double -> Void)) -> AMPPage {

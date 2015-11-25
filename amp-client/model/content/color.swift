@@ -33,7 +33,7 @@ public class AMPColorContent : AMPContent {
     
     /// Initialize color content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized color content object
+    /// - parameter json: `JSONObject` that contains serialized color content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
@@ -61,7 +61,7 @@ public class AMPColorContent : AMPContent {
     #if os(iOS)
     /// Create an `UIColor` instance from the color object
     /// 
-    /// - Returns: `UIColor` instance with values from color object
+    /// - returns: `UIColor` instance with values from color object
     public func color() -> UIColor? {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
@@ -70,7 +70,7 @@ public class AMPColorContent : AMPContent {
     #if os(OSX)
     /// Create an `NSColor` instance from the color object
     ///
-    /// - Returns: `NSColor` instance with values from color object
+    /// - returns: `NSColor` instance with values from color object
     public func color() -> NSColor? {
         return NSColor(deviceRed: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
@@ -83,8 +83,9 @@ extension AMPPage {
     #if os(OSX)
     /// Fetch `NSColor` object from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String, position: Int = 0) -> NSColor? {
         if let content = self.outlet(name, position: position) {
             if case let content as AMPColorContent = content {
@@ -96,8 +97,9 @@ extension AMPPage {
     
     /// Fetch `NSColor` object from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func color(name: String, position: Int = 0, callback: (NSColor -> Void)) -> AMPPage {
@@ -115,8 +117,9 @@ extension AMPPage {
     #if os(iOS)
     /// Fetch `UIColor` object from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String, position: Int = 0) -> UIColor? {
         if let content = self.outlet(name, position: position) {
             if case let content as AMPColorContent = content {
@@ -128,8 +131,9 @@ extension AMPPage {
     
     /// Fetch `UIColor` object from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the color object becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func color(name: String, position: Int = 0, callback: (UIColor -> Void)) -> AMPPage {

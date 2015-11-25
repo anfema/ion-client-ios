@@ -11,6 +11,8 @@ import html5parser
 import amp_client
 import Markdown
 
+@testable import amp_client
+
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
 

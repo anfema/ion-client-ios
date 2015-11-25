@@ -50,7 +50,7 @@ public enum AMPError: ErrorType {
     
     ///  Make NSError from AMPError
     ///
-    ///  - Returns: NSError object with information of the error
+    ///  - returns: NSError object with information of the error
     public func makeNSError() -> NSError {
         var userInfo = [NSLocalizedFailureReasonErrorKey: "Unknown Error"]
         var numericalCode = -7000

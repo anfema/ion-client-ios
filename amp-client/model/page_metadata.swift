@@ -45,7 +45,7 @@ public class AMPPageMeta: CanLoadImage {
     
     /// Init metadata from JSON object
     ///
-    /// - Parameter json: serialized JSON object of page metadata
+    /// - parameter json: serialized JSON object of page metadata
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
     internal init(json: JSONObject, position: Int) throws {
         guard case .JSONDictionary(let dict) = json else {
@@ -104,6 +104,7 @@ public class AMPPageMeta: CanLoadImage {
         }
     }
     
+    /// thumbnail image url for `CanLoadImage`
     public var imageURL:NSURL? {
         if let thumbnail = self.thumbnail {
             return NSURL(string: thumbnail)!
@@ -111,11 +112,13 @@ public class AMPPageMeta: CanLoadImage {
         return nil
     }
 
+    /// original image url for `CanLoadImage`, always nil
     public var originalImageURL:NSURL? {
         return nil
     }
     
+    /// variation for `CanLoadImage`, returns `default` because the thumbnails are all the same for all variations
     public var variation: String! {
-        return AMP.config.variation
+        return "default"
     }
 }

@@ -24,9 +24,9 @@ public class AMP {
 
     /// Login user
     ///
-    /// - Parameter username: the username to log in
-    /// - Parameter password: the password to send
-    /// - Parameter callback: block to call when login request finished (Bool parameter is success flag)
+    /// - parameter username: the username to log in
+    /// - parameter password: the password to send
+    /// - parameter callback: block to call when login request finished (Bool parameter is success flag)
     public class func login(username: String, password: String, callback: (Bool -> Void)) {
         AMPRequest.postJSON("login", queryParameters: nil, body: [
             "login": [
@@ -60,8 +60,8 @@ public class AMP {
     /// be delayed. Access to items in a non initialized collection may have
     /// undefined results
     ///
-    /// - Parameter identifier: the identifier of the collection
-    /// - Returns: collection object from cache or empty collection object
+    /// - parameter identifier: the identifier of the collection
+    /// - returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
         if !self.hasCacheTimedOut() {
@@ -84,9 +84,9 @@ public class AMP {
     
     /// Fetch a collection and call block on finish
     ///
-    /// - Parameter identifier: the identifier of the collection
-    /// - Parameter callback: the block to call when the collection is fully initialized
-    /// - Returns: fetched collection to be able to chain calls
+    /// - parameter identifier: the identifier of the collection
+    /// - parameter callback: the block to call when the collection is fully initialized
+    /// - returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
 
@@ -122,8 +122,8 @@ public class AMP {
 
     /// Error handler
     ///
-    /// - Parameter identifier: the collection identifier that caused the error
-    /// - Parameter error: An error object
+    /// - parameter identifier: the collection identifier that caused the error
+    /// - parameter error: An error object
     class func callError(identifier: String, error: AMPError) {
         dispatch_async(AMP.config.responseQueue) {
             AMP.config.errorHandler(identifier, error)
@@ -132,8 +132,8 @@ public class AMP {
 
     /// Downloader calls this function to register a progress item with the global progress toolbar
     ///
-    /// - Parameter progressObject: NSProgress of the download
-    /// - Parameter urlString: URL of the download for management purposes
+    /// - parameter progressObject: NSProgress of the download
+    /// - parameter urlString: URL of the download for management purposes
     class func registerProgress(progressObject: NSProgress, urlString: String) {
         // TODO: send progress callbacks
     }

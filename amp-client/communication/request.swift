@@ -25,10 +25,10 @@ public class AMPRequest {
 
     /// Async fetch JSON from AMP Server
     ///
-    /// - Parameter endpoint: the API endpoint to query
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
+    /// - parameter endpoint: the API endpoint to query
+    /// - parameter queryParameters: any query parameters to include in the query or nil
+    /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
+    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
     public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject, AMPError> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
@@ -88,10 +88,10 @@ public class AMPRequest {
     
     /// Async fetch a binary file from AMP Server
     ///
-    /// - Parameter urlString: the URL to fetch, has to be a complete and valid URL
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
+    /// - parameter urlString: the URL to fetch, has to be a complete and valid URL
+    /// - parameter queryParameters: any query parameters to include in the query or nil
+    /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
+    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
     public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String, AMPError> -> Void)) {
         let headers = self.headers()
@@ -177,8 +177,8 @@ public class AMPRequest {
     
     /// Fetch a file from the cache or return nil
     ///
-    /// - Parameter urlString: url of the file to fetch from cache
-    /// - Returns: NSData with memory mapped file or nil if not in cache
+    /// - parameter urlString: url of the file to fetch from cache
+    /// - returns: NSData with memory mapped file or nil if not in cache
     public class func cachedFile(urlString:String) -> NSData? {
         let url = NSURL(string: urlString)!
         let cacheName = self.cacheName(url)
@@ -196,10 +196,10 @@ public class AMPRequest {
     
     /// Async POST JSON to AMP Server
     ///
-    /// - Parameter endpoint: the API endpoint to post to
-    /// - Parameter queryParameters: any get parameters to include in the query or nil
-    /// - Parameter body: dictionary with parameters (will be JSON encoded)
-    /// - Parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
+    /// - parameter endpoint: the API endpoint to post to
+    /// - parameter queryParameters: any get parameters to include in the query or nil
+    /// - parameter body: dictionary with parameters (will be JSON encoded)
+    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
     public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONObject, AMPError> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         var headers = self.headers()
@@ -218,9 +218,9 @@ public class AMPRequest {
     
     /// Build url from partial API endpoint
     ///
-    /// - Parameter endpoint: the API endpoint
-    /// - Parameter queryParameters: any query parameters to include in the query or nil
-    /// - Returns: complete valid URL string for query based on `AMP.config`
+    /// - parameter endpoint: the API endpoint
+    /// - parameter queryParameters: any query parameters to include in the query or nil
+    /// - returns: complete valid URL string for query based on `AMP.config`
     private class func buildURL(endpoint: String, queryParameters: [String:String]?) -> String {
         // append endpoint to base url
         let url = AMP.config.serverURL.URLByAppendingPathComponent(endpoint)
@@ -241,7 +241,7 @@ public class AMPRequest {
     
     /// Prepare headers for request
     ///
-    /// - Returns: Headers-Dictionary for use in Alamofire request
+    /// - returns: Headers-Dictionary for use in Alamofire request
     private class func headers() -> [String:String] {
         var headers = [String:String]()
         if let token = AMP.config.sessionToken {
@@ -252,9 +252,9 @@ public class AMPRequest {
 
     /// Inject `last_updated` into json response
     ///
-    /// - Parameter json: the JSON object to patch
-    /// - Parameter urlString: the request URL (used to find the last update date in cache DB)
-    /// - Returns: new JSON object with added `last_updated` field if input was a dictionary, does not change arrays
+    /// - parameter json: the JSON object to patch
+    /// - parameter urlString: the request URL (used to find the last update date in cache DB)
+    /// - returns: new JSON object with added `last_updated` field if input was a dictionary, does not change arrays
     private class func augmentJSONWithChangeDate(json: JSONObject, urlString: String) -> JSONObject {
         // augment json with timestamp for last update
         guard case .JSONDictionary(var dict) = json,

@@ -19,7 +19,7 @@ public class AMPContainerContent : AMPContent {
     
     /// Initialize container content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized container content object
+    /// - parameter json: `JSONObject` that contains serialized container content object
     ///
     /// Container content children can be accessed by subscripting the container content object
     override init(json:JSONObject) throws {
@@ -58,8 +58,9 @@ extension AMPPage {
     
     /// Fetch `AMPContent`-Array from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: Array of `AMPContent` objects if the outlet was a container outlet and the page was already
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: Array of `AMPContent` objects if the outlet was a container outlet and the page was already
     ///            cached, else nil
     public func children(name: String, position: Int = 0) -> [AMPContent]? {
         if let content = self.outlet(name, position: position) {
@@ -72,8 +73,9 @@ extension AMPPage {
     
     /// Fetch `AMPContent`-Array from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the children become available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the children become available, will not be called if the outlet
     ///                       is not a container outlet or non-existant or fetching the outlet was canceled because
     ///                       of a communication error
     public func children(name: String, position: Int = 0, callback: ([AMPContent] -> Void)) -> AMPPage {
