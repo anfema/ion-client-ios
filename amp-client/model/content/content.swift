@@ -83,8 +83,6 @@ public class AMPContent {
             return try AMPFlagContent(json: json)
         case "imagecontent":
             return try AMPImageContent(json: json)
-        case "kvcontent":
-            return try AMPKeyValueContent(json: json)
         case "numbercontent":
             return try AMPNumberContent(json: json)
         case "mediacontent":
