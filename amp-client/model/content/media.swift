@@ -174,6 +174,11 @@ extension AMPPage {
                 return content.url
             }
         }
+        if let content = self.outlet(name, position: position) {
+            if case let content as AMPFileContent = content {
+                return content.url
+            }
+        }
         return nil
     }
     
@@ -187,6 +192,11 @@ extension AMPPage {
     public func mediaURL(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
         self.outlet(name, position: position) { content in
             if case let content as AMPMediaContent = content {
+                if let url = content.url {
+                    callback(url)
+                }
+            }
+            if case let content as AMPFileContent = content {
                 if let url = content.url {
                     callback(url)
                 }
