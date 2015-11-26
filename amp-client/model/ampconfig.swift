@@ -63,7 +63,11 @@ public struct AMPConfig {
         self.updateBlocks = Dictionary<String, (String -> Void)>()
         self.alamofire = Alamofire.Manager(configuration: configuration)
         self.ftsEnabled = [String:Bool]()
-        self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
+        #if os(iOS)
+            self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
+        #else
+            self.variation = "default"
+        #endif
         self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
         self.resetErrorHandler()
         

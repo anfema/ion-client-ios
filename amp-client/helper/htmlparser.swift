@@ -117,7 +117,7 @@ class HTMLParser {
         
         for token in self.tokens {
             switch token {
-            case .StartTag(let name, let selfClosing, let attributes):
+            case .StartTag(let name, let selfClosing, _):
                 guard let name = name where !selfClosing else {
                     continue
                 }
