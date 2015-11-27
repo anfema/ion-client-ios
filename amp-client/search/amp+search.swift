@@ -21,12 +21,14 @@ internal extension AMP {
     
     internal class func downloadFTSDB(collection: String, callback:(Void -> Void)? = nil) {
         AMP.collection(collection) { c in
+            guard let ftsURL = c.ftsDownloadURL else {
+                return
+            }
+            
             dispatch_barrier_async(c.workQueue) {
                 let sema = dispatch_semaphore_create(0)
                 
-                var url:String = AMP.config.serverURL.absoluteString
-                url = url.stringByReplacingOccurrencesOfString("client/v1/", withString: "media/fts/\(collection).sqlite3")
-                AMPRequest.fetchBinary(url, queryParameters: nil, cached: false, checksumMethod:"null", checksum: "") { result in
+                AMPRequest.fetchBinary(ftsURL, queryParameters: nil, cached: false, checksumMethod:"null", checksum: "") { result in
                     defer {
                         dispatch_semaphore_signal(sema)
                     }

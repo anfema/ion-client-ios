@@ -46,6 +46,12 @@ public class AMPCollection {
     /// set to false to avoid using the cache (refreshes, etc.)
     private var useCache = true
     
+    /// archive download url
+    internal var archiveURL:String?
+    
+    /// FTS download url
+    internal var ftsDownloadURL:String?
+    
 
     // MARK: - Initializer
     
@@ -282,7 +288,7 @@ public class AMPCollection {
             
             // furthermore we need a collection and a last_updated element
             guard dict["collection"] != nil && dict["last_updated"] != nil,
-                  case .JSONArray(let array) = dict["collection"]!,
+                  case .JSONArray(let array)      = dict["collection"]!,
                   case .JSONNumber(let timestamp) = dict["last_updated"]! else {
                     callback(AMPError.JSONObjectExpected(result.value!))
                     return
@@ -293,10 +299,11 @@ public class AMPCollection {
             if case .JSONDictionary(let dict) = array[0] {
                 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["pages"] != nil) && (dict["default_locale"] != nil),
-                      case .JSONString(let id)    = dict["identifier"]!,
-                      case .JSONString(let defaultLocale) = dict["default_locale"]!,
-                      case .JSONArray(let pages)          = dict["pages"]! else {
+                guard (dict["identifier"] != nil) && (dict["pages"] != nil) && (dict["default_locale"] != nil) && (dict["archive"] != nil) && (dict["fts_db"] != nil),
+                      case .JSONString(let id)             = dict["identifier"]!,
+                      case .JSONString(let defaultLocale)  = dict["default_locale"]!,
+                      case .JSONString(let archiveURL)     = dict["archive"]!,
+                      case .JSONArray(let pages)           = dict["pages"]! else {
                         callback(AMPError.InvalidJSON(result.value!))
                         return
                 }
@@ -304,6 +311,10 @@ public class AMPCollection {
                 // initialize self
                 self.identifier = id
                 self.defaultLocale = defaultLocale
+                self.archiveURL = archiveURL
+                if case .JSONString(let ftsURL) = dict["fts_db"]! {
+                    self.ftsDownloadURL = ftsURL
+                }
             
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
