@@ -191,7 +191,7 @@ extension AMPRequest {
         
         // append to cache DB and save
         self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
-        self.saveCacheDB()
+//        self.saveCacheDB()
     }
     
     /// Internal function to add an object to the cache DB
@@ -259,7 +259,7 @@ extension AMPRequest {
     }
     
     /// Private function to save the cache DB to disk
-    private class func saveCacheDB(locale: String = AMP.config.locale) {
+    internal class func saveCacheDB(locale: String = AMP.config.locale) {
         // can not save nothing
         guard let cacheDB = self.cacheDB else {
             return

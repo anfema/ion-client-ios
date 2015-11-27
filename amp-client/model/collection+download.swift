@@ -14,19 +14,21 @@ import Tarpit
 import DEjson
 
 extension AMPCollection {
-    public func download(callback: (Void -> Void)) -> AMPCollection {
+    public func download(callback: (Bool -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             
-            AMPRequest.fetchBinary(self.archiveURL, queryParameters: [ "locale" : self.locale ], cached: false,
+            AMPRequest.fetchBinary(self.archiveURL, queryParameters: nil, cached: false,
                 checksumMethod:"null", checksum: "") { result in
                     guard case .Success(let filename) = result else {
+                        dispatch_async(AMP.config.responseQueue) {
+                            callback(false)
+                        }
                         return
                     }
                     
-                    if self.unpackToCache(filename) {
-                        dispatch_async(AMP.config.responseQueue) {
-                            callback()
-                        }
+                    let result = self.unpackToCache(filename)
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(result)
                     }
             }
         }
@@ -35,7 +37,11 @@ extension AMPCollection {
     
     
     private func unpackToCache(filename: String) -> Bool {
-        var indexDB: JSONObject? = nil
+        var index = [JSONObject]()
+        
+        defer {
+            AMPRequest.saveCacheDB()
+        }
         
         do {
             let tar = try TarFile(fileName: filename)
@@ -44,13 +50,14 @@ extension AMPCollection {
                     guard let jsonString = NSString(data: file.data, encoding: NSUTF8StringEncoding) else {
                         return false
                     }
-                    indexDB = JSONDecoder(jsonString as String).jsonObject
-                } else {
-                    guard let indexDB = indexDB,
-                          case .JSONArray(let index) = indexDB else {
-                        return false
+                    let indexDB = JSONDecoder(jsonString as String).jsonObject
+                    guard case .JSONArray(let i) = indexDB else {
+                            return false
                     }
-                    for item in index {
+                    index = i
+                } else {
+                    var found: Int? = nil
+                    for (idx, item) in index.enumerate() {
                         guard case .JSONDictionary(let dict) = item where (dict["name"] != nil) && (dict["url"] != nil),
                               case .JSONString(let filename) = dict["name"]!,
                               case .JSONString(let url) = dict["url"]! else {
@@ -65,8 +72,12 @@ extension AMPCollection {
                         
                         if filename == file.filename {
                             AMPRequest.saveToCache(file.data, url: url, checksum: checksum)
+                            found = idx
                             break
                         }
+                    }
+                    if found != nil {
+                        index.removeAtIndex(found!)
                     }
                 }
             }
