@@ -108,6 +108,16 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+    
+    func testCollectionDownload() {
+        let expectation = self.expectationWithDescription("testCollectionDownload")
+        
+        AMP.collection("test").download {
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+    }
 
 }
 

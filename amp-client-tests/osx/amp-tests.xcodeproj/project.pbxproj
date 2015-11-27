@@ -63,6 +63,7 @@
 		8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		8FCFAECF1C08B5D30051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAECE1C08B5D30051981F /* htmlparser.swift */; };
+		8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAED01C08B83D0051981F /* collection+download.swift */; };
 		8FF9DB701BF9E32200935748 /* collection+native_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB6F1BF9E32200935748 /* collection+native_extensions.swift */; };
 		8FF9DB721BF9E35100935748 /* page_metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB711BF9E35100935748 /* page_metadata.swift */; };
 		8FF9DB741BF9E38400935748 /* collection+metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB731BF9E38400935748 /* collection+metadata.swift */; };
@@ -169,6 +170,7 @@
 		8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8FAD5CD11BF503B2000C3119 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8FCFAECE1C08B5D30051981F /* htmlparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = htmlparser.swift; sourceTree = "<group>"; };
+		8FCFAED01C08B83D0051981F /* collection+download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+download.swift"; sourceTree = "<group>"; };
 		8FF9DB6F1BF9E32200935748 /* collection+native_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+native_extensions.swift"; sourceTree = "<group>"; };
 		8FF9DB711BF9E35100935748 /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8FF9DB731BF9E38400935748 /* collection+metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+metadata.swift"; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 				8FF9DB731BF9E38400935748 /* collection+metadata.swift */,
 				8FF9DB711BF9E35100935748 /* page_metadata.swift */,
 				8FF9DB6F1BF9E32200935748 /* collection+native_extensions.swift */,
+				8FCFAED01C08B83D0051981F /* collection+download.swift */,
 			);
 			name = collection;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				8F78B30D1BF363AA009D4B67 /* content.swift in Sources */,
 				8F78B30B1BF363AA009D4B67 /* color.swift in Sources */,
 				8F78B3161BF363AA009D4B67 /* text.swift in Sources */,
+				8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */,
 				8F78B3151BF363AA009D4B67 /* option.swift in Sources */,
 				8F78B3051BF363AA009D4B67 /* request_cache.swift in Sources */,
 				8FF9DB7D1BF9E7D600935748 /* amp+cache.swift in Sources */,

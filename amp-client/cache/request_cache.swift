@@ -141,6 +141,59 @@ extension AMPRequest {
         }
     }
     
+    internal class func saveToCache(data: NSData, url: String, checksum:String?) {
+        // load cache DB if not loaded yet
+        if self.cacheDB == nil {
+            self.loadCacheDB()
+        }
+        
+        // fetch current timestamp truncated to maximum resolution of 1 ms
+        let timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        
+        // pop current cache DB entry
+        var obj:[String:JSONObject]? = self.getCacheDBEntry(url)
+        self.removeCacheDBEntry(url)
+
+        // if there was nothing to pop, create new object
+        if obj == nil {
+            obj = [String:JSONObject]()
+        }
+        
+        let parsedURL = NSURL(string: url)!
+        let hash = url.cryptoHash(.MD5)
+        
+        
+        var filename = self.cacheBaseDir(parsedURL.host!, locale: AMP.config.locale)
+        if !NSFileManager.defaultManager().fileExistsAtPath(filename.path!) {
+            do {
+                try NSFileManager.defaultManager().createDirectoryAtPath(filename.path!, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                return
+            }
+        }
+
+        filename = filename.URLByAppendingPathComponent(hash)
+        data.writeToFile(filename.path!, atomically: true)
+        
+        // populate object with current data
+        obj!["url"]             = .JSONString(url)
+        obj!["host"]            = .JSONString(parsedURL.host!)
+        obj!["filename"]        = .JSONString(hash)
+        obj!["last_updated"]    = .JSONNumber(timestamp)
+
+        if let checksum = checksum {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            if checksumParts.count > 1 {
+                obj!["checksum_method"] = .JSONString(checksumParts[0])
+                obj!["checksum"]        = .JSONString(checksumParts[1])
+            }
+        }
+        
+        // append to cache DB and save
+        self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
+        self.saveCacheDB()
+    }
+    
     /// Internal function to add an object to the cache DB
     ///
     /// - parameter request: optional request (used to extract URL)

@@ -47,7 +47,7 @@ public class AMPCollection {
     private var useCache = true
     
     /// archive download url
-    internal var archiveURL:String?
+    internal var archiveURL:String!
     
     /// FTS download url
     internal var ftsDownloadURL:String?
