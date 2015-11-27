@@ -4,6 +4,7 @@ PODS:
   - HashExtensions (1.0.0)
   - html5parser (1.0.0)
   - Markdown (1.0.2)
+  - Tarpit (1.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 3.1)
@@ -11,6 +12,7 @@ DEPENDENCIES:
   - HashExtensions (~> 1.0)
   - html5parser (~> 1.0)
   - Markdown (~> 1.0)
+  - Tarpit (~> 1.0)
 
 SPEC CHECKSUMS:
   Alamofire: 7c16ca65f3c7e681fd925fd7f2dec7747ff96855
@@ -18,5 +20,6 @@ SPEC CHECKSUMS:
   HashExtensions: 9ac81090e6e704fb936da8a4e51bf5331c014bab
   html5parser: 6618edf731a28ef0cdf46c5c5eac395e27c30af9
   Markdown: f0a6f3f1ada824b6f5514e384e2ecde63b1d4a12
+  Tarpit: 443186585942caba35de8d9b737a0c4d52e4eee8
 
 COCOAPODS: 0.39.0
