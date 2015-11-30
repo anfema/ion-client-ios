@@ -212,7 +212,7 @@ public struct AttributedStringStyling {
         self.embedImages = false
         
         self.heading = []
-        self.calculateHeadingSizes(1.1, font: font)
+        self.calculateHeadingSizes(1.1, font: strongFont)
     }
     
     public mutating func calculateHeadingSizes(multiplier: Float, font: Font) {
