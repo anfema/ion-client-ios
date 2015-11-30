@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7769A7F0274A01ED40DD985B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D059CE25D0784B783F89E4D /* Pods.framework */; };
+		8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DACC11C0C9A6300193E8C /* collection+download.swift */; };
 		8F78B1E81BF35689009D4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B1E71BF35689009D4B67 /* AppDelegate.swift */; };
 		8F78B1EA1BF35689009D4B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B1E91BF35689009D4B67 /* ViewController.swift */; };
 		8F78B1ED1BF35689009D4B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F78B1EB1BF35689009D4B67 /* Main.storyboard */; };
@@ -108,6 +109,7 @@
 
 /* Begin PBXFileReference section */
 		8D059CE25D0784B783F89E4D /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F0DACC11C0C9A6300193E8C /* collection+download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+download.swift"; sourceTree = "<group>"; };
 		8F78B1E41BF35689009D4B67 /* amp-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "amp-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F78B1E71BF35689009D4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F78B1E91BF35689009D4B67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 				8FCFADEB1BFCD7980051981F /* collection.swift */,
 				8FCFADE91BFCD7980051981F /* collection+metadata.swift */,
 				8FCFADEA1BFCD7980051981F /* collection+native_extensions.swift */,
+				8F0DACC11C0C9A6300193E8C /* collection+download.swift */,
 			);
 			name = collection;
 			sourceTree = "<group>";
@@ -690,6 +693,7 @@
 				8FCFAE391BFCD7E40051981F /* option.swift in Sources */,
 				8FCFAE351BFCD7E40051981F /* image.swift in Sources */,
 				8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */,
+				8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */,
 				8FCFAE2B1BFCD7E40051981F /* collection+native_extensions.swift in Sources */,
 				8FCFAE251BFCD7E40051981F /* page.swift in Sources */,
 				8FCFAE2D1BFCD7E40051981F /* ampconfig.swift in Sources */,
