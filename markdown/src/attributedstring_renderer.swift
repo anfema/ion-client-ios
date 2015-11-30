@@ -41,6 +41,7 @@ public struct AttributedStringStyle {
     public var marginBottom:Float?
     
     public var writingDirection:NSWritingDirection?
+    private var tabStops = [Float]()
     
     public func makeAttributeDict(nestingDepth nestingDepth: Int = 0, renderMode: RenderMode = .Normal) -> Dictionary<String, AnyObject> {
         var result = Dictionary<String, AnyObject>()
@@ -48,7 +49,7 @@ public struct AttributedStringStyle {
         if let font = self.font where renderMode != .ExcludeFont {
             result[NSFontAttributeName] = font
         }
-
+        
         if let foregroundColor = self.foregroundColor {
             result[NSForegroundColorAttributeName] = foregroundColor
         }
@@ -61,11 +62,11 @@ public struct AttributedStringStyle {
         if let strikeThrough = self.strikeThrough {
             result[NSStrikethroughStyleAttributeName] = (strikeThrough ? NSUnderlineStyle.StyleSingle.rawValue : NSUnderlineStyle.StyleNone.rawValue)
         }
-
+        
         if renderMode == .FontOnly {
             return result
         }
-       
+        
         var useParagraphStyle = false
         let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         
@@ -73,38 +74,50 @@ public struct AttributedStringStyle {
             useParagraphStyle = true
             paragraphStyle.alignment = alignment
         }
-
+        
         if let textIndent = self.textIndent {
             useParagraphStyle = true
             paragraphStyle.firstLineHeadIndent = CGFloat(textIndent * (nestingDepth + 1))
-            paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1))
+            paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1)) + CGFloat(textIndent)
         }
-
+        
         if let lineHeightMultiplier = self.lineHeightMultiplier {
             useParagraphStyle = true
             paragraphStyle.lineHeightMultiple = CGFloat(lineHeightMultiplier)
         }
-
+        
         if let lineBreakMode = self.lineBreakMode {
             useParagraphStyle = true
             paragraphStyle.lineBreakMode = lineBreakMode
         }
-
+        
         if let marginTop = self.marginTop {
             useParagraphStyle = true
             paragraphStyle.paragraphSpacingBefore = CGFloat(marginTop)
         }
-
+        
         if let marginBottom = self.marginBottom {
             useParagraphStyle = true
             paragraphStyle.paragraphSpacing = CGFloat(marginBottom)
         }
-
+        
         if let writingDirection = self.writingDirection {
             useParagraphStyle = true
             paragraphStyle.baseWritingDirection = writingDirection
         }
-
+        
+        if self.tabStops.count > 0 {
+            var align = self.alignment
+            if align == nil {
+                align = NSTextAlignment.Left
+            }
+            var stops = [NSTextTab]()
+            for stop in self.tabStops {
+                stops.append(NSTextTab(textAlignment: align!, location: CGFloat(stop), options: [String:AnyObject]()))
+            }
+            paragraphStyle.tabStops = stops
+        }
+        
         if useParagraphStyle {
             result[NSParagraphStyleAttributeName] = paragraphStyle
         }
@@ -112,8 +125,8 @@ public struct AttributedStringStyle {
         return result
     }
     
-    public func addTabstop(location: Float) {
-        // TODO: add tabstop
+    public mutating func addTabstop(location: Float) {
+        self.tabStops.append(location)
     }
 }
 
@@ -126,7 +139,7 @@ public struct AttributedStringStyling {
     public var codeBlock:AttributedStringStyle
     public var paragraph:AttributedStringStyle
     public var quoteBlock:AttributedStringStyle
-
+    
     public var strongText:AttributedStringStyle
     public var emphasizedText:AttributedStringStyle
     public var deletedText:AttributedStringStyle
@@ -161,7 +174,8 @@ public struct AttributedStringStyling {
         listItems.foregroundColor = baseColor
         listItems.backgroundColor = backgroundColor
         listItems.textIndent = Int(font.pointSize)
-
+        listItems.addTabstop(2.0 * Float(font.pointSize))
+        
         self.unorderedListItem = listItems
         self.orderedListItem = listItems
         
@@ -178,10 +192,14 @@ public struct AttributedStringStyling {
         paragraph.font = font
         paragraph.foregroundColor = baseColor
         paragraph.backgroundColor = backgroundColor
+        paragraph.marginBottom = Float(font.pointSize)
         self.paragraph = paragraph
         
         var quote = AttributedStringStyle()
         quote.textIndent = Int(font.pointSize)
+        quote.font = font
+        quote.foregroundColor = baseColor
+        quote.backgroundColor = backgroundColor
         self.quoteBlock = quote
         
         var strong = AttributedStringStyle()
@@ -221,7 +239,7 @@ public struct AttributedStringStyling {
             let fontSize = Float(font.pointSize) * powf(1.1, Float(5 - i))
             #if os(iOS)
                 let f = UIFont(name:font.fontName, size: CGFloat(fontSize))
-                #else
+            #else
                 let f = NSFont(name:font.fontName, size: CGFloat(fontSize))
             #endif
             var settings = AttributedStringStyle()
@@ -261,7 +279,7 @@ extension ContentNode {
             return result
             
         case .UnorderedListItem(let nestingDepth):
-            let result = NSMutableAttributedString(string: "• \n")
+            let result = NSMutableAttributedString(string: "•\t\n")
             result.insertAttributedString(content, atIndex: 2)
             result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, 2))
             var startIndex:Int? = nil
@@ -285,12 +303,12 @@ extension ContentNode {
             
         case .OrderedListItem(let index, let nestingDepth):
             let result = NSMutableAttributedString(string: "\n")
-
-            let indexLabel = NSAttributedString(string: NSString(format: "%d. ", index) as String)
+            
+            let indexLabel = NSAttributedString(string: NSString(format: "%d.\t", index) as String)
             result.insertAttributedString(indexLabel, atIndex: 0)
             result.insertAttributedString(content, atIndex: indexLabel.length)
             result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, indexLabel.length))
-
+            
             var startIndex:Int? = nil
             // find first attribute with different indent
             result.enumerateAttribute(NSParagraphStyleAttributeName, inRange: NSMakeRange(indexLabel.length, result.length - indexLabel.length), options: NSAttributedStringEnumerationOptions(rawValue: 0)) { (value, range, stop) in
@@ -302,7 +320,7 @@ extension ContentNode {
                 startIndex = result.length
             }
             result.addAttributes(style.orderedListItem.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, startIndex!))
-
+            
             // FIXME: do not convert list index types to arabic numbers
             return result
             
@@ -324,8 +342,8 @@ extension ContentNode {
             result.addAttributes(style.quoteBlock.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
-        // Inline
-        // FIXME: Inline fonts are overridden by block level fonts, so bold, italic and code do not work correctly.
+            // Inline
+            // FIXME: Inline fonts are overridden by block level fonts, so bold, italic and code do not work correctly.
         case .PlainText:
             let result = NSMutableAttributedString(string: self.text)
             result.addAttributes(style.paragraph.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, result.length))

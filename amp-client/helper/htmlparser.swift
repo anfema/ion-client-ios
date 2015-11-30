@@ -34,25 +34,39 @@ class HTMLParser {
         for token in self.tokens {
             switch token {
             case .StartTag(let name, let selfClosing, let attributes):
-                guard let name = name where !selfClosing else {
+                guard let name = name else {
                     continue
                 }
-                self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
+                if selfClosing {
+                    if name == "br" {
+                        result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: formatStack.last!.styleDict))
+                    } else {
+                        continue
+                    }
+                }
+                
+                if name == "p" && self.formatStack.last!.tagName == "blockquote" {
+                    self.pushFormat(style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
+                } else {
+                    self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
+                }
                 
                 switch name {
                 case "li":
                     if self.getListContext() == "ul" {
-                        result.appendAttributedString(NSAttributedString(string: "\n• ", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.appendAttributedString(NSAttributedString(string: "\n•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                     }
                     if self.getListContext() == "ol"  {
                         let counter = counters.popLast()!
-                        result.appendAttributedString(NSAttributedString(string: "\n\(counter). ", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.appendAttributedString(NSAttributedString(string: "\n\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                         counters.append(counter + 1)
                     }
                     continue
                 case "ol", "ul":
                     depth++
                     counters.append(1)
+                case "br":
+                    result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: formatStack.last!.styleDict))
                 default:
                     break
                 }
@@ -92,7 +106,7 @@ class HTMLParser {
                     stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
                 }
-                if result.string.characters.count > 0 && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n") {
+                if result.string.characters.count > 0 && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
@@ -118,9 +132,17 @@ class HTMLParser {
         for token in self.tokens {
             switch token {
             case .StartTag(let name, let selfClosing, _):
-                guard let name = name where !selfClosing else {
+                guard let name = name else {
                     continue
                 }
+                if selfClosing {
+                    if name == "br" {
+                        result.appendContentsOf("\n")
+                    } else {
+                        continue
+                    }
+                }
+                
                 lastTagName = name
                 
                 switch name {
@@ -286,7 +308,7 @@ class HTMLParser {
     
     private func isBlock(tagName: String) -> Bool {
         switch tagName {
-        case "h1", "h2", "h3", "h4", "h5", "ul", "ol", "li", "pre", "p", "bockquote":
+        case "h1", "h2", "h3", "h4", "h5", "ul", "ol", "li", "pre", "p", "blockquote":
             return true
         case "strong", "b", "em", "i", "del", "code", "a":
             return false
