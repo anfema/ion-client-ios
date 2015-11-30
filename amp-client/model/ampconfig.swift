@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import Markdown
+import DEjson
 
 /// AMP configuration object
 ///
@@ -53,6 +54,12 @@ public struct AMPConfig {
     /// full text search settings
     private var ftsEnabled:[String:Bool]
     
+    /// Needed to register additional content types with the default dispatcher
+    public typealias ContentTypeLambda = (JSONObject throws -> AMPContent)
+    
+    /// Registered content types
+    internal var registeredContentTypes = [String:ContentTypeLambda]()
+    
     /// only the AMP class may init this
     internal init() {
         let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -70,6 +77,34 @@ public struct AMPConfig {
         #endif
         self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
         self.resetErrorHandler()
+        
+        self.registerContentType("colorcontent") { json in
+            return try AMPColorContent(json: json)
+        }
+        self.registerContentType("datetimecontent") { json in
+            return try AMPDateTimeContent(json: json)
+        }
+        self.registerContentType("filecontent") { json in
+            return try AMPFileContent(json: json)
+        }
+        self.registerContentType("flagcontent") { json in
+            return try AMPFlagContent(json: json)
+        }
+        self.registerContentType("imagecontent") { json in
+            return try AMPImageContent(json: json)
+        }
+        self.registerContentType("numbercontent") { json in
+            return try AMPNumberContent(json: json)
+        }
+        self.registerContentType("mediacontent") { json in
+            return try AMPMediaContent(json: json)
+        }
+        self.registerContentType("optioncontent") { json in
+            return try AMPOptionContent(json: json)
+        }
+        self.registerContentType("textcontent") { json in
+            return try AMPTextContent(json: json)
+        }
         
         self.registerUpdateBlock("fts") { collectionIdentifier in
             if AMP.config.isFTSEnabled(collectionIdentifier) {
@@ -120,6 +155,27 @@ public struct AMPConfig {
             return enabled
         }
         return false
+    }
+    
+    /// Register a custom content type
+    ///
+    /// Example:
+    ///
+    /// AMP.config.registerContentType("customcontent") { json in
+    ///     return try MyContent(json: json)
+    /// }
+    ///
+    /// - parameter typeName: type name in JSON
+    /// - parameter creationBlock: a block to create an instance of the content type
+    public mutating func registerContentType(typeName: String, creationBlock: ContentTypeLambda) {
+        self.registeredContentTypes[typeName] = creationBlock
+    }
+    
+    /// De-register custom content type
+    ///
+    /// - parameter typeName: type name in JSON
+    public mutating func unRegisterContentType(typeName: String) {
+        self.registeredContentTypes.removeValueForKey(typeName)
     }
     
     /// Reset the error handler to the default logging handler

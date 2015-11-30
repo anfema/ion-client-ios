@@ -68,28 +68,15 @@ public class AMPContent {
                 throw AMPError.JSONObjectExpected(json)
         }
         
-        switch(contentType) {
-        case "colorcontent":
-            return try AMPColorContent(json: json)
-        case "containercontent":
+        // dispatcher
+        if contentType == "containercontent" {
             return try AMPContainerContent(json: json)
-        case "datetimecontent":
-            return try AMPDateTimeContent(json: json)
-        case "filecontent":
-            return try AMPFileContent(json: json)
-        case "flagcontent":
-            return try AMPFlagContent(json: json)
-        case "imagecontent":
-            return try AMPImageContent(json: json)
-        case "numbercontent":
-            return try AMPNumberContent(json: json)
-        case "mediacontent":
-            return try AMPMediaContent(json: json)
-        case "optioncontent":
-            return try AMPOptionContent(json: json)
-        case "textcontent":
-            return try AMPTextContent(json: json)
-        default:
+        } else {
+            for item in AMP.config.registeredContentTypes {
+                if contentType == item.0 {
+                    return try item.1(json)
+                }
+            }
             throw AMPError.UnknownContentType(contentType)
         }
     }
