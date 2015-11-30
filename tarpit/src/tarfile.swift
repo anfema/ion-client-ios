@@ -72,13 +72,13 @@ public class TarFile {
             // parse header info
             let header = try self.parseHeader(dataPtr.advancedBy(self.offset))
 
+            // advance offset (512 byte blocks)
+            self.offset += 512 + (header.filesize + (512 - header.filesize % 512))
+
             if header.isFile {
                 // copy over data
                 let data = NSData(bytes: dataPtr.advancedBy(self.offset + 512), length: header.filesize)
-        
-                // advance offset (512 byte blocks)
-                self.offset += 512 + (header.filesize + (512 - header.filesize % 512))
-        
+                
                 // return file data
                 return (filename: header.filepath, data: data)
             }
