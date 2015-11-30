@@ -29,7 +29,7 @@ public class AMPContent {
     /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!
     ///
     /// - parameter json: `JSONObject` that contains serialized content content object
-	init(json:JSONObject) throws {
+	public init(json:JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
 			throw AMPError.JSONObjectExpected(json)
 		}
