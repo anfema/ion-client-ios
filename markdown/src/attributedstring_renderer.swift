@@ -204,18 +204,26 @@ public struct AttributedStringStyling {
         
         var strong = AttributedStringStyle()
         strong.font = strongFont
+        strong.foregroundColor = baseColor
+        strong.backgroundColor = backgroundColor
         self.strongText = strong
         
         var em = AttributedStringStyle()
         em.font = emphasizedFont
+        em.foregroundColor = baseColor
+        em.backgroundColor = backgroundColor
         self.emphasizedText = em
         
         var delete = AttributedStringStyle()
         delete.strikeThrough = true
+        delete.foregroundColor = baseColor
+        delete.backgroundColor = backgroundColor
         self.deletedText = delete
         
         var inlineCode = AttributedStringStyle()
         inlineCode.font = codeBlock.font
+        inlineCode.foregroundColor = baseColor
+        inlineCode.backgroundColor = backgroundColor
         self.inlineCode = inlineCode
         
         var link = AttributedStringStyle()
@@ -230,10 +238,10 @@ public struct AttributedStringStyling {
         self.embedImages = false
         
         self.heading = []
-        self.calculateHeadingSizes(1.1, font: strongFont)
+        self.calculateHeadingSizes(1.1, font: strongFont, baseColor: baseColor, backgroundColor: backgroundColor)
     }
     
-    public mutating func calculateHeadingSizes(multiplier: Float, font: Font) {
+    public mutating func calculateHeadingSizes(multiplier: Float, font: Font, baseColor: Color, backgroundColor: Color) {
         self.heading.removeAll()
         for i in 0...4 {
             let fontSize = Float(font.pointSize) * powf(1.1, Float(5 - i))
@@ -246,7 +254,9 @@ public struct AttributedStringStyling {
             settings.font = f
             settings.marginTop = fontSize / 4.0
             settings.marginBottom = fontSize / 2.0
-            
+            settings.foregroundColor = baseColor
+            settings.backgroundColor = backgroundColor
+
             self.heading.append(settings)
         }
     }
