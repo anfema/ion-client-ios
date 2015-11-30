@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Markdown"
-  s.version      = "1.0.2"
+  s.version      = "1.0.3"
   s.summary      = "Markdown parser in swift."
   s.description  = <<-DESC
                    Markdown parser in swift.
@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
                    to build a DOM Tree that may be serialized into different formats.
 
                    Included renderers:
-                   - HTML (complete)
-                   - Plain Text (in progress)
-                   - NSAttributedString (works mostly, some bugs)
+                   - HTML
+                   - Plain Text
+                   - NSAttributedString
                    DESC
 
   s.homepage     = "https://github.com/anfema/amp-ios-client"
@@ -21,6 +21,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-1.0.2" }
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-1.0.3" }
   s.source_files  = "Markdown/src/*.swift"  
 end
