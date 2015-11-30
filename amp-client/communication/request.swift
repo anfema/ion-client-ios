@@ -97,7 +97,8 @@ public class AMPRequest {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
-        while true {
+
+        let fetchFromCache:(String -> Result<String, AMPError>) = { urlString in
             // TODO: Make unittest
             
             // validate checksum
@@ -107,7 +108,7 @@ public class AMPRequest {
                   case .JSONString(let filename)             = cacheDBEntry!["filename"]!,
                   case .JSONString(let cachedChecksumMethod) = cacheDBEntry!["checksum_method"]!,
                   case .JSONString(let cachedChecksum)       = cacheDBEntry!["checksum"]! else {
-                break
+                return .Failure(AMPError.InvalidJSON(nil))
             }
 
             let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
@@ -120,14 +121,22 @@ public class AMPRequest {
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-                break
+                return .Failure(AMPError.NoData(nil))
             }
             
             // Check disk cache
-            if cached && NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
-                // return from cache instantly
+            if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+                return .Success(cacheName)
+            } else {
+                return .Failure(AMPError.NoData(nil))
+            }
+        }
+        
+        if cached {
+            let cacheResult = fetchFromCache(urlString)
+            if case .Success = cacheResult {
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(.Success(cacheName))
+                    callback(cacheResult)
                 }
                 return
             }
@@ -135,7 +144,7 @@ public class AMPRequest {
         
         // destination block for Alamofire request
         let destination = { (file_url: NSURL, response: NSHTTPURLResponse) -> NSURL in
-            return NSURL(fileURLWithPath: self.cacheName(url))
+            return NSURL(fileURLWithPath: self.cacheName(url) + ".tmp")
         }
 
         // Start download task
@@ -143,17 +152,33 @@ public class AMPRequest {
             
             // check for download errors
             if error != nil {
-                // remove file
+                // remove temp file
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url) + ".tmp")
+                } catch {
+                    // do nothing, perhaps the file did not exist
+                }
+                // try falling back to cache
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(fetchFromCache(urlString))
+                }
+            } else {
+                // move temp file
                 do {
                     try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url))
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-                // call callback in correct queue
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Failure(AMPError.NoData(error)))
+                do {
+                    try NSFileManager.defaultManager().moveItemAtPath(self.cacheName(url) + ".tmp", toPath: self.cacheName(url))
+                } catch {
+                    // ok moving failed
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(Result.Failure(AMPError.NoData(error)))
+                    }
+                    return
                 }
-            } else {
+                
                 // no error, save file to cache db
                 var ckSumMethod = checksumMethod
                 var ckSum = checksum
