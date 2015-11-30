@@ -105,7 +105,7 @@ class pageMetadataTests: LoggedInXCTestCase {
         AMP.collection("test").metadata("page_002") { metadata in
             metadata.image { image in
                 XCTAssertNotNil(image)
-                let size = CGSize(width: 600 / AMP.config.variationScaleFactors[AMP.config.variation]!, height: 400 / AMP.config.variationScaleFactors[AMP.config.variation]!)
+                let size = CGSize(width: 600, height: 400)
                 XCTAssertEqual(size, image.size)
                 expectation.fulfill()
             }
