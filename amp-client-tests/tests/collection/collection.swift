@@ -158,7 +158,44 @@ class collectionTests: LoggedInXCTestCase {
             dispatch_resume(c.workQueue)
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    func testCollectionCompletion() {
+        AMP.resetMemCache()
+        XCTAssert(AMP.collectionCache.count == 0)
+        
+        let expectation = self.expectationWithDescription("testCollectionCompletion")
+        var page1:AMPPage? = nil
+        var page2:AMPPage? = nil
+
+        let collection = AMP.collection("test") { collection in
+            page1 = collection.page("page_001")
+            collection.page("page_002") { page in
+                page2 = page
+            }
+        }
+        
+        collection.onCompletion { collection, completed in
+            XCTAssert(completed == true)
+            if let page1 = page1 {
+                XCTAssert(page1.hasFailed == false)
+                XCTAssert(page1.isReady == true)
+            } else {
+                XCTFail("page1 not loaded")
+            }
+            
+            if let page2 = page2 {
+                XCTAssert(page2.hasFailed == false)
+                XCTAssert(page2.isReady == true)
+            } else {
+                XCTFail("page2 not loaded")
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 }
 

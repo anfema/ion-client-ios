@@ -46,6 +46,9 @@ public class AMPCollection {
     /// set to false to avoid using the cache (refreshes, etc.)
     private var useCache = true
     
+    /// block to call on completion
+    private var completionBlock: ((collection: AMPCollection, completed: Bool) -> Void)?
+    
     /// archive download url
     internal var archiveURL:String!
     
@@ -54,7 +57,7 @@ public class AMPCollection {
 
     /// internal id
     internal var uuid = NSUUID().UUIDString
-
+    
     // MARK: - Initializer
     
     /// Initialize collection async
@@ -84,6 +87,9 @@ public class AMPCollection {
                 } else if let cb = callback {
                     dispatch_async(AMP.config.responseQueue) {
                         cb(self)
+                        dispatch_barrier_async(self.workQueue) {
+                            self.checkCompleted()
+                        }
                     }
                 }
                 dispatch_semaphore_signal(semaphore)
@@ -116,6 +122,9 @@ public class AMPCollection {
                     self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
                         page.position = meta.position
                         callback(page)
+                        page.onCompletion { _,_ in
+                            self.checkCompleted()
+                        }
                     }
                 }
                 
@@ -165,6 +174,9 @@ public class AMPCollection {
                 self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
                     page.position = meta.position
                     callback(page)
+                    page.onCompletion { _,_ in
+                        self.checkCompleted()
+                    }
                 }
             }
         }
@@ -205,6 +217,9 @@ public class AMPCollection {
             
             // not cached, fetch from web and add it to the cache
             let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: true, parent: parent) { page in
+                dispatch_async(self.workQueue) {
+                    self.checkCompleted()
+                }
             }
             page.position = position
             self.pageCache[identifier] = page
@@ -281,14 +296,31 @@ public class AMPCollection {
     /// - returns: self for chaining
     public func onCompletion(callback: ((collection: AMPCollection, completed: Bool) -> Void)) -> AMPCollection {
         dispatch_barrier_async(self.workQueue) {
-            dispatch_async(AMP.config.responseQueue) {
-                callback(collection: self, completed: !self.hasFailed)
-            }
+            self.completionBlock = callback
         }
         return self
     }
     
     // MARK: - Private
+    
+    private func checkCompleted() {
+        dispatch_barrier_async(self.workQueue) {
+            var completed = true
+            for page in self.pageCache {
+                if !page.1.isReady && !page.1.hasFailed {
+                    completed = false
+                    break
+                }
+            }
+            
+            if let completionBlock = self.completionBlock where completed == true {
+                self.completionBlock = nil
+                dispatch_async(AMP.config.responseQueue) {
+                    completionBlock(collection: self, completed: !self.hasFailed)
+                }
+            }
+        }
+    }
     
     private init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
         self.locale = locale
@@ -401,6 +433,7 @@ class ErrorHandlingAMPCollection: AMPCollection {
             self.pageMeta = collection.pageMeta
             self.hasFailed = collection.hasFailed
             collection.parentLock.unlock()
+            self.checkCompleted()
         }
 
     }
@@ -426,6 +459,7 @@ public class CancelableAMPCollection: AMPCollection {
             self.pageMeta = collection.pageMeta
             self.hasFailed = collection.hasFailed
             collection.parentLock.unlock()
+            self.checkCompleted()
         }
     }
     
