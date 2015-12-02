@@ -63,9 +63,14 @@ public struct AMPConfig {
     /// only the AMP class may init this
     internal init() {
         let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
         configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
         configuration.HTTPCookieAcceptPolicy = .Never
         configuration.HTTPShouldSetCookies = false
+        
+        var protocolClasses = [AnyClass]()
+        protocolClasses.append(AMPCacheAvoidance)
+        configuration.protocolClasses = protocolClasses
         
         self.updateBlocks = Dictionary<String, (String -> Void)>()
         self.alamofire = Alamofire.Manager(configuration: configuration)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F0DB0641C0DFBE900193E8C /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0631C0DFBE900193E8C /* nsurlcache.swift */; };
 		8F0DB0661C0F15B600193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0651C0F15B600193E8C /* connection.swift */; };
 		8F0DB0681C0F177900193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0671C0F177900193E8C /* connection.swift */; };
 		8F78B2BF1BF36216009D4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */; };
@@ -112,6 +113,7 @@
 /* Begin PBXFileReference section */
 		606E3FF91CA25DAC5F68F02C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		84C5F81A940CAE21C579A116 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F0DB0631C0DFBE900193E8C /* nsurlcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = nsurlcache.swift; sourceTree = "<group>"; };
 		8F0DB0651C0F15B600193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F0DB0671C0F177900193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F78B2BB1BF36216009D4B67 /* amp-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "amp-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				8F78B2ED1BF363AA009D4B67 /* request_cache.swift */,
+				8F0DB0631C0DFBE900193E8C /* nsurlcache.swift */,
 			);
 			name = cache;
 			path = "../../amp-client/cache";
@@ -724,6 +727,7 @@
 				8F0DB0661C0F15B600193E8C /* connection.swift in Sources */,
 				8F78B3101BF363AA009D4B67 /* flag.swift in Sources */,
 				8FAD5CC51BF4EFFA000C3119 /* search.swift in Sources */,
+				8F0DB0641C0DFBE900193E8C /* nsurlcache.swift in Sources */,
 				8F78B3171BF363AA009D4B67 /* error.swift in Sources */,
 				8F78B30C1BF363AA009D4B67 /* container.swift in Sources */,
 				8FF9DB771BF9E59900935748 /* page+native_extensions.swift in Sources */,
