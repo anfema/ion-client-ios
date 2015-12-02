@@ -1,0 +1,13 @@
+PODS:
+  - Alamofire (3.1.3)
+  - DEjson (1.0.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.1)
+  - DEjson (~> 1.0)
+
+SPEC CHECKSUMS:
+  Alamofire: 9f93b56389e48def9220dd57d1f44b1927229a5a
+  DEjson: 18af7d4a4f76f7e7676dffcf21364e1d8a88fc20
+
+COCOAPODS: 0.39.0

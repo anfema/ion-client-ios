@@ -1,0 +1,16 @@
+source 'git@git.assembla.com:anfema-intern.cocoapods.git'
+source 'https://github.com/CocoaPods/Specs'
+
+use_frameworks!
+
+target 'mockingbird_ios' do
+	platform :ios, '8.4'
+	pod 'Alamofire', '~> 3.1'
+	pod 'DEjson', '~> 1.0'
+end
+
+target 'mockingbird_osx' do
+	platform :osx, '10.10'
+	pod 'Alamofire', '~> 3.1'
+	pod 'DEjson', '~> 1.0'
+end
