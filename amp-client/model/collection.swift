@@ -279,10 +279,10 @@ public class AMPCollection {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: (AMPCollection -> Void)) -> AMPCollection {
+    public func onCompletion(callback: ((collection: AMPCollection, completed: Bool) -> Void)) -> AMPCollection {
         dispatch_barrier_async(self.workQueue) {
             dispatch_async(AMP.config.responseQueue) {
-                callback(self)
+                callback(collection: self, completed: !self.hasFailed)
             }
         }
         return self
@@ -430,13 +430,24 @@ public class CancelableAMPCollection: AMPCollection {
     }
     
     public func cancel() {
-        self.hasFailed = true
-        self.finish()
+        dispatch_barrier_async(self.workQueue) {
+            // cancel all page loads
+            for page in self.pageCache {
+                if case let p as CancelableAMPPage = page.1 {
+                    p.cancel()
+                }
+            }
+            // set ourselves to failed to cancel all queued items
+            self.hasFailed = true
+        
+            // remove self from cache
+            self.finish()
+        }
     }
     
     public func finish() {
-        self.onCompletion { collection in
-            collection.pageCache.removeAll() // break cycle
+        dispatch_barrier_async(self.workQueue) {
+            self.pageCache.removeAll() // break cycle
             AMP.collectionCache.removeValueForKey(self.identifier + "-" + self.uuid)
         }
     }

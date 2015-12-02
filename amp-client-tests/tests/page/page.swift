@@ -311,7 +311,8 @@ class pageTests: LoggedInXCTestCase {
                 p.cancel()
                 
                 // on completion will now be called after cancelling
-                p.onCompletion() { page in
+                p.onCompletion() { page, completed in
+                    XCTAssert(completed == false)
                     // cancel/finish has happened here already so only the original page should be in the cache
                     dispatch_async(p.workQueue) {
                         XCTAssert(collection.pageCache.count == 1)

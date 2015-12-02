@@ -162,10 +162,10 @@ public class AMPPage {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: (AMPPage -> Void)) -> AMPPage {
+    public func onCompletion(callback: ((page: AMPPage, completed: Bool) -> Void)) -> AMPPage {
         dispatch_barrier_async(self.workQueue) {
             dispatch_async(AMP.config.responseQueue) {
-                callback(self)
+                callback(page: self, completed: !self.hasFailed)
             }
         }
         return self
@@ -510,12 +510,14 @@ public class CancelableAMPPage: AMPPage {
     }
 
     public func cancel() {
-        self.hasFailed = true
-        self.finish()
+        dispatch_barrier_async(self.workQueue) {
+            self.hasFailed = true
+            self.finish()
+        }
     }
     
     public func finish() {
-        self.onCompletion { _ in
+        dispatch_barrier_async(self.workQueue) {
             self.collection.pageCache.removeValueForKey(self.identifier + "-" + self.uuid)
         }
     }

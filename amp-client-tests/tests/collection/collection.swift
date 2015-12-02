@@ -145,7 +145,8 @@ class collectionTests: LoggedInXCTestCase {
             c.cancel()
             
             // on completion will now be called after cancelling
-            c.onCompletion() { collection in
+            c.onCompletion() { collection, completed in
+                XCTAssert(completed == false)
                 // cancel/finish has happened here already so only the original collection should be in the cache
                 dispatch_async(c.workQueue) {
                     XCTAssert(AMP.collectionCache.count == 1)
