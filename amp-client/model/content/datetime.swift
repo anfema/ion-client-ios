@@ -15,7 +15,7 @@ import DEjson
 /// DateTime content
 public class AMPDateTimeContent : AMPContent {
     /// parsed date
-    public var date:NSDate?
+    public var date:NSDate? = nil
     
     /// Initialize datetime content object from JSON
     ///
@@ -27,17 +27,18 @@ public class AMPDateTimeContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["datetime"] != nil),
-            case .JSONString(let datetime) = dict["datetime"]! else {
+        guard (dict["datetime"] != nil) else {
                 throw AMPError.InvalidJSON(json)
         }
         
-        let fmt = NSDateFormatter()
-        fmt.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-        fmt.timeZone   = NSTimeZone(forSecondsFromGMT: 0)
-        fmt.locale     = NSLocale(localeIdentifier: "en_US_POSIX")
-        
-        self.date = fmt.dateFromString(datetime)
+        if case .JSONString(let datetime) = dict["datetime"]! {
+            let fmt = NSDateFormatter()
+            fmt.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            fmt.timeZone   = NSTimeZone(forSecondsFromGMT: 0)
+            fmt.locale     = NSLocale(localeIdentifier: "en_US_POSIX")
+
+            self.date = fmt.dateFromString(datetime)
+        }
     }
 }
 
