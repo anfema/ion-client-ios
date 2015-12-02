@@ -282,4 +282,49 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    func testCancelablePage() {
+        AMP.resetMemCache()
+        XCTAssert(AMP.collectionCache.count == 0)
+        
+        let expectation = self.expectationWithDescription("testCancelableCollection")
+        
+        AMP.collection("test") { collection in
+            // now this one collection is in the cache and no page
+            XCTAssert(AMP.collectionCache.count == 1)
+            XCTAssert(collection.pageCache.count == 0)
+            
+            collection.page("page_001") { page in
+                // now we have one page
+                XCTAssert(collection.pageCache.count == 1)
+            
+                // let's get a cancelable fork
+                let p = page.cancelable()
+                
+                // now we have 2 pages in the cache
+                XCTAssert(collection.pageCache.count == 2)
+                
+                // suspend the work queue to be able to queue deterministically
+                dispatch_suspend(p.workQueue)
+                
+                // cancel the fork
+                p.cancel()
+                
+                // on completion will now be called after cancelling
+                p.onCompletion() { page in
+                    // cancel/finish has happened here already so only the original page should be in the cache
+                    dispatch_async(p.workQueue) {
+                        XCTAssert(collection.pageCache.count == 1)
+                        expectation.fulfill()
+                    }
+                }
+                
+                // now start the thing
+                dispatch_resume(p.workQueue)
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
 }

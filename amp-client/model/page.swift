@@ -30,7 +30,7 @@ public class AMPPage {
     public var lastUpdate:NSDate!
     
     /// this instance produced an error while fetching from net
-    public var hasFailed: Bool = false
+    public var hasFailed = false
     
     /// locale code for the page
     public var locale:String
@@ -56,6 +56,8 @@ public class AMPPage {
     /// set to true to avoid fetching from cache
     private var useCache = false
     
+    /// internal uuid
+    internal var uuid = NSUUID().UUIDString
     
     // MARK: Initializer
     
@@ -125,6 +127,13 @@ public class AMPPage {
     public func onError(callback: (AMPError -> Void)) -> AMPPage {
         return ErrorHandlingAMPPage(page: self, errorHandler: callback)
     }
+
+    /// Fork the work queue, the returning page has to be finished or canceled, else you risk a memory leak
+    ///
+    /// - returns: self with new work queue that is cancelable
+    public func cancelable() -> CancelableAMPPage {
+        return CancelableAMPPage(page: self)
+    }
     
     /// override default error callback to bubble error up to collection
     internal func callErrorHandler(error: AMPError) {
@@ -136,6 +145,25 @@ public class AMPPage {
     /// - parameter callback: callback to call
     public func waitUntilReady(callback: (AMPPage -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
+            dispatch_async(AMP.config.responseQueue) {
+                callback(self)
+            }
+        }
+        return self
+    }
+    
+    /// Callback when page work queue is empty
+    ///
+    /// Attention: This blocks all queries that follow this call until the callback
+    /// has completed
+    ///
+    /// - parameter callback: callback to call
+    /// - returns: self for chaining
+    public func onCompletion(callback: (AMPPage -> Void)) -> AMPPage {
+        dispatch_barrier_async(self.workQueue) {
             dispatch_async(AMP.config.responseQueue) {
                 callback(self)
             }
@@ -185,7 +213,7 @@ public class AMPPage {
     /// - parameter position: (optional) position in the array
     /// - returns: content object if page was loaded and outlet exists
     public func outlet(name: String, position: Int = 0) -> AMPContent? {
-        if !self.isReady {
+        if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
             return nil
         } else {
@@ -246,7 +274,7 @@ public class AMPPage {
     /// - parameter position: (optional) position in the array
     /// - returns: true if outlet exists else false, nil if page not loaded
     public func outletExists(name: String, position: Int = 0) -> Bool? {
-        if !self.isReady {
+        if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
             return nil
         } else {
@@ -296,7 +324,7 @@ public class AMPPage {
     ///
     /// - returns: count if page was ready, nil if page is not loaded
     public func numberOfContentsForOutlet(name: String) -> Int? {
-        if !self.isReady {
+        if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
             return nil
         } else {
@@ -313,16 +341,16 @@ public class AMPPage {
     
     // MARK: Private
     
-    private init(forErrorHandlerWithCollection collection: AMPCollection, identifier: String, locale: String) {
+    private init(forkedWorkQueueWithCollection collection: AMPCollection, identifier: String, locale: String) {
         self.locale = locale
         self.useCache = true
         self.collection = collection
         self.identifier = identifier
         self.layout = ""
-        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).withErrorHandler.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).fork.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
-        self.collection.pageCache[identifier + "-" + NSUUID().UUIDString] = self
+        self.collection.pageCache[identifier + "-" + self.uuid] = self
     }
 
     /// Fetch page from cache or web
@@ -436,7 +464,7 @@ class ErrorHandlingAMPPage: AMPPage {
     
     init(page: AMPPage, errorHandler: (AMPError -> Void)) {
         self.errorHandler = errorHandler
-        super.init(forErrorHandlerWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
+        super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
         
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
@@ -448,6 +476,8 @@ class ErrorHandlingAMPPage: AMPPage {
             self.layout = page.layout
             self.content = page.content
             self.position = page.position
+            self.hasFailed = page.hasFailed
+            self.isReady = true
             page.parentLock.unlock()
         }
     }
@@ -455,5 +485,38 @@ class ErrorHandlingAMPPage: AMPPage {
     /// override default error callback to bubble error up to AMP object
     override internal func callErrorHandler(error: AMPError) {
         errorHandler(error)
+    }
+}
+
+public class CancelableAMPPage: AMPPage {
+
+    init(page: AMPPage) {
+        super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
+        
+        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
+        dispatch_barrier_async(self.workQueue) {
+            page.parentLock.lock()
+            self.identifier = page.identifier
+            self.parent = page.parent
+            self.locale = page.locale
+            self.lastUpdate = page.lastUpdate
+            self.layout = page.layout
+            self.content = page.content
+            self.position = page.position
+            self.hasFailed = page.hasFailed
+            self.isReady = true
+            page.parentLock.unlock()
+        }
+    }
+
+    public func cancel() {
+        self.hasFailed = true
+        self.finish()
+    }
+    
+    public func finish() {
+        self.onCompletion { _ in
+            self.collection.pageCache.removeValueForKey(self.identifier + "-" + self.uuid)
+        }
     }
 }

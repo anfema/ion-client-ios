@@ -122,5 +122,42 @@ class collectionTests: LoggedInXCTestCase {
         AMP.resetMemCache()
     }
 
+    func testCancelableCollection() {
+        AMP.resetMemCache()
+        XCTAssert(AMP.collectionCache.count == 0)
+        
+        let expectation = self.expectationWithDescription("testCancelableCollection")
+        
+        AMP.collection("test") { collection in
+            // now this one collection is in the cache
+            XCTAssert(AMP.collectionCache.count == 1)
+            
+            // let's get a cancelable fork
+            let c = collection.cancelable()
+            
+            // now we have 2 collections in the cache
+            XCTAssert(AMP.collectionCache.count == 2)
+            
+            // suspend the work queue to be able to queue deterministically
+            dispatch_suspend(c.workQueue)
+
+            // cancel the fork
+            c.cancel()
+            
+            // on completion will now be called after cancelling
+            c.onCompletion() { collection in
+                // cancel/finish has happened here already so only the original collection should be in the cache
+                dispatch_async(c.workQueue) {
+                    XCTAssert(AMP.collectionCache.count == 1)
+                    expectation.fulfill()
+                }
+            }
+            
+            // now start the thing
+            dispatch_resume(c.workQueue)
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
 

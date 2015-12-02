@@ -51,7 +51,9 @@ public class AMPCollection {
     
     /// FTS download url
     internal var ftsDownloadURL:String?
-    
+
+    /// internal id
+    internal var uuid = NSUUID().UUIDString
 
     // MARK: - Initializer
     
@@ -143,6 +145,9 @@ public class AMPCollection {
                     }
                 } else {
                     dispatch_async(page.workQueue) {
+                        guard !self.hasFailed else {
+                            return
+                        }
                         if checkNeedsUpdate() {
                             updateBlock()
                         } else {
@@ -236,7 +241,14 @@ public class AMPCollection {
     public func onError(callback: (AMPError -> Void)) -> AMPCollection {
         return ErrorHandlingAMPCollection(collection: self, errorHandler: callback)
     }
-    
+
+    /// Fork the work queue, the returning collection has to be finished or canceled, else you risk a memory leak
+    ///
+    /// - returns: self with new work queue that is cancelable
+    public func cancelable() -> CancelableAMPCollection {
+        return CancelableAMPCollection(collection: self)
+    }
+
     // MARK: - Internal
     
     /// override default error callback to bubble error up to AMP object
@@ -247,8 +259,12 @@ public class AMPCollection {
     /// Callback when collection fully loaded
     ///
     /// - parameter callback: callback to call
+    /// - returns: self for chaining
     public func waitUntilReady(callback: (AMPCollection -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
+            guard !self.hasFailed else {
+                return
+            }
             dispatch_async(AMP.config.responseQueue) {
                 callback(self)
             }
@@ -256,16 +272,32 @@ public class AMPCollection {
         return self
     }
 
+    /// Callback when collection work queue is empty
+    ///
+    /// Attention: This blocks all queries that follow this call until the callback
+    /// has completed
+    ///
+    /// - parameter callback: callback to call
+    /// - returns: self for chaining
+    public func onCompletion(callback: (AMPCollection -> Void)) -> AMPCollection {
+        dispatch_barrier_async(self.workQueue) {
+            dispatch_async(AMP.config.responseQueue) {
+                callback(self)
+            }
+        }
+        return self
+    }
+    
     // MARK: - Private
     
-    private init(forErrorHandlerWithIdentifier identifier: String, locale: String) {
+    private init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
         self.locale = locale
         self.useCache = true
         self.identifier = identifier
-        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).withErrorHandler.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
-        AMP.collectionCache[identifier + "-" + NSUUID().UUIDString] = self
+        AMP.collectionCache[identifier + "-" + self.uuid] = self
     }
 
     /// Fetch collection from cache or web
@@ -357,7 +389,7 @@ class ErrorHandlingAMPCollection: AMPCollection {
     
     init(collection: AMPCollection, errorHandler: (AMPError -> Void)) {
         self.errorHandler = errorHandler
-        super.init(forErrorHandlerWithIdentifier: collection.identifier, locale: collection.locale)
+        super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
         
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
@@ -367,6 +399,7 @@ class ErrorHandlingAMPCollection: AMPCollection {
             self.defaultLocale = collection.defaultLocale
             self.lastUpdate = collection.lastUpdate
             self.pageMeta = collection.pageMeta
+            self.hasFailed = collection.hasFailed
             collection.parentLock.unlock()
         }
 
@@ -375,5 +408,36 @@ class ErrorHandlingAMPCollection: AMPCollection {
     /// override default error callback to bubble error up to AMP object
     override internal func callErrorHandler(error: AMPError) {
        errorHandler(error)
+    }
+}
+
+public class CancelableAMPCollection: AMPCollection {
+    
+    init(collection: AMPCollection) {
+        super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
+        
+        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
+        dispatch_barrier_async(self.workQueue) {
+            collection.parentLock.lock()
+            self.identifier = collection.identifier
+            self.locale = collection.locale
+            self.defaultLocale = collection.defaultLocale
+            self.lastUpdate = collection.lastUpdate
+            self.pageMeta = collection.pageMeta
+            self.hasFailed = collection.hasFailed
+            collection.parentLock.unlock()
+        }
+    }
+    
+    public func cancel() {
+        self.hasFailed = true
+        self.finish()
+    }
+    
+    public func finish() {
+        self.onCompletion { collection in
+            collection.pageCache.removeAll() // break cycle
+            AMP.collectionCache.removeValueForKey(self.identifier + "-" + self.uuid)
+        }
     }
 }
