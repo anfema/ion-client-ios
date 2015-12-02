@@ -81,6 +81,9 @@ public struct AMPConfig {
         self.registerContentType("colorcontent") { json in
             return try AMPColorContent(json: json)
         }
+        self.registerContentType("connectioncontent") { json in
+            return try AMPConnectionContent(json: json)
+        }
         self.registerContentType("datetimecontent") { json in
             return try AMPDateTimeContent(json: json)
         }
