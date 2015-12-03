@@ -9,9 +9,10 @@
 import XCTest
 @testable import mockingbird
 import Alamofire
+import DEjson
 
 class mockingbirdTests: XCTestCase {
-    var alamofire: Alamofire.Manager? = nil
+    var alamofire: Alamofire.Manager! = nil
     
     override func setUp() {
         super.setUp()
@@ -25,7 +26,12 @@ class mockingbirdTests: XCTestCase {
         MockingBird.registerInConfig(configuration)
         self.alamofire = Alamofire.Manager(configuration: configuration)
 
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let bundle = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/httpbin"
+        do {
+            try MockingBird.setMockBundle(bundle)
+        } catch {
+            XCTFail("Could not reset mock bundle")
+        }
     }
     
     override func tearDown() {
@@ -33,16 +39,154 @@ class mockingbirdTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+    func testReal() {
+        let expectation = self.expectationWithDescription("testReal")
+        
+        do {
+            try MockingBird.setMockBundle(nil)
+        } catch {
+            XCTFail("Could not disable mock bundle")
         }
+
+        self.alamofire.request(.GET, "http://httpbin.org/ip").response { (request, response, data, error) in
+            if let data = data {
+                let jsonString = String(data: data, encoding: NSUTF8StringEncoding)
+                XCTAssertNotNil(jsonString)
+                let json = JSONDecoder(jsonString!).jsonObject
+                guard case .JSONDictionary(let dict) = json where dict["origin"] != nil,
+                      case .JSONString(let ip) = dict["origin"]! else {
+                        XCTFail("Invalid data returned")
+                        expectation.fulfill()
+                        return
+                }
+                
+                XCTAssert(ip != "127.0.0.1")
+                expectation.fulfill()
+            } else {
+                XCTFail("No data returned")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
     
+    func testMock() {
+        let expectation = self.expectationWithDescription("testMock")
+        
+        self.alamofire.request(.GET, "http://httpbin.org/ip").response { (request, response, data, error) in
+            if let data = data {
+                let jsonString = String(data: data, encoding: NSUTF8StringEncoding)
+                XCTAssertNotNil(jsonString)
+                let json = JSONDecoder(jsonString!).jsonObject
+                guard case .JSONDictionary(let dict) = json where dict["origin"] != nil,
+                    case .JSONString(let ip) = dict["origin"]! else {
+                        XCTFail("Invalid data returned")
+                        expectation.fulfill()
+                        return
+                }
+                
+                XCTAssert(ip == "127.0.0.1")
+                expectation.fulfill()
+            } else {
+                XCTFail("No data returned")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
+    
+    func testArguments() {
+        let expectation = self.expectationWithDescription("testArguments")
+        
+        self.alamofire.request(.GET, "http://httpbin.org/get", parameters:["arg1": "test", "arg2": "test"]).response { (request, response, data, error) in
+            if let data = data {
+                let jsonString = String(data: data, encoding: NSUTF8StringEncoding)
+                XCTAssertNotNil(jsonString)
+                let json = JSONDecoder(jsonString!).jsonObject
+                guard case .JSONDictionary(let dict) = json where (dict["origin"] != nil && dict["args"] != nil),
+                      case .JSONString(let ip) = dict["origin"]!,
+                      case .JSONDictionary(let args) = dict["args"]! else {
+                        XCTFail("Invalid data returned")
+                        expectation.fulfill()
+                        return
+                }
+                
+                XCTAssert(ip == "127.0.0.1")
+                XCTAssertNotNil(args["arg1"])
+                XCTAssertNotNil(args["arg2"])
+                
+                expectation.fulfill()
+            } else {
+                XCTFail("No data returned")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testOtherArgument() {
+        let expectation = self.expectationWithDescription("testArguments")
+        
+        self.alamofire.request(.GET, "http://httpbin.org/get", parameters:["arg1": "foobar"]).response { (request, response, data, error) in
+            if let data = data {
+                let jsonString = String(data: data, encoding: NSUTF8StringEncoding)
+                XCTAssertNotNil(jsonString)
+                let json = JSONDecoder(jsonString!).jsonObject
+                guard case .JSONDictionary(let dict) = json where (dict["origin"] != nil && dict["args"] != nil),
+                    case .JSONString(let ip) = dict["origin"]!,
+                    case .JSONDictionary(let args) = dict["args"]! else {
+                        XCTFail("Invalid data returned")
+                        expectation.fulfill()
+                        return
+                }
+                
+                XCTAssert(ip == "127.0.0.1")
+                XCTAssertNotNil(args["arg1"])
+                XCTAssertNil(args["arg2"])
+                
+                expectation.fulfill()
+            } else {
+                XCTFail("No data returned")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testNonMatchingArgument() {
+        let expectation = self.expectationWithDescription("testArguments")
+        
+        self.alamofire.request(.GET, "http://httpbin.org/get", parameters:["other": "foobar"]).response { (request, response, data, error) in
+            if let data = data {
+                let jsonString = String(data: data, encoding: NSUTF8StringEncoding)
+                XCTAssertNotNil(jsonString)
+                let json = JSONDecoder(jsonString!).jsonObject
+                guard case .JSONDictionary(let dict) = json where (dict["origin"] != nil && dict["args"] != nil),
+                    case .JSONString(let ip) = dict["origin"]!,
+                    case .JSONDictionary(let args) = dict["args"]! else {
+                        XCTFail("Invalid data returned: \(jsonString)")
+                        expectation.fulfill()
+                        return
+                }
+                
+                XCTAssert(ip != "127.0.0.1")
+                XCTAssertNotNil(args["other"])
+                XCTAssertNil(args["arg1"])
+                XCTAssertNil(args["arg2"])
+                
+                expectation.fulfill()
+            } else {
+                XCTFail("No data returned")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
 }

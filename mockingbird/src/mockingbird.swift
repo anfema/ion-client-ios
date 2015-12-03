@@ -99,7 +99,17 @@ public class MockingBird: NSURLProtocol {
         config.protocolClasses = protocolClasses
     }
 
-    public class func setMockBundle(bundlePath: String) throws {
+    /// Set mock bundle to use
+    ///
+    /// - parameter bundlePath: path to the bundle
+    /// - throws: MockingBird.Error when bundle could not be loaded
+    public class func setMockBundle(bundlePath: String?) throws {
+        guard let bundlePath = bundlePath else {
+            self.currentMockBundle = nil
+            self.currentMockBundlePath = nil
+            return
+        }
+        
         do {
             var isDir:ObjCBool = false
             if NSFileManager.defaultManager().fileExistsAtPath(bundlePath, isDirectory: &isDir) && isDir {
@@ -134,7 +144,7 @@ extension MockingBird {
         }
         
         // we can answer all http and https requests
-        if request.URL!.scheme.hasPrefix("http") {
+        if let _ = self.getBundleItem(request.URL!, method: request.HTTPMethod!) {
             return true
         }
         return false
@@ -151,68 +161,35 @@ extension MockingBird {
     }
     
     public override func startLoading() {
+        // fetch item
+        guard let entry = MockingBird.getBundleItem(self.request.URL!, method: self.request.HTTPMethod!) else {
+            self.client!.URLProtocol(self, didFailWithError: NSError.init(domain: "mockingbird", code: 1000, userInfo:nil))
+            return
+        }
+        
+        // set mime type
         var mime: String? = nil
+        if let m = entry.responseMime {
+            mime = m
+        }
+        
+        // load data
         var data: NSData? = nil
-
-        // find entry that matches
-        for entry in MockingBird.currentMockBundle! {
-            // url match
-            if "\(self.request.URL!.scheme)\(entry.url)" == self.request.URL!.absoluteString {
-                
-                // request method match
-                if entry.requestMethod == self.request.HTTPMethod {
-                    
-                    // components
-                    var valid = false
-                    if let components = self.request.URL!.query?.componentsSeparatedByString("&") {
-                        for component in components {
-                            let v = component.componentsSeparatedByString("=")
-                            
-                            for q in entry.queryParameters {
-                                if q.0 == v[0] && q.1 == v[1] {
-                                    valid = true
-                                    break
-                                }
-                            }
-                        }
-                    } else {
-                        // no components
-                        if entry.queryParameters.count == 0 {
-                            valid = true
-                        }
-                    }
-                    
-                    // if found entry
-                    if valid {
-                        
-                        // set mime type
-                        if let m = entry.responseMime {
-                            mime = m
-                        }
-                        
-                        // load data
-                        if let f = entry.responseFile {
-                            do {
-                                data = try NSData(contentsOfFile: "\(MockingBird.currentMockBundlePath!)/\(f)", options: .DataReadingMappedIfSafe)
-                            } catch {
-                                data = nil
-                            }
-                        }
-                        
-                        break
-                    }
-                }
+        if let f = entry.responseFile {
+            do {
+                data = try NSData(contentsOfFile: "\(MockingBird.currentMockBundlePath!)/\(f)", options: .DataReadingMappedIfSafe)
+            } catch {
+                data = nil
             }
         }
         
-        
         // construct response
-        var response: NSURLResponse
+        var headers = entry.responseHeaders
+        headers["Content-Type"] = mime
         if let data = data {
-            response = NSURLResponse(URL: self.request.URL!, MIMEType: mime, expectedContentLength: data.length, textEncodingName: nil)
-        } else {
-            response = NSURLResponse(URL: self.request.URL!, MIMEType: nil, expectedContentLength: 0, textEncodingName: nil)
+            headers["Content-Length"] = "\(data.length)"
         }
+        let response = NSHTTPURLResponse(URL: self.request.URL!, statusCode: entry.responseCode, HTTPVersion: "HTTP/1.1", headerFields: headers)!
         
         // send response
         self.client!.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
@@ -228,5 +205,50 @@ extension MockingBird {
     
     public override func stopLoading() {
         // do nothing
+    }
+    
+    private class func getBundleItem(inUrl: NSURL, method: String) -> MockBundleEntry? {
+        let url = NSURLComponents(URL: inUrl, resolvingAgainstBaseURL: false)!
+        
+        // find entry that matches
+        for entry in MockingBird.currentMockBundle! {
+            // url match and request method match
+            var urlPart = "://\(url.host!)\(url.path!)"
+            if let port = url.port {
+                urlPart = "://\(url.host!):\(port)\(url.path!)"
+            }
+            
+            if entry.url == urlPart && entry.requestMethod == method {
+                
+                // components
+                var valid = true
+                if let queryItems = url.queryItems {
+                    for component in queryItems {
+                        var found = false
+                        for q in entry.queryParameters {
+                            if component.name == q.0 && component.value == q.1 {
+                                found = true
+                                break
+                            }
+                        }
+                        if !found {
+                            valid = false
+                            break
+                        }
+                    }
+                } else {
+                    // no components
+                    if entry.queryParameters.count != 0 {
+                        valid = false
+                    }
+                }
+                
+                if valid {
+                    return entry
+                }
+            }
+        }
+        
+        return nil
     }
 }
