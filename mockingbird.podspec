@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.10"
 
   s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "mocking-1.0.0" }
-  s.source_files  = "amp-client/cache/*.swift", "amp-client/communication/*.swift", "amp-client/helper/*.swift", "amp-client/model/**/*.swift", "amp-client/search/*.swift"
+  s.source_files  = "mockingbird/src/*.swift"
   
   s.framework  = "Alamofire", "DEjson"
 
