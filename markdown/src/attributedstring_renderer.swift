@@ -175,6 +175,8 @@ public struct AttributedStringStyling {
         listItems.backgroundColor = backgroundColor
         listItems.textIndent = Int(font.pointSize)
         listItems.addTabstop(2.0 * Float(font.pointSize))
+        listItems.addTabstop(3.0 * Float(font.pointSize))
+        listItems.addTabstop(4.0 * Float(font.pointSize))
         
         self.unorderedListItem = listItems
         self.orderedListItem = listItems

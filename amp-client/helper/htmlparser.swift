@@ -70,15 +70,12 @@ class HTMLParser {
                 default:
                     break
                 }
-                if result.string.characters.count > 0 && self.isBlock(name) {
-                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
-                }
                 
             case .EndTag(let name):
                 guard let name = name else {
                     continue
                 }
-                self.popFormat(name)
+                let oldFormat = self.popFormat(name)
                 
                 switch name {
                 case "ol", "ul":
@@ -91,8 +88,22 @@ class HTMLParser {
                     break
                 }
                 
-                if !result.string.hasSuffix(" ") {
-                    result.appendAttributedString(NSAttributedString(string: " ", attributes: formatStack.last!.styleDict))
+                if !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
+                    let a = (oldFormat != nil) ? oldFormat!.styleDict : formatStack.last!.styleDict
+                    result.appendAttributedString(NSAttributedString(string: " ", attributes: a))
+                }
+
+                if result.string.characters.count > 0 && self.isBlock(name) && oldFormat != nil {
+                    if name == "ul" || name == "ol" {
+                        if formatStack.last!.tagName == "li" {
+                            continue
+                        }
+                    }
+                    print("\(name) linebreak")
+                    var a = oldFormat!.styleDict
+                    a[NSFontAttributeName] = UIFont(name: "Helvetica", size: 1)
+                    result.appendAttributedString(NSAttributedString(string: "\n\n", attributes: a))
+//                    result.appendAttributedString(NSAttributedString(string: "\u{2029}", attributes: oldFormat!.styleDict))
                 }
                 
                 
@@ -105,11 +116,17 @@ class HTMLParser {
                 if formatStack.last!.tagName != "pre" {
                     stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
+                    stripped = stripped.stringByReplacingOccurrencesOfString("\u{2028}", withString: " ")
+                    stripped = stripped.stringByReplacingOccurrencesOfString("\u{2029}", withString: " ")
                 }
-                if result.string.characters.count > 0 && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") {
+                if stripped.characters.count == 0 {
+                    continue
+                }
+                if result.string.characters.count > 0 && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
+                print("'\(stripped)'")
                 result.appendAttributedString(string)
 
             default:
@@ -276,9 +293,9 @@ class HTMLParser {
         }
     }
     
-    private func popFormat(tagName: String) {
+    private func popFormat(tagName: String) -> FormatStackItem? {
         if self.formatStack.last!.tagName == tagName {
-            self.formatStack.popLast()
+            return self.formatStack.popLast()
         } else {
             let tagIsBlock = self.isBlock(tagName)
             let lastTagIsBlock = self.isBlock(self.formatStack.last!.tagName)
@@ -293,17 +310,18 @@ class HTMLParser {
                 }
                 if lastFound > 0 {
                     for _ in 0..<(self.formatStack.count - lastFound) {
-                        self.formatStack.popLast()
+                        return self.formatStack.popLast()
                     }
                 }
             }
             if lastTagIsBlock && !tagIsBlock {
-                return // ignore
+                return nil // ignore
             }
             if !lastTagIsBlock && !tagIsBlock {
-                return // ignore
+                return nil // ignore
             }
         }
+        return nil
     }
     
     private func isBlock(tagName: String) -> Bool {
