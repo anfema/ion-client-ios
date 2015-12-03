@@ -8,11 +8,23 @@
 
 import XCTest
 @testable import mockingbird
+import Alamofire
 
 class mockingbirdTests: XCTestCase {
+    var alamofire: Alamofire.Manager? = nil
     
     override func setUp() {
         super.setUp()
+        
+        let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
+        configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
+        configuration.HTTPCookieAcceptPolicy = .Never
+        configuration.HTTPShouldSetCookies = false
+        
+        MockingBird.registerInConfig(configuration)
+        self.alamofire = Alamofire.Manager(configuration: configuration)
+
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     

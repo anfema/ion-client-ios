@@ -84,14 +84,21 @@ public class MockingBird: NSURLProtocol {
     ///
     /// - parameter session: the session to mock
     public class func registerInSession(session: NSURLSession) {
-        var protocolClasses = session.configuration.protocolClasses
+        self.registerInConfig(session.configuration)
+    }
+
+    /// Register MockingBird in a NSURLSessionConfiguration
+    ///
+    /// - parameter config: session configuration to mock
+    public class func registerInConfig(config: NSURLSessionConfiguration) {
+        var protocolClasses = config.protocolClasses
         if protocolClasses == nil {
             protocolClasses = [AnyClass]()
         }
         protocolClasses!.insert(MockingBird.self, atIndex: 0)
-        session.configuration.protocolClasses = protocolClasses
+        config.protocolClasses = protocolClasses
     }
-    
+
     public class func setMockBundle(bundlePath: String) throws {
         do {
             var isDir:ObjCBool = false
