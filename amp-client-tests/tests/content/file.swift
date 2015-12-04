@@ -26,9 +26,9 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("File") { outlet in
+        AMP.collection("test").page("page_001").outlet("file") { outlet in
 
-            AMP.collection("test").page("page_001").fileData("File") { data in
+            AMP.collection("test").page("page_001").fileData("file") { data in
                 guard case let file as AMPFileContent = outlet else {
                         XCTFail("File outlet not found or of wrong type \(outlet)")
                         expectation.fulfill()
@@ -49,7 +49,7 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")
 
-        AMP.collection("test").page("page_001").outlet("File") { outlet in
+        AMP.collection("test").page("page_001").outlet("file") { outlet in
             guard case let img as AMPFileContent = outlet else {
                 XCTFail("File outlet not found or of wrong type \(outlet)")
                 expectation.fulfill()

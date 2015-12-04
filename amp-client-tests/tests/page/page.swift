@@ -30,7 +30,7 @@ class pageTests: LoggedInXCTestCase {
             let page = collection.page("page_001")
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
-            XCTAssert(page.layout == "Layout 001")
+            XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
@@ -68,7 +68,7 @@ class pageTests: LoggedInXCTestCase {
         }.page("page_001") { page in
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
-            XCTAssert(page.layout == "Layout 001")
+            XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
         
@@ -120,7 +120,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
-            XCTAssert(page.layout == "Layout 001")
+            XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
         
@@ -142,7 +142,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
-            XCTAssert(page.layout == "Layout 001")
+            XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
@@ -159,7 +159,8 @@ class pageTests: LoggedInXCTestCase {
             }
             XCTAssert(child.identifier == "subpage_001")
             XCTAssert(child.parent == "page_002")
-            XCTAssert(child.layout == "Layout 001")
+            print(child.layout)
+            XCTAssert(child.layout == "layout-001")
             expectation.fulfill()
         }
         
@@ -177,7 +178,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
-            XCTAssert(page.layout == "Layout 001")
+            XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
         
@@ -253,7 +254,7 @@ class pageTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_001") { page in
             XCTAssertNotNil(page)
-            XCTAssert(page.outletExists("Text") == true)
+            XCTAssert(page.outletExists("text") == true)
             XCTAssert(page.outletExists("Unknown_Outlet") == false)
             expectation.fulfill()
         }
@@ -264,7 +265,7 @@ class pageTests: LoggedInXCTestCase {
     func testOutletExistsAsync() {
         let expectation = self.expectationWithDescription("testOutletExistsAsync")
         
-        AMP.collection("test").page("page_001").outletExists("Text") { exists in
+        AMP.collection("test").page("page_001").outletExists("text") { exists in
             XCTAssertTrue(exists)
             expectation.fulfill()
         }

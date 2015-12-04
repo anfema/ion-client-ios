@@ -27,7 +27,7 @@ class optionContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOptionOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
-            if let value = page.selectedOption("Option") {
+            if let value = page.selectedOption("option") {
                 XCTAssertEqual(value, "Green")
             } else {
                 XCTFail("option content 'Option' returned nil")
@@ -40,7 +40,7 @@ class optionContentTests: LoggedInXCTestCase {
     func testOptionOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testOptionOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").selectedOption("Option") { value in
+        AMP.collection("test").page("page_001").selectedOption("option") { value in
             XCTAssertEqual(value, "Green")
             expectation.fulfill()
         }

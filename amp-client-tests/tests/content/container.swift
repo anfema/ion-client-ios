@@ -26,7 +26,7 @@ class containerContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testContainerOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
-            if let children = page.children("Layout 001") {
+            if let children = page.children("layout-001") {
                 XCTAssertEqual(children.count, 10)
             } else {
                 XCTFail("container content 'Layout 001' returned nil")
@@ -39,7 +39,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testContainerOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").children("Layout 001") { children in
+        AMP.collection("test").page("page_001").children("layout-001") { children in
             XCTAssertEqual(children.count, 10)
             expectation.fulfill()
         }
@@ -49,7 +49,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletSubscripting() {
         let expectation = self.expectationWithDescription("fetch outlet")
         
-        AMP.collection("test").page("page_001").outlet("Layout 001") { outlet in
+        AMP.collection("test").page("page_001").outlet("layout-001") { outlet in
             if case let container as AMPContainerContent = outlet {
                 XCTAssertEqual(container.children.count, 10)
                 XCTAssertNotNil(container[0])

@@ -26,7 +26,7 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testColorOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
-            if let value = page.cachedColor("Color") {
+            if let value = page.cachedColor("color") {
                 var r:CGFloat = 0.0
                 var g:CGFloat = 0.0
                 var b:CGFloat = 0.0
@@ -47,7 +47,7 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").color("Color") { value in
+        AMP.collection("test").page("page_001").color("color") { value in
             var r:CGFloat = 0.0
             var g:CGFloat = 0.0
             var b:CGFloat = 0.0

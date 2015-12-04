@@ -28,7 +28,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testDateOutletFetchSync")
         
         AMP.collection("test").page("page_001") { page in
-            if let value = page.date("Datetime") {
+            if let value = page.date("datetime") {
                 XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)
             } else {
                 XCTFail("date content 'Datetime' returned nil")
@@ -41,7 +41,7 @@ class datetimeContentTests: LoggedInXCTestCase {
     func testDateOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testDateOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").date("Datetime") { value in
+        AMP.collection("test").page("page_001").date("datetime") { value in
             XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)
             expectation.fulfill()
         }

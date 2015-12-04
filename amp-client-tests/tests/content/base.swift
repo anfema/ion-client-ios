@@ -26,7 +26,7 @@ class contentBaseTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletFetchSync")
         
         AMP.collection("test").page("page_001"){ page in
-            if let _ = page.outlet("Text") {
+            if let _ = page.outlet("text") {
                 // all ok
             } else {
                 XCTFail("outlet for name 'text' returned nil")
@@ -39,7 +39,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("Text") { text in
+        AMP.collection("test").page("page_001").outlet("text") { text in
             XCTAssertNotNil(text)
             expectation.fulfill()
         }
@@ -66,7 +66,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayCount() {
         let expectation = self.expectationWithDescription("testOutletArrayCount")
         
-        AMP.collection("test").page("page_002").numberOfContentsForOutlet("ColorArray") { count in
+        AMP.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { count in
             XCTAssertEqual(count, 32)
             expectation.fulfill()
         }
@@ -76,7 +76,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayValues() {
         for i in 0..<32 {
             let expectation = self.expectationWithDescription("testOutletArrayValues")
-            AMP.collection("test").page("page_002").color("ColorArray", position: i) { color in
+            AMP.collection("test").page("page_002").color("colorarray", position: i) { color in
                 var r = CGFloat(0)
                 var g = CGFloat(0)
                 var b = CGFloat(0)

@@ -28,7 +28,7 @@ class pageMetadataTests: LoggedInXCTestCase {
         
         AMP.collection("test").metadata("page_001") { metadata in
             XCTAssert(metadata.identifier == "page_001")
-            XCTAssert(metadata.layout == "Layout 001")
+            XCTAssert(metadata.layout == "layout-001")
             XCTAssertNil(metadata.parent)
             XCTAssertNil(metadata.title)
             expectation.fulfill()
@@ -42,7 +42,7 @@ class pageMetadataTests: LoggedInXCTestCase {
         
         AMP.collection("test").metadata("page_002") { metadata in
                 XCTAssert(metadata.identifier == "page_002")
-                XCTAssert(metadata.layout == "Layout 002")
+                XCTAssert(metadata.layout == "layout-002")
                 XCTAssertNil(metadata.parent)
                 XCTAssert(metadata.title == "Donec ullamcorper")
                 expectation.fulfill()

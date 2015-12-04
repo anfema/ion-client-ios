@@ -101,7 +101,11 @@ class HTMLParser {
                     }
                     print("\(name) linebreak")
                     var a = oldFormat!.styleDict
-                    a[NSFontAttributeName] = UIFont(name: "Helvetica", size: 1)
+                    #if os(iOS)
+                        a[NSFontAttributeName] = UIFont(name: "Helvetica", size: 1)
+                    #else
+                        a[NSFontAttributeName] = NSFont(name: "Helvetica", size: 1)
+                    #endif
                     result.appendAttributedString(NSAttributedString(string: "\n\n", attributes: a))
 //                    result.appendAttributedString(NSAttributedString(string: "\u{2029}", attributes: oldFormat!.styleDict))
                 }
