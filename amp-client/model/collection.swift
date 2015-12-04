@@ -383,7 +383,7 @@ public class AMPCollection {
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
-                        let obj = try AMPPageMeta(json: page, position: 0)
+                        let obj = try AMPPageMeta(json: page, position: 0, collection: self)
 
                         // find max position for current parent
                         var position = -1

@@ -112,5 +112,17 @@ class pageMetadataTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    func testMetaChildren() {
+        let expectation = self.expectationWithDescription("testMetaChildren")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertNotNil(metadata.children)
+            XCTAssert(metadata.children!.count == 1)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 
 }

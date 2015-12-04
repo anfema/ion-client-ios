@@ -43,11 +43,26 @@ public class AMPPageMeta: CanLoadImage {
     /// page position
     public var position: Int!
     
+    /// collection of this meta item
+    public weak var collection: AMPCollection?
+    
+    /// children
+    public var children:[AMPPageMeta]? {
+        guard let collection = self.collection else {
+            return nil
+        }
+        if let list = collection.metadataList(self.identifier) {
+            return list
+        }
+        return nil
+    }
+    
     /// Init metadata from JSON object
     ///
     /// - parameter json: serialized JSON object of page metadata
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
-    internal init(json: JSONObject, position: Int) throws {
+    internal init(json: JSONObject, position: Int, collection: AMPCollection) throws {
+        self.collection = collection
         guard case .JSONDictionary(let dict) = json else {
             throw AMPError.JSONObjectExpected(json)
         }
