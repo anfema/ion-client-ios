@@ -30,7 +30,7 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssert(metadata.identifier == "page_001")
             XCTAssert(metadata.layout == "layout-001")
             XCTAssertNil(metadata.parent)
-            XCTAssertNil(metadata.title)
+            XCTAssertNotNil(metadata["text"])
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
@@ -44,7 +44,8 @@ class pageMetadataTests: LoggedInXCTestCase {
                 XCTAssert(metadata.identifier == "page_002")
                 XCTAssert(metadata.layout == "layout-002")
                 XCTAssertNil(metadata.parent)
-                XCTAssert(metadata.title == "Donec ullamcorper")
+                XCTAssertNotNil(metadata["title"])
+                XCTAssert(metadata["title"] == "Donec ullamcorper")
                 expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
