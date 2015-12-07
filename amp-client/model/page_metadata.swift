@@ -95,12 +95,11 @@ public class AMPPageMeta: CanLoadImage {
         self.position = position
         
         if dict["meta"] != nil {
-            guard case .JSONDictionary(let metaDict) = dict["meta"]! else {
-                throw AMPError.InvalidJSON(dict["meta"]!)
-            }
-            for item in metaDict {
-                if case .JSONString(let value) = item.1 {
-                    self.metaData[item.0] = value
+            if case .JSONDictionary(let metaDict) = dict["meta"]! {
+                for item in metaDict {
+                    if case .JSONString(let value) = item.1 {
+                        self.metaData[item.0] = value
+                    }
                 }
             }
         }
@@ -119,7 +118,7 @@ public class AMPPageMeta: CanLoadImage {
     ///
     /// - parameter index: key to return value for
     /// - returns: value or nil
-    public subscript(index: String) -> String?{
+    public subscript(index: String) -> String? {
         return self.metaData[index]
     }
     
