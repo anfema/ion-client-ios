@@ -46,7 +46,7 @@ public struct AMPConfig {
     public var stringStyling = AttributedStringStyling()
     
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    let alamofire: Alamofire.Manager
+    var alamofire: Alamofire.Manager
     
     /// update detected blocks
     var updateBlocks: [String:(String -> Void)]

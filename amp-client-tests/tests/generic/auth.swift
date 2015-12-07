@@ -35,13 +35,15 @@ class authTests: DefaultXCTestCase {
     }
 
     func testLoginFailure() {
-        let expectation = self.expectationWithDescription("testLoginFailure")
+        if !self.mock {
+            let expectation = self.expectationWithDescription("testLoginFailure")
         
-        AMP.login("admin@anfe.ma", password: "wrongpassword") { success in
-            XCTAssert(!success)
-            XCTAssertNil(AMP.config.sessionToken)
-            expectation.fulfill()
+            AMP.login("admin@anfe.ma", password: "wrongpassword") { success in
+                XCTAssert(!success)
+                XCTAssertNil(AMP.config.sessionToken)
+                expectation.fulfill()
+            }
+            self.waitForExpectationsWithTimeout(1.0, handler: nil)
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 }

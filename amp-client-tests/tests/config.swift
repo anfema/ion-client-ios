@@ -11,16 +11,20 @@
 
 import Foundation
 import XCTest
+import mockingbird
+import Alamofire
 @testable import amp_client
 
+
 struct DefaultConfig {
-    static let serverURL = "http://rodriguez.local:8000/client/v1/"
+    static let serverURL = "http://127.0.0.1:8000/client/v1/"
     static let locale    = "de_DE"
 }
 
 
 
 class DefaultXCTestCase: XCTestCase {
+    let mock = true
 
     func configure(callback: (Void -> Void)) {
         AMP.config.serverURL = NSURL(string: DefaultConfig.serverURL)
@@ -37,6 +41,20 @@ class DefaultXCTestCase: XCTestCase {
         
         let expectation = self.expectationWithDescription("login")
         self.configure() {
+            
+            if self.mock {
+                let config = AMP.config.alamofire.session.configuration
+                MockingBird.registerInConfig(config)
+                AMP.config.alamofire = Alamofire.Manager(configuration: config)
+                
+                let path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/amp"
+                do {
+                    try MockingBird.setMockBundle(path)
+                } catch {
+                    XCTFail("Could not set up API mocking")
+                }
+            }
+
             expectation.fulfill()
         }
 
