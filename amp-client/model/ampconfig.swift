@@ -45,20 +45,46 @@ public struct AMPConfig {
     /// styling for attributed string conversion of markdown text
     public var stringStyling = AttributedStringStyling()
     
-    /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    var alamofire: Alamofire.Manager
-    
-    /// update detected blocks
-    var updateBlocks: [String:(String -> Void)]
-    
-    /// full text search settings
-    private var ftsEnabled:[String:Bool]
+    /// AMP Device ID, will be generated on first use
+    public var deviceID:String {
+        if let deviceID = NSUserDefaults.standardUserDefaults().stringForKey("AMPDeviceID") {
+            return deviceID
+        }
+        
+        let devID = NSUUID().UUIDString
+        NSUserDefaults.standardUserDefaults().setObject(devID as NSString, forKey: "AMPDeviceID")
+        NSUserDefaults.standardUserDefaults().synchronize()
+        return devID
+    }
     
     /// Needed to register additional content types with the default dispatcher
     public typealias ContentTypeLambda = (JSONObject throws -> AMPContent)
     
+    /// User for HTTP basic auth (use either this or `sessionToken` or the `login()` call)
+    public var basicAuthUser:String? {
+        didSet {
+            self.updateAuthHeaders()
+        }
+    }
+    
+    /// Password for HTTP basic auth (use either this or `sessionToken` or the `login()` call)
+    public var basicAuthPassword:String? {
+        didSet {
+            self.updateAuthHeaders()
+        }
+    }
+
+    /// the alamofire manager to use for all calls, initialized to accept no cookies by default
+    var alamofire: Alamofire.Manager! = nil
+    
+    /// update detected blocks
+    var updateBlocks: [String:(String -> Void)]
+
     /// Registered content types
-    internal var registeredContentTypes = [String:ContentTypeLambda]()
+    var registeredContentTypes = [String:ContentTypeLambda]()
+
+    /// full text search settings
+    private var ftsEnabled:[String:Bool]
     
     /// only the AMP class may init this
     internal init() {
@@ -73,7 +99,6 @@ public struct AMPConfig {
         configuration.protocolClasses = protocolClasses
         
         self.updateBlocks = Dictionary<String, (String -> Void)>()
-        self.alamofire = Alamofire.Manager(configuration: configuration)
         self.ftsEnabled = [String:Bool]()
         #if os(iOS)
             self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
@@ -81,6 +106,9 @@ public struct AMPConfig {
             self.variation = "default"
         #endif
         self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
+
+        configuration.HTTPAdditionalHeaders!["X-DeviceID"] = self.deviceID
+        self.alamofire = Alamofire.Manager(configuration: configuration)
         self.resetErrorHandler()
         
         self.registerContentType("colorcontent") { json in
@@ -191,5 +219,20 @@ public struct AMPConfig {
         self.errorHandler = { (collection, error) in
             print("AMP unhandled error in collection '\(collection)': \(error)")
         }
+    }
+    
+    // MARK: - Private
+    private mutating func updateAuthHeaders() {
+        guard let user = self.basicAuthUser,
+              let password = self.basicAuthPassword else {
+                return
+        }
+        
+        let auth = "\(user):\(password)" as NSString
+        let authData = auth.dataUsingEncoding(NSUTF8StringEncoding)!
+        
+        let config = self.alamofire.session.configuration
+        config.HTTPAdditionalHeaders!["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        self.alamofire = Alamofire.Manager(configuration: config)
     }
 }
