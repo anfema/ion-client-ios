@@ -5,6 +5,9 @@
 //  Created by Johannes Schriewer on 04.02.15.
 //  Copyright (c) 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import Foundation
 
@@ -25,6 +28,7 @@ func -(left: String.Index, right: Int) -> String.Index {
 	return left.advancedBy(-right)
 }
 
+// TODO: Add tests for JSONEncoder
 public class JSONEncoder {
     let jsonObject: JSONObject
     
@@ -127,6 +131,9 @@ public class JSONEncoder {
             case 34: // "
                 result.append(UnicodeScalar(92))
                 result.append(c)
+            case 92: // \ -> \
+                result.append(UnicodeScalar(92))
+                result.append(c)
             default:
                 if c.value > 128 {
                     result.append(UnicodeScalar(92))
@@ -134,12 +141,16 @@ public class JSONEncoder {
 
                     let high = UInt8((c.value >> 8) & 0xff)
                     let low = UInt8(c.value & 0xff)
-                    var highString = self.makeHexString(high).unicodeScalars.generate()
-                    var lowString = self.makeHexString(low).unicodeScalars.generate()
-                    result.append(highString.next()!)
-                    result.append(highString.next()!)
-                    result.append(lowString.next()!)
-                    result.append(lowString.next()!)
+                    
+                    // This is so convoluted because of Swift compiler bug on iOS 8.4 (works simpler on 9.0+)
+                    var highString = self.makeHexString(high)
+                    var lowString = self.makeHexString(low)
+                    var lowGen = lowString.unicodeScalars.generate()
+                    var highGen = highString.unicodeScalars.generate()
+                    result.append(highGen.next()!)
+                    result.append(highGen.next()!)
+                    result.append(lowGen.next()!)
+                    result.append(lowGen.next()!)
                 } else {
                     result.append(c)
                 }

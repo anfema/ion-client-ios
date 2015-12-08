@@ -5,8 +5,13 @@
 //  Created by Johannes Schriewer on 07.10.15.
 //  Copyright © 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import Foundation
+
+// TODO: Add tests for text renderer
 
 extension ContentNode {
     
@@ -22,7 +27,7 @@ extension ContentNode {
             return content
             
         // Block level
-        case .Heading(let level):
+        case .Heading:
             return "\n\(content)\n\n"
             
         case .UnorderedList:
@@ -62,10 +67,10 @@ extension ContentNode {
         case .InlineCode:
             return content
 
-        case .Link(let location):
+        case .Link:
             return content
 
-        case .Image(let location):
+        case .Image:
             return content
         }
     }

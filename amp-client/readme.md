@@ -2,33 +2,34 @@
 
 <!-- MarkdownTOC -->
 
-- [AMP Client documentation](#amp-client-documentation)
-  - [Setup](#setup)
-  - [Login to the API Server](#login-to-the-api-server)
-  - [Getting collections](#getting-collections)
-  - [Getting pages](#getting-pages)
-    - [Fetch a single page from a collection](#fetch-a-single-page-from-a-collection)
-    - [Fetch multiple pages from the same collection](#fetch-multiple-pages-from-the-same-collection)
-  - [Getting outlets](#getting-outlets)
-    - [Fetch a single outlet](#fetch-a-single-outlet)
-    - [Fetch multiple outlets](#fetch-multiple-outlets)
-    - [Fetch all outlets](#fetch-all-outlets)
-  - [Content types](#content-types)
-    - [Color](#color)
-    - [Container](#container)
-    - [DateTime](#datetime)
-    - [File](#file)
-    - [Flag](#flag)
-    - [Image](#image)
-    - [KeyValue](#keyvalue)
-    - [Media](#media)
-    - [Option](#option)
-    - [Text](#text)
-  - [Error handling](#error-handling)
-  - [Resetting caches](#resetting-caches)
-    - [Memory cache](#memory-cache)
-    - [Disk cache](#disk-cache)
-    - [Cache refresh](#cache-refresh)
+1. [AMP Client documentation](#amp-client-documentation)
+    1. [Setup](#setup)
+    2. [Login to the API Server](#login-to-the-api-server)
+    3. [Getting collections](#getting-collections)
+    4. [Getting pages](#getting-pages)
+        1. [Fetch a single page from a collection](#fetch-a-single-page-from-a-collection)
+        2. [Fetch multiple pages from the same collection](#fetch-multiple-pages-from-the-same-collection)
+        3. [Get child pages from a page](#get-child-pages-from-a-page)
+        4. [Get meta data for a page without downloading the page](#get-meta-data-for-a-page-without-downloading-the-page)
+    5. [Getting outlets](#getting-outlets)
+        1. [Fetch a single outlet](#fetch-a-single-outlet)
+        2. [Fetch multiple outlets](#fetch-multiple-outlets)
+        3. [Fetch all outlets](#fetch-all-outlets)
+    6. [Content types](#content-types)
+        1. [Color](#color)
+        2. [Container](#container)
+        3. [DateTime](#datetime)
+        4. [File](#file)
+        5. [Flag](#flag)
+        6. [Image](#image)
+        7. [Media](#media)
+        8. [Option](#option)
+        9. [Text](#text)
+    7. [Error handling](#error-handling)
+    8. [Resetting caches](#resetting-caches)
+        1. [Memory cache](#memory-cache)
+        2. [Disk cache](#disk-cache)
+        3. [Cache refresh](#cache-refresh)
 
 <!-- /MarkdownTOC -->
 
@@ -44,8 +45,10 @@ To use the AMP client you'll need to supply some basic information:
 
 Example:
 
-    AMP.config.serverURL = NSURL(string: "http://127.0.0.1:8000/client/v1/")
-    AMP.config.locale = "en_US"
+~~~swift
+AMP.config.serverURL = NSURL(string: "http://127.0.0.1:8000/client/v1/")
+AMP.config.locale = "en_US"
+~~~
 
 To be sure to produce no conflict with later AMP calls put this in your AppDelegate.
 
@@ -58,10 +61,11 @@ For logging in call the `login` function of the `AMP` class **or** supply a `ses
 
 Example:
 
-    AMP.login("testuser@example.com", password:"password") { success in
-        print("login " + (success ? "suceeeded" : "failed"))
-    }
-
+~~~swift
+AMP.login("testuser@example.com", password:"password") { success in
+    print("login " + (success ? "suceeeded" : "failed"))
+}
+~~~
 
 ## Getting collections
 
@@ -71,13 +75,17 @@ When you request a collection that is not found on the server no queued commands
 
 Async variant:
 
-    AMP.collection("collection001") { collection in
-        print("loaded collection \(collection.identifier)")
-    }
+~~~swift
+AMP.collection("collection001") { collection in
+    print("loaded collection \(collection.identifier)")
+}
+~~~
 
 Sync variant:
 
-    let collection = AMP.collection("collection001")
+~~~swift
+let collection = AMP.collection("collection001")
+~~~
 
 The sync variant fetches its values in the background async, so not all values will be available directly, **but** all appended calls to such an unfinished collection will be queued until it is available and called then.
 
@@ -93,34 +101,57 @@ Fetching pages can be done in multiple ways.
 
 ### Fetch a single page from a collection
 
-    AMP.collection("collection001").page("page001") { page in
-        print("page \(page.identifier) loaded")
-    }
-
+~~~swift
+AMP.collection("collection001").page("page001") { page in
+    print("page \(page.identifier) loaded")
+}
+~~~
 
 ### Fetch multiple pages from the same collection
 
 Variant 1:
 
-    AMP.collection("collection001") { collection in
-        collection.page("page001") { page in
-            print("page \(page.identifier) loaded")
-        }
-        collection.page("page002") { page in
-            print("page \(page.identifier) loaded")
-        }
-    }
-
-Variant 2:
-
-    let collection = AMP.collection("collection001")
+~~~swift
+AMP.collection("collection001") { collection in
     collection.page("page001") { page in
         print("page \(page.identifier) loaded")
     }
     collection.page("page002") { page in
         print("page \(page.identifier) loaded")
     }
+}
+~~~
 
+Variant 2:
+
+~~~swift
+let collection = AMP.collection("collection001")
+collection.page("page001") { page in
+    print("page \(page.identifier) loaded")
+}
+collection.page("page002") { page in
+    print("page \(page.identifier) loaded")
+}
+~~~
+
+### Get child pages from a page
+
+~~~swift
+AMP.collection("collection001").page("page001").child("subpage001") { page in
+    print("sub-page \(page.identifier) loaded")
+}
+~~~
+
+### Get meta data for a page without downloading the page
+
+~~~swift
+AMP.collection("collection001").metadata("page001") { metadata in
+    print("page title \(metadata.title)")
+    metadata.image { thumbnail in
+        print("thumbnail size: \(image.size.width) x \(image.size.height)")
+    }
+}
+~~~
 
 ## Getting outlets
 
@@ -132,62 +163,69 @@ When you request an outlet that is not found in the page no queued commands or s
 
 The result of an `outlet(*)` call is always an `AMPContent` object. To get the values of the content object you'll need a switch:
 
-    switch(content) {
-    case let t as AMPTextContent:
-        print(t.plainText())
-    
-    ...
-    
-    default:
-        break
-    }
+~~~swift
+switch(content) {
+case let t as AMPTextContent:
+    print(t.plainText())
+
+...
+
+default:
+    break
+}
+~~~
 
 or at least a `if case let`:
 
-    if case let t as AMPTextContent = content {
-        print(t.plainText())
-    }
-
+~~~swift
+if case let t as AMPTextContent = content {
+    print(t.plainText())
+}
+~~~
 
 
 ### Fetch a single outlet
 
-    AMP.collection("collection001").page("page001").outlet("title") { content in
-        print("outlet \(content.getBaseObject().outlet) loaded")
-    }
-
+~~~swift
+AMP.collection("collection001").page("page001").outlet("title") { content in
+    print("outlet \(content.getBaseObject().outlet) loaded")
+}
+~~~
 
 ### Fetch multiple outlets
 
 Variant 1:
 
-    AMP.collection("collection001").page("page001") { page in
-        page.outlet("title") { content in
-            print("outlet \(content.getBaseObject().outlet) loaded")
-        }
-        page.outlet("text") { content in
-            print("outlet \(content.getBaseObject().outlet) loaded")
-        }
+~~~swift
+AMP.collection("collection001").page("page001") { page in
+    page.outlet("title") { content in
+        print("outlet \(content.outlet) loaded")
     }
-
+    page.outlet("text") { content in
+        print("outlet \(content.outlet) loaded")
+    }
+}
+~~~
 
 Variant 2:
 
-    AMP.collection("collection001").page("page001").outlet("title") { content in
-        print("outlet \(content.getBaseObject().outlet) loaded")
-    }.outlet("text") { content in
-        print("outlet \(content.getBaseObject().outlet) loaded")
-    }
-
+~~~swift
+AMP.collection("collection001").page("page001").outlet("title") { content in
+    print("outlet \(content.outlet) loaded")
+}.outlet("text") { content in
+    print("outlet \(content.outlet) loaded")
+}
+~~~
 
 ### Fetch all outlets
 
-    AMP.collection("collection001").page("page001") { page in
-        for content in page.content {
-            print("outlet \(content.getBaseObject().outlet) loaded")
-        }
+~~~swift
+AMP.collection("collection001").page("page001") { page in
+    for content in page.content {
+        print("outlet \(content.outlet) loaded")
     }
-
+}
+~~~
 
 ## Content types
 
@@ -199,13 +237,11 @@ The following content types are defined:
 - File
 - Flag
 - Image
-- KeyValue
 - Media
 - Option
 - Text
 
-All content types have the base class of `AMPContentBase` and are always encapsulated in the `AMPContent` enum. All content types extend the `AMPPage` object with some convenience functions to make getting their values easier,
-following is a list with all available functions.
+All content types have the base class of `AMPContentBase`. All content types extend the `AMPPage` object with some convenience functions to make getting their values easier, following is a list with all available functions.
 
 
 ### Color
@@ -252,6 +288,16 @@ Content object:
 
 - `data(callback: (NSData -> Void))`:
   Returns memory mapped `NSData` for the content of the file, this initiates the file download if it is not in the cache
+- `dataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the modified image data
+- `originalDataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the original image data
+- `cgImage(original: Bool = false, callback: (CGImageRef -> Void))`
+  Calls a callback with a `CGImage` for the image data
+- `image(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the modified image data
+- `originalImage(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the original image data
 
 Page extension:
 
@@ -276,32 +322,22 @@ Page extension:
 Content object:
 
 - `dataProvider(callback: (CGDataProviderRef -> Void))`
-  Calls a callback with a `CGDataProvider` for the image data
-- `cgImage(callback: (CGImageRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the modified image data
+- `originalDataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the original image data
+- `cgImage(original: Bool = false, callback: (CGImageRef -> Void))`
   Calls a callback with a `CGImage` for the image data
 - `image(callback: (XXImage -> Void))`
-  Calls a callback with a `UIImage` or `NSImage` for the image data
+  Calls a callback with a `UIImage` or `NSImage` for the modified image data
+- `originalImage(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the original image data
 
 Page extension:
 
 - `image(name: String, callback: (XXImage -> Void)) -> AMPPage`:
-  Calls callback with image (either `UIImage` or `NSImage`), returns `self` for further chaining
-
-
-### KeyValue
-
-Content object may be subscripted with a `String` key to get to the values
-
-Page extension:
-
-- `valueForKey(name: String, key: String) -> AnyObject?`:
-  Returns the value for the key if data was cached, else `nil`
-- `valueForKey(name: String, key:String, callback: (AnyObject -> Void)) -> AMPPage`:
-  Calls callback with value, returns `self` for further chaining
-- `keyValue(name: String) -> Dictionary<String, AnyObject>?`:
-  Returns a dictionary if data was cached, else `nil`
-- `keyValue(name: String, callback: (Dictionary<String, AnyObject> -> Void)) -> AMPPage`:
-  Calls callback with dictionary, returns `self` for further chaining
+  Calls callback with modified image (either `UIImage` or `NSImage`), returns `self` for further chaining
+- `originalImage(name: String, callback: (XXImage -> Void)) -> AMPPage`:
+  Calls callback with original image (either `UIImage` or `NSImage`), returns `self` for further chaining
 
 
 ### Media
@@ -310,7 +346,18 @@ Content object:
 
 - `data(callback: (NSData -> Void))`:
   Calls a callback with memory mapped `NSData` for the media file, **Warning**: this downloads the file!
+- `dataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the modified image data
+- `originalDataProvider(callback: (CGDataProviderRef -> Void))`
+  Calls a callback with a `CGDataProvider` for the original image data
+- `cgImage(original: Bool = false, callback: (CGImageRef -> Void))`
+  Calls a callback with a `CGImage` for the image data
+- `image(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the modified image data
+- `originalImage(callback: (XXImage -> Void))`
+  Calls a callback with a `UIImage` or `NSImage` for the original image data
 - Use `url` property to get the URL of the file!
+
 
 Page extension:
 
@@ -364,16 +411,17 @@ There is a global error handler in `AMP.config.errorHandler` that catches all er
 
 Example:
 
-    AMP.config.errorHandler = { (collection, error) in
-        print("collection failed to load: \(error)")
-    }
-    
-    AMP.collection("collection001").onError() { error in
-        print("page failed to load: \(error)")
-    }.page("page001") { page in
-        print("page \(page.identifier) loaded")
-    }
+~~~swift
+AMP.config.errorHandler = { (collection, error) in
+    print("collection failed to load: \(error)")
+}
 
+AMP.collection("collection001").onError() { error in
+    print("page failed to load: \(error)")
+}.page("page001") { page in
+    print("page \(page.identifier) loaded")
+}
+~~~
 
 ## Resetting caches
 
@@ -386,8 +434,9 @@ All accessed collections and pages will be kept in a memory cache to avoid const
 
 Example:
 
-    AMP.resetMemCache()
-
+~~~swift
+AMP.resetMemCache()
+~~~
 
 ### Disk cache
 
@@ -396,32 +445,15 @@ another server than you send the api requests to they will be saved in a directo
 
 Example:
 
-    AMP.resetDiskCache()                                    // resets the cache for the current config
-    AMP.resetDiskCache(host: "example.com", locale:"de_DE") // resets the cache for example.com and `de_DE` locale
-
+~~~swift
+AMP.resetDiskCache() // resets the cache for the current config
+~~~
 
 ### Cache refresh
 
-Cache refresh will refresh only those collections and pages that are currently cached in memory because the caching system currently does not know what is exactly in the cache. (This will be fixed in the future)
+The first call to any collection after App-start will automatically cause a server-fetch.
 
-Example:
+You can set the cache timeout by setting `AMP.config.cacheTimeout`, by default it is set to 600 seconds.
 
-    // refresh all loaded collections
-    AMP.refreshCache() { collection in
-        print("collection refreshed: \(collection.identifier)")
-    }
-
-    // refresh all loaded pages in collection "collection001"
-    AMP.refreshCache(collection: "collection001") { page in
-        print("page refreshed: \(page.identifier)")
-    }
-
-    // refresh page "page001" in collection "collection001"
-    AMP.refreshCache(collection: "collection001", page: "page001") { refreshed, page in
-        if refreshed {
-            print("page refreshed: \(page.identifier)")
-        } else {
-            print("page up to date: \(page.identifier)")
-        }
-    }
+To force a collection update set `AMP.config.lastOnlineUpdate` to `nil`.
 

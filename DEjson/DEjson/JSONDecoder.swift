@@ -5,6 +5,10 @@
 //  Created by Johannes Schriewer on 30.01.15.
 //  Copyright (c) 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
+
 
 import Foundation
 
@@ -69,6 +73,7 @@ public class JSONDecoder {
         return .JSONInvalid
     }
     
+    // TODO: Add tests for escaped characters
     func parseString(inout generator: String.UnicodeScalarView.Generator) -> (String) {
         var stringEnded = false
         var slash = false
@@ -89,6 +94,8 @@ public class JSONDecoder {
                     string.append(UnicodeScalar(13))
                 case 116: // t -> tab
                     string.append(UnicodeScalar(9))
+                case 92: // \ -> \
+                    string.append(UnicodeScalar(92))
                 case 117: // u -> unicode value
                     // gather 4 chars
                     let d1 = self.parseHexDigit(generator.next())
@@ -118,7 +125,6 @@ public class JSONDecoder {
                 break
             }
         }
-        // TODO: parse backslash escaped characters
         return string.stringByReplacingOccurrencesOfString("\\n", withString: "\n")
     }
 
@@ -188,6 +194,7 @@ public class JSONDecoder {
         return arr
     }
 
+    // TODO: Add tests for negative numbers and exponential notations
     func parseNumber(inout generator: String.UnicodeScalarView.Generator, currentChar: UnicodeScalar) -> (Double?) {
         var numberEnded = false
         var numberStarted = false
@@ -285,6 +292,7 @@ public class JSONDecoder {
         return number
     }
 
+    // TODO: Add tests for true, false and null
     func parseStatement(inout generator: String.UnicodeScalarView.Generator, currentChar: UnicodeScalar) -> (Bool?) {
         enum parseState {
             case ParseStateUnknown

@@ -5,6 +5,9 @@
 //  Created by Johannes Schriewer on 07.09.15.
 //  Copyright © 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import Foundation
 #if os(OSX)
@@ -13,34 +16,63 @@ import Foundation
     import UIKit
 #endif
 import DEjson
-import ImageIO
 
-public class AMPImageContent : AMPContent {
-    var mimeType:String!                        /// mime type of the image
-    var size:CGSize				= CGSizeZero    /// dimensions of the image
-    var fileSize:Int			= 0             /// file size in bytes
-    var url:NSURL!                              /// URL of the image
-    var originalMimeType:String!                /// original image mime type
-    var originalSize:CGSize		= CGSizeZero    /// original image dimensions
-    var originalFileSize:Int	= 0             /// original image file size
-    var originalURL:NSURL!                      /// original image URL
-    var translation:CGPoint		= CGPointZero   /// image translation before cropping to final size
-    var scale:Float				= 1.0           /// image scale factor before cropping
+/// Image content, has OS specific image loading functionality
+public class AMPImageContent : AMPContent, CanLoadImage {
     
-    var checksumMethod:String   = "null:"
-    var checksum:String         = ""
+    /// mime type of the image
+    public var mimeType:String!
+    
+    /// dimensions of the image
+    public var size:CGSize				= CGSizeZero
+    
+    /// file size in bytes
+    public var fileSize:Int			    = 0
+    
+    /// URL of the image
+    public var url:NSURL?
+    
+    /// original image mime type
+    public var originalMimeType:String!
+    
+    /// original image dimensions
+    public var originalSize:CGSize		= CGSizeZero
+    
+    /// original image file size
+    public var originalFileSize:Int	    = 0
+    
+    /// original image URL
+    public var originalURL:NSURL?
+    
+    /// image translation before cropping to final size
+    public var translation:CGPoint		= CGPointZero
+    
+    /// image scale factor before cropping
+    public var scale:Float				= 1.0
+    
+    /// checksumming method used
+    public var checksumMethod:String   = "null"
+    
+    /// checksum of the file
+    public var checksum:String         = ""
 
-    var originalChecksumMethod:String = "null:"
-    var originalChecksum:String       = ""
+    /// original file checksumming method
+    public var originalChecksumMethod:String = "null"
+    
+    /// original file checksum
+    public var originalChecksum:String       = ""
+    
+    /// is this a valid image
+    public var isValid = false
 
     /// Initialize image content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized image content object
+    /// - parameter json: `JSONObject` that contains serialized image content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard (dict["mime_type"] != nil) && (dict["original_mime_type"] != nil) && (dict["image"] != nil) &&
@@ -50,10 +82,6 @@ public class AMPImageContent : AMPContent {
             (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
             case .JSONString(let mimeType)  = dict["mime_type"]!,
             case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONString(let fileUrl)   = dict["image"]!,
-            case .JSONString(let oFileUrl)  = dict["original_image"]!,
-            case .JSONString(let checksum)  = dict["checksum"]!,
-            case .JSONString(let oChecksum) = dict["original_checksum"]!,
             case .JSONNumber(let width)     = dict["width"]!,
             case .JSONNumber(let height)    = dict["height"]!,
             case .JSONNumber(let oWidth)    = dict["original_width"]!,
@@ -63,13 +91,17 @@ public class AMPImageContent : AMPContent {
             case .JSONNumber(let scale)     = dict["scale"]!,
             case .JSONNumber(let transX)    = dict["translation_x"]!,
             case .JSONNumber(let transY)    = dict["translation_y"]! else {
-                throw AMPError.Code.InvalidJSON(json)
+                throw AMPError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
-        self.url      = NSURL(string: fileUrl)
+        
+        if case .JSONString(let fileUrl) = dict["image"]! {
+            self.url = NSURL(string: fileUrl)
+            self.isValid = true
+        }
         
         self.translation = CGPointMake(CGFloat(transX), CGFloat(transY))
         self.scale       = Float(scale)
@@ -77,88 +109,69 @@ public class AMPImageContent : AMPContent {
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
-        self.originalURL      = NSURL(string: oFileUrl)
+
+        if case .JSONString(let oFileUrl)  = dict["original_image"]! {
+            self.originalURL  = NSURL(string: oFileUrl)
+        }
         
-        let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-        self.originalChecksumMethod = originalChecksumParts[0]
-        self.originalChecksum = originalChecksumParts[1]
-
-        let checksumParts = checksum.componentsSeparatedByString(":")
-        self.checksumMethod = checksumParts[0]
-        self.checksum = checksumParts[1]
-
-    }
-    
-    /// get a `CGDataProvider` for the image
-    ///
-    /// - Parameter callback: block to run when the provider becomes available
-    public func dataProvider(callback: (CGDataProviderRef -> Void)) {
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
-            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
-            guard case .Success(let filename) = result else {
-                return
-            }
-            if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(dataProvider)
-                }
-            } else {
-                print("AMP: Could not create dataprovider from file \(filename)")
+        if case .JSONString(let checksum)  = dict["checksum"]! {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            if checksumParts.count > 1 {
+                self.checksumMethod = checksumParts[0]
+                self.checksum = checksumParts[1]
             }
         }
-    }
-
-    /// create a `CGImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func cgImage(callback: (CGImageRef -> Void)) {
-        self.dataProvider() { provider in
-            let options = Dictionary<String, AnyObject>()
-            if let src = CGImageSourceCreateWithDataProvider(provider, options) {
-                if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
-                    callback(img)
-                }
+        
+        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+            let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+            if originalChecksumParts.count > 1 {
+                self.originalChecksumMethod = originalChecksumParts[0]
+                self.originalChecksum = originalChecksumParts[1]
             }
         }
     }
     
-    #if os(iOS)
-    /// create `UIImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func image(callback: (UIImage -> Void)) {
-        self.cgImage() { img in
-            let uiImage = UIImage(CGImage: img)
-            callback(uiImage)
-        }
+    /// image url for `CanLoadImage`
+    public var imageURL:NSURL? {
+        return self.url
     }
-    #endif
     
-    #if os(OSX)
-    /// create `NSImage` from the image data
-    ///
-    /// - Parameter callback: block to execute when the image has been allocated
-    public func image(callback: (NSImage -> Void)) {
-        self.cgImage() { img in
-            let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
-                callback(nsImage)
-            }
-        }
-    #endif
+    /// original image url for `CanLoadImage`
+    public var originalImageURL:NSURL? {
+        return self.originalURL
+    }
 }
 
+/// Image extension to AMPPage
 extension AMPPage {
     #if os(iOS)
     /// Allocate `UIImage` for named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, callback: (UIImage -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func image(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
-                content.image(callback)
+                content.image(callback: callback)
+            }
+        }
+        return self
+    }
+    
+    /// Allocate `UIImage` for named outlet (original unmodified image) async
+    ///
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func originalImage(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
+            if case let content as AMPImageContent = content {
+                content.originalImage(callback)
             }
         }
         return self
@@ -168,14 +181,29 @@ extension AMPPage {
     #if os(OSX)
     /// Allocate `NSImage` for named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the image becomes available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, callback: (NSImage -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func image(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPImageContent = content {
-                content.image(callback)
+                content.image(callback: callback)
+            }
+        }
+        return self
+    }
+    
+    /// Allocate `NSImage` for named outlet async
+    ///
+    /// - parameter name: the name of the outlet
+    /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
+    ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func originalImage(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
+            if case let content as AMPImageContent = content {
+                content.originalImage(callback)
             }
         }
         return self
