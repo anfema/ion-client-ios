@@ -207,6 +207,20 @@ extension AMPCollection {
             }
         }
     }
+    
+    
+    /// Fetch page tree metadata leaves from parent (walks down the page tree and returns all leaves at the end)
+    ///
+    /// - parameter parent:   parent from where to start the leave search (nil for toplevel)
+    /// - returns:            array of `AMPPageMeta` objects
+    public func metaLeaves(parent: String?) -> [AMPPageMeta] {
+        
+        let toplevel = self.pageMeta.filter { $0.parent == parent }
+        let result = self.leaveRecursive(toplevel)
+        
+        return result
+    }
+    
 
     // MARK: - Internal
     
