@@ -31,20 +31,17 @@ public class AMPPageMeta: CanLoadImage {
     /// last change date
     public var lastChanged:NSDate!
     
-    /// page title if available
-    public var title:String?
-    
     /// page layout
     public var layout:String!
-    
-    /// thumbnail URL if available, if you want the UIImage use convenience functions below
-    public var thumbnail:String?
     
     /// page position
     public var position: Int!
     
     /// collection of this meta item
     public weak var collection: AMPCollection?
+    
+    /// meta data attached to page
+    private var metaData = [String:Array<String>]()
     
     /// children
     public var children:[AMPPageMeta]? {
@@ -97,16 +94,24 @@ public class AMPPageMeta: CanLoadImage {
         self.layout = layout
         self.position = position
         
-        if (dict["title"]  != nil) {
-            if case .JSONString(let title) = dict["title"]! {
-                self.title = title
+        if dict["meta"] != nil {
+            if case .JSONDictionary(let metaDict) = dict["meta"]! {
+                for item in metaDict {
+                    if case .JSONString(let value) = item.1 {
+                        self.metaData[item.0] = [value]
+                    }
+                    if case .JSONArray(let array) = item.1 {
+                        var result = [String]()
+                        for subitem in array {
+                            if case .JSONString(let value) = subitem {
+                                result.append(value)
+                            }
+                        }
+                        self.metaData[item.0] = result
+                    }
+                }
             }
-        }
-        
-        if (dict["thumbnail"]  != nil) {
-            if case .JSONString(let thumbnail) = dict["thumbnail"]! {
-                self.thumbnail = thumbnail
-            }
+
         }
         
         switch(dict["parent"]!) {
@@ -119,10 +124,37 @@ public class AMPPageMeta: CanLoadImage {
         }
     }
     
+    /// AMPPageMeta can be subscripted by string to fetch metadata items
+    ///
+    /// - parameter index: key to return value for
+    /// - returns: value or nil
+    public subscript(index: String) -> String? {
+        if let meta = self.metaData[index] {
+            return meta[0]
+        }
+        return nil
+    }
+
+    /// AMPPageMeta can be subscripted by string + position to fetch metadata items
+    ///
+    /// - parameter index: key to return value for
+    /// - parameter position: array position to return
+    /// - returns: value or nil
+    public subscript(index: String, position: Int) -> String? {
+        if let meta = self.metaData[index] {
+            if meta.count > position {
+                return meta[position]
+            }
+        }
+        return nil
+    }
+    
     /// thumbnail image url for `CanLoadImage`
     public var imageURL:NSURL? {
-        if let thumbnail = self.thumbnail {
+        if let thumbnail = self["thumbnail"] {
             return NSURL(string: thumbnail)!
+        } else if let icon = self["icon"] {
+            return NSURL(string: icon)!
         }
         return nil
     }

@@ -189,24 +189,31 @@ extension AMPCollection {
     /// - parameter callback: callback called with unrealized page objects
     public func leaves(parent: String?, callback:([AMPPage] -> Void)) {
         dispatch_async(self.workQueue) {
-            var toplevel = [AMPPageMeta]()
-            for meta in self.pageMeta {
-                if meta.parent == parent {
-                    toplevel.append(meta)
-                }
-            }
-            
-            let resultMetas = self.leaveRecursive(toplevel)
-            var result = [AMPPage]()
-            for meta in resultMetas {
-                result.append(self.page(meta.identifier))
-            }
+            let metaItems = self.metaLeaves(parent)
+
+            let result:[AMPPage] = metaItems.map({ meta -> AMPPage in
+                return self.page(meta.identifier)
+            })
             
             dispatch_async(AMP.config.responseQueue) {
                 callback(result)
             }
         }
     }
+    
+    
+    /// Fetch page tree metadata leaves from parent (walks down the page tree and returns all leaves at the end)
+    ///
+    /// - parameter parent:   parent from where to start the leave search (nil for toplevel)
+    /// - returns:            array of `AMPPageMeta` objects
+    public func metaLeaves(parent: String?) -> [AMPPageMeta] {
+        
+        let toplevel = self.pageMeta.filter { $0.parent == parent }
+        let result = self.leaveRecursive(toplevel)
+        
+        return result
+    }
+    
 
     // MARK: - Internal
     

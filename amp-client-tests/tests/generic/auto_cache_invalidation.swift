@@ -36,11 +36,11 @@ class autoCacheTests: LoggedInXCTestCase {
 
     func testCollectionFetchWithTimeout() {
         let expectation = self.expectationWithDescription("testCollectionFetchWithTimeout")
-        AMP.config.cacheTimeout = 2
+        AMP.config.cacheTimeout = 1
         AMP.config.lastOnlineUpdate = nil
         AMP.collection("test") { collection in
             XCTAssertNotNil(collection.lastUpdate)
-            sleep(3)
+            sleep(2)
             AMP.collection("test") { collection2 in
                 XCTAssert(collection.lastUpdate != collection2.lastUpdate)
                 expectation.fulfill()
