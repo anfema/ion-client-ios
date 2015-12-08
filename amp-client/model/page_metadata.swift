@@ -41,7 +41,7 @@ public class AMPPageMeta: CanLoadImage {
     public weak var collection: AMPCollection?
     
     /// meta data attached to page
-    private var metaData = [String:String]()
+    private var metaData = [String:Array<String>]()
     
     /// children
     public var children:[AMPPageMeta]? {
@@ -98,10 +98,20 @@ public class AMPPageMeta: CanLoadImage {
             if case .JSONDictionary(let metaDict) = dict["meta"]! {
                 for item in metaDict {
                     if case .JSONString(let value) = item.1 {
-                        self.metaData[item.0] = value
+                        self.metaData[item.0] = [value]
+                    }
+                    if case .JSONArray(let array) = item.1 {
+                        var result = [String]()
+                        for subitem in array {
+                            if case .JSONString(let value) = subitem {
+                                result.append(value)
+                            }
+                        }
+                        self.metaData[item.0] = result
                     }
                 }
             }
+
         }
         
         switch(dict["parent"]!) {
@@ -119,7 +129,24 @@ public class AMPPageMeta: CanLoadImage {
     /// - parameter index: key to return value for
     /// - returns: value or nil
     public subscript(index: String) -> String? {
-        return self.metaData[index]
+        if let meta = self.metaData[index] {
+            return meta[0]
+        }
+        return nil
+    }
+
+    /// AMPPageMeta can be subscripted by string + position to fetch metadata items
+    ///
+    /// - parameter index: key to return value for
+    /// - parameter position: array position to return
+    /// - returns: value or nil
+    public subscript(index: String, position: Int) -> String? {
+        if let meta = self.metaData[index] {
+            if meta.count > position {
+                return meta[position]
+            }
+        }
+        return nil
     }
     
     /// thumbnail image url for `CanLoadImage`
