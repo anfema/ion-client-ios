@@ -26,9 +26,11 @@ extension AMPCollection {
                         return
                     }
                     
-                    let result = self.unpackToCache(filename)
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(result)
+                    dispatch_async(self.workQueue) {
+                        let result = self.unpackToCache(filename)
+                        dispatch_async(AMP.config.responseQueue){
+                            callback(result)
+                        }
                     }
             }
         }
