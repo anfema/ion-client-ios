@@ -1,0 +1,924 @@
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/1dba9804-3872-4c5d-8eaa-ef343abfa667/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/1dba9804-3872-4c5d-8eaa-ef343abfa667/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Rm1vMR5.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Rm1vMR5.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_8GAW2Jz.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_8GAW2Jz.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_8GAW2Jz.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_8GAW2Jz.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_Vo0SHRT.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_fzbiY0n.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder_JkybJjD.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/435763c3-8dc0-4c4f-a8eb-7a6659447789/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/435763c3-8dc0-4c4f-a8eb-7a6659447789/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/a79b7aff-3c86-4e2c-ba38-65030b961bb5/placeholder.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/placeholder.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/test.txt"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/test.txt",
+      "mime_type": "text/plain"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/files/a79b7aff-3c86-4e2c-ba38-65030b961bb5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },

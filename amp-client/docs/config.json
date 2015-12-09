@@ -1,0 +1,13 @@
+{
+	"output": "./docs",
+	"author": "anfema",
+	"author_url": "http://anfe.ma",
+	"swift-version": "2.1",
+	"readme": "./readme.md",
+	"clean": true,
+	"module": "amp_client",
+	"module_version": "1.0.15",
+	"min-acl": "public",
+	"template-directory": "./docs.config/templates",
+	"assets-directory": "./docs.config/assets"
+}

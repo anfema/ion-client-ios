@@ -5,12 +5,17 @@
 //  Created by Johannes Schriewer on 22.09.15.
 //  Copyright © 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import Foundation
 
+import HashExtensions
 import Alamofire
 import DEjson
 
+/// Caching extension for AMPRequest
 extension AMPRequest {
     private static var cacheDB:[JSONObject]?
     
@@ -18,8 +23,8 @@ extension AMPRequest {
     
     /// Reset the complete AMP cache for a specific host
     ///
-    /// - Parameter host: host to clear cache for
-    /// - Parameter locale: locale to clear cache for
+    /// - parameter host: host to clear cache for
+    /// - parameter locale: locale to clear cache for
     public class func resetCache(host: String, locale: String = AMP.config.locale) {
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(host, locale: locale)
@@ -43,7 +48,12 @@ extension AMPRequest {
         self.saveCacheDB()
     }
 
+    /// Reset complete AMP cache for a specific language and all hosts
+    ///
+    /// - parameter locale: locale to clear cache for
     public class func resetCache(locale locale: String) {
+        // TODO: Write test for resetCache(locale:)
+
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)
         do {
@@ -63,8 +73,8 @@ extension AMPRequest {
     
     /// Internal function to fetch the cache path for a specific URL
     ///
-    /// - Parameter url: the URL to find in the cache
-    /// - Returns: Path to the cache file (may not exist)
+    /// - parameter url: the URL to find in the cache
+    /// - returns: Path to the cache file (may not exist)
     internal class func cacheName(url: NSURL) -> String {
         var fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
         
@@ -84,8 +94,8 @@ extension AMPRequest {
 
     /// Internal function to fetch a cache DB entry
     ///
-    /// - Parameter urlString: the URL to find in the cache DB
-    /// - Returns: cache db entry (JSON dictionary unpacked into dictionary)
+    /// - parameter urlString: the URL to find in the cache DB
+    /// - returns: cache db entry (JSON dictionary unpacked into dictionary)
     internal class func getCacheDBEntry(urlString: String) -> [String:JSONObject]? {
         // load db if not already loaded
         if self.cacheDB == nil {
@@ -107,10 +117,10 @@ extension AMPRequest {
 
     /// Internal function to save a JSON response to the cache
     ///
-    /// - Parameter optRequest: optional request (used for request url)
-    /// - Parameter optResponse: optional response, checked for status code 200
-    /// - Parameter result: the object to save
-    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError.Code>) {
+    /// - parameter optRequest: optional request (used for request url)
+    /// - parameter optResponse: optional response, checked for status code 200
+    /// - parameter result: the object to save
+    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
@@ -131,10 +141,63 @@ extension AMPRequest {
         }
     }
     
+    internal class func saveToCache(data: NSData, url: String, checksum:String?) {
+        // load cache DB if not loaded yet
+        if self.cacheDB == nil {
+            self.loadCacheDB()
+        }
+        
+        // fetch current timestamp truncated to maximum resolution of 1 ms
+        let timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        
+        // pop current cache DB entry
+        var obj:[String:JSONObject]? = self.getCacheDBEntry(url)
+        self.removeCacheDBEntry(url)
+
+        // if there was nothing to pop, create new object
+        if obj == nil {
+            obj = [String:JSONObject]()
+        }
+        
+        let parsedURL = NSURL(string: url)!
+        let hash = url.cryptoHash(.MD5)
+        
+        
+        var filename = self.cacheBaseDir(parsedURL.host!, locale: AMP.config.locale)
+        if !NSFileManager.defaultManager().fileExistsAtPath(filename.path!) {
+            do {
+                try NSFileManager.defaultManager().createDirectoryAtPath(filename.path!, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                return
+            }
+        }
+
+        filename = filename.URLByAppendingPathComponent(hash)
+        data.writeToFile(filename.path!, atomically: true)
+        
+        // populate object with current data
+        obj!["url"]             = .JSONString(url)
+        obj!["host"]            = .JSONString(parsedURL.host!)
+        obj!["filename"]        = .JSONString(hash)
+        obj!["last_updated"]    = .JSONNumber(timestamp)
+
+        if let checksum = checksum {
+            let checksumParts = checksum.componentsSeparatedByString(":")
+            if checksumParts.count > 1 {
+                obj!["checksum_method"] = .JSONString(checksumParts[0])
+                obj!["checksum"]        = .JSONString(checksumParts[1])
+            }
+        }
+        
+        // append to cache DB and save
+        self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
+//        self.saveCacheDB()
+    }
+    
     /// Internal function to add an object to the cache DB
     ///
-    /// - Parameter request: optional request (used to extract URL)
-    /// - Parameter response: optional response, checked for status code
+    /// - parameter request: optional request (used to extract URL)
+    /// - parameter response: optional response, checked for status code
     internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
@@ -196,7 +259,7 @@ extension AMPRequest {
     }
     
     /// Private function to save the cache DB to disk
-    private class func saveCacheDB(locale: String = AMP.config.locale) {
+    internal class func saveCacheDB(locale: String = AMP.config.locale) {
         // can not save nothing
         guard let cacheDB = self.cacheDB else {
             return
@@ -241,8 +304,8 @@ extension AMPRequest {
     
     /// Internal function to return the base directory for the AMP cache
     ///
-    /// - Parameter host: the API host to fetch the cache dir for
-    /// - Returns: File URL to the cache dir
+    /// - parameter host: the API host to fetch the cache dir for
+    /// - returns: File URL to the cache dir
     internal class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(host)")

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import markdown
+@testable import Markdown
 
 class markdownTests: XCTestCase {
     

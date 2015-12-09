@@ -5,28 +5,33 @@
 //  Created by Johannes Schriewer on 07.09.15.
 //  Copyright © 2015 anfema. All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
 
 import Foundation
 import DEjson
 
+/// Container content, contains other content objects
 public class AMPContainerContent : AMPContent {
-    var children:[AMPContent]!
+    /// children to this container
+    public var children:[AMPContent]!
     
     /// Initialize container content object from JSON
     ///
-    /// - Parameter json: `JSONObject` that contains serialized container content object
+    /// - parameter json: `JSONObject` that contains serialized container content object
     ///
     /// Container content children can be accessed by subscripting the container content object
     override init(json:JSONObject) throws {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.Code.JSONObjectExpected(json)
+            throw AMPError.JSONObjectExpected(json)
         }
         
         guard dict["children"] != nil,
             case .JSONArray(let children) = dict["children"]! else {
-                throw AMPError.Code.JSONArrayExpected(json)
+                throw AMPError.JSONArrayExpected(json)
         }
         
         self.children = []
@@ -48,15 +53,17 @@ public class AMPContainerContent : AMPContent {
     }
 }
 
+/// Container extension to AMPPage
 extension AMPPage {
     
     /// Fetch `AMPContent`-Array from named outlet
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Returns: Array of `AMPContent` objects if the outlet was a container outlet and the page was already
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - returns: Array of `AMPContent` objects if the outlet was a container outlet and the page was already
     ///            cached, else nil
-    public func children(name: String) -> [AMPContent]? {
-        if let content = self.outlet(name) {
+    public func children(name: String, position: Int = 0) -> [AMPContent]? {
+        if let content = self.outlet(name, position: position) {
             if case let content as AMPContainerContent = content {
                 return content.children
             }
@@ -66,12 +73,13 @@ extension AMPPage {
     
     /// Fetch `AMPContent`-Array from named outlet async
     ///
-    /// - Parameter name: the name of the outlet
-    /// - Parameter callback: block to call when the children become available, will not be called if the outlet
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the children become available, will not be called if the outlet
     ///                       is not a container outlet or non-existant or fetching the outlet was canceled because
     ///                       of a communication error
-    public func children(name: String, callback: ([AMPContent] -> Void)) -> AMPPage {
-        self.outlet(name) { content in
+    public func children(name: String, position: Int = 0, callback: ([AMPContent] -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
             if case let content as AMPContainerContent = content {
                 if let c = content.children {
                     callback(c)

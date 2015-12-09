@@ -1,0 +1,129 @@
+//
+//  page_metadata.swift
+//  amp-client
+//
+//  Created by Johannes Schriewer on 28.09.15.
+//  Copyright © 2015 anfema. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under the conditions of the 3-clause
+// BSD license (see LICENSE.txt for full license text)
+
+import XCTest
+@testable import amp_client
+
+class pageMetadataTests: LoggedInXCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+    }
+    
+    func testMetadataFetchAsync() {
+        let expectation = self.expectationWithDescription("testMetadataFetchAsync")
+        AMP.resetMemCache()
+        
+        AMP.collection("test").metadata("page_001") { metadata in
+            XCTAssert(metadata.identifier == "page_001")
+            XCTAssert(metadata.layout == "layout-001")
+            XCTAssertNil(metadata.parent)
+            XCTAssertNotNil(metadata["text"])
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataFetchAsync2() {
+        let expectation = self.expectationWithDescription("testMetadataFetchAsync2")
+        AMP.resetMemCache()
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+                XCTAssert(metadata.identifier == "page_002")
+                XCTAssert(metadata.layout == "layout-002")
+                XCTAssertNil(metadata.parent)
+                XCTAssertNotNil(metadata["title"])
+                XCTAssert(metadata["title"] == "Donec ullamcorper")
+                expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataEnumerateAsync() {
+        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync")
+       
+        var count = 0
+        AMP.collection("test").enumerateMetadata(nil) { metadata in
+            XCTAssertNil(metadata.parent)
+            count++
+            if count == 2 {
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        XCTAssert(count == 2)
+    }
+
+    func testMetadataEnumerateAsync2() {
+        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync2")
+        
+        AMP.collection("test").enumerateMetadata("page_002") { metadata in
+            XCTAssert(metadata.parent == "page_002")
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataListAsync() {
+        let expectation = self.expectationWithDescription("testMetadataListAsync")
+        
+        AMP.collection("test").metadataList(nil) { list in
+            XCTAssert(list.count == 2)
+            XCTAssert(list[0].position == 0)
+            XCTAssert(list[0].identifier == "page_001")
+            XCTAssert(list[1].position == 1)
+            XCTAssert(list[1].identifier == "page_002")
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataListAsync2() {
+        let expectation = self.expectationWithDescription("testMetadataListAsync2")
+        
+        AMP.collection("test").metadataList("page_002") { list in
+            XCTAssert(list.count == 1)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testMetadataThumbnailAsync() {
+        let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            metadata.image { image in
+                XCTAssertNotNil(image)
+                let size = CGSize(width: 600, height: 400)
+                XCTAssertEqual(size, image.size)
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    func testMetaChildren() {
+        let expectation = self.expectationWithDescription("testMetaChildren")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertNotNil(metadata.children)
+            XCTAssert(metadata.children!.count == 1)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+}
