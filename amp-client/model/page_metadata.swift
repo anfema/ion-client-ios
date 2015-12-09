@@ -151,11 +151,21 @@ public class AMPPageMeta: CanLoadImage {
     
     /// thumbnail image url for `CanLoadImage`
     public var imageURL:NSURL? {
-        if let thumbnail = self["thumbnail"] {
-            return NSURL(string: thumbnail)!
-        } else if let icon = self["icon"] {
-            return NSURL(string: icon)!
+        let taintedURL: String? = self["thumbnail"] ?? self["icon"]
+ 
+        if let url = taintedURL
+        {
+            guard let escapedURL = url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) else
+            {
+                return nil
+            }
+            
+            if let url = NSURL(string: escapedURL)
+            {
+                return url
+            }
         }
+        
         return nil
     }
 
