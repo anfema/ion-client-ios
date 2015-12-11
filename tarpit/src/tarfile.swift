@@ -60,7 +60,7 @@ public class TarFile {
     /// - throws: TarFile.Errors
     ///
     /// - returns: tuple with filename and data
-    public func extractFile() throws -> (filename: NSString, data: NSData)? {
+    public func extractFile() throws -> (filename: NSString, mtime: NSDate, data: NSData)? {
         if streamingMode {
             throw Errors.ProgrammingError
         }
@@ -87,7 +87,7 @@ public class TarFile {
 
             if let data = data where header.isFile {
                 // return file data
-                return (filename: header.filepath, data: data)
+                return (filename: header.filepath, mtime: header.mtime, data: data)
             }
         }
     }
