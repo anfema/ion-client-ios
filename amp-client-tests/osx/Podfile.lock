@@ -3,11 +3,11 @@ PODS:
   - DEjson (1.0.0)
   - HashExtensions (1.0.0)
   - html5parser (1.0.0)
-  - Markdown (1.0.4)
+  - Markdown (1.0.5)
   - mockingbird (1.0.0):
     - Alamofire (~> 3.0)
     - DEjson (~> 1.0)
-  - Tarpit (1.0.1)
+  - Tarpit (1.0.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.1)
@@ -23,8 +23,8 @@ SPEC CHECKSUMS:
   DEjson: 18af7d4a4f76f7e7676dffcf21364e1d8a88fc20
   HashExtensions: 9ac81090e6e704fb936da8a4e51bf5331c014bab
   html5parser: 6618edf731a28ef0cdf46c5c5eac395e27c30af9
-  Markdown: 4bc8640818d877720be9f2b8a7208f8763d1212e
+  Markdown: c36814b29a1847a213f8d0d889f3c699fafaa501
   mockingbird: f9ea43c566d90baac9f9532e3d17613d85f01f41
-  Tarpit: 2f0dcf575c8e3decc439ea42add1b65effd6ed0a
+  Tarpit: b6db50ed664f4b9ffcf54c9f2172502bf0f475bd
 
 COCOAPODS: 0.39.0
