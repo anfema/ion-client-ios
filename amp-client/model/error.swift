@@ -44,6 +44,9 @@ public enum AMPError: ErrorType {
     /// Outlet with that name not found
     case OutletNotFound(String)
     
+    /// Authorization with token or username/password tuple failed
+    case NotAuthorized
+    
     /// Error domain for conversion into NSError
     public var errorDomain: String {
         return "com.anfema.amp"
@@ -105,6 +108,9 @@ public enum AMPError: ErrorType {
             numericalCode = -7010
             userInfo[NSLocalizedFailureReasonErrorKey] = "Outlet not found"
             userInfo["name"] = name
+        case .NotAuthorized:
+            numericalCode = -7011
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Not authorized"
         }
         
         return NSError(domain: self.errorDomain, code: numericalCode, userInfo: userInfo)

@@ -24,6 +24,10 @@ extension Request {
                 return .Failure(.NoData(error))
             }
             
+            if response!.statusCode == 401 || response!.statusCode == 403 {
+                return .Failure(.NotAuthorized)
+            }
+            
             if response!.statusCode != 200 {
                 return .Failure(.NoData(error))
             }

@@ -67,6 +67,15 @@ public class AMPRequest {
         headers["Accept"] = "application/json"
         
         AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { response in
+            if case .Failure(let error) = response.result {
+                if case .NotAuthorized = error {
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(response.result)
+                    }
+                    return
+                }
+            }
+            
             // save response to cache
             self.saveToCache(response.request!, response.result)
             
@@ -158,6 +167,14 @@ public class AMPRequest {
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
+                
+                if response!.statusCode == 401 || response!.statusCode == 403 {
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(.Failure(.NotAuthorized))
+                    }
+                    return
+                }
+
                 // try falling back to cache
                 dispatch_async(AMP.config.responseQueue) {
                     callback(fetchFromCache(urlString))
