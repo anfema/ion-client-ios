@@ -83,7 +83,9 @@ extension AMPRequest {
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(fileURL.path!, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                print("AMP: Could not create cache dir!")
+                if AMP.config.loggingEnabled {
+                    print("AMP: Could not create cache dir!")
+                }
             }
         }
         
@@ -254,7 +256,9 @@ extension AMPRequest {
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
-                print("AMP: Could not load cache DB index, corrupt file")
+                if AMP.config.loggingEnabled {
+                    print("AMP: Could not load cache DB index, corrupt file")
+                }
                 self.cacheDB = [JSONObject]()
             }
         } catch {
@@ -291,7 +295,9 @@ extension AMPRequest {
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
-                print("AMP: Could not save cache DB index")
+                if AMP.config.loggingEnabled {
+                    print("AMP: Could not save cache DB index")
+                }
             }
         }
     }

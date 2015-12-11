@@ -138,7 +138,9 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
                     callback(data)
                 }
             } catch {
-                print("AMP: Could not read file \(filename)")
+                if AMP.config.loggingEnabled {
+                    print("AMP: Could not read file \(filename)")
+                }
             }
         }
     }

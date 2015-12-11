@@ -39,13 +39,17 @@ internal extension AMP {
                         do {
                             try NSFileManager.defaultManager().removeItemAtPath(AMP.searchIndex(collection))
                         } catch {
-                            print("AMP: Could not remove FTS db at '\(AMP.searchIndex(collection))'")
+                            if AMP.config.loggingEnabled {
+                                print("AMP: Could not remove FTS db at '\(AMP.searchIndex(collection))'")
+                            }
                         }
                     }
                     do {
                         try NSFileManager.defaultManager().moveItemAtPath(filename, toPath: AMP.searchIndex(collection))
                     } catch {
-                        print("AMP: Could not save FTS db at '\(AMP.searchIndex(collection))'")
+                        if AMP.config.loggingEnabled {
+                            print("AMP: Could not save FTS db at '\(AMP.searchIndex(collection))'")
+                        }
                     }
                 }
                 

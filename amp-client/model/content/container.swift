@@ -39,7 +39,9 @@ public class AMPContainerContent : AMPContent {
             do {
                 try self.children!.append(AMPContent.factory(child))
             } catch {
-                print("AMP: Deserialization failed")
+                if AMP.config.loggingEnabled {
+                    print("AMP: Deserialization failed")
+                }
             }
         }
     }

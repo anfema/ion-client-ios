@@ -99,7 +99,6 @@ class HTMLParser {
                             continue
                         }
                     }
-                    print("\(name) linebreak")
                     var a = oldFormat!.styleDict
                     #if os(iOS)
                         a[NSFontAttributeName] = UIFont(name: "Helvetica", size: 1)
@@ -130,7 +129,6 @@ class HTMLParser {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
-                print("'\(stripped)'")
                 result.appendAttributedString(string)
 
             default:

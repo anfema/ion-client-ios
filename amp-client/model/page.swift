@@ -426,7 +426,9 @@ public class AMPPage {
                             self.appendContent(obj)
                         } catch {
                             // Content could not be deserialized, do not add to page
-                            print("AMP: Deserialization failed")
+                            if AMP.config.loggingEnabled {
+                                print("AMP: Deserialization failed")
+                            }
                         }
                     }
                 }

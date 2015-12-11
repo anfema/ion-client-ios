@@ -21,6 +21,9 @@ public struct AMPConfig {
     /// locale-code to work on, defined by server config
     public var locale:String = "en_EN"
     
+    /// set to `false` to disable logging (defaults to `true` in debug mode)
+    public var loggingEnabled:Bool
+    
     /// variation code to fetch from server, populated by default, only change if neccessary
     public var variation:String
     
@@ -97,6 +100,12 @@ public struct AMPConfig {
         var protocolClasses = [AnyClass]()
         protocolClasses.append(AMPCacheAvoidance)
         configuration.protocolClasses = protocolClasses
+        
+        #if DEBUG
+            self.loggingEnabled = true
+        #else
+            self.loggingEnabled = false
+        #endif
         
         self.updateBlocks = Dictionary<String, (String -> Void)>()
         self.ftsEnabled = [String:Bool]()
@@ -217,7 +226,9 @@ public struct AMPConfig {
     /// Reset the error handler to the default logging handler
     public mutating func resetErrorHandler() {
         self.errorHandler = { (collection, error) in
-            print("AMP unhandled error in collection '\(collection)': \(error)")
+            if AMP.config.loggingEnabled {
+                print("AMP unhandled error in collection '\(collection)': \(error)")
+            }
         }
     }
     

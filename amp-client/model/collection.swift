@@ -400,9 +400,13 @@ public class AMPCollection {
                         self.pageMeta.append(obj)
                     } catch {
                         if let json = JSONEncoder(page).prettyJSONString {
-                            print("Invalid page: " + json)
+                            if AMP.config.loggingEnabled {
+                                print("Invalid page: " + json)
+                            }
                         } else {
-                            print("Invalid page, invalid json")
+                            if AMP.config.loggingEnabled {
+                                print("Invalid page, invalid json")
+                            }
                         }
                     }
                 }

@@ -101,7 +101,9 @@ extension CanLoadImage {
                         callback(dataProvider)
                     }
                 } else {
-                    print("AMP: Could not create dataprovider from file \(filename)")
+                    if AMP.config.loggingEnabled {
+                        print("AMP: Could not create dataprovider from file \(filename)")
+                    }
                 }
         }
     }
@@ -123,7 +125,9 @@ extension CanLoadImage {
                         callback(dataProvider)
                     }
                 } else {
-                    print("AMP: Could not create dataprovider from file \(filename)")
+                    if AMP.config.loggingEnabled {
+                        print("AMP: Could not create dataprovider from file \(filename)")
+                    }
                 }
         }
     }
