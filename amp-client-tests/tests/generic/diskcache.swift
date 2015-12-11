@@ -81,7 +81,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
-                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedDescending)
+                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
                 expectation.fulfill()
             }
         }
