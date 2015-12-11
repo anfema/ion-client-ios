@@ -141,14 +141,19 @@ extension AMPRequest {
         }
     }
     
-    internal class func saveToCache(data: NSData, url: String, checksum:String?) {
+    internal class func saveToCache(data: NSData, url: String, checksum:String?, last_updated:NSDate? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
         }
         
         // fetch current timestamp truncated to maximum resolution of 1 ms
-        let timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        var timestamp: Double = 0.0
+        if let last_updated = last_updated {
+            timestamp = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
+        } else {
+            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        }
         
         // pop current cache DB entry
         var obj:[String:JSONObject]? = self.getCacheDBEntry(url)

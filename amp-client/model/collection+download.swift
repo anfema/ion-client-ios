@@ -73,7 +73,7 @@ extension AMPCollection {
                         }
                         
                         if filename == file.filename {
-                            AMPRequest.saveToCache(file.data, url: url, checksum: checksum)
+                            AMPRequest.saveToCache(file.data, url: url, checksum: checksum, last_updated: file.mtime)
                             found = idx
                             break
                         }

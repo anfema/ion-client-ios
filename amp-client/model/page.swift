@@ -373,21 +373,20 @@ public class AMPPage {
             
             // furthermore we need a page and a last_updated element
             guard dict["page"] != nil && dict["last_updated"] != nil,
-                  case .JSONArray(let array) = dict["page"]!,
-                  case .JSONNumber(let timestamp) = dict["last_updated"]! else {
+                  case .JSONArray(let array) = dict["page"]! else {
                     callback(.JSONObjectExpected(dict["page"]))
                     return
             }
-            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
 
             // if we have a nonzero result
             if case .JSONDictionary(let dict) = array[0] {
 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["translations"] != nil),
+                guard (dict["identifier"] != nil) && (dict["translations"] != nil) && (dict["last_changed"] != nil),
                       case .JSONString(let id) = dict["identifier"]!,
                       let parent = dict["parent"],
-                      case .JSONArray(let translations) = dict["translations"]! else {
+                      case .JSONArray(let translations) = dict["translations"]!,
+                      case .JSONString(let last_changed) = dict["last_changed"]! else {
                         callback(.InvalidJSON(result.value))
                         return
                 }
@@ -398,6 +397,7 @@ public class AMPPage {
                     self.parent = nil
                 }
                 self.identifier = id
+                self.lastUpdate = NSDate(isoDateString: last_changed)
 
                 // we only process the first translation as we used the `locale` filter in the request
                 if translations.count > 0 {
