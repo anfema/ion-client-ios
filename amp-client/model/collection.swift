@@ -119,7 +119,7 @@ public class AMPCollection {
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
-                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: false, parent:meta.parent) { page in
                         page.position = meta.position
                         callback(page)
                         page.onCompletion { _,_ in
@@ -150,6 +150,7 @@ public class AMPCollection {
                     } else {
                         dispatch_async(AMP.config.responseQueue) {
                             callback(page)
+                            self.checkCompleted()
                         }
                     }
                 } else {
@@ -162,6 +163,7 @@ public class AMPCollection {
                         } else {
                             dispatch_async(AMP.config.responseQueue) {
                                 callback(page)
+                                self.checkCompleted()
                             }
                         }
                     }
@@ -173,9 +175,10 @@ public class AMPCollection {
                 }
                 self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
                     page.position = meta.position
-                    callback(page)
-                    page.onCompletion { _,_ in
-                        self.checkCompleted()
+                    
+                    // recursive call to use update check from "page is caches" path
+                    self.page(identifier) { page in
+                        callback(page)
                     }
                 }
             }

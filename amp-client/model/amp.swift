@@ -68,6 +68,8 @@ public class AMP {
             if let cachedCollection = cachedCollection {
                 return cachedCollection
             }
+        } else {
+            self.collectionCache.removeValueForKey(identifier)
         }
         let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut()) { collection in
             guard let cachedCollection = cachedCollection else {
