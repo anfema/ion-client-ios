@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Tarpit"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "TAR-file unpacker in swift."
   s.description  = <<-DESC
                    TAR-file unpacker in swift.
@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "tar-1.0.1" }
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "tar-1.0.2" }
   s.source_files  = "tarpit/src/*.swift"  
 end
