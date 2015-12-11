@@ -32,12 +32,7 @@ public class AMPDateTimeContent : AMPContent {
         }
         
         if case .JSONString(let datetime) = dict["datetime"]! {
-            let fmt = NSDateFormatter()
-            fmt.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-            fmt.timeZone   = NSTimeZone(forSecondsFromGMT: 0)
-            fmt.locale     = NSLocale(localeIdentifier: "en_US_POSIX")
-
-            self.date = fmt.dateFromString(datetime)
+            self.date = NSDate(isoDateString: datetime)
         }
     }
 }
