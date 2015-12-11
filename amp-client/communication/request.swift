@@ -151,7 +151,7 @@ public class AMPRequest {
         let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
             
             // check for download errors
-            if error != nil {
+            if error != nil || response?.statusCode != 200 {
                 // remove temp file
                 do {
                     try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url) + ".tmp")
