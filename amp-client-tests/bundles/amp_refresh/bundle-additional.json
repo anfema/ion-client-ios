@@ -87,3 +87,81 @@
       "code": 404
     }
   },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "en_US",
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "en_US",
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "en_US",
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "de_DE",
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "de_DE",
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/collections/notallowed",
+      "parameters": {
+        "locale": "de_DE",
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },

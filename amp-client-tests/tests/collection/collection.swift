@@ -61,7 +61,29 @@ class collectionTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
         AMP.config.resetErrorHandler()
     }
-    
+
+    func testCollectionFetchNotAllowed() {
+        let expectation = self.expectationWithDescription("testCollectionFetchNotAllowed")
+        
+        AMP.config.errorHandler = { (collectionID, error) in
+            XCTAssertEqual(collectionID, "notallowed")
+            if case .NotAuthorized = error {
+                // ok
+            } else {
+                XCTFail()
+            }
+            expectation.fulfill()
+        }
+        
+        AMP.collection("notallowed") { collection in
+            XCTFail()
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        AMP.config.resetErrorHandler()
+    }
+
     func testCollectionMetaPath() {
         let expectation = self.expectationWithDescription("testCollectionMetaPath")
 

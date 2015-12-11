@@ -341,8 +341,12 @@ public class AMPCollection {
     /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
         AMPRequest.fetchJSON("collections/\(identifier)", queryParameters: [ "locale" : self.locale, "variation" : AMP.config.variation ], cached:self.useCache) { result in
-            if case .Failure = result {
-                callback(AMPError.CollectionNotFound(identifier))
+            if case .Failure(let error) = result {
+                if case .NotAuthorized = error {
+                    callback(error)
+                } else {
+                    callback(AMPError.CollectionNotFound(identifier))
+                }
                 return
             }
             
