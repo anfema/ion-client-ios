@@ -168,6 +168,13 @@ public class AMPRequest {
                     // do nothing, perhaps the file did not exist
                 }
                 
+                guard response != nil else {
+                    dispatch_async(AMP.config.responseQueue) {
+                        callback(.Failure(.ServerUnreachable))
+                    }
+                    return
+                }
+
                 if response!.statusCode == 401 || response!.statusCode == 403 {
                     dispatch_async(AMP.config.responseQueue) {
                         callback(.Failure(.NotAuthorized))

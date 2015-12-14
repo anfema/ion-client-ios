@@ -21,7 +21,7 @@ extension Request {
     public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONObject, AMPError> {
         return ResponseSerializer { _, response, data, error in
             guard let validData = data where response != nil else {
-                return .Failure(.NoData(error))
+                return .Failure(.ServerUnreachable)
             }
             
             if response!.statusCode == 401 || response!.statusCode == 403 {

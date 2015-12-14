@@ -47,6 +47,9 @@ public enum AMPError: ErrorType {
     /// Authorization with token or username/password tuple failed
     case NotAuthorized
     
+    /// AMP Server unreachable, either the server is offline or the user is
+    case ServerUnreachable
+    
     /// Error domain for conversion into NSError
     public var errorDomain: String {
         return "com.anfema.amp"
@@ -111,6 +114,9 @@ public enum AMPError: ErrorType {
         case .NotAuthorized:
             numericalCode = -7011
             userInfo[NSLocalizedFailureReasonErrorKey] = "Not authorized"
+        case .ServerUnreachable:
+            numericalCode = -7012
+            userInfo[NSLocalizedFailureReasonErrorKey] = "Server unreachable"
         }
         
         return NSError(domain: self.errorDomain, code: numericalCode, userInfo: userInfo)
