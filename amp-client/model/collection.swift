@@ -84,11 +84,15 @@ public class AMPCollection {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     self.callErrorHandler(error)
                     self.hasFailed = true
-                } else if let cb = callback {
-                    dispatch_async(AMP.config.responseQueue) {
-                        cb(self)
-                        dispatch_barrier_async(self.workQueue) {
-                            self.checkCompleted()
+                } else {
+                    AMP.collectionCache[identifier] = self
+                    
+                    if let cb = callback {
+                        dispatch_async(AMP.config.responseQueue) {
+                            cb(self)
+                            dispatch_barrier_async(self.workQueue) {
+                                self.checkCompleted()
+                            }
                         }
                     }
                 }
@@ -97,8 +101,6 @@ public class AMPCollection {
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             self.parentLock.unlock()
         }
-        
-        AMP.collectionCache[identifier] = self
     }
    
     // MARK: - API
