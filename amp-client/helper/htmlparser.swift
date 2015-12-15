@@ -136,6 +136,16 @@ class HTMLParser {
             }
         }
         
+        while true {
+            if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: .BackwardsSearch) where rng.endIndex == result.string.endIndex {
+                let start = result.string.startIndex.distanceTo(rng.startIndex)
+                let len = rng.startIndex.distanceTo(rng.endIndex)
+                result.replaceCharactersInRange(NSMakeRange(start, len), withAttributedString: NSAttributedString())
+            } else {
+                break
+            }
+        }
+
         return result
     }
     
