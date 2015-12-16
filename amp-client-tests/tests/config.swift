@@ -11,7 +11,7 @@
 
 import Foundation
 import XCTest
-import mockingbird
+import anfema_mockingbird
 import Alamofire
 @testable import amp_client
 

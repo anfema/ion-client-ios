@@ -11,7 +11,7 @@
 
 import XCTest
 @testable import amp_client
-import mockingbird
+import anfema_mockingbird
 
 class autoCacheTests: LoggedInXCTestCase {
     
