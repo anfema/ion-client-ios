@@ -386,10 +386,10 @@ public class AMPPage {
             if case .JSONDictionary(let dict) = array[0] {
 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["translations"] != nil) && (dict["last_changed"] != nil),
+                guard (dict["identifier"] != nil) && (dict["contents"] != nil) && (dict["last_changed"] != nil),
                       case .JSONString(let id) = dict["identifier"]!,
                       let parent = dict["parent"],
-                      case .JSONArray(let translations) = dict["translations"]!,
+                      case .JSONArray(let contents) = dict["contents"]!,
                       case .JSONString(let last_changed) = dict["last_changed"]! else {
                         callback(.InvalidJSON(result.value))
                         return
@@ -402,39 +402,24 @@ public class AMPPage {
                 }
                 self.identifier = id
                 self.lastUpdate = NSDate(isoDateString: last_changed)
-
-                // we only process the first translation as we used the `locale` filter in the request
-                if translations.count > 0 {
-                    let translation = translations[0]
-                    
-                    // guard against garbage data
-                    guard case .JSONDictionary(let t) = translation else {
-                        callback(.JSONObjectExpected(translation))
-                        return
-                    }
-                    
-                    // make sure the translation contains all needed fields
-                    guard (t["locale"] != nil) && (t["content"] != nil),
-                        case .JSONString(let localeCode) = t["locale"]!,
-                        case .JSONArray(let content)     = t["content"]! else {
-                            callback(.InvalidJSON(translation))
-                            return
-                    }
-                    
-                    self.locale = localeCode
-                    
-                    // parse and append content to this page
-                    for c in content {
-                        do {
-                            let obj = try AMPContent.factory(c)
-                            self.appendContent(obj)
-                        } catch {
-                            // Content could not be deserialized, do not add to page
-                            if AMP.config.loggingEnabled {
-                                print("AMP: Deserialization failed")
-                            }
+                
+                // parse and append content to this page
+                for c in contents {
+                    do {
+                        let obj = try AMPContent.factory(c)
+                        self.appendContent(obj)
+                    } catch {
+                        // Content could not be deserialized, do not add to page
+                        if AMP.config.loggingEnabled {
+                            print("AMP: Deserialization failed")
                         }
                     }
+                }
+            
+                if self.content.count > 0 {
+                    self.locale = self.content[0].localeCode
+                } else {
+                    self.locale = self.collection.defaultLocale!
                 }
             }
             

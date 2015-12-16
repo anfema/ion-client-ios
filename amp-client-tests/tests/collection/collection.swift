@@ -63,6 +63,10 @@ class collectionTests: LoggedInXCTestCase {
     }
 
     func testCollectionFetchNotAllowed() {
+        guard self.mock else {
+            return
+        }
+        
         let expectation = self.expectationWithDescription("testCollectionFetchNotAllowed")
         
         AMP.config.errorHandler = { (collectionID, error) in
