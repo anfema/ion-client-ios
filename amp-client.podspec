@@ -32,6 +32,6 @@ Pod::Spec.new do |s|
   s.dependency "DEjson", "~> 1.0"
   s.dependency "Markdown", "~> 1.0"
   s.dependency "HashExtensions", "~> 1.0"
-  s.dependency "html5parser", "~> 1.0"
+  s.dependency "html5tokenizer", "~> 1.0"
   s.dependency "Tarpit", "~> 1.0"
 end

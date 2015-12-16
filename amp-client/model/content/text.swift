@@ -12,7 +12,7 @@
 import Foundation
 import DEjson
 import Markdown
-import html5parser
+import html5tokenizer
 
 /// Text content, may be rendered in different markup
 public class AMPTextContent : AMPContent {

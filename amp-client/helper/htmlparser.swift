@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import html5parser
+import html5tokenizer
 import Markdown
 
 class HTMLParser {
