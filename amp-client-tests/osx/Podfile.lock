@@ -5,7 +5,7 @@ PODS:
     - DEjson (~> 1.0)
   - DEjson (1.0.1)
   - HashExtensions (1.0.0)
-  - html5parser (1.0.0)
+  - html5tokenizer (1.0.0)
   - Markdown (1.0.5)
   - Tarpit (1.0.2)
 
@@ -14,7 +14,7 @@ DEPENDENCIES:
   - anfema-mockingbird (~> 1.0)
   - DEjson (~> 1.0)
   - HashExtensions (~> 1.0)
-  - html5parser (~> 1.0)
+  - html5tokenizer (~> 1.0)
   - Markdown (~> 1.0)
   - Tarpit (~> 1.0)
 
@@ -23,8 +23,8 @@ SPEC CHECKSUMS:
   anfema-mockingbird: 5b603c7d53196bcf44033872016bd8954b6b5c88
   DEjson: 9630f0cb6973e5243c220ae275cc61d93d3e153f
   HashExtensions: 6cd70409ca44039e749006cbdc0e3bffc791ea74
-  html5parser: 6618edf731a28ef0cdf46c5c5eac395e27c30af9
+  html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   Markdown: c36814b29a1847a213f8d0d889f3c699fafaa501
-  Tarpit: b6db50ed664f4b9ffcf54c9f2172502bf0f475bd
+  Tarpit: 14429e81c060a3509ff61ad3bac516acaf170c00
 
 COCOAPODS: 0.39.0
