@@ -78,7 +78,13 @@ public struct AttributedStringStyle {
         if let textIndent = self.textIndent {
             useParagraphStyle = true
             paragraphStyle.firstLineHeadIndent = CGFloat(textIndent * (nestingDepth + 1))
-            paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1)) + CGFloat(textIndent)
+            if textIndent == 0 {
+                if let font = self.font {
+                    paragraphStyle.headIndent = CGFloat(font.pointSize)
+                }
+            } else {
+                paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1)) + CGFloat(textIndent)
+            }
         }
         
         if let lineHeightMultiplier = self.lineHeightMultiplier {
