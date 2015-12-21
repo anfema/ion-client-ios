@@ -134,6 +134,10 @@ public struct AttributedStringStyle {
     public mutating func addTabstop(location: Float) {
         self.tabStops.append(location)
     }
+    
+    public mutating func removeTabstop(index: Int) {
+        self.tabStops.removeAtIndex(index)
+    }
 }
 
 public struct AttributedStringStyling {
