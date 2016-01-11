@@ -25,7 +25,7 @@ extension AMP {
     ///
     /// Removes all cached requests and files for the configured server, does not affect memory cache so be careful
     public class func resetDiskCache() {
-        self.config.lastOnlineUpdate = nil
+        self.config.lastOnlineUpdate.removeAll()
         AMPRequest.resetCache(self.config.serverURL!.host!, locale:self.config.locale)
     }
     
@@ -35,7 +35,7 @@ extension AMP {
     /// - parameter host: a hostname to empty the cache for
     public class func resetDiskCache(host host:String) {
         // TODO: Write test for resetDiskCache(host:)
-        self.config.lastOnlineUpdate = nil
+        self.config.lastOnlineUpdate.removeAll()
         AMPRequest.resetCache(host)
     }
     
@@ -46,7 +46,7 @@ extension AMP {
     /// - parameter locale: the locale to reset
     public class func resetDiskCache(host host:String, locale:String) {
         // TODO: Write test for resetDiskCache(host:locale:)
-        self.config.lastOnlineUpdate = nil
+        self.config.lastOnlineUpdate.removeAll()
         AMPRequest.resetCache(host, locale:locale)
     }
     
@@ -56,16 +56,16 @@ extension AMP {
     /// - parameter locale: a locale code to empty the cache for
     public class func resetDiskCache(locale locale: String) {
         // TODO: Write test for resetDiskCache(locale:)
-        self.config.lastOnlineUpdate = nil
+        self.config.lastOnlineUpdate.removeAll()
         AMPRequest.resetCache(locale: locale)
     }
     
     /// Determine if collection cache has timed out
     ///
     /// - returns: true if cache is old
-    internal class func hasCacheTimedOut() -> Bool {
+    internal class func hasCacheTimedOut(identifier: String) -> Bool {
         var timeout = false
-        if let lastUpdate = self.config.lastOnlineUpdate {
+        if let lastUpdate = self.config.lastOnlineUpdate[identifier] {
             let currentDate = NSDate()
             if lastUpdate.dateByAddingTimeInterval(self.config.cacheTimeout).compare(currentDate) == NSComparisonResult.OrderedAscending {
                 timeout = true
