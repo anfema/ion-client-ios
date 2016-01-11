@@ -242,7 +242,9 @@ class pageTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_002").childrenList { list in
             XCTAssert(list.count == 1)
-            XCTAssert(list[0].identifier == "subpage_001")
+            if list.count == 1 {
+                XCTAssert(list[0].identifier == "subpage_001")
+            }
             expectation.fulfill()
         }
         
