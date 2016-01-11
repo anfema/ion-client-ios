@@ -24,9 +24,6 @@ public class AMPContent {
     /// searchable?
 	public var isSearchable = false
    
-    /// locale of this content
-    public var localeCode:String!
-    
     /// Initialize content content object from JSON
     ///
     /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!
@@ -37,16 +34,14 @@ public class AMPContent {
 			throw AMPError.JSONObjectExpected(json)
 		}
 		
-		guard (dict["variation"] != nil) && (dict["outlet"] != nil) && (dict["locale"] != nil),
+		guard (dict["variation"] != nil) && (dict["outlet"] != nil),
               case .JSONString(let variation) = dict["variation"]!,
-              case .JSONString(let outlet)    = dict["outlet"]!,
-              case .JSONString(let locale)    = dict["locale"]! else {
+              case .JSONString(let outlet)    = dict["outlet"]! else {
 			throw AMPError.InvalidJSON(json)
 		}
 		
 		self.variation = variation
 		self.outlet = outlet
-        self.localeCode = locale
         
         if let searchableObj = dict["is_searchable"] {
             if case .JSONBoolean(let searchable) = searchableObj {

@@ -386,11 +386,12 @@ public class AMPPage {
             if case .JSONDictionary(let dict) = array[0] {
 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["contents"] != nil) && (dict["last_changed"] != nil),
+                guard (dict["identifier"] != nil) && (dict["contents"] != nil) && (dict["last_changed"] != nil) && (dict["locale"] != nil),
                       case .JSONString(let id) = dict["identifier"]!,
                       let parent = dict["parent"],
                       case .JSONArray(let contents) = dict["contents"]!,
-                      case .JSONString(let last_changed) = dict["last_changed"]! else {
+                      case .JSONString(let last_changed) = dict["last_changed"]!,
+                      case .JSONString(let locale) = dict["locale"]! else {
                         callback(.InvalidJSON(result.value))
                         return
                 }
@@ -401,6 +402,7 @@ public class AMPPage {
                     self.parent = nil
                 }
                 self.identifier = id
+                self.locale = locale
                 self.lastUpdate = NSDate(isoDateString: last_changed)
                 
                 // parse and append content to this page
@@ -414,12 +416,6 @@ public class AMPPage {
                             print("AMP: Deserialization failed")
                         }
                     }
-                }
-            
-                if self.content.count > 0 {
-                    self.locale = self.content[0].localeCode
-                } else {
-                    self.locale = self.collection.defaultLocale!
                 }
             }
             
