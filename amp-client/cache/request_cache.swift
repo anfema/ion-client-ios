@@ -17,8 +17,6 @@ import DEjson
 
 /// Caching extension for AMPRequest
 extension AMPRequest {
-    private static var cacheDB:[JSONObject]?
-    
     // MARK: - external API
     
     /// Reset the complete AMP cache for a specific host

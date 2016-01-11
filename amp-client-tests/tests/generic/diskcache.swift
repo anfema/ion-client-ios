@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import DEjson
 @testable import amp_client
 
 class diskcacheTests: LoggedInXCTestCase {
@@ -87,4 +88,100 @@ class diskcacheTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    func testDiskCacheForBinaryFilesMiss() {
+        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesMiss")
+        AMP.resetMemCache()
+        AMP.resetDiskCache()
+        AMP.collection("test").page("page_001") { page in
+            XCTAssertNotNil(page.lastUpdate)
+            if case let outlet as AMPImageContent = page.outlet("image") {
+                let result = AMPRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                XCTAssertNotNil(result)
+                if case .Success(let filename) = result {
+                    print(filename)
+                    XCTFail("Cached image found when it should not be found")
+                } else {
+                    print("Cache miss!")
+                }
+            } else {
+                XCTFail("Image outlet not found")
+            }
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    func testDiskCacheForBinaryFilesHit() {
+        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesHit")
+        AMP.resetMemCache()
+        AMP.resetDiskCache()
+        AMP.collection("test").page("page_001").image("image") { image in
+            XCTAssertNotNil(image)
+            
+            AMP.collection("test").page("page_001") { page in
+                if case let outlet as AMPImageContent = page.outlet("image") {
+                    let result = AMPRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    XCTAssertNotNil(result)
+                    if case .Success(let filename) = result {
+                        print(filename)
+                    } else {
+                        print("Cache miss!")
+                        XCTFail("Cached image not found when it should be found")
+                    }
+                } else {
+                    XCTFail("Image outlet not found")
+                }
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    func testDiskCacheForBinaryFilesChange() {
+        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesChange")
+        AMP.resetMemCache()
+        AMP.resetDiskCache()
+        AMP.collection("test").page("page_001") { page in
+            if case let outlet as AMPImageContent = page.outlet("image") {
+                outlet.image() { image in
+                    XCTAssertNotNil(image)
+                    
+                    let urlString = outlet.imageURL!.absoluteString
+                    
+                    // find entry in cache db and change the checksum
+                    var tmpDB = [JSONObject]()
+                    for case .JSONDictionary(let dict) in AMPRequest.cacheDB! {
+                        guard dict["url"] != nil,
+                            case .JSONString(let entryURL) = dict["url"]! where entryURL == urlString else {
+                                tmpDB.append(.JSONDictionary(dict))
+                                continue
+                        }
+                        
+                        var changed = dict
+                        changed["checksum"] = .JSONString("xxx")
+                        tmpDB.append(.JSONDictionary(changed))
+                    }
+                    AMPRequest.cacheDB = tmpDB
+                    AMPRequest.saveCacheDB()
+                    
+                    // now a cache lookup has to fail
+                    let result = AMPRequest.fetchFromCache(urlString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    XCTAssertNotNil(result)
+                    if case .Success(let filename) = result {
+                        print(filename)
+                        XCTFail("Cached image found but checksum has changed, so a reload had to happen but didn't")
+                    } else {
+                        print("Cache miss!")
+                    }
+                    expectation.fulfill()
+                }
+            } else {
+                XCTFail("Image outlet not found")
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
 }

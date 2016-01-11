@@ -19,7 +19,7 @@ import DEjson
 
 /// Base Request class that handles caching
 public class AMPRequest {
-    private static var cacheDB:[JSONObject]?
+    static var cacheDB:[JSONObject]?
     
     // MARK: - API
 
@@ -106,43 +106,8 @@ public class AMPRequest {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
-
-        let fetchFromCache:(String -> Result<String, AMPError>) = { urlString in
-            // TODO: Make unittest
-            
-            // validate checksum
-            let cacheDBEntry = self.getCacheDBEntry(urlString)
-            guard (cacheDBEntry != nil) && (cacheDBEntry!["filename"] != nil) &&
-                  (cacheDBEntry!["checksum_method"] != nil) && (cacheDBEntry!["checksum"] != nil),
-                  case .JSONString(let filename)             = cacheDBEntry!["filename"]!,
-                  case .JSONString(let cachedChecksumMethod) = cacheDBEntry!["checksum_method"]!,
-                  case .JSONString(let cachedChecksum)       = cacheDBEntry!["checksum"]! else {
-                return .Failure(AMPError.InvalidJSON(nil))
-            }
-
-            let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
-            let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
-
-            if (cachedChecksumMethod != checksumMethod) || (cachedChecksum != checksum) {
-                // if checksum changed DO NOT USE cache
-                do {
-                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
-                } catch {
-                    // do nothing, perhaps the file did not exist
-                }
-                return .Failure(AMPError.NoData(nil))
-            }
-            
-            // Check disk cache
-            if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
-                return .Success(cacheName)
-            } else {
-                return .Failure(AMPError.NoData(nil))
-            }
-        }
-        
         if cached {
-            let cacheResult = fetchFromCache(urlString)
+            let cacheResult = self.fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
             if case .Success = cacheResult {
                 dispatch_async(AMP.config.responseQueue) {
                     callback(cacheResult)
@@ -184,7 +149,7 @@ public class AMPRequest {
 
                 // try falling back to cache
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(fetchFromCache(urlString))
+                    callback(fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum))
                 }
             } else {
                 // move temp file
@@ -316,6 +281,47 @@ public class AMPRequest {
         dict["last_updated"] = cacheDBEntry["last_updated"]
         return .JSONDictionary(dict)
     }
+    
+    /// Load file from cache
+    ///
+    /// - parameter urlString: URL of file
+    /// - parameter checksumMethod: used checksumming method
+    /// - parameter checksum: checksum to compare to
+    /// - returns: Success with cached file name or Failure
+    internal class func fetchFromCache(urlString: String, checksumMethod: String, checksum: String) -> Result<String, AMPError> {
+        let url = NSURL(string: urlString)!
+
+        // validate checksum
+        let cacheDBEntry = self.getCacheDBEntry(urlString)
+        guard (cacheDBEntry != nil) && (cacheDBEntry!["filename"] != nil) &&
+            (cacheDBEntry!["checksum_method"] != nil) && (cacheDBEntry!["checksum"] != nil),
+            case .JSONString(let filename)             = cacheDBEntry!["filename"]!,
+            case .JSONString(let cachedChecksumMethod) = cacheDBEntry!["checksum_method"]!,
+            case .JSONString(let cachedChecksum)       = cacheDBEntry!["checksum"]! else {
+                return .Failure(AMPError.InvalidJSON(nil))
+        }
+        
+        let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
+        let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
+        
+        if (cachedChecksumMethod != checksumMethod) || (cachedChecksum != checksum) {
+            // if checksum changed DO NOT USE cache
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+            } catch {
+                // do nothing, perhaps the file did not exist
+            }
+            return .Failure(AMPError.NoData(nil))
+        }
+        
+        // Check disk cache
+        if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
+            return .Success(cacheName)
+        } else {
+            return .Failure(AMPError.NoData(nil))
+        }
+    }
+
     
     // Make init private to avoid instanciating as all functions are class functions
     private init() {
