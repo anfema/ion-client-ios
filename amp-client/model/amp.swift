@@ -64,23 +64,26 @@ public class AMP {
     /// - returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
-        if !self.hasCacheTimedOut() {
+        if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 return cachedCollection
             }
         } else {
             self.collectionCache.removeValueForKey(identifier)
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut()) { collection in
+        
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(identifier)) { collection in
             guard let cachedCollection = cachedCollection else {
                 return
             }
 
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
-        if self.hasCacheTimedOut() {
-            self.config.lastOnlineUpdate = NSDate()
+        
+        if self.hasCacheTimedOut(identifier) {
+            self.config.lastOnlineUpdate[identifier] = NSDate()
         }
+        
         return newCollection
     }
     
@@ -92,7 +95,7 @@ public class AMP {
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
 
-        if !self.hasCacheTimedOut() {
+        if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
                     self.callError(identifier, error: .CollectionNotFound(identifier))
@@ -106,7 +109,8 @@ public class AMP {
                 return cachedCollection
             }
         }
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut()) { collection in
+        
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(identifier)) { collection in
             callback(collection)
             
             guard let cachedCollection = cachedCollection else {
@@ -114,9 +118,11 @@ public class AMP {
             }
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
-        if self.hasCacheTimedOut() {
-            self.config.lastOnlineUpdate = NSDate()
+        
+        if self.hasCacheTimedOut(identifier) {
+            self.config.lastOnlineUpdate[identifier] = NSDate()
         }
+        
         return newCollection
     }
     

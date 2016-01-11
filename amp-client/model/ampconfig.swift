@@ -39,8 +39,8 @@ public struct AMPConfig {
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?
     
-    /// last collection fetch, set to nil to force a collection reload from server
-    public var lastOnlineUpdate: NSDate?
+    /// last collection fetch, delete entry from dictionary to force a collection reload from server
+    public var lastOnlineUpdate: [String: NSDate] = [:]
     
     /// collection cache timeout
     public var cacheTimeout: NSTimeInterval = 600

@@ -51,14 +51,24 @@ class HTMLParser {
                     self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
                 }
                 
+                if self.isBlock(name) {
+                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
+                }
+                if name == "p" || name == "pre" {
+                    if !result.string.hasSuffix("\n\n") {
+                        result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
+                    }
+                }
+
+                
                 switch name {
                 case "li":
                     if self.getListContext() == "ul" {
-                        result.appendAttributedString(NSAttributedString(string: "\n•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.appendAttributedString(NSAttributedString(string: "•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                     }
                     if self.getListContext() == "ol"  {
                         let counter = counters.popLast()!
-                        result.appendAttributedString(NSAttributedString(string: "\n\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.appendAttributedString(NSAttributedString(string: "\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                         counters.append(counter + 1)
                     }
                     continue
@@ -79,7 +89,6 @@ class HTMLParser {
                 
                 switch name {
                 case "ol", "ul":
-                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
                     depth--
                     counters.popLast()
                 case "li":
@@ -92,23 +101,6 @@ class HTMLParser {
                     let a = (oldFormat != nil) ? oldFormat!.styleDict : formatStack.last!.styleDict
                     result.appendAttributedString(NSAttributedString(string: " ", attributes: a))
                 }
-
-                if result.string.characters.count > 0 && self.isBlock(name) && oldFormat != nil {
-                    if name == "ul" || name == "ol" {
-                        if formatStack.last!.tagName == "li" {
-                            continue
-                        }
-                    }
-                    var a = oldFormat!.styleDict
-                    #if os(iOS)
-                        a[NSFontAttributeName] = UIFont(name: "Helvetica", size: 1)
-                    #else
-                        a[NSFontAttributeName] = NSFont(name: "Helvetica", size: 1)
-                    #endif
-                    result.appendAttributedString(NSAttributedString(string: "\n\n", attributes: a))
-//                    result.appendAttributedString(NSAttributedString(string: "\u{2029}", attributes: oldFormat!.styleDict))
-                }
-                
                 
             case .Text(let data):
                 guard let data = data else {
@@ -138,6 +130,16 @@ class HTMLParser {
         
         while true {
             if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: .BackwardsSearch) where rng.endIndex == result.string.endIndex {
+                let start = result.string.startIndex.distanceTo(rng.startIndex)
+                let len = rng.startIndex.distanceTo(rng.endIndex)
+                result.replaceCharactersInRange(NSMakeRange(start, len), withAttributedString: NSAttributedString())
+            } else {
+                break
+            }
+        }
+
+        while true {
+            if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: NSStringCompareOptions()) where rng.startIndex == result.string.startIndex {
                 let start = result.string.startIndex.distanceTo(rng.startIndex)
                 let len = rng.startIndex.distanceTo(rng.endIndex)
                 result.replaceCharactersInRange(NSMakeRange(start, len), withAttributedString: NSAttributedString())

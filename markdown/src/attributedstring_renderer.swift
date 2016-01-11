@@ -41,7 +41,7 @@ public struct AttributedStringStyle {
     public var marginBottom:Float?
     
     public var writingDirection:NSWritingDirection?
-    private var tabStops = [Float]()
+    public var tabStops = [Float]()
     
     public func makeAttributeDict(nestingDepth nestingDepth: Int = 0, renderMode: RenderMode = .Normal) -> Dictionary<String, AnyObject> {
         var result = Dictionary<String, AnyObject>()
@@ -78,7 +78,13 @@ public struct AttributedStringStyle {
         if let textIndent = self.textIndent {
             useParagraphStyle = true
             paragraphStyle.firstLineHeadIndent = CGFloat(textIndent * (nestingDepth + 1))
-            paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1)) + CGFloat(textIndent)
+            if textIndent == 0 {
+                if self.tabStops.count > 0 {
+                    paragraphStyle.headIndent = CGFloat(self.tabStops[0])
+                }
+            } else {
+                paragraphStyle.headIndent = CGFloat(textIndent * (nestingDepth + 1)) + CGFloat(textIndent)
+            }
         }
         
         if let lineHeightMultiplier = self.lineHeightMultiplier {
@@ -123,10 +129,6 @@ public struct AttributedStringStyle {
         }
         
         return result
-    }
-    
-    public mutating func addTabstop(location: Float) {
-        self.tabStops.append(location)
     }
 }
 
@@ -174,9 +176,9 @@ public struct AttributedStringStyling {
         listItems.foregroundColor = baseColor
         listItems.backgroundColor = backgroundColor
         listItems.textIndent = Int(font.pointSize)
-        listItems.addTabstop(2.0 * Float(font.pointSize))
-        listItems.addTabstop(3.0 * Float(font.pointSize))
-        listItems.addTabstop(4.0 * Float(font.pointSize))
+        listItems.tabStops.append(2.0 * Float(font.pointSize))
+        listItems.tabStops.append(3.0 * Float(font.pointSize))
+        listItems.tabStops.append(4.0 * Float(font.pointSize))
         
         self.unorderedListItem = listItems
         self.orderedListItem = listItems
@@ -355,7 +357,6 @@ extension ContentNode {
             return result
             
             // Inline
-            // FIXME: Inline fonts are overridden by block level fonts, so bold, italic and code do not work correctly.
         case .PlainText:
             let result = NSMutableAttributedString(string: self.text)
             result.addAttributes(style.paragraph.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, result.length))
