@@ -46,6 +46,7 @@
 		8F78B2AF1BF36163009D4B67 /* HashExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2AA1BF36163009D4B67 /* HashExtensions.framework */; };
 		8F78B2B01BF36163009D4B67 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2AB1BF36163009D4B67 /* Markdown.framework */; };
 		8F78B2B11BF36163009D4B67 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2AC1BF36163009D4B67 /* Pods.framework */; };
+		8FB149AC1C45154900441F82 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 8FB149AB1C45154900441F82 /* bundles */; };
 		8FCFAE251BFCD7E40051981F /* page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADFC1BFCD7980051981F /* page.swift */; };
 		8FCFAE261BFCD7E40051981F /* page+children.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADFA1BFCD7980051981F /* page+children.swift */; };
 		8FCFAE271BFCD7E40051981F /* page_metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADFD1BFCD7980051981F /* page_metadata.swift */; };
@@ -154,6 +155,7 @@
 		8F78B2AA1BF36163009D4B67 /* HashExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HashExtensions.framework; path = "Pods/../build/Debug-iphoneos/HashExtensions.framework"; sourceTree = "<group>"; };
 		8F78B2AB1BF36163009D4B67 /* Markdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Markdown.framework; path = "Pods/../build/Debug-iphoneos/Markdown.framework"; sourceTree = "<group>"; };
 		8F78B2AC1BF36163009D4B67 /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
+		8FB149AB1C45154900441F82 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundles; path = ../bundles; sourceTree = "<group>"; };
 		8FCFADDE1BFCD7980051981F /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request_cache.swift; sourceTree = "<group>"; };
 		8FCFADE01BFCD7980051981F /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		8FCFADE11BFCD7980051981F /* response_serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = response_serializer.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 		8F78B1F91BF35925009D4B67 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				8FB149AB1C45154900441F82 /* bundles */,
 				8F78B21C1BF35945009D4B67 /* Info.plist */,
 				8F78B2221BF35998009D4B67 /* collection */,
 				8F78B2241BF35998009D4B67 /* config.swift */,
@@ -594,6 +597,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FB149AC1C45154900441F82 /* bundles in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

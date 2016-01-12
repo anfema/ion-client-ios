@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import html5parser
+import html5tokenizer
 import amp_client
 import Markdown
 
