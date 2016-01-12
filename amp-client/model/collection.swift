@@ -311,8 +311,8 @@ public class AMPCollection {
     private func checkCompleted() {
         dispatch_barrier_async(self.workQueue) {
             var completed = true
-            for page in self.pageCache {
-                if !page.1.isReady && !page.1.hasFailed {
+            for (_, page) in self.pageCache {
+                if !page.isReady && !page.hasFailed {
                     completed = false
                     break
                 }
@@ -479,8 +479,8 @@ public class CancelableAMPCollection: AMPCollection {
     public func cancel() {
         dispatch_barrier_async(self.workQueue) {
             // cancel all page loads
-            for page in self.pageCache {
-                if case let p as CancelableAMPPage = page.1 {
+            for (_, page) in self.pageCache {
+                if case let p as CancelableAMPPage = page {
                     p.cancel()
                 }
             }
