@@ -196,7 +196,6 @@ extension AMPRequest {
         
         // append to cache DB and save
         self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
-//        self.saveCacheDB()
     }
     
     /// Internal function to add an object to the cache DB
@@ -213,24 +212,19 @@ extension AMPRequest {
         let timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
         
         // pop current cache DB entry
-        var obj:[String:JSONObject]? = self.getCacheDBEntry(request.URLString)
+        var obj:[String:JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]
         self.removeCacheDBEntry(request.URLString)
         
-        // if there was nothing to pop, create new object
-        if obj == nil {
-            obj = [String:JSONObject]()
-        }
-        
         // populate object with current data
-        obj!["url"]             = .JSONString(request.URLString)
-        obj!["host"]            = .JSONString(request.URL!.host!)
-        obj!["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5))
-        obj!["last_updated"]    = .JSONNumber(timestamp)
-        obj!["checksum_method"] = .JSONString(checksumMethod)
-        obj!["checksum"]        = .JSONString(checksum)
+        obj["url"]             = .JSONString(request.URLString)
+        obj["host"]            = .JSONString(request.URL!.host!)
+        obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5))
+        obj["last_updated"]    = .JSONNumber(timestamp)
+        obj["checksum_method"] = .JSONString(checksumMethod)
+        obj["checksum"]        = .JSONString(checksum)
         
         // append to cache DB and save
-        self.cacheDB!.append(JSONObject.JSONDictionary(obj!))
+        self.cacheDB!.append(JSONObject.JSONDictionary(obj))
         self.saveCacheDB()
     }
 
