@@ -90,7 +90,6 @@ public class AMPPageMeta: CanLoadImage {
                     }
                 }
             }
-
         }
         
         switch(dict["parent"]!) {
