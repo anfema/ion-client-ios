@@ -73,7 +73,7 @@ class HTMLParser {
                     }
                     continue
                 case "ol", "ul":
-                    depth++
+                    depth += 1
                     counters.append(1)
                 case "br":
                     result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: formatStack.last!.styleDict))
@@ -89,7 +89,7 @@ class HTMLParser {
                 
                 switch name {
                 case "ol", "ul":
-                    depth--
+                    depth -= 1
                     counters.popLast()
                 case "li":
                     continue
@@ -197,7 +197,7 @@ class HTMLParser {
                     continue
                 case "ol", "ul":
                     listContext.append(name)
-                    depth++
+                    depth += 1
                     counters.append(1)
                 default:
                     break
@@ -215,7 +215,7 @@ class HTMLParser {
                 case "ol", "ul":
                     listContext.popLast()
                     result.appendContentsOf("\n")
-                    depth--
+                    depth -= 1
                     counters.popLast()
                     continue
                 case "li":

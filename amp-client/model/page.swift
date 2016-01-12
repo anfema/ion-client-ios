@@ -193,7 +193,7 @@ public class AMPPage {
                         cObj = content
                         break
                     }
-                    count++
+                    count += 1
                 }
             }
             if let c = cObj {
@@ -226,7 +226,7 @@ public class AMPPage {
                         cObj = content
                         break
                     }
-                    count++
+                    count += 1
                 }
             }
             if cObj == nil {
@@ -257,7 +257,7 @@ public class AMPPage {
                         found = true
                         break
                     }
-                    count++
+                    count += 1
                 }
             }
             dispatch_async(AMP.config.responseQueue) {
@@ -285,7 +285,7 @@ public class AMPPage {
                     if (count == position) {
                         return true
                     }
-                    count++
+                    count += 1
                 }
             }
             return false
@@ -308,7 +308,7 @@ public class AMPPage {
             var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    count++
+                    count += 1
                 }
             }
             dispatch_async(AMP.config.responseQueue) {
@@ -332,7 +332,7 @@ public class AMPPage {
             var count = 0
             for content in self.content {
                 if content.outlet == name {
-                    count++
+                    count += 1
                 }
             }
             return count

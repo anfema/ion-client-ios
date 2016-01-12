@@ -41,7 +41,7 @@ extension AMPCollection {
         var count = 0
         for meta in self.pageMeta {
             if meta.parent == parent {
-                count++
+                count += 1
             }
         }
         return count
