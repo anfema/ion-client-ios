@@ -133,14 +133,14 @@ public class AMPRequest {
                     // do nothing, perhaps the file did not exist
                 }
                 
-                guard response != nil else {
+                guard let response = response else {
                     dispatch_async(AMP.config.responseQueue) {
                         callback(.Failure(.ServerUnreachable))
                     }
                     return
                 }
 
-                if response!.statusCode == 401 || response!.statusCode == 403 {
+                if response.statusCode == 401 || response.statusCode == 403 {
                     dispatch_async(AMP.config.responseQueue) {
                         callback(.Failure(.NotAuthorized))
                     }
@@ -241,7 +241,7 @@ public class AMPRequest {
         
         // add query parameters
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
-        components.queryItems = [NSURLQueryItem]()
+        components.queryItems = []
         if let parameters = queryParameters {
             for (key, value) in parameters {
                 components.queryItems!.append(NSURLQueryItem(name: key, value: value))
@@ -292,12 +292,15 @@ public class AMPRequest {
         let url = NSURL(string: urlString)!
 
         // validate checksum
-        let cacheDBEntry = self.getCacheDBEntry(urlString)
-        guard (cacheDBEntry != nil) && (cacheDBEntry!["filename"] != nil) &&
-            (cacheDBEntry!["checksum_method"] != nil) && (cacheDBEntry!["checksum"] != nil),
-            case .JSONString(let filename)             = cacheDBEntry!["filename"]!,
-            case .JSONString(let cachedChecksumMethod) = cacheDBEntry!["checksum_method"]!,
-            case .JSONString(let cachedChecksum)       = cacheDBEntry!["checksum"]! else {
+        guard let cacheDBEntry = self.getCacheDBEntry(urlString) else {
+            return .Failure(AMPError.InvalidJSON(nil))
+        }
+        
+        guard (cacheDBEntry["filename"] != nil) &&
+            (cacheDBEntry["checksum_method"] != nil) && (cacheDBEntry["checksum"] != nil),
+            case .JSONString(let filename)             = cacheDBEntry["filename"]!,
+            case .JSONString(let cachedChecksumMethod) = cacheDBEntry["checksum_method"]!,
+            case .JSONString(let cachedChecksum)       = cacheDBEntry["checksum"]! else {
                 return .Failure(AMPError.InvalidJSON(nil))
         }
         
