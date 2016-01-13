@@ -66,6 +66,7 @@ class collectionTests: LoggedInXCTestCase {
         guard self.mock else {
             return
         }
+        
         let expectation = self.expectationWithDescription("testCollectionFetchNotAllowed")
         
         AMP.config.errorHandler = { (collectionID, error) in
@@ -94,8 +95,10 @@ class collectionTests: LoggedInXCTestCase {
             XCTAssertNotNil(collection)
             collection.metaPath("subpage_001") { path in
                 XCTAssert(path.count == 2)
-                XCTAssert(path[0].identifier == "page_002")
-                XCTAssert(path[1].identifier == "subpage_001")
+                if path.count == 2 {
+                    XCTAssert(path[0].identifier == "page_002")
+                    XCTAssert(path[1].identifier == "subpage_001")
+                }
                 expectation.fulfill()
             }
         }
@@ -110,8 +113,10 @@ class collectionTests: LoggedInXCTestCase {
             XCTAssertNotNil(collection)
             if let list = collection.metadataList(nil) {
                 XCTAssert(list.count == 2)
-                XCTAssert(list[0].identifier == "page_001")
-                XCTAssert(list[1].identifier == "page_002")
+                if list.count == 2 {
+                    XCTAssert(list[0].identifier == "page_001")
+                    XCTAssert(list[1].identifier == "page_002")
+                }
             } else {
                 XCTFail()
             }
@@ -126,8 +131,10 @@ class collectionTests: LoggedInXCTestCase {
         
         AMP.collection("test").leaves(nil) { pages in
             XCTAssert(pages.count == 2)
-            XCTAssert(pages[0].identifier == "page_001")
-            XCTAssert(pages[1].identifier == "subpage_001")
+            if pages.count == 2 {
+                XCTAssert(pages[0].identifier == "page_001")
+                XCTAssert(pages[1].identifier == "subpage_001")
+            }
             expectation.fulfill()
         }
         

@@ -24,7 +24,7 @@ struct DefaultConfig {
 
 
 class DefaultXCTestCase: XCTestCase {
-    let mock = true
+    let mock = false
 
     func configure(callback: (Void -> Void)) {
         AMP.config.serverURL = NSURL(string: DefaultConfig.serverURL)

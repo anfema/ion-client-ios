@@ -386,11 +386,12 @@ public class AMPPage {
             if case .JSONDictionary(let dict) = array[0] {
 
                 // make sure everything is there
-                guard let rawIdentifier = dict["identifier"], rawTranslations = dict["translations"],
-                    rawLastChanged = dict["last_changed"], let parent = dict["parent"],
+                guard let rawIdentifier = dict["identifier"], rawContents = dict["contents"],
+                      rawLastChanged = dict["last_changed"], parent = dict["parent"], rawLocale = dict["locale"]
                       case .JSONString(let id) = rawIdentifier,
-                      case .JSONArray(let translations) = rawTranslations,
-                      case .JSONString(let last_changed) = rawLastChanged else {
+                      case .JSONArray(let contents) = rawContents,
+                      case .JSONString(let last_changed) = rawLastChanged,
+                      case .JSONString(let locale) = rawLocale else {
                         callback(.InvalidJSON(result.value))
                         return
                 }
@@ -401,38 +402,18 @@ public class AMPPage {
                     self.parent = nil
                 }
                 self.identifier = id
+                self.locale = locale
                 self.lastUpdate = NSDate(isoDateString: last_changed)
-
-                // we only process the first translation as we used the `locale` filter in the request
-                if translations.count > 0 {
-                    let translation = translations[0]
-                    
-                    // guard against garbage data
-                    guard case .JSONDictionary(let t) = translation else {
-                        callback(.JSONObjectExpected(translation))
-                        return
-                    }
-                    
-                    // make sure the translation contains all needed fields
-                    guard let rawLocale = t["locale"], rawContent = t["content"],
-                        case .JSONString(let localeCode) = rawLocale,
-                        case .JSONArray(let content)     = rawContent else {
-                            callback(.InvalidJSON(translation))
-                            return
-                    }
-                    
-                    self.locale = localeCode
-                    
-                    // parse and append content to this page
-                    for c in content {
-                        do {
-                            let obj = try AMPContent.factory(c)
-                            self.appendContent(obj)
-                        } catch {
-                            // Content could not be deserialized, do not add to page
-                            if AMP.config.loggingEnabled {
-                                print("AMP: Deserialization failed")
-                            }
+                
+                // parse and append content to this page
+                for c in contents {
+                    do {
+                        let obj = try AMPContent.factory(c)
+                        self.appendContent(obj)
+                    } catch {
+                        // Content could not be deserialized, do not add to page
+                        if AMP.config.loggingEnabled {
+                            print("AMP: Deserialization failed")
                         }
                     }
                 }

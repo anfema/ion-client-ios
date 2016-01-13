@@ -120,7 +120,9 @@ class pageMetadataTests: LoggedInXCTestCase {
         AMP.collection("test").metadata("page_002") { metadata in
             XCTAssertNotNil(metadata)
             XCTAssertNotNil(metadata.children)
-            XCTAssert(metadata.children!.count == 1)
+            if let children = metadata.children {
+                XCTAssert(children.count == 1)
+            }
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
