@@ -71,9 +71,9 @@ public class AMPContent {
         if contentType == "containercontent" {
             return try AMPContainerContent(json: json)
         } else {
-            for item in AMP.config.registeredContentTypes {
-                if contentType == item.0 {
-                    return try item.1(json)
+            for (type, lambda) in AMP.config.registeredContentTypes {
+                if contentType == type {
+                    return try lambda(json)
                 }
             }
             throw AMPError.UnknownContentType(contentType)
