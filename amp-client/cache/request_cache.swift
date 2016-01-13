@@ -36,13 +36,8 @@ extension AMPRequest {
         if self.cacheDB == nil {
             self.loadCacheDB()
         }
-        self.cacheDB = self.cacheDB!.filter({ entry -> Bool in
-            guard case .JSONDictionary(let dict) = entry where dict["host"] != nil,
-                case .JSONString(let entryHost) = dict["host"]! where entryHost == host else {
-                    return true
-            }
-            return false
-        })
+        
+        removeCacheDBEntries(forKey: "host", value: host)
         self.saveCacheDB()
     }
 
@@ -104,8 +99,8 @@ extension AMPRequest {
 
         // find entry in cache db
         for case .JSONDictionary(let dict) in self.cacheDB! {
-            guard dict["url"] != nil,
-                  case .JSONString(let entryURL) = dict["url"]! where entryURL == urlString else {
+            guard let rawURL = dict["url"],
+                  case .JSONString(let entryURL) = rawURL where entryURL == urlString else {
                 continue
             }
             return dict
@@ -156,7 +151,7 @@ extension AMPRequest {
         
         // pop current cache DB entry
         var obj:[String:JSONObject] = self.getCacheDBEntry(url) ?? [:]
-        self.removeCacheDBEntry(url)
+        self.removeCacheDBEntries(withURL: url)
         
         let parsedURL = NSURL(string: url)!
         let hash = url.cryptoHash(.MD5)
@@ -214,11 +209,15 @@ extension AMPRequest {
         
         // pop current cache DB entry
         var obj:[String:JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]
-        self.removeCacheDBEntry(request.URLString)
-
+        self.removeCacheDBEntries(withURL: request.URLString)
+        
+        guard let requestURL = request.URL, requestHost = requestURL.host else {
+            return
+        }
+        
         // populate object with current data
         obj["url"]             = .JSONString(request.URLString)
-        obj["host"]            = .JSONString(request.URL!.host!)
+        obj["host"]            = .JSONString(requestHost)
         obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5))
         obj["last_updated"]    = .JSONNumber(timestamp)
         obj["checksum_method"] = .JSONString(checksumMethod)
@@ -295,11 +294,18 @@ extension AMPRequest {
         }
     }
     
-    /// Private function to remove an entry from the cache DB
-    private class func removeCacheDBEntry(urlString: String) {
+    
+    /// Private function to remove entries with a specific url from the cache DB
+    private class func removeCacheDBEntries(withURL urlString: String) {
+        removeCacheDBEntries(forKey: "url", value: urlString)
+    }
+    
+    
+    /// Private function to remove entries from the cache DB
+    private class func removeCacheDBEntries(forKey key: String, value: String) {
         self.cacheDB = self.cacheDB!.filter({ entry -> Bool in
-            guard case .JSONDictionary(let dict) = entry where dict["url"] != nil,
-                case .JSONString(let entryURL) = dict["url"]! where entryURL == urlString else {
+            guard case .JSONDictionary(let dict) = entry where dict[key] != nil,
+                case .JSONString(let entryValue) = dict[key]! where entryValue == value else {
                     return true
             }
             return false
