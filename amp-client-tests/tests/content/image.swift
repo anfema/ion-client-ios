@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import DEjson
 @testable import amp_client
 
 class imageContentTests: LoggedInXCTestCase {
@@ -44,4 +45,59 @@ class imageContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    
+    func testImageInitializerFail1() {
+        let json: JSONObject = .JSONString("invalid")
+        
+        do {
+            let image = try AMPImageContent(json: json)
+            XCTFail("should have failed. returned \(image) instead")
+        }
+            
+        catch let e as AMPError
+        {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONObjectExpected(let obj) = e else
+            {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        }
+            
+        catch
+        {
+            XCTFail("wrong error thrown")
+        }
+    }
+    
+    
+    func testImageInitializerFail2() {
+        let json: JSONObject = .JSONDictionary(["variation": .JSONString("@2x"), "outlet": .JSONString("titleImage")])
+        
+        do {
+            let image = try AMPImageContent(json: json)
+            XCTFail("should have failed. returned \(image) instead")
+        }
+            
+        catch let e as AMPError
+        {
+            XCTAssertNotNil(e)
+    
+            guard case .InvalidJSON(let obj) = e else
+            {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        }
+            
+        catch
+        {
+            XCTFail("wrong error thrown")
+        }
+    }
 }

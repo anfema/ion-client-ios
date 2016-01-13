@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A4B8FF71C469BE90024D319 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */; };
 		7769A7F0274A01ED40DD985B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D059CE25D0784B783F89E4D /* Pods.framework */; };
 		8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DACC11C0C9A6300193E8C /* collection+download.swift */; };
 		8F114C6A1C10828900977640 /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F114C691C10828900977640 /* connection.swift */; };
@@ -112,6 +113,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8D059CE25D0784B783F89E4D /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0DACC11C0C9A6300193E8C /* collection+download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+download.swift"; sourceTree = "<group>"; };
 		8F114C691C10828900977640 /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
@@ -234,6 +236,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		6A4B8FF51C469BC70024D319 /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */,
+			);
+			path = helper;
+			sourceTree = "<group>";
+		};
 		7A4D5D6A0BACFF1E75491607 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +299,7 @@
 			children = (
 				8FB149AB1C45154900441F82 /* bundles */,
 				8F78B21C1BF35945009D4B67 /* Info.plist */,
+				6A4B8FF51C469BC70024D319 /* helper */,
 				8F78B2221BF35998009D4B67 /* collection */,
 				8F78B2241BF35998009D4B67 /* config.swift */,
 				8F78B2251BF35998009D4B67 /* content */,
@@ -674,6 +685,7 @@
 			files = (
 				8F78B2471BF35998009D4B67 /* number.swift in Sources */,
 				8F78B24E1BF35998009D4B67 /* error_handler.swift in Sources */,
+				6A4B8FF71C469BE90024D319 /* NSDate+ISODate.swift in Sources */,
 				8F78B24A1BF35998009D4B67 /* auth.swift in Sources */,
 				8F78B2461BF35998009D4B67 /* media.swift in Sources */,
 				8F78B2421BF35998009D4B67 /* file.swift in Sources */,
