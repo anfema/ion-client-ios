@@ -360,9 +360,9 @@ public class AMPCollection {
             }
             
             // furthermore we need a collection and a last_updated element
-            guard dict["collection"] != nil && dict["last_updated"] != nil,
-                  case .JSONArray(let array)      = dict["collection"]!,
-                  case .JSONNumber(let timestamp) = dict["last_updated"]! else {
+            guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
+                  case .JSONArray(let array)      = rawCollection,
+                  case .JSONNumber(let timestamp) = rawLastUpdated else {
                     callback(AMPError.JSONObjectExpected(result.value!))
                     return
             }
@@ -372,11 +372,12 @@ public class AMPCollection {
             if case .JSONDictionary(let dict) = array[0] {
                 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["pages"] != nil) && (dict["default_locale"] != nil) && (dict["archive"] != nil) && (dict["fts_db"] != nil),
-                      case .JSONString(let id)             = dict["identifier"]!,
-                      case .JSONString(let defaultLocale)  = dict["default_locale"]!,
-                      case .JSONString(let archiveURL)     = dict["archive"]!,
-                      case .JSONArray(let pages)           = dict["pages"]! else {
+                guard let rawIdentifier = dict["identifier"], rawPages = dict["pages"], rawDefaultLocale = dict["default_locale"],
+                    rawArchive = dict["archive"], rawFTSdb = dict["fts_db"],
+                      case .JSONString(let id)             = rawIdentifier,
+                      case .JSONString(let defaultLocale)  = rawDefaultLocale,
+                      case .JSONString(let archiveURL)     = rawArchive,
+                      case .JSONArray(let pages)           = rawPages else {
                         callback(AMPError.InvalidJSON(result.value!))
                         return
                 }
@@ -385,7 +386,7 @@ public class AMPCollection {
                 self.identifier = id
                 self.defaultLocale = defaultLocale
                 self.archiveURL = archiveURL
-                if case .JSONString(let ftsURL) = dict["fts_db"]! {
+                if case .JSONString(let ftsURL) = rawFTSdb {
                     self.ftsDownloadURL = ftsURL
                 }
             

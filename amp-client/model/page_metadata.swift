@@ -15,8 +15,8 @@ import DEjson
 
 /// Page metadata, used if only small samples of a page have to be used instead of downloading the whole thing
 public class AMPPageMeta: CanLoadImage {
-    /// flag if the date formatter has already been instanciated
-    static var formatterInstanciated = false
+    /// flag if the date formatter has already been instantiated
+    static var formatterInstantiated = false
     
     /// page identifier
     public var identifier:String!
@@ -60,11 +60,11 @@ public class AMPPageMeta: CanLoadImage {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["last_changed"] != nil) && (dict["parent"] != nil) &&
-            (dict["identifier"] != nil) && (dict["layout"] != nil),
-            case .JSONString(let lastChanged) = dict["last_changed"]!,
-            case .JSONString(let layout) = dict["layout"]!,
-            case .JSONString(let identifier)  = dict["identifier"]! else {
+        guard let rawLastChanged = dict["last_changed"], rawParent = dict["parent"],
+            rawIdentifier = dict["identifier"], rawLayout = dict["layout"],
+            case .JSONString(let lastChanged) = rawLastChanged,
+            case .JSONString(let layout) = rawLayout,
+            case .JSONString(let identifier)  = rawIdentifier else {
                 throw AMPError.InvalidJSON(json)
         }
         
@@ -73,26 +73,26 @@ public class AMPPageMeta: CanLoadImage {
         self.layout = layout
         self.position = position
         
-        if dict["meta"] != nil {
-            if case .JSONDictionary(let metaDict) = dict["meta"]! {
-                for item in metaDict {
-                    if case .JSONString(let value) = item.1 {
-                        self.metaData[item.0] = [value]
+        if let rawMeta = dict["meta"] {
+            if case .JSONDictionary(let metaDict) = rawMeta {
+                for (key, jsonObj) in metaDict {
+                    if case .JSONString(let value) = jsonObj {
+                        self.metaData[key] = [value]
                     }
-                    if case .JSONArray(let array) = item.1 {
+                    if case .JSONArray(let array) = jsonObj {
                         var result = [String]()
                         for subitem in array {
                             if case .JSONString(let value) = subitem {
                                 result.append(value)
                             }
                         }
-                        self.metaData[item.0] = result
+                        self.metaData[key] = result
                     }
                 }
             }
         }
         
-        switch(dict["parent"]!) {
+        switch(rawParent) {
         case .JSONNull:
             self.parent = nil
         case .JSONString(let parent):

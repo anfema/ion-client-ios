@@ -26,7 +26,7 @@ public class AMPContent {
    
     /// Initialize content content object from JSON
     ///
-    /// This is the conten base class, it should never be instanciated by itself, only through it's subclasses!
+    /// This is the conten base class, it should never be instantiated by itself, only through it's subclasses!
     ///
     /// - parameter json: `JSONObject` that contains serialized content content object
 	public init(json:JSONObject) throws {
@@ -53,7 +53,7 @@ public class AMPContent {
     /// Initialize a content object from JSON
     ///
     /// This essentially removes the top JSON object casing and determines which object
-    /// to instanciate from the name of the key of that JSON object
+    /// to instantiate from the name of the key of that JSON object
     ///
     /// - parameter json: the JSON object to parse
     /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON, AMPError.Code.UnknownContentType

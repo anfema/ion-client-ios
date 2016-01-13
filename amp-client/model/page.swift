@@ -376,8 +376,8 @@ public class AMPPage {
             }
             
             // furthermore we need a page and a last_updated element
-            guard dict["page"] != nil && dict["last_updated"] != nil,
-                  case .JSONArray(let array) = dict["page"]! else {
+            guard let rawPage = dict["page"] where dict["last_updated"] != nil,
+                  case .JSONArray(let array) = rawPage else {
                     callback(.JSONObjectExpected(dict["page"]))
                     return
             }
@@ -386,11 +386,11 @@ public class AMPPage {
             if case .JSONDictionary(let dict) = array[0] {
 
                 // make sure everything is there
-                guard (dict["identifier"] != nil) && (dict["translations"] != nil) && (dict["last_changed"] != nil),
-                      case .JSONString(let id) = dict["identifier"]!,
-                      let parent = dict["parent"],
-                      case .JSONArray(let translations) = dict["translations"]!,
-                      case .JSONString(let last_changed) = dict["last_changed"]! else {
+                guard let rawIdentifier = dict["identifier"], rawTranslations = dict["translations"],
+                    rawLastChanged = dict["last_changed"], let parent = dict["parent"],
+                      case .JSONString(let id) = rawIdentifier,
+                      case .JSONArray(let translations) = rawTranslations,
+                      case .JSONString(let last_changed) = rawLastChanged else {
                         callback(.InvalidJSON(result.value))
                         return
                 }
@@ -414,9 +414,9 @@ public class AMPPage {
                     }
                     
                     // make sure the translation contains all needed fields
-                    guard (t["locale"] != nil) && (t["content"] != nil),
-                        case .JSONString(let localeCode) = t["locale"]!,
-                        case .JSONArray(let content)     = t["content"]! else {
+                    guard let rawLocale = t["locale"], rawContent = t["content"],
+                        case .JSONString(let localeCode) = rawLocale,
+                        case .JSONArray(let content)     = rawContent else {
                             callback(.InvalidJSON(translation))
                             return
                     }
