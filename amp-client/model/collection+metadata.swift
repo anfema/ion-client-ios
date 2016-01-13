@@ -219,20 +219,14 @@ extension AMPCollection {
     
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
         dispatch_async(self.workQueue) {
-            var result:[String] = []
+            var temp:[AMPPageMeta] = self.pageMeta.filter({ $0.parent == parent })
             
-            var temp:[AMPPageMeta] = []
-            for meta in self.pageMeta {
-                if meta.parent == parent {
-                    temp.append(meta)
-                }
-            }
             temp.sortInPlace({ (page1, page2) -> Bool in
                 return page1.position < page2.position
             })
-            for item in temp {
-                result.append(item.identifier)
-            }
+            
+            let result: [String] = temp.flatMap({ $0.identifier })
+            
             dispatch_async(AMP.config.responseQueue) {
                 callback(result)
             }
