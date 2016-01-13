@@ -43,11 +43,11 @@ public class AMPColorContent : AMPContent {
         }
         
         // make sure all data is there
-        guard (dict["r"] != nil) && (dict["g"] != nil) && (dict["b"] != nil),
-            case .JSONNumber(let r) = dict["r"]!,
-            case .JSONNumber(let g) = dict["g"]!,
-            case .JSONNumber(let b) = dict["b"]!,
-            case .JSONNumber(let a) = dict["a"]! else {
+        guard let rawR = dict["r"], rawG = dict["g"], rawB = dict["b"], rawA = dict["a"],
+            case .JSONNumber(let r) = rawR,
+            case .JSONNumber(let g) = rawG,
+            case .JSONNumber(let b) = rawB,
+            case .JSONNumber(let a) = rawA else {
                 throw AMPError.InvalidJSON(json)
         }
         
