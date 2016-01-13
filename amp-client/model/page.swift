@@ -387,7 +387,7 @@ public class AMPPage {
 
                 // make sure everything is there
                 guard let rawIdentifier = dict["identifier"], rawContents = dict["contents"],
-                      rawLastChanged = dict["last_changed"], parent = dict["parent"], rawLocale = dict["locale"]
+                      rawLastChanged = dict["last_changed"], parent = dict["parent"], rawLocale = dict["locale"],
                       case .JSONString(let id) = rawIdentifier,
                       case .JSONArray(let contents) = rawContents,
                       case .JSONString(let last_changed) = rawLastChanged,
