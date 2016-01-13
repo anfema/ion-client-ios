@@ -296,11 +296,12 @@ public class AMPRequest {
             return .Failure(AMPError.InvalidJSON(nil))
         }
         
-        guard (cacheDBEntry["filename"] != nil) &&
-            (cacheDBEntry["checksum_method"] != nil) && (cacheDBEntry["checksum"] != nil),
-            case .JSONString(let filename)             = cacheDBEntry["filename"]!,
-            case .JSONString(let cachedChecksumMethod) = cacheDBEntry["checksum_method"]!,
-            case .JSONString(let cachedChecksum)       = cacheDBEntry["checksum"]! else {
+        guard let rawFileName = cacheDBEntry["filename"],
+            rawChecksumMethod = cacheDBEntry["checksum_method"],
+            rawChecksum = cacheDBEntry["checksum"],
+            case .JSONString(let filename)             = rawFileName,
+            case .JSONString(let cachedChecksumMethod) = rawChecksumMethod,
+            case .JSONString(let cachedChecksum)       = rawChecksum else {
                 return .Failure(AMPError.InvalidJSON(nil))
         }
         

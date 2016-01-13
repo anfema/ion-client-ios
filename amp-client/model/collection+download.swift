@@ -60,11 +60,16 @@ extension AMPCollection {
                 } else {
                     var found: Int? = nil
                     for (idx, item) in index.enumerate() {
-                        guard case .JSONDictionary(let dict) = item where (dict["name"] != nil) && (dict["url"] != nil),
-                              case .JSONString(let filename) = dict["name"]!,
-                              case .JSONString(let url) = dict["url"]! else {
+                        guard case .JSONDictionary(let dict) = item else {
+                            return false
+                        }
+
+                        guard let rawName = dict["name"], rawURL = dict["url"],
+                              case .JSONString(let filename) = rawName,
+                              case .JSONString(let url) = rawURL else {
                                 return false
                         }
+                        
                         var checksum: String? = nil
                         if let dictChecksum = dict["checksum"] {
                             if case .JSONString(let ck) = dictChecksum {
