@@ -163,12 +163,6 @@ class collectionTests: LoggedInXCTestCase {
             // now we have 2 collections in the cache
             XCTAssert(AMP.collectionCache.count == 2)
             
-            // suspend the work queue to be able to queue deterministically
-            dispatch_suspend(c.workQueue)
-
-            // cancel the fork
-            c.cancel()
-            
             // on completion will now be called after cancelling
             c.onCompletion() { collection, completed in
                 XCTAssert(completed == false)
@@ -179,8 +173,8 @@ class collectionTests: LoggedInXCTestCase {
                 }
             }
             
-            // now start the thing
-            dispatch_resume(c.workQueue)
+            // cancel the fork
+            c.cancel()
         }
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
