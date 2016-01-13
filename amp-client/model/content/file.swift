@@ -45,11 +45,11 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["mime_type"] != nil) && (dict["name"] != nil) && (dict["file_size"] != nil) &&
-            (dict["checksum"] != nil) && (dict["file"] != nil),
-            case .JSONString(let mimeType) = dict["mime_type"]!,
-            case .JSONString(let fileName) = dict["name"]!,
-            case .JSONNumber(let size)     = dict["file_size"]! else {
+        guard let rawMimeType = dict["mime_type"], rawName = dict["name"], rawFileSize = dict["file_size"],
+            rawChecksum = dict["checksum"], rawFile = dict["file"],
+            case .JSONString(let mimeType) = rawMimeType,
+            case .JSONString(let fileName) = rawName,
+            case .JSONNumber(let size)     = rawFileSize else {
                 throw AMPError.InvalidJSON(json)
         }
         
@@ -57,7 +57,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         self.fileName = fileName
         self.size     = Int(size)
         
-        if case .JSONString(let checksum)  = dict["checksum"]! {
+        if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
@@ -65,7 +65,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             }
         }
         
-        if case .JSONString(let fileUrl) = dict["file"]! {
+        if case .JSONString(let fileUrl) = rawFile {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }

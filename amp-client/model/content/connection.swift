@@ -33,8 +33,8 @@ public class AMPConnectionContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["connection_string"] != nil),
-            case .JSONString(let value) = dict["connection_string"]! else {
+        guard let connectionString = dict["connection_string"],
+            case .JSONString(let value) = connectionString else {
                 throw AMPError.InvalidJSON(json)
         }
         

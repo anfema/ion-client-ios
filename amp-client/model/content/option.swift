@@ -28,8 +28,8 @@ public class AMPOptionContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["value"] != nil),
-            case .JSONString(let value) = dict["value"]! else {
+        guard let rawValue = dict["value"],
+            case .JSONString(let value) = rawValue else {
                 throw AMPError.InvalidJSON(json)
         }
         

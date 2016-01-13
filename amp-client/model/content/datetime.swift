@@ -27,11 +27,11 @@ public class AMPDateTimeContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["datetime"] != nil) else {
-                throw AMPError.InvalidJSON(json)
+        guard let rawDateTime = dict["datetime"] else {
+            throw AMPError.InvalidJSON(json)
         }
         
-        if case .JSONString(let datetime) = dict["datetime"]! {
+        if case .JSONString(let datetime) = rawDateTime {
             self.date = NSDate(isoDateString: datetime)
         }
     }

@@ -35,10 +35,10 @@ public class AMPTextContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["mime_type"] != nil) && (dict["is_multiline"] != nil) && (dict["text"] != nil),
-            case .JSONString(let mimeType) = dict["mime_type"]!,
-            case .JSONBoolean(let multiLine) = dict["is_multiline"]!,
-            case .JSONString(let text) = dict["text"]! else {
+        guard let rawMimeType = dict["mime_type"], rawIsMultiline = dict["is_multiline"], rawText = dict["text"],
+            case .JSONString(let mimeType) = rawMimeType,
+            case .JSONBoolean(let multiLine) = rawIsMultiline,
+            case .JSONString(let text) = rawText else {
                 throw AMPError.InvalidJSON(json)
         }
         

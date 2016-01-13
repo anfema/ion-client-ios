@@ -27,8 +27,8 @@ public class AMPFlagContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["is_enabled"] != nil),
-            case .JSONBoolean(let enabled) = dict["is_enabled"]! else {
+        guard let rawIsEnabled = dict["is_enabled"],
+            case .JSONBoolean(let enabled) = rawIsEnabled else {
                 throw AMPError.InvalidJSON(json)
         }
         

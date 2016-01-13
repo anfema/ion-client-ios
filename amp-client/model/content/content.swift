@@ -34,9 +34,9 @@ public class AMPContent {
 			throw AMPError.JSONObjectExpected(json)
 		}
 		
-		guard (dict["variation"] != nil) && (dict["outlet"] != nil),
-              case .JSONString(let variation) = dict["variation"]!,
-              case .JSONString(let outlet)    = dict["outlet"]! else {
+		guard let rawVariation = dict["variation"], rawOutlet = dict["outlet"],
+              case .JSONString(let variation) = rawVariation,
+              case .JSONString(let outlet)    = rawOutlet else {
 			throw AMPError.InvalidJSON(json)
 		}
 		
@@ -62,9 +62,8 @@ public class AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["type"] != nil),
-            case let contentTypeObj = dict["type"]!,
-            case .JSONString(let contentType) = contentTypeObj else {
+        guard let rawType = dict["type"],
+            case .JSONString(let contentType) = rawType else {
                 throw AMPError.JSONObjectExpected(json)
         }
         

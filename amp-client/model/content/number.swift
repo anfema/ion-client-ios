@@ -27,8 +27,8 @@ public class AMPNumberContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["value"] != nil),
-            case .JSONNumber(let value) = dict["value"]! else {
+        guard let rawValue = dict["value"],
+            case .JSONNumber(let value) = rawValue else {
                 throw AMPError.InvalidJSON(json)
         }
         

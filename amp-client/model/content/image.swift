@@ -75,22 +75,22 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["mime_type"] != nil) && (dict["original_mime_type"] != nil) && (dict["image"] != nil) &&
-            (dict["original_image"] != nil) && (dict["width"] != nil) && (dict["height"] != nil) &&
-            (dict["original_width"] != nil) && (dict["original_height"] != nil) && (dict["file_size"] != nil) &&
-            (dict["original_file_size"] != nil) && (dict["scale"] != nil) && (dict["translation_x"] != nil) &&
-            (dict["translation_y"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil),
-            case .JSONString(let mimeType)  = dict["mime_type"]!,
-            case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONNumber(let width)     = dict["width"]!,
-            case .JSONNumber(let height)    = dict["height"]!,
-            case .JSONNumber(let oWidth)    = dict["original_width"]!,
-            case .JSONNumber(let oHeight)   = dict["original_height"]!,
-            case .JSONNumber(let fileSize)  = dict["file_size"]!,
-            case .JSONNumber(let oFileSize) = dict["original_file_size"]!,
-            case .JSONNumber(let scale)     = dict["scale"]!,
-            case .JSONNumber(let transX)    = dict["translation_x"]!,
-            case .JSONNumber(let transY)    = dict["translation_y"]! else {
+        guard let rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawImage = dict["image"],
+            rawOriginalImage = dict["original_image"], rawWidth = dict["width"], rawHeight = dict["height"],
+            rawOriginalWidth = dict["original_width"], rawOriginalHeight = dict["original_height"], rawFileSize = dict["file_size"],
+            rawOriginalFileSize = dict["original_file_size"], rawScale = dict["scale"], rawTranslationX = dict["translation_x"],
+            rawTranslationY = dict["translation_y"], rawChecksum = dict["checksum"], rawOriginalChecksum = dict["original_checksum"],
+            case .JSONString(let mimeType)  = rawMimeType,
+            case .JSONString(let oMimeType) = rawOriginalMimeType,
+            case .JSONNumber(let width)     = rawWidth,
+            case .JSONNumber(let height)    = rawHeight,
+            case .JSONNumber(let oWidth)    = rawOriginalWidth,
+            case .JSONNumber(let oHeight)   = rawOriginalHeight,
+            case .JSONNumber(let fileSize)  = rawFileSize,
+            case .JSONNumber(let oFileSize) = rawOriginalFileSize,
+            case .JSONNumber(let scale)     = rawScale,
+            case .JSONNumber(let transX)    = rawTranslationX,
+            case .JSONNumber(let transY)    = rawTranslationY else {
                 throw AMPError.InvalidJSON(json)
         }
         
@@ -98,7 +98,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
         
-        if case .JSONString(let fileUrl) = dict["image"]! {
+        if case .JSONString(let fileUrl) = rawImage {
             self.url = NSURL(string: fileUrl)
             self.isValid = true
         }
@@ -110,11 +110,11 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
 
-        if case .JSONString(let oFileUrl)  = dict["original_image"]! {
+        if case .JSONString(let oFileUrl)  = rawOriginalImage {
             self.originalURL  = NSURL(string: oFileUrl)
         }
         
-        if case .JSONString(let checksum)  = dict["checksum"]! {
+        if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
@@ -122,7 +122,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             }
         }
         
-        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+        if case .JSONString(let oChecksum) = rawOriginalChecksum {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
             if originalChecksumParts.count > 1 {
                 self.originalChecksumMethod = originalChecksumParts[0]

@@ -29,15 +29,15 @@ public class AMPContainerContent : AMPContent {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard dict["children"] != nil,
-            case .JSONArray(let children) = dict["children"]! else {
+        guard let rawChildren = dict["children"],
+            case .JSONArray(let children) = rawChildren else {
                 throw AMPError.JSONArrayExpected(json)
         }
         
         self.children = []
         for child in children {
             do {
-                try self.children!.append(AMPContent.factory(child))
+                try self.children.append(AMPContent.factory(child))
             } catch {
                 if AMP.config.loggingEnabled {
                     print("AMP: Deserialization failed")
@@ -48,10 +48,10 @@ public class AMPContainerContent : AMPContent {
     
     /// Container content has a subscript for it's children
     subscript(index: Int) -> AMPContent? {
-        guard self.children != nil && index < self.children!.count else {
+        guard self.children != nil && index < self.children.count else {
             return nil
         }
-        return self.children![index]
+        return self.children[index]
     }
 }
 

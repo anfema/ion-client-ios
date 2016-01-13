@@ -70,33 +70,33 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard (dict["mime_type"] != nil) && (dict["original_mime_type"] != nil) && (dict["file"] != nil) &&
-            (dict["original_file"] != nil) && (dict["width"] != nil) && (dict["height"] != nil) &&
-            (dict["original_width"] != nil) && (dict["original_height"] != nil) && (dict["file_size"] != nil) &&
-            (dict["original_file_size"] != nil) && (dict["checksum"] != nil) && (dict["original_checksum"] != nil) &&
-            (dict["length"] != nil) && (dict["original_length"] != nil),
-            case .JSONString(let mimeType)  = dict["mime_type"]!,
-            case .JSONString(let oMimeType) = dict["original_mime_type"]!,
-            case .JSONNumber(let width)     = dict["width"]!,
-            case .JSONNumber(let height)    = dict["height"]!,
-            case .JSONNumber(let oWidth)    = dict["original_width"]!,
-            case .JSONNumber(let oHeight)   = dict["original_height"]!,
-            case .JSONNumber(let fileSize)  = dict["file_size"]!,
-            case .JSONNumber(let oFileSize) = dict["original_file_size"]!,
-            case .JSONNumber(let length)    = dict["length"]!,
-            case .JSONNumber(let oLength)   = dict["original_length"]! else {
+        guard let rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawFile = dict["file"],
+            rawOriginalFile = dict["original_file"], rawWidth = dict["width"], rawHeight = dict["height"],
+            rawOriginalWidth = dict["original_width"], rawOriginalHeight = dict["original_height"], rawFileSize = dict["file_size"],
+            rawOriginalFileSize = dict["original_file_size"], rawChecksum = dict["checksum"], rawOriginalChecksum = dict["original_checksum"],
+            rawLength = dict["length"], rawOriginalLength = dict["original_length"],
+            case .JSONString(let mimeType)  = rawMimeType,
+            case .JSONString(let oMimeType) = rawOriginalMimeType,
+            case .JSONNumber(let width)     = rawWidth,
+            case .JSONNumber(let height)    = rawHeight,
+            case .JSONNumber(let oWidth)    = rawOriginalWidth,
+            case .JSONNumber(let oHeight)   = rawOriginalHeight,
+            case .JSONNumber(let fileSize)  = rawFileSize,
+            case .JSONNumber(let oFileSize) = rawOriginalFileSize,
+            case .JSONNumber(let length)    = rawLength,
+            case .JSONNumber(let oLength)   = rawOriginalLength else {
                 throw AMPError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
-        if case .JSONString(let fileUrl) = dict["file"]! {
+        if case .JSONString(let fileUrl) = rawFile {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
         
-        if case .JSONString(let checksum)  = dict["checksum"]! {
+        if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
@@ -108,11 +108,11 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
-        if case .JSONString(let oFileUrl) = dict["original_file"]! {
+        if case .JSONString(let oFileUrl) = rawOriginalFile {
             self.originalURL      = NSURL(string: oFileUrl)
         }
         
-        if case .JSONString(let oChecksum) = dict["original_checksum"]! {
+        if case .JSONString(let oChecksum) = rawOriginalChecksum {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
             if originalChecksumParts.count > 1 {
                 self.originalChecksumMethod = originalChecksumParts[0]
