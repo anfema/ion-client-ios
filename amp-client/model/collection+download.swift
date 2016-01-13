@@ -66,8 +66,8 @@ extension AMPCollection {
                                 return false
                         }
                         var checksum: String? = nil
-                        if (dict["checksum"] != nil) {
-                            if case .JSONString(let ck) = dict["checksum"]! {
+                        if let dictChecksum = dict["checksum"] {
+                            if case .JSONString(let ck) = dictChecksum {
                                 checksum = ck
                             }
                         }
