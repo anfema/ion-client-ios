@@ -128,4 +128,70 @@ class pageMetadataTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
+    
+    func testOriginalImage() {
+        let expectation = self.expectationWithDescription("testOriginalImage")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertEqual(metadata.originalImageURL, nil)
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testSubscriptSuccess1() {
+        let expectation = self.expectationWithDescription("testSubscriptSuccess1")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertEqual(metadata["title"], "Donec ullamcorper")
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testSubscriptSuccess2() {
+        let expectation = self.expectationWithDescription("testSubscriptSuccess2")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            
+            guard let value = metadata["title", 0] else
+            {
+                XCTFail("did not return first element")
+                return
+            }
+            
+            XCTAssertEqual(value, "Donec ullamcorper")
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testSubscriptFail1() {
+        let expectation = self.expectationWithDescription("testSubscriptFail1")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertNil(metadata["doesnotexist"])
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testSubscriptFail2() {
+        let expectation = self.expectationWithDescription("testSubscriptFail2")
+        
+        AMP.collection("test").metadata("page_002") { metadata in
+            XCTAssertNotNil(metadata)
+            XCTAssertNil(metadata["title", 1])
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }

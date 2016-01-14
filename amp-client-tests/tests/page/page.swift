@@ -331,4 +331,43 @@ class pageTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
+    
+    func testWaitUntilReady() {
+        let expectation = self.expectationWithDescription("testWaitUntilReady")
+
+        AMP.collection("test").page("page_001").waitUntilReady{ page in
+            XCTAssertNotNil(page)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testNumberOfContentsForOutletSync() {
+        let expectation = self.expectationWithDescription("testNumberOfContentsForOutletSync")
+        
+        AMP.collection("test").page("page_001"){ page in
+            XCTAssertNotNil(page)
+            XCTAssertEqual(page.numberOfContentsForOutlet("text"), 1)
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testNumberOfContentsForOutletAsync() {
+        let expectation = self.expectationWithDescription("testNumberOfContentsForOutletAsync")
+        
+        AMP.collection("test").page("page_001").numberOfContentsForOutlet("text") { count in
+            XCTAssertNotNil(count)
+            XCTAssertEqual(count, 1)
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }

@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import DEjson
 @testable import amp_client
 
 class colorContentTests: LoggedInXCTestCase {
@@ -44,6 +45,22 @@ class colorContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
+    
+    func testColorOutletFetchSyncFail() {
+        let expectation = self.expectationWithDescription("testColorOutletFetchSyncFail")
+        
+        AMP.collection("test").page("page_001") { page in
+            if let value = page.cachedColor("missing_color") {
+                XCTFail("color content 'Color' returned \(value)")
+            } else {
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
     func testColorOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsync")
         
@@ -61,5 +78,141 @@ class colorContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testColorOutletFetchAsyncFail() {
+        let expectation = self.expectationWithDescription("testColorOutletFetchAsyncFail")
+        
+        AMP.collection("test").page("page_001").onError({ (e) -> Void in
+            
+            guard case .OutletNotFound(let error) = e else
+            {
+                XCTFail("wrong error: \(e). expected OutletNotFound")
+                return
+            }
+            
+            XCTAssertNotNil(error)
+            expectation.fulfill()
+        }).color("missing_color") { (value) -> Void in
+            XCTFail("color content 'Color' returned \(value)")
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testColorInitializerSuccess() {
+        let json: JSONObject = .JSONDictionary([
+            "r": .JSONNumber(255),
+            "g": .JSONNumber(100),
+            "b": .JSONNumber(100),
+            "a": .JSONNumber(255),
+            "variation": .JSONString("@2x"),
+            "outlet": .JSONString("color")])
+
+        do {
+            let color = try AMPColorContent(json: json)
+            XCTAssertNotNil(color)
+        }
+            
+        catch let e
+        {
+            XCTFail("should have succeeded. returned \(e) instead")
+        }
+    }
+    
+    
+    func testColorInitializerFail1() {
+        let json: JSONObject = .JSONDictionary([
+            "r": .JSONNumber(255),
+            "b": .JSONNumber(100),
+            "a": .JSONNumber(255),
+            "variation": .JSONString("@2x"),
+            "outlet": .JSONString("color")])
+        
+        do {
+            let color = try AMPColorContent(json: json)
+            XCTFail("should have failed. returned \(color) instead")
+        }
+            
+        catch let e as AMPError
+        {
+            XCTAssertNotNil(e)
+            
+            guard case .InvalidJSON(let obj) = e else
+            {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        }
+            
+        catch
+        {
+            XCTFail("wrong error thrown")
+        }
+    }
+    
+    
+    func testColorInitializerFail2() {
+        let json: JSONObject = .JSONDictionary([
+            "r": .JSONNumber(255),
+            "g": .JSONNumber(100),
+            "b": .JSONNumber(100),
+            "a": .JSONNumber(255),
+            "outlet": .JSONString("color")])
+        
+        do {
+            let color = try AMPColorContent(json: json)
+            XCTFail("should have failed. returned \(color) instead")
+        }
+            
+        catch let e as AMPError
+        {
+            XCTAssertNotNil(e)
+            
+            guard case .InvalidJSON(let obj) = e else
+            {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        }
+            
+        catch
+        {
+            XCTFail("wrong error thrown")
+        }
+    }
+    
+    
+    func testColorInitializerFail3() {
+        let json: JSONObject = .JSONString("invalid")
+        
+        do {
+            let color = try AMPColorContent(json: json)
+            XCTFail("should have failed. returned \(color) instead")
+        }
+            
+        catch let e as AMPError
+        {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONObjectExpected(let obj) = e else
+            {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        }
+            
+        catch
+        {
+            XCTFail("wrong error thrown")
+        }
     }
 }
