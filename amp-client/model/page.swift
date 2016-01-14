@@ -305,12 +305,8 @@ public class AMPPage {
             }
             
             // search content
-            var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    count += 1
-                }
-            }
+            let count = self.content.filter({ $0.outlet == name }).count
+            
             dispatch_async(AMP.config.responseQueue) {
                 callback(count)
             }
@@ -329,13 +325,7 @@ public class AMPPage {
             return nil
         } else {
             // search content
-            var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    count += 1
-                }
-            }
-            return count
+            return self.content.filter({ $0.outlet == name }).count
         }
     }
     
