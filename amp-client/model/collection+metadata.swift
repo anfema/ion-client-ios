@@ -224,8 +224,14 @@ extension AMPCollection {
     }
     
     internal func getPageMetaForPage(identifier: String) -> AMPPageMeta? {
-        let metaItems = self.pageMeta.filter({ $0.identifier == identifier })
-        return metaItems.first
+        var result: AMPPageMeta? = nil
+        for meta in self.pageMeta {
+            if meta.identifier == identifier {
+                result = meta
+                break
+            }
+        }
+        return result
     }
 
     // MARK: - Private
