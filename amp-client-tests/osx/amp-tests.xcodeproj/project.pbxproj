@@ -556,6 +556,7 @@
 				8F78B2DB1BF36392009D4B67 /* Frameworks */,
 				8F78B2DC1BF36392009D4B67 /* Headers */,
 				8F78B2DD1BF36392009D4B67 /* Resources */,
+				8FB149B21C493F4100441F82 /* TODOs as Warnings */,
 			);
 			buildRules = (
 			);
@@ -636,6 +637,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8FB149B21C493F4100441F82 /* TODOs as Warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "TODOs as Warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/../../amp-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
+			showEnvVarsInLog = 0;
+		};
 		A1B25B85621D1A8BC9F6F64B /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
