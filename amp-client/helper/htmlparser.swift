@@ -157,8 +157,7 @@ class HTMLParser {
         var depth = 0
 
         var lastTagName = "root"
-        var listContext = [String]()
-        listContext.append("none")
+        var listContext = ["none"]
         
         for token in self.tokens {
             switch token {
