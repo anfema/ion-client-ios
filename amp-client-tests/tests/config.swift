@@ -24,12 +24,13 @@ struct DefaultConfig {
 
 
 class DefaultXCTestCase: XCTestCase {
-    let mock = false
+    let mock = true
 
     func configure(callback: (Void -> Void)) {
         AMP.config.serverURL = NSURL(string: DefaultConfig.serverURL)
         AMP.config.locale = DefaultConfig.locale
         AMP.config.responseQueue = dispatch_queue_create("com.anfema.amp.responsequeue.test", DISPATCH_QUEUE_SERIAL)
+        AMP.config.variation = "default"
         
         dispatch_async(AMP.config.responseQueue) {
             callback()
