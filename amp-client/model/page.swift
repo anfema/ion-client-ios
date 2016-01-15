@@ -191,15 +191,10 @@ public class AMPPage {
             }
 
             // search content
-            var cObj:AMPContent? = nil
-            var count = 0
-            for content in self.content where content.outlet == name {
-                if count == position {
-                    cObj = content
-                    break
-                }
-                count += 1
-            }
+            let cObj = self.content.filter({ obj -> Bool in
+                return obj.outlet == name && obj.position == position
+            }).first
+
             if let c = cObj {
                 dispatch_async(AMP.config.responseQueue) {
                     callback(c)
@@ -222,15 +217,10 @@ public class AMPPage {
             return nil
         } else {
             // search content
-            var cObj:AMPContent? = nil
-            var count = 0
-            for content in self.content where content.outlet == name {
-                if count == position {
-                    cObj = content
-                    break
-                }
-                count += 1
-            }
+            let cObj = self.content.filter({ obj -> Bool in
+                return obj.outlet == name && obj.position == position
+            }).first
+            
             if cObj == nil {
                 self.callErrorHandler(.OutletNotFound(name))
             }
@@ -252,13 +242,11 @@ public class AMPPage {
        
             // search content
             var found = false
-            var count = 0
             for content in self.content where content.outlet == name {
-                if count == position {
+                if content.position == position {
                     found = true
                     break
                 }
-                count += 1
             }
             dispatch_async(AMP.config.responseQueue) {
                 callback(found)
@@ -279,12 +267,10 @@ public class AMPPage {
             return nil
         } else {
             // search content
-            var count = 0
             for content in self.content where content.outlet == name {
-                if (count == position) {
+                if content.position == position {
                     return true
                 }
-                count += 1
             }
             return false
         }

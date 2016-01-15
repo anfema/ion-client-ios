@@ -23,6 +23,9 @@ public class AMPContent {
     
     /// searchable?
 	public var isSearchable = false
+    
+    /// Array position
+    public var position: Int!
    
     /// Initialize content content object from JSON
     ///
@@ -47,6 +50,14 @@ public class AMPContent {
             if case .JSONBoolean(let searchable) = searchableObj {
                 self.isSearchable = searchable
             }
+        }
+
+        if let positionObj = dict["position"] {
+            if case .JSONNumber(let pos) = positionObj {
+                self.position = Int(pos)
+            }
+        } else {
+            self.position = 0
         }
 	}
     
