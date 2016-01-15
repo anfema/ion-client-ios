@@ -44,6 +44,9 @@ public class AMPPage {
     /// page position
     public var position: Int = 0
     
+    /// set to true to avoid fetching from cache
+    private var useCache = false
+    
     /// page has loaded
     internal var isReady = false
 
@@ -53,11 +56,14 @@ public class AMPPage {
     /// work queue
     internal var workQueue: dispatch_queue_t
 
-    /// set to true to avoid fetching from cache
-    private var useCache = false
-    
     /// internal uuid
     internal var uuid = NSUUID().UUIDString
+    
+    /// internal identifier used to store the page into the `collection.pageCache`
+    /// when using the `forkedWorkQueueWithCollection` initializer
+    lazy internal var forkedIdentifier: String = {
+        return "\(self.identifier)-\(self.uuid)"
+    }()
     
     // MARK: Initializer
     
@@ -340,7 +346,7 @@ public class AMPPage {
         self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).fork.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
-        self.collection.pageCache[identifier + "-" + self.uuid] = self
+        self.collection.pageCache[self.forkedIdentifier] = self
     }
 
     /// Fetch page from cache or web
@@ -495,7 +501,7 @@ public class CancelableAMPPage: AMPPage {
     
     public func finish() {
         dispatch_barrier_async(self.workQueue) {
-            self.collection.pageCache.removeValueForKey(self.identifier + "-" + self.uuid)
+            self.collection.pageCache.removeValueForKey(self.forkedIdentifier)
         }
     }
 }
