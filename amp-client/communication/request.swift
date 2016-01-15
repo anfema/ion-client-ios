@@ -126,6 +126,8 @@ public class AMPRequest {
             
             // check for download errors
             if error != nil || response?.statusCode != 200 {
+                // TODO: Request bogus binary to test error case
+                
                 // remove temp file
                 do {
                     try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url) + ".tmp")

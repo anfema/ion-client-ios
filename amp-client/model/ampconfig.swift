@@ -234,6 +234,7 @@ public struct AMPConfig {
     
     // MARK: - Private
     private mutating func updateAuthHeaders() {
+        // TODO: Write test for updateAuthHeaders
         guard let user = self.basicAuthUser,
               let password = self.basicAuthPassword else {
                 return

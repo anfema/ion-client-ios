@@ -79,6 +79,7 @@ public class AMPPageMeta: CanLoadImage {
                     if case .JSONString(let value) = jsonObj {
                         self.metaData[key] = [value]
                     }
+                    // TODO: Test meta arrays, needs test data
                     if case .JSONArray(let array) = jsonObj {
                         var result = [String]()
                         for subitem in array {

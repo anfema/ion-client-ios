@@ -245,6 +245,8 @@ public class AMPCollection {
     ///
     /// - parameter callback: block to call for each page
     public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
+        // TODO: Write test for pages async call
+        
         // append page listing to work queue
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -287,6 +289,7 @@ public class AMPCollection {
     /// - parameter callback: callback to call
     /// - returns: self for chaining
     public func waitUntilReady(callback: (AMPCollection -> Void)) -> AMPCollection {
+        // TODO: Write test for waitUntilReady
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -486,6 +489,8 @@ public class CancelableAMPCollection: AMPCollection {
     public func cancel() {
         dispatch_barrier_async(self.workQueue) {
             // cancel all page loads
+            
+            // TODO: Test cancelling of page loads, needs support in mock framework
             for (_, page) in self.pageCache {
                 if case let p as CancelableAMPPage = page {
                     p.cancel()

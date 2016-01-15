@@ -67,6 +67,7 @@
 		8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC71BF4F019000C3119 /* fts.swift */; };
 		8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
+		8FB149B11C493DE400441F82 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB149B01C493DE400441F82 /* NSDate+ISODate.swift */; };
 		8FCFAECF1C08B5D30051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAECE1C08B5D30051981F /* htmlparser.swift */; };
 		8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAED01C08B83D0051981F /* collection+download.swift */; };
 		8FF9DB701BF9E32200935748 /* collection+native_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB6F1BF9E32200935748 /* collection+native_extensions.swift */; };
@@ -179,6 +180,7 @@
 		8FAD5CC71BF4F019000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
 		8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8FAD5CD11BF503B2000C3119 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		8FB149B01C493DE400441F82 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8FCFAECE1C08B5D30051981F /* htmlparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = htmlparser.swift; sourceTree = "<group>"; };
 		8FCFAED01C08B83D0051981F /* collection+download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+download.swift"; sourceTree = "<group>"; };
 		8FF9DB6F1BF9E32200935748 /* collection+native_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+native_extensions.swift"; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 			children = (
 				8F114C6D1C15F44100977640 /* bundles */,
 				8F78B3491BF36405009D4B67 /* Info.plist */,
+				8FB149AF1C493DE400441F82 /* helper */,
 				8FAD5CC61BF4F00D000C3119 /* search */,
 				8F78B34A1BF36411009D4B67 /* collection */,
 				8F78B34C1BF36411009D4B67 /* config.swift */,
@@ -448,6 +451,15 @@
 			);
 			name = search;
 			path = ../../tests/search;
+			sourceTree = "<group>";
+		};
+		8FB149AF1C493DE400441F82 /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				8FB149B01C493DE400441F82 /* NSDate+ISODate.swift */,
+			);
+			name = helper;
+			path = ../../tests/helper;
 			sourceTree = "<group>";
 		};
 		8FF9DB6E1BF9E2F000935748 /* collection */ = {
@@ -694,6 +706,7 @@
 				8F78B3731BF36411009D4B67 /* auto_cache_invalidation.swift in Sources */,
 				8F78B3781BF36411009D4B67 /* page.swift in Sources */,
 				8F78B3701BF36411009D4B67 /* option.swift in Sources */,
+				8FB149B11C493DE400441F82 /* NSDate+ISODate.swift in Sources */,
 				8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */,
 				8F78B3771BF36411009D4B67 /* memcache.swift in Sources */,
 				8F78B3681BF36411009D4B67 /* container.swift in Sources */,
