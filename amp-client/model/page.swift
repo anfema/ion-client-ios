@@ -193,14 +193,12 @@ public class AMPPage {
             // search content
             var cObj:AMPContent? = nil
             var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    if count == position {
-                        cObj = content
-                        break
-                    }
-                    count += 1
+            for content in self.content where content.outlet == name {
+                if count == position {
+                    cObj = content
+                    break
                 }
+                count += 1
             }
             if let c = cObj {
                 dispatch_async(AMP.config.responseQueue) {
@@ -226,14 +224,12 @@ public class AMPPage {
             // search content
             var cObj:AMPContent? = nil
             var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    if count == position {
-                        cObj = content
-                        break
-                    }
-                    count += 1
+            for content in self.content where content.outlet == name {
+                if count == position {
+                    cObj = content
+                    break
                 }
+                count += 1
             }
             if cObj == nil {
                 self.callErrorHandler(.OutletNotFound(name))
@@ -257,14 +253,12 @@ public class AMPPage {
             // search content
             var found = false
             var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    if count == position {
-                        found = true
-                        break
-                    }
-                    count += 1
+            for content in self.content where content.outlet == name {
+                if count == position {
+                    found = true
+                    break
                 }
+                count += 1
             }
             dispatch_async(AMP.config.responseQueue) {
                 callback(found)
@@ -286,13 +280,11 @@ public class AMPPage {
         } else {
             // search content
             var count = 0
-            for content in self.content {
-                if content.outlet == name {
-                    if (count == position) {
-                        return true
-                    }
-                    count += 1
+            for content in self.content where content.outlet == name {
+                if (count == position) {
+                    return true
                 }
+                count += 1
             }
             return false
         }

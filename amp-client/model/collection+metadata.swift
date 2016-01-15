@@ -38,12 +38,7 @@ extension AMPCollection {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return nil
         }
-        var count = 0
-        for meta in self.pageMeta {
-            if meta.parent == parent {
-                count += 1
-            }
-        }
+        let count = self.pageMeta.filter({ $0.parent == parent }).count
         return count
     }
 
@@ -121,12 +116,8 @@ extension AMPCollection {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return nil
         }
-        var result = [AMPPageMeta]()
-        for meta in self.pageMeta {
-            if meta.parent == parent {
-                result.append(meta)
-            }
-        }
+        var result = self.pageMeta.filter({ $0.parent == parent })
+
         if result.count == 0 {
             if let parent = parent {
                 self.callErrorHandler(.PageNotFound(parent))
@@ -168,10 +159,9 @@ extension AMPCollection {
                 return nil
         }
         
-        var result = [AMPPageMeta]()
-        result.append(pagemeta)
-        
+        var result = [pagemeta]
         var parentID = pagemeta.parent
+        
         while parentID != nil {
             guard let meta = self.getPageMetaForPage(parentID!) else {
                 break
