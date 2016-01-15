@@ -223,5 +223,39 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+    
+    func testWaitUntilReady() {
+        let expectation = self.expectationWithDescription("testWaitUntilReady")
+        
+        AMP.collection("test").waitUntilReady{ collection in
+            XCTAssertNotNil(collection)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    func testWaitUntilReady2() {
+        let expectation = self.expectationWithDescription("testWaitUntilReady2")
+        
+        AMP.config.errorHandler = { (str, error) in
+            AMP.config.resetErrorHandler()
+            
+            guard case AMPError.CollectionNotFound(let e) = error else
+            {
+                XCTFail("wrong error")
+                return
+            }
+            
+            XCTAssertNotNil(e)
+            expectation.fulfill()
+        }
+        
+        AMP.collection("not_available").waitUntilReady{ collection in
+            XCTFail("expected to fail. returned \(collection) instead")
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }
 

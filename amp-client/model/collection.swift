@@ -289,7 +289,6 @@ public class AMPCollection {
     /// - parameter callback: callback to call
     /// - returns: self for chaining
     public func waitUntilReady(callback: (AMPCollection -> Void)) -> AMPCollection {
-        // TODO: Write test for waitUntilReady
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
