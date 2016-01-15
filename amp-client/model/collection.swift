@@ -58,6 +58,13 @@ public class AMPCollection {
     /// internal id
     internal var uuid = NSUUID().UUIDString
     
+    /// internal identifier used to store the collection into the `AMP.collectionCache`
+    /// when using the `forkedWorkQueueWithCollection` initializer
+    lazy internal var forkedIdentifier: String = {
+        return "\(self.identifier)-\(self.uuid)"
+    }()
+    
+    
     // MARK: - Initializer
     
     /// Initialize collection async
@@ -243,11 +250,10 @@ public class AMPCollection {
             guard !self.hasFailed else {
                 return
             }
-            for meta in self.pageMeta {
-                // only pages where no parent is set will be returned (top level)
-                if meta.parent == nil {
-                    self.page(meta.identifier, callback:callback)
-                }
+            
+            // only pages where no parent is set will be returned (top level)
+            for meta in self.pageMeta where meta.parent == nil {
+                self.page(meta.identifier, callback:callback)
             }
         }
         
@@ -334,7 +340,7 @@ public class AMPCollection {
         self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
-        AMP.collectionCache[identifier + "-" + self.uuid] = self
+        AMP.collectionCache[self.forkedIdentifier] = self
     }
 
     /// Fetch collection from cache or web
@@ -496,7 +502,7 @@ public class CancelableAMPCollection: AMPCollection {
     public func finish() {
         dispatch_barrier_async(self.workQueue) {
             self.pageCache.removeAll() // break cycle
-            AMP.collectionCache.removeValueForKey(self.identifier + "-" + self.uuid)
+            AMP.collectionCache.removeValueForKey(self.forkedIdentifier)
         }
     }
 }
