@@ -198,7 +198,6 @@ extension AMPPage {
     /// - parameter position: (optional) position in the array
     /// - returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
     public func attributedString(name: String, position: Int = 0) -> NSAttributedString? {
-        // TODO: Write tests for page's attributedString function
         if let content = self.outlet(name, position: position) {
             if case let content as AMPTextContent = content {
                 return content.attributedString()

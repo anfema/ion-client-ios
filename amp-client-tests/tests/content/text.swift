@@ -105,4 +105,45 @@ class textContentTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testTextOutletAttributedStringAsync(){
+        let expectation = self.expectationWithDescription("testTextOutletAttributedStringAsync")
+        let outletName = "text"
+        
+        AMP.collection("test").page("page_001").text(outletName) { plainText in
+            AMP.collection("test").page("page_001").attributedString(outletName) { text in
+                
+                XCTAssertNotNil(text)
+                XCTAssertEqual(plainText.characters.count, text.string.characters.count)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testTextOutletAttributedStringSync(){
+        let expectation = self.expectationWithDescription("testTextOutletAttributedStringSync")
+        let outletName = "text"
+        
+        AMP.collection("test").page("page_001").text(outletName) { plainText in
+            AMP.collection("test").page("page_001").waitUntilReady { page in
+                guard let text = page.attributedString(outletName, position: 0) else
+                {
+                    XCTFail()
+                    return
+                }
+
+                XCTAssertNotNil(text)
+                XCTAssertEqual(plainText.characters.count, text.string.characters.count)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
