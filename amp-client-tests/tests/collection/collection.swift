@@ -257,5 +257,31 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    
+    func testCollectionPages(){
+        let expectation = self.expectationWithDescription("testCollectionPages")
+        
+        var pages = 0
+        
+        AMP.collection("test") { collection in
+            XCTAssertNotNil(collection)
+            
+            collection.pages({ page in
+                XCTAssertNotNil(page)
+                XCTAssert(page.isReady == true)
+                
+                pages += 1
+                
+                // page_001 and page_002
+                if pages == 2
+                {
+                    expectation.fulfill()
+                }
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }
 

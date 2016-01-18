@@ -245,8 +245,6 @@ public class AMPCollection {
     ///
     /// - parameter callback: block to call for each page
     public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
-        // TODO: Write test for pages async call
-        
         // append page listing to work queue
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
