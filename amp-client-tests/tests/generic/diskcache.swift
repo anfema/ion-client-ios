@@ -88,7 +88,24 @@ class diskcacheTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
-    
+
+    func testPageDiskCacheLocaleClean() {
+        let expectation = self.expectationWithDescription("testPageDiskCacheLocaleClean")
+        AMP.collection("test").page("page_001") { page in
+            XCTAssertNotNil(page.lastUpdate)
+            AMP.resetMemCache()
+            AMP.resetDiskCache(locale: page.locale)
+            AMP.collection("test").page("page_001") { page2 in
+                XCTAssert(page2 !== page)
+                XCTAssert(page2 == page)
+                XCTAssertNotNil(page2.lastUpdate)
+                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
     func testDiskCacheForBinaryFilesMiss() {
         let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesMiss")
         AMP.resetMemCache()

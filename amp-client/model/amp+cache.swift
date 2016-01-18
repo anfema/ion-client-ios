@@ -49,7 +49,6 @@ extension AMP {
     /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
     /// - parameter locale: a locale code to empty the cache for
     public class func resetDiskCache(locale locale: String) {
-        // TODO: Write test for resetDiskCache(locale:)
         self.config.lastOnlineUpdate.removeAll()
         for (_, collection) in self.collectionCache where collection.locale == locale {
             collection.lastCompleteUpdate = nil
