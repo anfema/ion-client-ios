@@ -283,5 +283,37 @@ class collectionTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    
+    func testPageByIndex(){
+        let expectation = self.expectationWithDescription("testPageByIndex")
+
+        AMP.collection("test").waitUntilReady() { collection in
+            if let _ = collection.page(-1)
+            {
+                XCTFail()
+                return
+            }
+
+            if let _ = collection.page(2)
+            {
+                XCTFail()
+                return
+            }
+            
+            guard let page = collection.page(1) else
+            {
+                XCTFail()
+                return
+            }
+            
+            page.waitUntilReady() { loadedPage in
+                XCTAssertEqual(loadedPage.identifier, "page_002")
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
 

@@ -239,7 +239,29 @@ public class AMPCollection {
         }
     }
     
-    // TODO: public func page(index: Int) -> AMPPage
+    
+    /// Fetch a page from this collection
+    ///
+    /// As there is no callback, this returns a page that resolves async once the page becomes available
+    /// all actions chained to the page will be queued until the data is available
+    ///
+    /// - parameter index: position of the page in the collection
+    /// - returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
+    public func page(index: Int) -> AMPPage? {
+        guard index > 0 else
+        {
+            return nil
+        }
+        
+        let pages = self.pageMeta.filter({ $0.parent == nil }).sort({ $0.0.position < $0.1.position })
+        
+        guard pages.count > 0 && index < pages.count else {
+            return nil
+        }
+        
+        return page(pages[index].identifier)
+    }
+    
   
     /// Enumerate pages
     ///
