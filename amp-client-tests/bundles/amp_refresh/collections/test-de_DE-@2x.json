@@ -10,13 +10,13 @@
           "identifier": "page_001",
           "collection_identifier": "test",
           "version_number": 1,
-          "last_changed": "2016-01-15T14:15:57Z",
+          "last_changed": "2016-01-18T14:59:48Z",
           "position": 0,
           "layout": "new-layout-001",
           "locale": "de_DE",
           "parent": null,
           "meta": {
-            "image": "http://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg",
+            "image": "http://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg",
             "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui."
           }
         },
@@ -24,27 +24,27 @@
           "identifier": "page_002",
           "collection_identifier": "test",
           "version_number": 1,
-          "last_changed": "2016-01-15T14:10:58Z",
+          "last_changed": "2016-01-18T14:56:49Z",
           "position": 1,
           "layout": "layout-002",
           "locale": "de_DE",
           "parent": null,
           "meta": {
-            "thumbnail": "http://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_MSL5kgA.jpeg",
-            "title": "Donec"
+            "title": "Donec",
+            "thumbnail": "http://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_jXbZPgI.jpeg"
           }
         },
         {
           "identifier": "subpage_001",
           "collection_identifier": "test",
           "version_number": 1,
-          "last_changed": "2016-01-15T14:10:59Z",
+          "last_changed": "2016-01-18T14:56:50Z",
           "position": 0,
           "layout": "layout-001",
           "locale": "de_DE",
           "parent": "page_002",
           "meta": {
-            "image": "http://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg",
+            "image": "http://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg",
             "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui."
           }
         }

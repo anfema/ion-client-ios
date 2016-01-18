@@ -630,7 +630,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/test.txt"
     },
     "response" : {
       "code": 200,
@@ -641,7 +641,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -652,7 +652,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -663,7 +674,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -674,7 +685,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/test.txt"
     },
     "response" : {
       "code": 200,
@@ -685,7 +696,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -696,7 +707,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -707,7 +729,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -718,7 +740,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/test.txt"
     },
     "response" : {
       "code": 200,
@@ -729,7 +751,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dc7857b5-be85-40cb-986d-7bfbc22e644e/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -740,7 +762,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -751,7 +784,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dc7857b5-be85-40cb-986d-7bfbc22e644e/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -762,7 +795,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_MSL5kgA.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_jXbZPgI.jpeg"
     },
     "response" : {
       "code": 200,
@@ -773,7 +806,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_MSL5kgA.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_jXbZPgI.jpeg"
     },
     "response" : {
       "code": 200,
@@ -784,7 +817,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -795,7 +828,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -806,7 +839,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -817,7 +850,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -828,7 +861,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -839,7 +872,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -850,7 +883,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_sePQ9tZ.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_Aqz8hKg.jpeg"
     },
     "response" : {
       "code": 200,
@@ -861,7 +894,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_sePQ9tZ.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_Aqz8hKg.jpeg"
     },
     "response" : {
       "code": 200,
@@ -872,7 +905,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -883,7 +916,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -894,7 +927,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -905,7 +938,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -916,7 +949,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -927,7 +960,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -938,7 +971,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_sePQ9tZ.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_Aqz8hKg.jpeg"
     },
     "response" : {
       "code": 200,
@@ -949,7 +982,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_sePQ9tZ.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_Aqz8hKg.jpeg"
     },
     "response" : {
       "code": 200,
@@ -960,7 +993,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -971,7 +1004,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_0acz51z.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_8XkwUzq.jpeg"
     },
     "response" : {
       "code": 200,
@@ -982,7 +1015,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -993,7 +1026,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_6QZ7Yqr.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_fBAULCU.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1004,7 +1037,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1015,7 +1048,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder_p8D48RK.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_3YddEdB.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1026,7 +1059,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1037,7 +1070,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1048,7 +1081,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1059,7 +1103,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1070,7 +1114,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1081,7 +1125,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1092,7 +1136,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1103,7 +1158,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1114,7 +1169,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1125,7 +1180,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/dbbc25ee-66aa-4d01-8445-9db76f122793/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1136,7 +1191,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/7d727225-e8da-4fcb-ae43-b8a8758544bf/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1147,7 +1213,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/dbbc25ee-66aa-4d01-8445-9db76f122793/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1158,7 +1224,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1169,7 +1235,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1180,7 +1246,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1191,7 +1268,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1202,7 +1279,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1213,7 +1290,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1224,7 +1301,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1235,7 +1323,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1246,7 +1334,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/test.txt"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/test.txt"
     },
     "response" : {
       "code": 200,
@@ -1257,7 +1345,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/files/ea97d622-2e5a-4426-85e3-34060e76eb46/media.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1268,7 +1356,18 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/files/8094f4e8-ca4a-4a17-9819-15dab399c2c5/media.jpeg"
+    },
+    "response" : {
+      "code": 200,
+      "file": "media/media.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
@@ -1279,7 +1378,7 @@
   {
     "request": {
       "method": "GET",
-      "url": "://127.0.0.1:8000/protected_media/images/ea97d622-2e5a-4426-85e3-34060e76eb46/placeholder.jpeg"
+      "url": "://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg"
     },
     "response" : {
       "code": 200,
