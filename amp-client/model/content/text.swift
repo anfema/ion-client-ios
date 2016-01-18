@@ -166,7 +166,6 @@ extension AMPPage {
     /// - parameter position: (optional) position in the array
     /// - returns: html string if the outlet was a text outlet and the page was already cached, else nil
     public func html(name: String, position: Int = 0) -> String? {
-        // TODO: Write tests for page's html function
         if let content = self.outlet(name, position: position) {
             if case let content as AMPTextContent = content {
                 return content.htmlText()

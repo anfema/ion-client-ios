@@ -45,4 +45,64 @@ class textContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testTextOutletHTMLAsync(){
+        let expectation = self.expectationWithDescription("testTextOutletHTMLAsync")
+        let outletName = "text"
+        
+        AMP.collection("test").page("page_001").text(outletName) { plainText in
+            AMP.collection("test").page("page_001").html(outletName) { text in
+                let prefix = "<div class=\"ampcontent ampcontent__\(outletName)\">"
+                let suffix = "</div>"
+                
+                XCTAssertNotNil(text)
+                XCTAssert(text.hasPrefix(prefix) == true)
+                XCTAssert(text.hasSuffix(suffix) == true)
+                
+                var newString = text.substringToIndex(text.startIndex.advancedBy(text.characters.count - suffix.characters.count))
+                newString = newString.substringFromIndex(text.startIndex.advancedBy(prefix.characters.count))
+                newString = newString.stringByReplacingOccurrencesOfString("<br>", withString: "")
+                
+                XCTAssertEqual(plainText.characters.count, newString.characters.count)
+                
+                expectation.fulfill()
+            }
+        }
+
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testTextOutletHTMLSync(){
+        let expectation = self.expectationWithDescription("testTextOutletHTMLSync")
+        let outletName = "text"
+        
+        AMP.collection("test").page("page_001").text(outletName) { plainText in
+            AMP.collection("test").page("page_001").waitUntilReady { page in
+                guard let text = page.html(outletName, position: 0) else
+                {
+                    XCTFail()
+                    return
+                }
+                
+                let prefix = "<div class=\"ampcontent ampcontent__\(outletName)\">"
+                let suffix = "</div>"
+                
+                XCTAssertNotNil(text)
+                XCTAssert(text.hasPrefix(prefix) == true)
+                XCTAssert(text.hasSuffix(suffix) == true)
+                
+                var newString = text.substringToIndex(text.startIndex.advancedBy(text.characters.count - suffix.characters.count))
+                newString = newString.substringFromIndex(text.startIndex.advancedBy(prefix.characters.count))
+                newString = newString.stringByReplacingOccurrencesOfString("<br>", withString: "")
+                
+                XCTAssertEqual(plainText.characters.count, newString.characters.count)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
