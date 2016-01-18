@@ -14,40 +14,34 @@ extension AMP {
     /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
     /// cache and have a parsing and initialization penalty on next call.
     public class func resetMemCache() {
-        // FIXME: collection needs resetMemCache()
         for collection in self.collectionCache.values {
             collection.pageCache.removeAll()
         }
         self.collectionCache.removeAll()
     }
-    
+
+    /// Clear memory cache for a specific collection
+    ///
+    /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
+    /// cache and have a parsing and initialization penalty on next call.
+    /// - parameter collection: Collection to clear
+    public class func resetMemCache(collection: String) {
+        guard let c = self.collectionCache[collection] else {
+            return
+        }
+        c.pageCache.removeAll()
+        self.collectionCache.removeValueForKey(collection)
+    }
+
     /// Clear disk cache
     ///
     /// Removes all cached requests and files for the configured server, does not affect memory cache so be careful
     public class func resetDiskCache() {
         self.config.lastOnlineUpdate.removeAll()
-        AMPRequest.resetCache(self.config.serverURL!.host!, locale:self.config.locale)
-    }
-    
-    /// Clear disk cache for specific host and current locale
-    ///
-    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - parameter host: a hostname to empty the cache for
-    public class func resetDiskCache(host host:String) {
-        // TODO: Write test for resetDiskCache(host:)
-        self.config.lastOnlineUpdate.removeAll()
-        AMPRequest.resetCache(host)
-    }
-    
-    /// Clear disk cache for specific host and locale
-    ///
-    /// Removes all cached requests and files for the specified server, does not affect memory cache so be careful
-    /// - parameter host: a hostname to empty the cache for
-    /// - parameter locale: the locale to reset
-    public class func resetDiskCache(host host:String, locale:String) {
-        // TODO: Write test for resetDiskCache(host:locale:)
-        self.config.lastOnlineUpdate.removeAll()
-        AMPRequest.resetCache(host, locale:locale)
+        for (_, collection) in self.collectionCache {
+            collection.lastCompleteUpdate = nil
+        }
+        AMPRequest.resetCache(locale: self.config.locale)
     }
     
     /// Clear disk cache for specific locale and all hosts
@@ -57,6 +51,9 @@ extension AMP {
     public class func resetDiskCache(locale locale: String) {
         // TODO: Write test for resetDiskCache(locale:)
         self.config.lastOnlineUpdate.removeAll()
+        for (_, collection) in self.collectionCache where collection.locale == locale {
+            collection.lastCompleteUpdate = nil
+        }
         AMPRequest.resetCache(locale: locale)
     }
     

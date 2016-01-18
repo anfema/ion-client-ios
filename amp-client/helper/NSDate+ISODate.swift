@@ -34,7 +34,7 @@ struct ISODateFormatter {
     }
     
     func format(date: NSDate) -> String {
-        return self.dateFormatter1.stringFromDate(date)
+        return self.dateFormatter2.stringFromDate(date)
     }
 }
 

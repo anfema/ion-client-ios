@@ -22,7 +22,7 @@ class NSDate_ISODate: XCTestCase {
     func testIsoDateString() {
         let date = NSDate(timeIntervalSince1970: 443795696)
         let isoDateString = date.isoDateString
-        XCTAssertTrue(isoDateString == "1984-01-24T12:34:56.000000Z")
+        XCTAssertTrue(isoDateString == "1984-01-24T12:34:56Z")
         
         if let newDate = NSDate(isoDateString: isoDateString) {
             XCTAssert(date.compare(newDate) == .OrderedSame)
