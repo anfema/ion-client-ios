@@ -252,7 +252,7 @@ class collectionTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        AMP.collection("not_available").waitUntilReady{ collection in
+        AMP.collection("gnarf").waitUntilReady{ collection in
             XCTFail("expected to fail. returned \(collection) instead")
         }
         
