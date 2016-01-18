@@ -244,6 +244,7 @@ class collectionTests: LoggedInXCTestCase {
             guard case AMPError.CollectionNotFound(let e) = error else
             {
                 XCTFail("wrong error")
+                expectation.fulfill()
                 return
             }
             

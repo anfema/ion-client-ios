@@ -28,7 +28,7 @@ class ftsTests: LoggedInXCTestCase {
         
         AMP.collection("test").getSearchHandle { search in
             let items = search.search("ullamcorper")
-            XCTAssert(items.count == 3)
+            XCTAssert(items.count == 4)
             expectation.fulfill()
         }
 
@@ -52,7 +52,7 @@ class ftsTests: LoggedInXCTestCase {
         
         AMP.collection("test").getSearchHandle { search in
             let items = search.search("donec duis")
-            XCTAssert(items.count == 2)
+            XCTAssert(items.count == 3)
             expectation.fulfill()
         }
         
