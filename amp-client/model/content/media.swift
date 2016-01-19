@@ -15,6 +15,9 @@ import DEjson
 /// Media content, may be image, audio or video content
 public class AMPMediaContent : AMPContent, CanLoadImage {
     
+    // original file name
+    public var filename:String!
+    
     /// mime type of media file
     public var mimeType:String!
     
@@ -70,11 +73,12 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             throw AMPError.JSONObjectExpected(json)
         }
         
-        guard let rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawFile = dict["file"],
+        guard let rawName = dict["name"], rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawFile = dict["file"],
             rawOriginalFile = dict["original_file"], rawWidth = dict["width"], rawHeight = dict["height"],
             rawOriginalWidth = dict["original_width"], rawOriginalHeight = dict["original_height"], rawFileSize = dict["file_size"],
             rawOriginalFileSize = dict["original_file_size"], rawChecksum = dict["checksum"], rawOriginalChecksum = dict["original_checksum"],
             rawLength = dict["length"], rawOriginalLength = dict["original_length"],
+            case .JSONString(let name)      = rawName,
             case .JSONString(let mimeType)  = rawMimeType,
             case .JSONString(let oMimeType) = rawOriginalMimeType,
             case .JSONNumber(let width)     = rawWidth,
@@ -88,6 +92,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
                 throw AMPError.InvalidJSON(json)
         }
         
+        self.filename = name
         self.mimeType = mimeType
         self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
         self.fileSize = Int(fileSize)
