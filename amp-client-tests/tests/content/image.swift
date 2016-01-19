@@ -45,6 +45,17 @@ class imageContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    func testImageOutletTempURL() {
+        let expectation = self.expectationWithDescription("testImageOutletTempURL")
+        
+        AMP.collection("test").page("page_001").temporaryURL("image") { url in
+            XCTAssertNotNil(url)
+            XCTAssert(url.absoluteString.containsString("token="))
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
     
     func testImageInitializerFail1() {
         let json: JSONObject = .JSONString("invalid")

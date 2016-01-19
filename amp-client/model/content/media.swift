@@ -145,6 +145,25 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         }
     }
     
+    /// Get a temporary valid url for this media file
+    ///
+    /// - parameter callback: block to call with the temporary URL, will not be called if there was an error while
+    ///                       fetching the URL from the server
+    public func temporaryURL(callback: (NSURL -> Void)) {
+        AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : self.url.absoluteString ]) { result in
+            guard result.isSuccess,
+                let json = result.value,
+                case .JSONDictionary(let dict) = json where dict["url"] != nil,
+                case .JSONString(let url) = dict["url"]! else {
+                    return
+            }
+
+            dispatch_async(AMP.config.responseQueue) {
+                callback(NSURL(string: url)!)
+            }
+        }
+    }
+    
     /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         if self.mimeType.hasPrefix("image/") {
@@ -206,6 +225,35 @@ extension AMPPage {
         }
         return self
     }
+    
+    /// Fetch temporary valid URL from named outlet async
+    ///
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
+    ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func temporaryURL(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { content in
+            if case let content as AMPMediaContent = content {
+                content.temporaryURL { url in
+                    callback(url)
+                }
+            }
+            if case let content as AMPFileContent = content {
+                content.temporaryURL { url in
+                    callback(url)
+                }
+            }
+            if case let content as AMPImageContent = content {
+                content.temporaryURL { url in
+                    callback(url)
+                }
+            }
+        }
+        return self
+    }
+    
    
     /// Fetch data for media file async
     ///

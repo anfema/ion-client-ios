@@ -73,11 +73,23 @@ class mediaContentTests: LoggedInXCTestCase {
     }
     
     func testMediaOutletURLFetch() {
-        let expectation = self.expectationWithDescription("fetch outlet")
+        let expectation = self.expectationWithDescription("testMediaOutletURLFetch")
         
         AMP.collection("test").page("page_001") { page in
             let mediaURL = page.mediaURL("media")
             XCTAssertNotNil(mediaURL)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
+    func testMediaOutletTempURL() {
+        let expectation = self.expectationWithDescription("testMediaOutletTempURL")
+        
+        AMP.collection("test").page("page_001").temporaryURL("media") { url in
+            XCTAssertNotNil(url)
+            XCTAssert(url.absoluteString.containsString("token="))
             expectation.fulfill()
         }
         

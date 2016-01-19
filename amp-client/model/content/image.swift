@@ -131,6 +131,28 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         }
     }
     
+    /// Get a temporary valid url for this image file
+    ///
+    /// - parameter callback: block to call with the temporary URL, will not be called if there was an error while
+    ///                       fetching the URL from the server
+    public func temporaryURL(callback: (NSURL -> Void)) {
+        guard let myURL = self.url else {
+            return
+        }
+        AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : myURL.absoluteString ]) { result in
+            guard result.isSuccess,
+                let json = result.value,
+                case .JSONDictionary(let dict) = json where dict["url"] != nil,
+                case .JSONString(let url) = dict["url"]! else {
+                    return
+            }
+            
+            dispatch_async(AMP.config.responseQueue) {
+                callback(NSURL(string: url)!)
+            }
+        }
+    }
+
     /// image url for `CanLoadImage`
     public var imageURL:NSURL? {
         return self.url

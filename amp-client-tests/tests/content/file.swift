@@ -69,4 +69,15 @@ class fileContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
+    func testFileOutletTempURL() {
+        let expectation = self.expectationWithDescription("testFileOutletTempURL")
+        
+        AMP.collection("test").page("page_001").temporaryURL("file") { url in
+            XCTAssertNotNil(url)
+            XCTAssert(url.absoluteString.containsString("token="))
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }
