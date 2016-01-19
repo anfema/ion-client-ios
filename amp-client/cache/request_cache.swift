@@ -149,7 +149,7 @@ extension AMPRequest {
         }
 
         filename = filename.URLByAppendingPathComponent(hash)
-        data.writeToFile(path, atomically: true)
+        data.writeToFile(filename.path!, atomically: true)
         
         // populate object with current data
         obj["url"]             = .JSONString(url)
