@@ -18,35 +18,11 @@ import DEjson
 /// Caching extension for AMPRequest
 extension AMPRequest {
     // MARK: - external API
-    
-    /// Reset the complete AMP cache for a specific host
-    ///
-    /// - parameter host: host to clear cache for
-    /// - parameter locale: locale to clear cache for
-    public class func resetCache(host: String, locale: String = AMP.config.locale) {
-        // remove complete cache dir for this host
-        let fileURL = self.cacheBaseDir(host, locale: locale)
-        do {
-            try NSFileManager.defaultManager().removeItemAtPath(fileURL.path!)
-        } catch {
-            // non-fatal, could not remove item at path, so probably path did not exist
-        }
-        
-        // remove all entries for this host from cache db
-        if self.cacheDB == nil {
-            self.loadCacheDB()
-        }
-        
-        removeCacheDBEntries(forKey: "host", value: host)
-        self.saveCacheDB()
-    }
-
+ 
     /// Reset complete AMP cache for a specific language and all hosts
     ///
     /// - parameter locale: locale to clear cache for
     public class func resetCache(locale locale: String) {
-        // TODO: Write test for resetCache(locale:)
-
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)
         do {
