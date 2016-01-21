@@ -65,12 +65,19 @@ public class AMPRequest {
         
         var headers = self.headers()
         headers["Accept"] = "application/json"
+        if let index = self.getCacheDBEntry(urlString) {
+            if let rawLastUpdated = index["last_updated"],
+               case .JSONNumber(let timestamp) = rawLastUpdated {
+                let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestamp))
+                headers["If-Modified-Since"] = lastUpdated.rfc822DateString
+            }
+        }
         
         AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { response in
             if case .Failure(let error) = response.result {
                 if case .NotAuthorized = error {
                     dispatch_async(AMP.config.responseQueue) {
-                        callback(response.result)
+                        callback(.Failure(error))
                     }
                     return
                 }
@@ -80,14 +87,16 @@ public class AMPRequest {
             self.saveToCache(response.request!, response.result)
             
             // object can only be saved if there is a request url and the status code of the response is a 200
-            guard response.result.isSuccess else {
+            guard response.result.isSuccess,
+                  let jsonResponse = response.result.value,
+                  let jsonObject = jsonResponse.json else {
                 // fallback to cache
                 callback(fromCache(cacheName))
                 return
             }
-
+            
             // patch last_updated into response
-            let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(response.result.value!, urlString: urlString))
+            let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
             // call callback in correct queue
             dispatch_async(AMP.config.responseQueue) {
                 callback(patchedResult)
@@ -216,7 +225,7 @@ public class AMPRequest {
     /// - parameter queryParameters: any get parameters to include in the query or nil
     /// - parameter body: dictionary with parameters (will be JSON encoded)
     /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONObject, AMPError> -> Void)) {
+    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONResponse, AMPError> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         var headers = self.headers()
         headers["Accept"] = "application/json"

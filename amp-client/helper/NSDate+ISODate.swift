@@ -50,3 +50,37 @@ public extension NSDate {
         return ISODateFormatter.sharedInstance.format(self)
     }
 }
+
+
+struct RFC822DateFormatter {
+    static let sharedInstance = RFC822DateFormatter()
+    let dateFormatter: NSDateFormatter
+    
+    init() {
+        self.dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat  = "EEE', 'dd' 'MMM' 'yyyy' 'HH':'mm':'ss' GMT'"
+        dateFormatter.timeZone    = NSTimeZone(forSecondsFromGMT: 0)
+        dateFormatter.locale      = NSLocale(localeIdentifier: "en_US_POSIX")
+    }
+    
+    func parse(string: String) -> NSDate? {
+        return self.dateFormatter.dateFromString(string)
+    }
+    
+    func format(date: NSDate) -> String {
+        return self.dateFormatter.stringFromDate(date)
+    }
+}
+
+public extension NSDate {
+    public convenience init?(rfc822DateString: String) {
+        guard let date = RFC822DateFormatter.sharedInstance.parse(rfc822DateString) else {
+            return nil
+        }
+        self.init(timeIntervalSinceReferenceDate: date.timeIntervalSinceReferenceDate)
+    }
+    
+    public var rfc822DateString: String {
+        return RFC822DateFormatter.sharedInstance.format(self)
+    }
+}

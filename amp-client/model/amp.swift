@@ -35,7 +35,8 @@ public class AMP {
             ]
         ]) { result in
             guard result.isSuccess,
-                  let json = result.value,
+                  let jsonResponse = result.value,
+                  let json = jsonResponse.json,
                   case .JSONDictionary(let dict) = json where dict["login"] != nil,
                   case .JSONDictionary(let loginDict) = dict["login"]! where loginDict["token"] != nil,
                   case .JSONString(let token) = loginDict["token"]! else {

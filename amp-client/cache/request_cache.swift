@@ -90,12 +90,13 @@ extension AMPRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONObject, AMPError>) {
+    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONResponse, AMPError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
-            case .Success(let data) = result,
-            let json = JSONEncoder(data).prettyJSONString else {
+            case .Success(let jsonResponse) = result where jsonResponse.statusCode == 200,
+            let jsonObject = jsonResponse.json,
+            let json = JSONEncoder(jsonObject).prettyJSONString else {
                 return
         }
         

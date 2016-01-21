@@ -141,7 +141,8 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         }
         AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : myURL.absoluteString ]) { result in
             guard result.isSuccess,
-                let json = result.value,
+                let jsonResponse = result.value,
+                let json = jsonResponse.json,
                 case .JSONDictionary(let dict) = json where dict["url"] != nil,
                 case .JSONString(let url) = dict["url"]! else {
                     return
