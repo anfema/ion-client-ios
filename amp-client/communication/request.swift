@@ -131,8 +131,25 @@ public class AMPRequest {
         }
 
         // Start download task
-        let downloadTask = AMP.config.alamofire.download(.GET, urlString, parameters: queryParameters, encoding: .URLEncodedInURL, headers: headers, destination: destination).response { (request, response, data, error) -> Void in
-            
+        let downloadTask = AMP.config.alamofire.download(
+            .GET, urlString,
+            parameters: queryParameters,
+            encoding: .URLEncodedInURL,
+            headers: headers,
+            destination: destination)
+        
+        downloadTask.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
+            // Register the download with the global progress handler
+            if totalBytesExpectedToRead < 0 {
+                // server sent no content-length header, we expect one byte more than we got
+                AMP.registerProgress(totalBytesRead, bytesExpected: totalBytesRead + 1, urlString: urlString)
+            } else {
+                // server sent a content-length header, trust it
+                AMP.registerProgress(totalBytesRead, bytesExpected: totalBytesExpectedToRead, urlString: urlString)
+            }
+        }
+        
+        downloadTask.response { (request, response, data, error) -> Void in
             // check for download errors
             if error != nil || response?.statusCode != 200 {
                 // TODO: Request bogus binary to test error case
@@ -156,6 +173,12 @@ public class AMPRequest {
                         callback(.Failure(.NotAuthorized))
                     }
                     return
+                }
+
+                // call final update for progress, we're using 1 here because the user likely wants to
+                // calculate a percentage and thus divides those numbers
+                if response.allHeaderFields["Content-Length"] == nil {
+                    AMP.registerProgress(1, bytesExpected: 1, urlString: urlString)
                 }
 
                 // try falling back to cache
@@ -187,6 +210,13 @@ public class AMPRequest {
                     ckSumMethod = "sha256"
                     ckSum = self.cachedFile(urlString)!.cryptoHash(.SHA256).hexString()
                 }
+                
+                // finish up progress reporting
+                if let unwrapped = response where unwrapped.allHeaderFields["Content-Length"] == nil {
+                    let bytes: Int64 = Int64(self.cachedFile(urlString)!.length)
+                    AMP.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
+                }
+
                 self.saveToCache(request!, checksumMethod: ckSumMethod, checksum: ckSum)
                 
                 // call callback in correct queue
@@ -195,9 +225,6 @@ public class AMPRequest {
                 }
             }
         }
-        
-        // Register the download with the global progress handler
-        AMP.registerProgress(downloadTask.progress, urlString: urlString)
     }
     
     /// Fetch a file from the cache or return nil

@@ -80,4 +80,36 @@ class fileContentTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    func testFileDownloadProgress() {
+        let expectation1 = self.expectationWithDescription("testFileDownloadProgress")
+        let expectation2 = self.expectationWithDescription("testFileDownloadFinished")
+
+        AMP.resetDiskCache()
+        AMP.config.progressHandler = { total, downloaded, count in
+            if count > 0 {
+                XCTAssert(total > 0)
+                let percent: Float = Float(downloaded) / Float(total) * 100.0
+                print("Download progress \(percent)%")
+            }
+            
+            if count == 0 {
+                expectation1.fulfill()
+            }
+        }
+        AMP.collection("test").page("page_001").outlet("file") { outlet in
+            guard case let file as AMPFileContent = outlet else {
+                XCTFail("File outlet not found or of wrong type \(outlet)")
+                return
+            }
+            file.data { data in
+                XCTAssertNotNil(data)
+                XCTAssert(data.length == file.size)
+                expectation2.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        AMP.config.progressHandler = nil
+    }
 }

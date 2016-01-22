@@ -19,9 +19,12 @@ public class AMP {
     /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
     static public var config = AMPConfig()
 
-    // Internal cache for collections
+    /// Internal cache for collections
     static internal var collectionCache = [String:AMPCollection]()
 
+    /// Pending downloads
+    static internal var pendingDownloads = [String:(totalBytes: Int64, downloadedBytes: Int64)]()
+    
     /// Login user
     ///
     /// - parameter username: the username to log in
@@ -143,8 +146,35 @@ public class AMP {
     ///
     /// - parameter progressObject: NSProgress of the download
     /// - parameter urlString: URL of the download for management purposes
-    class func registerProgress(progressObject: NSProgress, urlString: String) {
-        // TODO: send progress callbacks
+    class func registerProgress(bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
+        self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
+        
+        // sum up all pending downloads
+        var totalBytes:Int64 = 0
+        var downloadedBytes:Int64 = 0
+        
+        for (total, downloaded) in self.pendingDownloads.values {
+            totalBytes += total
+            downloadedBytes += downloaded
+        }
+
+        // call progress handler
+        if let progressHandler = AMP.config.progressHandler {
+            let count = self.pendingDownloads.count
+            dispatch_async(AMP.config.responseQueue) {
+                progressHandler(totalBytes: totalBytes, downloadedBytes: downloadedBytes, numberOfPendingDownloads: count)
+            }
+        }
+        
+        // remove from pending when total == downloaded
+        if bytesReceived == bytesExpected {
+            self.pendingDownloads.removeValueForKey(urlString)
+            if let progressHandler = AMP.config.progressHandler where self.pendingDownloads.count == 0 {
+                dispatch_async(AMP.config.responseQueue) {
+                    progressHandler(totalBytes: 0, downloadedBytes: 0, numberOfPendingDownloads: 0)
+                }
+            }
+        }
     }
     
     // MARK: - Private

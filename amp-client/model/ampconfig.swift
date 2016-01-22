@@ -33,8 +33,11 @@ public struct AMPConfig {
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
     public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
-    /// global error handler (catches all errors that have not been caught by a `.onError` somewhere
+    /// global error handler (catches all errors that have not been caught by a `.onError` somewhere)
     public var errorHandler:((String, AMPError) -> Void)!
+    
+    /// global request progress handler (will be called periodically when progress updates)
+    public var progressHandler:((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
     
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?
