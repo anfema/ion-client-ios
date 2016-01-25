@@ -42,6 +42,9 @@ public struct AMPConfig {
     /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
     public var sessionToken:String?
     
+    /// Additional Headers that should be added to the requests
+    private (set) var additionalHeaders: [String: String] = [:]
+    
     /// last collection fetch, delete entry from dictionary to force a collection reload from server
     public var lastOnlineUpdate: [String: NSDate] = [:]
     
@@ -65,20 +68,6 @@ public struct AMPConfig {
     
     /// Needed to register additional content types with the default dispatcher
     public typealias ContentTypeLambda = (JSONObject throws -> AMPContent)
-    
-    /// User for HTTP basic auth (use either this or `sessionToken` or the `login()` call)
-    public var basicAuthUser:String? {
-        didSet {
-            self.updateAuthHeaders()
-        }
-    }
-    
-    /// Password for HTTP basic auth (use either this or `sessionToken` or the `login()` call)
-    public var basicAuthPassword:String? {
-        didSet {
-            self.updateAuthHeaders()
-        }
-    }
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     var alamofire: Alamofire.Manager! = nil
@@ -235,19 +224,15 @@ public struct AMPConfig {
         }
     }
     
-    // MARK: - Private
-    private mutating func updateAuthHeaders() {
-        // TODO: Write test for updateAuthHeaders
-        guard let user = self.basicAuthUser,
-              let password = self.basicAuthPassword else {
-                return
-        }
-        
+    /// Set the credentials for HTTP Basic Authentication.
+    /// Use either this, `sessionToken` or the `login()` call for authentication.
+    ///
+    /// - parameter user: The user
+    /// - parameter password: The password
+    public mutating func setBasicAuthCredentials(user user: String, password: String) {
         let auth = "\(user):\(password)" as NSString
         let authData = auth.dataUsingEncoding(NSUTF8StringEncoding)!
         
-        let config = self.alamofire.session.configuration
-        config.HTTPAdditionalHeaders!["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
-        self.alamofire = Alamofire.Manager(configuration: config)
+        additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
     }
 }

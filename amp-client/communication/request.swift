@@ -295,10 +295,12 @@ public class AMPRequest {
     ///
     /// - returns: Headers-Dictionary for use in Alamofire request
     private class func headers() -> [String:String] {
-        var headers = [String:String]()
+        var headers = AMP.config.additionalHeaders
+        
         if let token = AMP.config.sessionToken {
             headers["Authorization"] = "Token " + token
         }
+        
         return headers
     }
 
