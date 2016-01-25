@@ -19,6 +19,22 @@
       "url": "://127.0.0.1:8000/client/v1/archive/test",
       "parameters": {
         "locale": "en_US",
+        "variation": "@2x",
+        "lastUpdate": null
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-en_US-@2x.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "en_US",
         "variation": "@3x"
       }
     },
@@ -34,7 +50,39 @@
       "url": "://127.0.0.1:8000/client/v1/archive/test",
       "parameters": {
         "locale": "en_US",
+        "variation": "@3x",
+        "lastUpdate": null
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-en_US-@3x.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "en_US",
         "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-en_US-default.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "en_US",
+        "variation": "default",
+        "lastUpdate": null
       }
     },
     "response" : {
@@ -64,6 +112,22 @@
       "url": "://127.0.0.1:8000/client/v1/archive/test",
       "parameters": {
         "locale": "de_DE",
+        "variation": "@2x",
+        "lastUpdate": null
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-de_DE-@2x.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "de_DE",
         "variation": "@3x"
       }
     },
@@ -79,7 +143,39 @@
       "url": "://127.0.0.1:8000/client/v1/archive/test",
       "parameters": {
         "locale": "de_DE",
+        "variation": "@3x",
+        "lastUpdate": null
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-de_DE-@3x.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "de_DE",
         "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/test-de_DE-default.tar",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/test",
+      "parameters": {
+        "locale": "de_DE",
+        "variation": "default",
+        "lastUpdate": null
       }
     },
     "response" : {

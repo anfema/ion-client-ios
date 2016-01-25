@@ -165,3 +165,14 @@
       "code": 403
     }
   },
+  {
+    "request": {
+      "method": "POST",
+      "url": "://127.0.0.1:8000/client/v1/tokenize"
+    },
+    "response" : {
+      "code": 200,
+      "file": "misc/tokenize.json",
+      "mime_type": "application/json"
+    }
+  },

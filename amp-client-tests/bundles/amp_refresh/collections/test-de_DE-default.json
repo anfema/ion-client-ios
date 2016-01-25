@@ -7,16 +7,30 @@
       "archive": "http://127.0.0.1:8000/client/v1/archive/test?locale=de_DE&variation=default",
       "pages": [
         {
+          "identifier": "subpage_001",
+          "collection_identifier": "test",
+          "version_number": 1,
+          "last_changed": "2016-01-21T13:14:43Z",
+          "position": 0,
+          "layout": "layout-001",
+          "locale": "de_DE",
+          "parent": "page_002",
+          "meta": {
+            "image": "http://127.0.0.1:8000/protected_media/images/ebf1dfbe-30aa-4876-bb58-6a659fa7b1c3/placeholder.jpeg",
+            "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui."
+          }
+        },
+        {
           "identifier": "page_001",
           "collection_identifier": "test",
           "version_number": 1,
-          "last_changed": "2016-01-18T14:59:48Z",
+          "last_changed": "2016-01-21T13:18:43Z",
           "position": 0,
           "layout": "new-layout-001",
           "locale": "de_DE",
           "parent": null,
           "meta": {
-            "image": "http://127.0.0.1:8000/protected_media/images/2e2cbd73-bebd-4ac7-ac48-5d7fd4956a1b/placeholder.jpeg",
+            "image": "http://127.0.0.1:8000/protected_media/images/da851b3a-0b2e-4add-8e16-60510f62168f/placeholder.jpeg",
             "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui."
           }
         },
@@ -24,28 +38,14 @@
           "identifier": "page_002",
           "collection_identifier": "test",
           "version_number": 1,
-          "last_changed": "2016-01-18T14:56:49Z",
+          "last_changed": "2016-01-21T13:14:43Z",
           "position": 1,
           "layout": "layout-002",
           "locale": "de_DE",
           "parent": null,
           "meta": {
             "title": "Donec ullamcorper",
-            "thumbnail": "http://127.0.0.1:8000/protected_media/images/7d727225-e8da-4fcb-ae43-b8a8758544bf/placeholder_Aqz8hKg.jpeg"
-          }
-        },
-        {
-          "identifier": "subpage_001",
-          "collection_identifier": "test",
-          "version_number": 1,
-          "last_changed": "2016-01-18T14:56:50Z",
-          "position": 0,
-          "layout": "layout-001",
-          "locale": "de_DE",
-          "parent": "page_002",
-          "meta": {
-            "image": "http://127.0.0.1:8000/protected_media/images/8094f4e8-ca4a-4a17-9819-15dab399c2c5/placeholder.jpeg",
-            "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui."
+            "thumbnail": "http://127.0.0.1:8000/protected_media/images/69320a6f-91c7-4de6-a2e3-9915c69629aa/placeholder_et8jN12.jpeg"
           }
         }
       ]

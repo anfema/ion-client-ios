@@ -30,6 +30,22 @@ cat <<EOF
       "mime_type": "application/json"
     }
   },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/archive/${collection}",
+      "parameters": {
+        "locale": "${lang}",
+        "variation": "${variation}",
+        "lastUpdate": null
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "archives/${file}",
+      "mime_type": "application/json"
+    }
+  },
 EOF
 
     done
