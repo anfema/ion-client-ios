@@ -94,21 +94,26 @@ extension AMPRequest {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
-            case .Success(let jsonResponse) = result where jsonResponse.statusCode == 200,
-            let jsonObject = jsonResponse.json,
-            let json = JSONEncoder(jsonObject).prettyJSONString else {
+            case .Success(let jsonResponse) = result else {
                 return
         }
-        
-        do {
-            // save object to disk
-            let cacheName = self.cacheName(request.URL!)
-            try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
-            
-            // save object to cache DB
+    
+        if jsonResponse.statusCode == 200,
+           let jsonObject = jsonResponse.json,
+           let json = JSONEncoder(jsonObject).prettyJSONString {
+
+            do {
+                // save object to disk
+                let cacheName = self.cacheName(request.URL!)
+                try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
+                
+                // save object to cache DB
+                self.saveToCache(request, checksumMethod: "null", checksum: "")
+            } catch {
+                // do nothing, could not be saved to cache -> nonfatal
+            }
+        } else if jsonResponse.statusCode == 304 {
             self.saveToCache(request, checksumMethod: "null", checksum: "")
-        } catch {
-            // do nothing, could not be saved to cache -> nonfatal
         }
     }
     
