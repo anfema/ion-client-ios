@@ -59,7 +59,9 @@ extension AMPRequest {
         }
         
         // generate cache path
-        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5))
+        
+        // The stringByReplacing... is needed because of a Bug in iOS 8.4 which inserts spaces, nobody knows why.
+        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).stringByReplacingOccurrencesOfString(" ", withString: ""))
         return fileURL.path!
     }
 
