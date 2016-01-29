@@ -143,10 +143,14 @@ class collectionTests: LoggedInXCTestCase {
     
     func testCollectionDownload() {
         let expectation = self.expectationWithDescription("testCollectionDownload")
+        AMP.resetDiskCache()
         
         AMP.collection("test").download { success in
             XCTAssertTrue(success)
-            expectation.fulfill()
+            AMP.collection("test").download { success in
+                XCTAssertTrue(success)
+                expectation.fulfill()
+            }
         }
         
         self.waitForExpectationsWithTimeout(10.0, handler: nil)

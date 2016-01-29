@@ -183,7 +183,14 @@ public class AMPRequest {
 
                 // try falling back to cache
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum))
+                    let result = fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
+                    if case .Failure = result {
+                        if response.statusCode == 304 {
+                            callback(.Success(""))
+                            return
+                        }
+                    }
+                    callback(result)
                 }
             } else {
                 // move temp file

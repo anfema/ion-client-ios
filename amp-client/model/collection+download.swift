@@ -16,42 +16,77 @@ import DEjson
 
 extension AMPCollection {
     private var lastUpdatedIdentifier: String {
-        return "lastUpdated-\(self.identifier)"
+        return "AMP.collection.lastUpdated"
     }
     
     public var lastCompleteUpdate: NSDate? {
         get {
             let prefs = NSUserDefaults.standardUserDefaults()
-            if let dt = prefs.valueForKey(self.lastUpdatedIdentifier) as? NSDate {
-                return dt
+            if let dict = prefs.objectForKey(self.lastUpdatedIdentifier) as? NSDictionary {
+                for item in dict.allKeys {
+                    guard let key = item as? NSString else {
+                        continue
+                    }
+                    if key == self.identifier {
+                        if let dt = dict[key] as? NSDate {
+                            return dt
+                        }
+                    }
+                }
             }
             return nil
         }
         
         set (newValue) {
             let prefs = NSUserDefaults.standardUserDefaults()
-            if let v = newValue {
-                prefs.setObject(v, forKey: self.lastUpdatedIdentifier)
+            if let dict = prefs.objectForKey(self.lastUpdatedIdentifier) as? NSDictionary {
+                var mutableCopy:[String:NSDate] = dict as! [String : NSDate]
+                mutableCopy[self.identifier] = newValue
+                prefs.setObject(mutableCopy, forKey: self.lastUpdatedIdentifier)
+                prefs.synchronize()
             } else {
-                prefs.removeObjectForKey(self.lastUpdatedIdentifier)
+                var dict = [String:NSDate]()
+                dict[self.identifier] = newValue
+                prefs.setObject(dict, forKey: self.lastUpdatedIdentifier)
+                prefs.synchronize()
             }
-            prefs.synchronize()
         }
     }
     
     public func download(callback: (Bool -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
-            
+            guard self.archiveURL != nil else {
+                dispatch_async(AMP.config.responseQueue){
+                    callback(false)
+                }
+                return
+            }
+
             var q = [String:String]()
+            var url: String = self.archiveURL
+            
+            // workaround for bug in Alamofire which does not append queryparameters to an URL that already has some
             if let dt = self.lastCompleteUpdate {
-                q["lastUpdate"] = dt.isoDateString
+                if self.archiveURL.containsString("?") {
+                    url += "&lastUpdated=\(dt.isoDateString)"
+                } else {
+                    q["lastUpdated"] = dt.isoDateString
+                }
+                print(url)
             }
             
-            AMPRequest.fetchBinary(self.archiveURL, queryParameters: q, cached: false,
+            AMPRequest.fetchBinary(url, queryParameters: q, cached: false,
                 checksumMethod:"null", checksum: "") { result in
                     guard case .Success(let filename) = result else {
                         dispatch_async(AMP.config.responseQueue) {
                             callback(false)
+                        }
+                        return
+                    }
+                    
+                    if filename == "" {
+                        dispatch_async(AMP.config.responseQueue) {
+                            callback(true)
                         }
                         return
                     }

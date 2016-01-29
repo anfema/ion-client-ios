@@ -50,9 +50,9 @@ extension AMP {
     /// - parameter locale: a locale code to empty the cache for
     public class func resetDiskCache(locale locale: String) {
         self.config.lastOnlineUpdate.removeAll()
-        for (_, collection) in self.collectionCache where collection.locale == locale {
-            collection.lastCompleteUpdate = nil
-        }
+        let prefs = NSUserDefaults.standardUserDefaults()
+        prefs.removeObjectForKey("AMP.collection.lastUpdated")
+        prefs.synchronize()
         AMPRequest.resetCache(locale: locale)
     }
     
