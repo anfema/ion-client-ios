@@ -59,7 +59,9 @@ extension AMPRequest {
         }
         
         // generate cache path
-        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5))
+        
+        // The stringByReplacing... is needed because of a Bug in iOS 8.4 which inserts spaces, nobody knows why.
+        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).stringByReplacingOccurrencesOfString(" ", withString: ""))
         return fileURL.path!
     }
 
@@ -94,21 +96,26 @@ extension AMPRequest {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
-            case .Success(let jsonResponse) = result where jsonResponse.statusCode == 200,
-            let jsonObject = jsonResponse.json,
-            let json = JSONEncoder(jsonObject).prettyJSONString else {
+            case .Success(let jsonResponse) = result else {
                 return
         }
-        
-        do {
-            // save object to disk
-            let cacheName = self.cacheName(request.URL!)
-            try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
-            
-            // save object to cache DB
+    
+        if jsonResponse.statusCode == 200,
+           let jsonObject = jsonResponse.json,
+           let json = JSONEncoder(jsonObject).prettyJSONString {
+
+            do {
+                // save object to disk
+                let cacheName = self.cacheName(request.URL!)
+                try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
+                
+                // save object to cache DB
+                self.saveToCache(request, checksumMethod: "null", checksum: "")
+            } catch {
+                // do nothing, could not be saved to cache -> nonfatal
+            }
+        } else if jsonResponse.statusCode == 304 {
             self.saveToCache(request, checksumMethod: "null", checksum: "")
-        } catch {
-            // do nothing, could not be saved to cache -> nonfatal
         }
     }
     

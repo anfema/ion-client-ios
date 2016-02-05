@@ -132,20 +132,29 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (NSData -> Void)) {
+        self.cachedURL { url in
+            do {
+                let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                callback(data)
+            } catch {
+                if AMP.config.loggingEnabled {
+                    print("AMP: Could not read file \(url.absoluteString)")
+                }
+            }
+        }
+    }
+    
+    /// Download the file and give back the URL
+    ///
+    /// - parameter callback: block to call when the download has finished, will not be called if there was an error
+    public func cachedURL(callback: (NSURL -> Void)) {
         AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
             }
-            do {
-                let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(data)
-                }
-            } catch {
-                if AMP.config.loggingEnabled {
-                    print("AMP: Could not read file \(filename)")
-                }
+            dispatch_async(AMP.config.responseQueue) {
+                callback(NSURL(fileURLWithPath: filename))
             }
         }
     }
@@ -208,7 +217,7 @@ extension AMPPage {
         }
         return nil
     }
-    
+
     /// Fetch URL from named outlet async
     ///
     /// - parameter name: the name of the outlet
@@ -231,7 +240,26 @@ extension AMPPage {
         }
         return self
     }
-    
+
+    /// Fetch locally cached URL from named outlet async
+    ///
+    /// - parameter name: the name of the outlet
+    /// - parameter position: (optional) position in the array
+    /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
+    ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
+    ///                       communication error
+    public func cachedMediaURL(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
+        // TODO: Test this
+        self.outlet(name, position: position) { content in
+            if case let content as AMPMediaContent = content {
+                content.cachedURL { url in
+                    callback(url)
+                }
+            }
+        }
+        return self
+    }
+
     /// Fetch temporary valid URL from named outlet async
     ///
     /// - parameter name: the name of the outlet

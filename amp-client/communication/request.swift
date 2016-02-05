@@ -87,19 +87,29 @@ public class AMPRequest {
             self.saveToCache(response.request!, response.result)
             
             // object can only be saved if there is a request url and the status code of the response is a 200
-            guard response.result.isSuccess,
-                  let jsonResponse = response.result.value,
-                  let jsonObject = jsonResponse.json else {
+            var jsonObject: JSONObject? = nil
+            if response.result.isSuccess,
+               let jsonResponse = response.result.value,
+               let json = jsonResponse.json {
+                jsonObject = json
+            } else {
                 // fallback to cache
-                callback(fromCache(cacheName))
-                return
+                if case .Success(let json) = fromCache(cacheName) {
+                    jsonObject = json
+                }
             }
             
-            // patch last_updated into response
-            let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
-            // call callback in correct queue
-            dispatch_async(AMP.config.responseQueue) {
-                callback(patchedResult)
+            if let jsonObject = jsonObject {
+                // patch last_updated into response
+                let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
+                // call callback in correct queue
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(patchedResult)
+                }
+            } else {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(.Failure(AMPError.NoData(nil)))
+                }
             }
         }
     }
