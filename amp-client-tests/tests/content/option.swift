@@ -28,7 +28,7 @@ class optionContentTests: LoggedInXCTestCase {
         
         AMP.collection("test").page("page_001") { page in
             if let value = page.selectedOption("option") {
-                XCTAssertEqual(value, "Green")
+                XCTAssertEqual(value, "2")
             } else {
                 XCTFail("option content 'Option' returned nil")
             }
@@ -41,7 +41,7 @@ class optionContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOptionOutletFetchAsync")
         
         AMP.collection("test").page("page_001").selectedOption("option") { value in
-            XCTAssertEqual(value, "Green")
+            XCTAssertEqual(value, "2")
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
