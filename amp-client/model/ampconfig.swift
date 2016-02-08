@@ -85,7 +85,6 @@ public struct AMPConfig {
     internal init() {
         let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
-        configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
         configuration.HTTPCookieAcceptPolicy = .Never
         configuration.HTTPShouldSetCookies = false
         
@@ -108,7 +107,10 @@ public struct AMPConfig {
         #endif
         self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
 
-        configuration.HTTPAdditionalHeaders!["X-DeviceID"] = self.deviceID
+        for (header, value) in Alamofire.Manager.defaultHTTPHeaders {
+            self.additionalHeaders[header] = value
+        }
+        self.additionalHeaders["X-DeviceID"] = self.deviceID
         self.alamofire = Alamofire.Manager(configuration: configuration)
         self.resetErrorHandler()
         
@@ -233,6 +235,6 @@ public struct AMPConfig {
         let auth = "\(user):\(password)" as NSString
         let authData = auth.dataUsingEncoding(NSUTF8StringEncoding)!
         
-        additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
     }
 }
