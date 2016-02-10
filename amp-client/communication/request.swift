@@ -73,7 +73,9 @@ public class AMPRequest {
             }
         }
         
-        AMP.config.alamofire.request(.GET, urlString, headers:headers).responseDEJSON { response in
+        let request = AMP.config.alamofire.request(.GET, urlString, headers:headers)
+        
+        request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
                 if case .NotAuthorized = error {
                     dispatch_async(AMP.config.responseQueue) {
@@ -112,6 +114,8 @@ public class AMPRequest {
                 }
             }
         }
+        
+        request.resume()
     }
     
     /// Async fetch a binary file from AMP Server
@@ -242,6 +246,8 @@ public class AMPRequest {
                 }
             }
         }
+        
+        downloadTask.resume()
     }
     
     /// Fetch a file from the cache or return nil
@@ -275,12 +281,14 @@ public class AMPRequest {
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
         
-        AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers).responseDEJSON { response in
+        let request = AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
+        request.responseDEJSON { response in
             // call callback in correct queue
             dispatch_async(AMP.config.responseQueue) {
                 callback(response.result)
             }
         }
+        request.resume()
     }
     
     // MARK: - Private

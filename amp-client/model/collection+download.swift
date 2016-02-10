@@ -72,7 +72,6 @@ extension AMPCollection {
                 } else {
                     q["lastUpdated"] = dt.isoDateString
                 }
-                print(url)
             }
             
             AMPRequest.fetchBinary(url, queryParameters: q, cached: false,

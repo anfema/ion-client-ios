@@ -112,6 +112,7 @@ public struct AMPConfig {
         }
         self.additionalHeaders["X-DeviceID"] = self.deviceID
         self.alamofire = Alamofire.Manager(configuration: configuration)
+        self.alamofire.startRequestsImmediately = false
         self.resetErrorHandler()
         
         self.registerContentType("colorcontent") { json in
