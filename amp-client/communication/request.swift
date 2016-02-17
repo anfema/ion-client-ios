@@ -17,6 +17,22 @@ import DEjson
 
 // TODO: Export interface and make generic to use cache for other requests
 
+public extension NSData {
+    public func hexString() -> String {
+        var bytes = [UInt8](count: self.length, repeatedValue: 0)
+        self.getBytes(&bytes, length:self.length)
+        
+        let convert_table = "0123456789abcdef"
+        var s = ""
+        for byte in bytes {
+            s.append(convert_table.characters[convert_table.startIndex.advancedBy(Int(byte >> 4))])
+            s.append(convert_table.characters[convert_table.startIndex.advancedBy(Int(byte & 0x0f))])
+        }
+        return s
+    }
+}
+
+
 /// Base Request class that handles caching
 public class AMPRequest {
     static var cacheDB:[JSONObject]?
@@ -373,14 +389,17 @@ public class AMPRequest {
         let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
         let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
         
-        if (cachedChecksumMethod != checksumMethod) || (cachedChecksum != checksum) {
-            // if checksum changed DO NOT USE cache
-            do {
-                try NSFileManager.defaultManager().removeItemAtPath(cacheName)
-            } catch {
-                // do nothing, perhaps the file did not exist
+        // ios 8.4 inserts spaces into our checksums, so remove them again
+        if (cachedChecksumMethod != checksumMethod) || (cachedChecksum.stringByReplacingOccurrencesOfString(" ", withString: "") != checksum.stringByReplacingOccurrencesOfString(" ", withString: "")) {
+            if checksumMethod != "null" {
+                // if checksum changed DO NOT USE cache
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+                } catch {
+                    // do nothing, perhaps the file did not exist
+                }
+                return .Failure(AMPError.NoData(nil))
             }
-            return .Failure(AMPError.NoData(nil))
         }
         
         // Check disk cache

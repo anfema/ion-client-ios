@@ -5,7 +5,7 @@ use_frameworks!
 
 platform :osx, '10.10'
 pod 'Alamofire', '~> 3.1'
-pod 'HashExtensions', '~> 1.0'
+pod 'HashExtensions', '~> 2.0'
 pod 'DEjson', '~> 1.0'
 pod 'Markdown', '~> 1.0'
 pod 'html5tokenizer', '~> 1.0'

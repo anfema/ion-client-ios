@@ -61,7 +61,7 @@ extension AMPRequest {
         // generate cache path
         
         // The stringByReplacing... is needed because of a Bug in iOS 8.4 which inserts spaces, nobody knows why.
-        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).stringByReplacingOccurrencesOfString(" ", withString: ""))
+        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString())
         return fileURL.path!
     }
 
@@ -102,7 +102,7 @@ extension AMPRequest {
     
         if jsonResponse.statusCode == 200,
            let jsonObject = jsonResponse.json,
-           let json = JSONEncoder(jsonObject).prettyJSONString {
+           let json = JSONEncoder(jsonObject).jsonString {
 
             do {
                 // save object to disk
@@ -156,13 +156,13 @@ extension AMPRequest {
             }
         }
 
-        filename = filename.URLByAppendingPathComponent(hash)
+        filename = filename.URLByAppendingPathComponent(hash.hexString())
         data.writeToFile(filename.path!, atomically: true)
         
         // populate object with current data
         obj["url"]             = .JSONString(url)
         obj["host"]            = .JSONString(parsedURL.host!)
-        obj["filename"]        = .JSONString(hash)
+        obj["filename"]        = .JSONString(hash.hexString())
         obj["last_updated"]    = .JSONNumber(timestamp)
 
         if let checksum = checksum {
@@ -202,7 +202,7 @@ extension AMPRequest {
         // populate object with current data
         obj["url"]             = .JSONString(request.URLString)
         obj["host"]            = .JSONString(requestHost)
-        obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5))
+        obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5).hexString())
         obj["last_updated"]    = .JSONNumber(timestamp)
         obj["checksum_method"] = .JSONString(checksumMethod)
         obj["checksum"]        = .JSONString(checksum)
@@ -252,7 +252,7 @@ extension AMPRequest {
         
         // create a valid JSON object and serialize
         let jsonObject = JSONObject.JSONArray(cacheDB)
-        if let jsonString = JSONEncoder(jsonObject).prettyJSONString {
+        if let jsonString = JSONEncoder(jsonObject).jsonString {
             do {
                 let basePath = self.cacheBaseDir(locale: locale).path!
                 let file = self.cacheFile("cacheIndex.json", locale: locale).path!
