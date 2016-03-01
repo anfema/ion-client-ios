@@ -112,17 +112,48 @@ public class AMPSearchHandle {
     internal init?(collection: AMPCollection) {
         self.collection = collection
         
-        guard sqlite3_open_v2(AMP.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateFTSDB:", name: AMPFTSDBDidUpdateNotification, object: nil)
+        
+        guard setupSqliteConnection() else
+        {
             return nil
+        }
+    }
+    
+    
+    @objc
+    internal func didUpdateFTSDB(notification: NSNotification) {
+        // Extract collection identifier from notification.
+        guard let collectionIdentifier = notification.object as? String else
+        {
+            return
+        }
+        
+        // Only update sqlite connection when the collection identifiers match.
+        guard collectionIdentifier == collection.identifier else
+        {
+            return
+        }
+        
+        setupSqliteConnection()
+    }
+    
+    
+    internal func setupSqliteConnection() -> Bool {
+        guard sqlite3_open_v2(AMP.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+            return false
         }
         
         let sql = "SELECT page, outlet, text FROM (\n\n    SELECT c.page, c.outlet, snippet(s.search, \'**\', \'**\', \'[...]\') as text, offsets(s.search) as off\n    FROM search s\n    JOIN contents c ON s.docid = c.rowid\n    WHERE\n        s.search MATCH :searchTerm AND\n        c.locale = :locale\n\n) ORDER BY length(text) ASC, (length(off) - length(replace(off, \' \', \'\')) - 1) / 2 DESC"
         guard sqlite3_prepare_v2(self.dbHandle, sql, sql.byteLength, &self.stmt, nil) == SQLITE_OK else {
             sqlite3_close(dbHandle)
-            return nil
+            return false
         }
         
+        return true
     }
+    
     
     // MARK: - Private
 
@@ -137,6 +168,8 @@ public class AMPSearchHandle {
     }
 
     deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
         sqlite3_finalize(self.stmt)
         sqlite3_close(self.dbHandle)
     }

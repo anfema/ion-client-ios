@@ -54,6 +54,10 @@ internal extension AMP {
                 }
                 
                 dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
+                
+                // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
+                NSNotificationCenter.defaultCenter().postNotificationName(AMPFTSDBDidUpdateNotification, object: collection)
+                
                 if callback != nil {
                     callback!()
                 }
