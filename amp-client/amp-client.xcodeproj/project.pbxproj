@@ -11,6 +11,8 @@
 		755D8B5A1B9DDAF700AB10C8 /* ampclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 755D8B591B9DDAF700AB10C8 /* ampclient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F4DD9401BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
 		8F4DD9411BEA45BC000F917A /* number.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DD93F1BEA45BB000F917A /* number.swift */; };
+		8F5872791C89A588005567E1 /* notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5872781C89A588005567E1 /* notifications.swift */; };
+		8F58727A1C89A588005567E1 /* notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5872781C89A588005567E1 /* notifications.swift */; };
 		8F86E6FE1BE25CD9002CE986 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; };
 		8F86E7001BE25CD9002CE986 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC269D41BB429BF00E38569 /* request_cache.swift */; };
 		8F86E7021BE25CDF002CE986 /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755D8BF21B9F364600AB10C8 /* response_serializer.swift */; };
@@ -94,6 +96,7 @@
 		8F52CD331BA86812004588F4 /* media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = media.swift; sourceTree = "<group>"; };
 		8F52CD341BA86812004588F4 /* option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = option.swift; sourceTree = "<group>"; };
 		8F52CD351BA86812004588F4 /* text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
+		8F5872781C89A588005567E1 /* notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
 		8F62FC7E1BF25FF1001E518D /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
 		8F62FC951BF262EB001E518D /* collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = collection.swift; sourceTree = "<group>"; };
 		8F62FC961BF262EB001E518D /* config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
@@ -425,6 +428,7 @@
 		8FCFAE6A1C05ED0F0051981F /* search */ = {
 			isa = PBXGroup;
 			children = (
+				8F5872781C89A588005567E1 /* notifications.swift */,
 				8FCFAE6B1C05ED0F0051981F /* amp+search.swift */,
 				8FCFAE6C1C05ED0F0051981F /* collection+search.swift */,
 				8FCFAE6D1C05ED0F0051981F /* module.modulemap */,
@@ -643,6 +647,7 @@
 				8FCFAE5A1C05ECF00051981F /* collection+metadata.swift in Sources */,
 				8FCFAE621C05ECF90051981F /* page_metadata.swift in Sources */,
 				8F86E7101BE25CE5002CE986 /* text.swift in Sources */,
+				8F5872791C89A588005567E1 /* notifications.swift in Sources */,
 				8FCFAE5C1C05ECF00051981F /* collection+native_extensions.swift in Sources */,
 				8FCFAE731C05ED0F0051981F /* search.swift in Sources */,
 				8F86E70B1BE25CE5002CE986 /* flag.swift in Sources */,
@@ -680,6 +685,7 @@
 				8FCFAE5B1C05ECF00051981F /* collection+metadata.swift in Sources */,
 				8FCFAE631C05ECF90051981F /* page_metadata.swift in Sources */,
 				8F86E71F1BE25CE5002CE986 /* text.swift in Sources */,
+				8F58727A1C89A588005567E1 /* notifications.swift in Sources */,
 				8FCFAE5D1C05ECF00051981F /* collection+native_extensions.swift in Sources */,
 				8FCFAE741C05ED0F0051981F /* search.swift in Sources */,
 				8F86E71A1BE25CE5002CE986 /* flag.swift in Sources */,
