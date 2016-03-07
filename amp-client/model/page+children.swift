@@ -45,21 +45,21 @@ extension AMPPage {
     ///
     /// - parameter identifier: identifier of child page
     /// - returns: page object that resolves async or nil if page not child of self
-    public func child(identifier: String) -> AMPPage? {
+    public func child(identifier: String) -> Result<AMPPage, AMPError> {
         let page = self.collection.page(identifier)
         
         if page.parent == self.identifier {
-            return page
+            return .Success(page)
         }
-        self.callErrorHandler(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
-        return nil
+        
+        return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
     }
     
     
     /// enumerate page children
     ///
     /// - parameter callback: the callback to call for each child
-    public func children(callback: (AMPPage -> Void)) {
+    public func children(callback: (Result<AMPPage, AMPError> -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             for child in children {
                 self.child(child, callback: callback)
