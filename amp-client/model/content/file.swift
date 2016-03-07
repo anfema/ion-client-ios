@@ -79,7 +79,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         guard self.isValid else {
             return
         }
-        AMPRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: .Prefer,
+        AMPRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: AMP.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
