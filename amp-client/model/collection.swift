@@ -137,7 +137,7 @@ public class AMPCollection {
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
-                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: false, parent:meta.parent) { page in
+                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { page in
                         page.position = meta.position
                         callback(page)
                         page.onCompletion { _,_ in
@@ -191,7 +191,7 @@ public class AMPCollection {
                     self.callErrorHandler(.PageNotFound(identifier))
                     return
                 }
-                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { page in
                     page.position = meta.position
                     
                     // recursive call to use update check from "page is caches" path
@@ -237,7 +237,7 @@ public class AMPCollection {
             }
             
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: true, parent: parent) { page in
+            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
                 dispatch_async(self.workQueue) {
                     self.checkCompleted()
                 }
