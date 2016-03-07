@@ -74,7 +74,7 @@ extension AMPCollection {
                 }
             }
             
-            AMPRequest.fetchBinary(url, queryParameters: q, cached: false,
+            AMPRequest.fetchBinary(url, queryParameters: q, cached: .Ignore,
                 checksumMethod:"null", checksum: "") { result in
                     guard case .Success(let filename) = result else {
                         dispatch_async(AMP.config.responseQueue) {

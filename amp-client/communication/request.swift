@@ -17,6 +17,12 @@ import DEjson
 
 // TODO: Export interface and make generic to use cache for other requests
 
+public enum AMPCacheBehaviour {
+    case Prefer
+    case Force
+    case Ignore
+}
+
 public extension NSData {
     public func hexString() -> String {
         var bytes = [UInt8](count: self.length, repeatedValue: 0)
@@ -45,7 +51,7 @@ public class AMPRequest {
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: Bool, callback: (Result<JSONObject, AMPError> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, callback: (Result<JSONObject, AMPError> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
 
@@ -68,12 +74,17 @@ public class AMPRequest {
             return .Failure(AMPError.NoData(nil))
         }
         
-        if cached {
+        if cached == .Prefer || cached == .Force {
             let result = fromCache(cacheName)
             if case .Success(let json) = result {
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
                     callback(.Success(json))
+                }
+                return
+            } else if cached == .Force {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(.Failure(AMPError.ServerUnreachable))
                 }
                 return
             }
@@ -141,15 +152,20 @@ public class AMPRequest {
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: Bool, checksumMethod: String, checksum: String, callback: (Result<String, AMPError> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, AMPError> -> Void)) {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
-        if cached {
+        if cached == .Force || cached == .Prefer {
             let cacheResult = self.fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
             if case .Success = cacheResult {
                 dispatch_async(AMP.config.responseQueue) {
                     callback(cacheResult)
+                }
+                return
+            } else if cached == .Force {
+                dispatch_async(AMP.config.responseQueue) {
+                    callback(.Failure(AMPError.ServerUnreachable))
                 }
                 return
             }

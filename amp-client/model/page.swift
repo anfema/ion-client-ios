@@ -332,7 +332,7 @@ public class AMPPage {
     /// - parameter identifier: page identifier to get
     /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
-        AMPRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached:self.useCache) { result in
+        AMPRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached: (self.useCache) ? .Prefer : .Ignore) { result in
             if case .Failure(let error) = result {
                 if case .NotAuthorized = error {
                     callback(error)
