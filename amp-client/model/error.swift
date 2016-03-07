@@ -44,6 +44,12 @@ public enum AMPError: ErrorType {
     /// Outlet with that name not found
     case OutletNotFound(String)
     
+    /// Outlet of incompatible type
+    case OutletIncompatible
+
+    /// Empty outlet
+    case OutletEmpty
+
     /// Authorization with token or username/password tuple failed
     case NotAuthorized
     

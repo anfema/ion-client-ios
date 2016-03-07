@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import Alamofire
 
 /// File content
 public class AMPFileContent : AMPContent, CanLoadImage {
@@ -75,7 +76,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     ///
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
-    public func data(callback: (NSData -> Void)) {
+    public func data(callback: (Result<NSData, AMPError> -> Void)) {
         guard self.isValid else {
             return
         }
@@ -87,12 +88,10 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             do {
                 let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(data)
+                    callback(.Success(data))
                 }
             } catch {
-                if AMP.config.loggingEnabled {
-                    print("AMP: Could not read file \(filename)")
-                }
+                callback(.Failure(.NoData(error)))
             }
         }
     }
@@ -145,8 +144,12 @@ extension AMPPage {
     /// - parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func fileData(name: String, position: Int = 0, callback: (NSData -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func fileData(name: String, position: Int = 0, callback: (Result<NSData, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
             if case let content as AMPFileContent = content {
                 content.data(callback)
             }

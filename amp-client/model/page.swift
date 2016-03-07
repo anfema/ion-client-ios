@@ -76,7 +76,7 @@ public class AMPPage {
     /// - parameter layout: the page layout
     /// - parameter useCache: set to false to force a page refresh
     /// - parameter callback: the block to call when initialization finished
-    init(collection: AMPCollection, identifier: String, layout: String?, useCache: AMPCacheBehaviour, parent: String?, callback:(AMPPage -> Void)?) {
+    init(collection: AMPCollection, identifier: String, layout: String?, useCache: AMPCacheBehaviour, parent: String?, callback:(Result<AMPPage, AMPError> -> Void)?) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
         if let layout = layout {
@@ -98,8 +98,10 @@ public class AMPPage {
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    self.callErrorHandler(error)
                     self.hasFailed = true
+                    if let cb = callback {
+                        cb(.Failure(error))
+                    }
                     
                 } else {
                     if self.content.count > 0 {
@@ -111,7 +113,7 @@ public class AMPPage {
                     self.isReady = true
                     if let cb = callback {
                         dispatch_async(AMP.config.responseQueue) {
-                            cb(self)
+                            cb(.Success(self))
                         }
                     }
                 }
@@ -171,7 +173,7 @@ public class AMPPage {
     /// - parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
     /// - returns: self to be able to chain another call
-    public func outlet(name: String, position: Int = 0, callback: (AMPContent -> Void)) -> AMPPage {
+    public func outlet(name: String, position: Int = 0, callback: (Result<AMPContent, AMPError> -> Void)) -> AMPPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -182,12 +184,12 @@ public class AMPPage {
                 return obj.outlet == name && obj.position == position
             }).first
 
-            if let c = cObj {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(c)
+            dispatch_async(AMP.config.responseQueue) {
+                if let c = cObj {
+                    callback(.Success(c))
+                } else {
+                    callback(.Failure(.OutletNotFound(name)))
                 }
-            } else {
-                self.callErrorHandler(.OutletNotFound(name))
             }
         }
         return self
@@ -198,20 +200,21 @@ public class AMPPage {
     /// - parameter name: outlet name to fetch
     /// - parameter position: (optional) position in the array
     /// - returns: content object if page was loaded and outlet exists
-    public func outlet(name: String, position: Int = 0) -> AMPContent? {
+    public func outlet(name: String, position: Int = 0) -> Result<AMPContent, AMPError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
-            return nil
+            return .Failure(.DidFail)
         } else {
             // search content
             let cObj = self.content.filter({ obj -> Bool in
                 return obj.outlet == name && obj.position == position
             }).first
             
-            if cObj == nil {
-                self.callErrorHandler(.OutletNotFound(name))
+            if let cObj = cObj {
+                return .Success(cObj)
+            } else {
+                return .Failure(.OutletNotFound(name))
             }
-            return cObj
         }
     }
 
@@ -326,21 +329,21 @@ public class AMPPage {
                 } else {
                     callback(.PageNotFound(identifier))
                 }
-                return
+                return nil
             }
 
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
                     callback(.JSONObjectExpected(result.value!))
-                    return
+                    return nil
             }
             
             // furthermore we need a page and a last_updated element
             guard let rawPage = dict["page"] where dict["last_updated"] != nil,
                   case .JSONArray(let array) = rawPage else {
                     callback(.JSONObjectExpected(dict["page"]))
-                    return
+                    return nil
             }
 
             // if we have a nonzero result
@@ -354,7 +357,7 @@ public class AMPPage {
                       case .JSONString(let last_changed) = rawLastChanged,
                       case .JSONString(let locale) = rawLocale else {
                         callback(.InvalidJSON(result.value))
-                        return
+                        return nil
                 }
                 
                 if case .JSONString(let parentID) = parent {
@@ -385,6 +388,7 @@ public class AMPPage {
             
             // all finished, call block
             callback(nil)
+            return self.lastUpdate
         }
     }
     
@@ -403,36 +407,6 @@ public class AMPPage {
                 }
             }
         }
-    }
-}
-
-
-class ErrorHandlingAMPPage: AMPPage {
-    private var errorHandler: (AMPError -> Void)
-    
-    init(page: AMPPage, errorHandler: (AMPError -> Void)) {
-        self.errorHandler = errorHandler
-        super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
-        
-        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
-        dispatch_barrier_async(self.workQueue) {
-            page.parentLock.lock()
-            self.identifier = page.identifier
-            self.parent = page.parent
-            self.locale = page.locale
-            self.lastUpdate = page.lastUpdate
-            self.layout = page.layout
-            self.content = page.content
-            self.position = page.position
-            self.hasFailed = page.hasFailed
-            self.isReady = true
-            page.parentLock.unlock()
-        }
-    }
-    
-    /// override default error callback to bubble error up to AMP object
-    override internal func callErrorHandler(error: AMPError) {
-        errorHandler(error)
     }
 }
 

@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import Alamofire
 
 /// Option content, just carries the selected value not the options
 public class AMPOptionContent : AMPContent {
@@ -45,13 +46,17 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: string if the outlet was an option outlet and the page was already cached, else nil
-    public func selectedOption(name: String, position: Int = 0) -> String? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPOptionContent = content {
-                return content.value
-            }
+    public func selectedOption(name: String, position: Int = 0) -> Result<String, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
         }
-        return nil
+        
+        if case let content as AMPOptionContent = content {
+            return .Success(content.value)
+        }
+        
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch selected option for named outlet async
@@ -61,12 +66,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func selectedOption(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func selectedOption(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPOptionContent = content {
                 if let value = content.value {
-                    callback(value)
+                    callback(.Success(value))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

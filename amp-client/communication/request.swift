@@ -51,7 +51,7 @@ public class AMPRequest {
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, callback: (Result<JSONObject, AMPError> -> Void)) {
+    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, callback: (Result<JSONObject, AMPError> -> NSDate?)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
 
@@ -133,7 +133,9 @@ public class AMPRequest {
                 let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
-                    callback(patchedResult)
+                    if let date = callback(patchedResult) {
+                        self.saveToCache(response.request!, checksumMethod: "null", checksum: "", lastUpdate: date)
+                    }
                 }
             } else {
                 dispatch_async(AMP.config.responseQueue) {

@@ -182,14 +182,19 @@ extension AMPRequest {
     /// - parameter request: request (used to extract URL)
     /// - parameter checksumMethod: the name of the used method used to create the `checksum`
     /// - parameter checksum: the checksum calculated by the `checksumMethod`
-    internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String) {
+    internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String, lastUpdate: NSDate? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
         }
         
         // fetch current timestamp truncated to maximum resolution of 1 ms
-        let timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        var timestamp: Double = 0.0
+        if let lastUpdate = lastUpdate {
+            timestamp = trunc(lastUpdate.timeIntervalSince1970 * 1000.0) / 1000.0
+        } else {
+            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+        }
         
         // pop current cache DB entry
         var obj:[String:JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]

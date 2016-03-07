@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import Alamofire
 
 /// Flag content, can be enabled or not
 public class AMPFlagContent : AMPContent {
@@ -44,13 +45,17 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: true or false if the outlet was a flag outlet and the page was already cached, else nil
-    public func isSet(name: String, position: Int = 0) -> Bool? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPFlagContent = content {
-                return content.enabled
-            }
+    public func isSet(name: String, position: Int = 0) -> Result<Bool, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
         }
-        return nil
+        
+        if case let content as AMPFlagContent = content {
+            return .Success(content.enabled)
+        }
+        
+        return .Failure(.OutletIncompatible)
     }
     
     /// Check if flag is set for named outlet async
@@ -60,10 +65,16 @@ extension AMPPage {
     /// - parameter callback: block to call when the flag becomes available, will not be called if the outlet
     ///                       is not a flag outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func isSet(name: String, position: Int = 0, callback: (Bool -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func isSet(name: String, position: Int = 0, callback: (Result<Bool, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
             if case let content as AMPFlagContent = content {
-                callback(content.enabled)
+                callback(.Success(content.enabled))
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

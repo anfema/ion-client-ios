@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import Alamofire
 
 /// Connection content, carries a link to another collection/page/outlet
 public class AMPConnectionContent : AMPContent {
@@ -50,13 +51,21 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: string if the outlet was an option outlet and the page was already cached, else nil
-    public func link(name: String, position: Int = 0) -> NSURL? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPConnectionContent = content {
-                return content.url
+    public func link(name: String, position: Int = 0) -> Result<NSURL, AMPError> {
+        let result = self.outlet(name, position: position)
+        
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+
+        if case let content as AMPConnectionContent = content {
+            if let url = content.url {
+                return .Success(url)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch selected option for named outlet async
@@ -66,12 +75,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func link(name: String, position: Int = 0, callback: (NSURL -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func link(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPConnectionContent = content {
                 if let url = content.url {
-                    callback(url)
+                    callback(.Success(url))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

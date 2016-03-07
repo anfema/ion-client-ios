@@ -20,8 +20,10 @@ internal extension AMP {
     }
     
     internal class func downloadFTSDB(collection: String, callback:(Void -> Void)? = nil) {
-        AMP.collection(collection) { c in
-            guard let ftsURL = c.ftsDownloadURL else {
+        AMP.collection(collection) { result in
+            guard case .Success(let c) = result,
+                  let ftsURL = c.ftsDownloadURL else {
+                    // FIXME: What happens in error case?
                 return
             }
             

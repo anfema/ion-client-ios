@@ -16,6 +16,7 @@ import Foundation
     import UIKit
 #endif
 import DEjson
+import Alamofire
 
 /// Color content
 public class AMPColorContent : AMPContent {
@@ -86,13 +87,21 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String, position: Int = 0) -> NSColor? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPColorContent = content {
-                return content.color()
+    public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+        
+        if case let content as AMPColorContent = content {
+            if let color = content.color() {
+                return .Success(color)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+        
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch `NSColor` object from named outlet async
@@ -102,12 +111,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, position: Int = 0, callback: (NSColor -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func color(name: String, position: Int = 0, callback: (Result<NSColor, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
-                    callback(c)
+                    callback(.Success(c))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self
@@ -120,13 +138,21 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String, position: Int = 0) -> UIColor? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPColorContent = content {
-                return content.color()
+    public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+    
+        if case let content as AMPColorContent = content {
+            if let color = content.color() {
+                return .Success(color)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+    
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch `UIColor` object from named outlet async
@@ -136,12 +162,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, position: Int = 0, callback: (UIColor -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func color(name: String, position: Int = 0, callback: (Result<UIColor, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
-                    callback(c)
+                    callback(.Success(c))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

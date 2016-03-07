@@ -13,6 +13,7 @@ import Foundation
 import DEjson
 import Markdown
 import html5tokenizer
+import Alamofire
 
 /// Text content, may be rendered in different markup
 public class AMPTextContent : AMPContent {
@@ -133,13 +134,19 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
-    public func text(name: String, position: Int = 0) -> String? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPTextContent = content {
-                return content.plainText()
+    public func text(name: String, position: Int = 0) -> Result<String, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+        if case let content as AMPTextContent = content {
+            if let text = content.plainText() {
+                return .Success(text)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch plaintext string from named outlet async
@@ -149,12 +156,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func text(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func text(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+
             if case let content as AMPTextContent = content {
                 if let text = content.plainText() {
-                    callback(text)
+                    callback(.Success(text))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self
@@ -165,13 +181,21 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: html string if the outlet was a text outlet and the page was already cached, else nil
-    public func html(name: String, position: Int = 0) -> String? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPTextContent = content {
-                return content.htmlText()
+    public func html(name: String, position: Int = 0) -> Result<String, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+        
+        if case let content as AMPTextContent = content {
+            if let text = content.htmlText() {
+                return .Success(text)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch html string from named outlet async
@@ -181,12 +205,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func html(name: String, position: Int = 0, callback: (String -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func html(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+
             if case let content as AMPTextContent = content {
                 if let text = content.htmlText() {
-                    callback(text)
+                    callback(.Success(text))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self
@@ -197,13 +230,21 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
-    public func attributedString(name: String, position: Int = 0) -> NSAttributedString? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPTextContent = content {
-                return content.attributedString()
+    public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+
+        if case let content as AMPTextContent = content {
+            if let text = content.attributedString() {
+                return .Success(text)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch attributed string from named outlet async
@@ -213,12 +254,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func attributedString(name: String, position: Int = 0, callback: (NSAttributedString -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+
             if case let content as AMPTextContent = content {
                 if let text = content.attributedString() {
-                    callback(text)
+                    callback(.Success(text))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

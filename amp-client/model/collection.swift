@@ -136,7 +136,11 @@ public class AMPCollection {
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
-                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { page in
+                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
+                        guard case .Success(let page) = result else {
+                            // FIXME: what happens in the error case?
+                            return
+                        }
                         page.position = meta.position
                         callback(.Success(page))
                         page.onCompletion { _,_ in
@@ -190,7 +194,11 @@ public class AMPCollection {
                     callback(.Failure(.PageNotFound(identifier)))
                     return
                 }
-                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { page in
+                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
+                    guard case .Success(let page) = result else {
+                        // FIXME: What happens in error case?
+                        return
+                    }
                     page.position = meta.position
                     
                     // recursive call to use update check from "page is caches" path
@@ -376,14 +384,14 @@ public class AMPCollection {
                 } else {
                     callback(AMPError.CollectionNotFound(identifier))
                 }
-                return
+                return nil
             }
             
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
                     callback(AMPError.JSONObjectExpected(result.value!))
-                    return
+                    return nil
             }
             
             // furthermore we need a collection and a last_updated element
@@ -391,7 +399,7 @@ public class AMPCollection {
                   case .JSONArray(let array)      = rawCollection,
                   case .JSONNumber(let timestamp) = rawLastUpdated else {
                     callback(AMPError.JSONObjectExpected(result.value!))
-                    return
+                    return nil
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
 
@@ -406,7 +414,7 @@ public class AMPCollection {
                       case .JSONString(let archiveURL)     = rawArchive,
                       case .JSONArray(let pages)           = rawPages else {
                         callback(AMPError.InvalidJSON(result.value!))
-                        return
+                        return nil
                 }
             
                 // initialize self
@@ -422,6 +430,7 @@ public class AMPCollection {
                 if let rawLastChanged = dict["last_changed"] {
                     if case .JSONString(let lastChanged) = rawLastChanged {
                         self.lastChanged = NSDate(isoDateString: lastChanged)
+                        self.lastUpdate = self.lastChanged
                     }
                 }
                             
@@ -459,6 +468,8 @@ public class AMPCollection {
             
             // all finished, call callback
             callback(nil)
+            
+            return self.lastChanged
         }
     }
 }

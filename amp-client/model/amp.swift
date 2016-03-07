@@ -85,11 +85,13 @@ public class AMP {
             identifier: identifier,
             locale: AMP.config.locale,
             useCache: cache
-        ) { collection in
-            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
+        ) { result in
+            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed,
+                  case .Success(let collection) = result else {
+                    // FIXME: What happens in error case?
                 return
             }
-        
+            
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
     
@@ -105,7 +107,7 @@ public class AMP {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
+    public class func collection(identifier: String, callback: (Result<AMPCollection, AMPError> -> Void)) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
         
         // return memcache if not timed out
@@ -116,7 +118,7 @@ public class AMP {
                 } else {
                     dispatch_async(cachedCollection.workQueue) {
                         dispatch_async(self.config.responseQueue) {
-                            callback(cachedCollection)
+                            callback(.Success(cachedCollection))
                         }
                     }
                 }
@@ -129,8 +131,12 @@ public class AMP {
         
         // try an online update
         let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { collection in
-            callback(collection)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { result in
+            guard case .Success(let collection) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            callback(.Success(collection))
             
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return

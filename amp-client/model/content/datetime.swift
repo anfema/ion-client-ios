@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import Alamofire
 
 /// DateTime content
 public class AMPDateTimeContent : AMPContent {
@@ -45,13 +46,20 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
-    public func date(name: String, position: Int = 0) -> NSDate? {
-        if let content = self.outlet(name, position: position) {
-            if case let content as AMPDateTimeContent = content {
-                return content.date
+    public func date(name: String, position: Int = 0) -> Result<NSDate, AMPError> {
+        let result = self.outlet(name, position: position)
+        guard case .Success(let content) = result else {
+            return .Failure(result.error!)
+        }
+
+        if case let content as AMPDateTimeContent = content {
+            if let date = content.date {
+                return .Success(date)
+            } else {
+                return .Failure(.OutletEmpty)
             }
         }
-        return nil
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch `NSDate` object from named outlet async
@@ -61,12 +69,21 @@ extension AMPPage {
     /// - parameter callback: block to call when the date object becomes available, will not be called if the outlet
     ///                       is not a datetime outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func date(name: String, position: Int = 0, callback: (NSDate -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func date(name: String, position: Int = 0, callback: (Result<NSDate, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPDateTimeContent = content {
                 if let d = content.date {
-                    callback(d)
+                    callback(.Success(d))
+                } else {
+                    callback(.Failure(.OutletEmpty))
                 }
+            } else {
+                callback(.Failure(.OutletIncompatible))
             }
         }
         return self

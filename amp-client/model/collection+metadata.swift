@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
+import Alamofire
 
 extension AMPCollection {
  
@@ -47,13 +48,12 @@ extension AMPCollection {
     ///
     /// - parameter identifier: page identifier to get metadata for
     /// - parameter callback: callback to call with metadata
-    public func metadata(identifier: String, callback: (AMPPageMeta -> Void)) -> AMPCollection {
+    public func metadata(identifier: String, callback: (Result<AMPPageMeta, AMPError> -> Void)) -> AMPCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
-            if let result = self.metadata(identifier) {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(result)
-                }
+            let result = self.metadata(identifier)
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
             }
         }
         
@@ -64,17 +64,16 @@ extension AMPCollection {
     ///
     /// - parameter identifier: page identifier to get metadata for
     /// - returns: AMPPageMeta object or nil if collection is not loaded
-    public func metadata(identifier: String) -> AMPPageMeta? {
+    public func metadata(identifier: String) -> Result<AMPPageMeta, AMPError> {
         guard !self.hasFailed && self.lastUpdate != nil else {
-            return nil
+            return .Failure(.DidFail)
         }
         for meta in self.pageMeta {
             if meta.identifier == identifier {
-                return meta
+                return .Success(meta)
             }
         }
-        self.callErrorHandler(.PageNotFound(identifier))
-        return nil
+        return .Failure(.PageNotFound(identifier))
     }
     
     /// Enumerate metadata
