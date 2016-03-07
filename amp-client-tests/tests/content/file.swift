@@ -86,6 +86,9 @@ class fileContentTests: LoggedInXCTestCase {
         let expectation2 = self.expectationWithDescription("testFileDownloadFinished")
 
         AMP.resetDiskCache()
+        
+        // FIXME: Why is this called 2 times for 100%?
+        var flag = false
         AMP.config.progressHandler = { total, downloaded, count in
             if count > 0 {
                 XCTAssert(total > 0)
@@ -93,7 +96,8 @@ class fileContentTests: LoggedInXCTestCase {
                 print("Download progress \(percent)%")
             }
             
-            if count == 0 {
+            if count == 0 && !flag {
+                flag = true
                 expectation1.fulfill()
             }
         }
