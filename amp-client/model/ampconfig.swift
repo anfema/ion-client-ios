@@ -51,6 +51,9 @@ public struct AMPConfig {
     /// collection cache timeout
     public var cacheTimeout: NSTimeInterval = 600
     
+    /// offline mode: do not send any request
+    public var offlineMode = false
+    
     /// styling for attributed string conversion of markdown text
     public var stringStyling = AttributedStringStyling()
     
@@ -237,5 +240,12 @@ public struct AMPConfig {
         let authData = auth.dataUsingEncoding(NSUTF8StringEncoding)!
         
         self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+    }
+    
+    internal func cacheBehaviour(requestedBehaviour: AMPCacheBehaviour) -> AMPCacheBehaviour {
+        if self.offlineMode {
+            return .Force
+        }
+        return requestedBehaviour
     }
 }

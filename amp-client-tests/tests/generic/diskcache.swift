@@ -36,7 +36,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testCollectionDiskCacheClean() {
@@ -53,7 +53,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testPageDiskCache() {
@@ -69,7 +69,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     func testPageDiskCacheClean() {
@@ -86,7 +86,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testPageDiskCacheLocaleClean() {
@@ -103,7 +103,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testDiskCacheForBinaryFilesMiss() {
@@ -126,7 +126,7 @@ class diskcacheTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     func testDiskCacheForBinaryFilesHit() {
@@ -152,7 +152,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
     func testDiskCacheForBinaryFilesChange() {
@@ -198,7 +198,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
 }

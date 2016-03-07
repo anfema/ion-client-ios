@@ -68,22 +68,31 @@ public class AMP {
     /// - returns: collection object from cache or empty collection object
     public class func collection(identifier: String) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
+
+        // return memcache if not timed out
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 return cachedCollection
             }
         } else {
+            // remove from mem cache if expired
             self.collectionCache.removeValueForKey(identifier)
         }
         
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(identifier)) { collection in
-            guard let cachedCollection = cachedCollection else {
+        // try an online update
+        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let newCollection = AMPCollection(
+            identifier: identifier,
+            locale: AMP.config.locale,
+            useCache: cache
+        ) { collection in
+            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return
             }
-
+        
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
-        
+    
         if self.hasCacheTimedOut(identifier) {
             self.config.lastOnlineUpdate[identifier] = NSDate()
         }
@@ -98,7 +107,8 @@ public class AMP {
     /// - returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (AMPCollection -> Void)) -> AMPCollection {
         let cachedCollection = self.collectionCache[identifier]
-
+        
+        // return memcache if not timed out
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
@@ -112,12 +122,17 @@ public class AMP {
                 }
                 return cachedCollection
             }
+        } else {
+            // remove from mem cache if expired
+            self.collectionCache.removeValueForKey(identifier)
         }
         
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: !self.hasCacheTimedOut(identifier)) { collection in
+        // try an online update
+        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { collection in
             callback(collection)
             
-            guard let cachedCollection = cachedCollection else {
+            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return
             }
             self.notifyForUpdates(collection, collection2: cachedCollection)
@@ -198,7 +213,7 @@ public class AMP {
         var collectionChanged = false
         
         // compare metadata count
-        if (collection1.pageMeta.count != collection2.pageMeta.count) {
+        if (collection1.pageMeta.count != collection2.pageMeta.count) || (collection1.lastChanged != collection2.lastChanged) {
             collectionChanged = true
         } else {
             // compare old collection and new collection page change dates and identifiers

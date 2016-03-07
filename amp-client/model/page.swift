@@ -45,7 +45,7 @@ public class AMPPage {
     public var position: Int = 0
     
     /// set to true to avoid fetching from cache
-    private var useCache = false
+    private var useCache = AMPCacheBehaviour.Prefer
     
     /// page has loaded
     internal var isReady = false
@@ -76,7 +76,7 @@ public class AMPPage {
     /// - parameter layout: the page layout
     /// - parameter useCache: set to false to force a page refresh
     /// - parameter callback: the block to call when initialization finished
-    init(collection: AMPCollection, identifier: String, layout: String?, useCache: Bool, parent: String?, callback:(AMPPage -> Void)?) {
+    init(collection: AMPCollection, identifier: String, layout: String?, useCache: AMPCacheBehaviour, parent: String?, callback:(AMPPage -> Void)?) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
         if let layout = layout {
@@ -304,7 +304,7 @@ public class AMPPage {
     
     private init(forkedWorkQueueWithCollection collection: AMPCollection, identifier: String, locale: String) {
         self.locale = locale
-        self.useCache = true
+        self.useCache = .Prefer
         self.collection = collection
         self.identifier = identifier
         self.layout = ""
@@ -319,7 +319,7 @@ public class AMPPage {
     /// - parameter identifier: page identifier to get
     /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(AMPError? -> Void)) {
-        AMPRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached:self.useCache) { result in
+        AMPRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached: AMP.config.cacheBehaviour(self.useCache)) { result in
             if case .Failure(let error) = result {
                 if case .NotAuthorized = error {
                     callback(error)
@@ -381,7 +381,7 @@ public class AMPPage {
             }
             
             // reset to using cache
-            self.useCache = true
+            self.useCache = .Prefer
             
             // all finished, call block
             callback(nil)

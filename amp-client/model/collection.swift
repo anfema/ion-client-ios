@@ -27,6 +27,9 @@ public class AMPCollection {
     
     /// last update date
     public var lastUpdate:NSDate?
+    
+    /// last change date on server
+    public var lastChanged:NSDate?
 
     /// this instance produced an error while fetching from net
     public var hasFailed: Bool = false
@@ -44,7 +47,7 @@ public class AMPCollection {
     internal var workQueue: dispatch_queue_t
 
     /// set to false to avoid using the cache (refreshes, etc.)
-    private var useCache = true
+    private var useCache = AMPCacheBehaviour.Prefer
     
     /// block to call on completion
     private var completionBlock: ((collection: Result<AMPCollection, AMPError>, completed: Bool) -> Void)?
@@ -75,7 +78,7 @@ public class AMPCollection {
     /// - parameter locale: locale code to fetch
     /// - parameter useCache: set to false to force a refresh
     /// - parameter callback: block to call when collection is fully loaded
-    init(identifier: String, locale: String, useCache: Bool, callback:(Result<AMPCollection, AMPError> -> Void)?) {
+    init(identifier: String, locale: String, useCache: AMPCacheBehaviour, callback:(Result<AMPCollection, AMPError> -> Void)?) {
         self.locale = locale
         self.useCache = useCache
         self.identifier = identifier
@@ -133,7 +136,7 @@ public class AMPCollection {
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
-                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: false, parent:meta.parent) { page in
+                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { page in
                         page.position = meta.position
                         callback(.Success(page))
                         page.onCompletion { _,_ in
@@ -187,8 +190,7 @@ public class AMPCollection {
                     callback(.Failure(.PageNotFound(identifier)))
                     return
                 }
-                
-                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
+                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { page in
                     page.position = meta.position
                     
                     // recursive call to use update check from "page is caches" path
@@ -234,7 +236,7 @@ public class AMPCollection {
             }
             
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: true, parent: parent) { page in
+            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
                 dispatch_async(self.workQueue) {
                     self.checkCompleted()
                 }
@@ -354,7 +356,7 @@ public class AMPCollection {
     
     private init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
         self.locale = locale
-        self.useCache = true
+        self.useCache = .Prefer
         self.identifier = identifier
         self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
@@ -414,7 +416,15 @@ public class AMPCollection {
                 if case .JSONString(let ftsURL) = rawFTSdb {
                     self.ftsDownloadURL = ftsURL
                 }
-            
+                
+                // extract last change date from collection, default to last update when not available
+                self.lastChanged = self.lastUpdate
+                if let rawLastChanged = dict["last_changed"] {
+                    if case .JSONString(let lastChanged) = rawLastChanged {
+                        self.lastChanged = NSDate(isoDateString: lastChanged)
+                    }
+                }
+                            
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
@@ -445,7 +455,7 @@ public class AMPCollection {
             }
             
             // revert to using cache
-            self.useCache = true
+            self.useCache = .Prefer
             
             // all finished, call callback
             callback(nil)
