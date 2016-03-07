@@ -125,25 +125,12 @@ public class AMPPage {
     }
 
     // MARK: - API
-    
-    /// Error handler to chain to the page
-    ///
-    /// - parameter callback: the block to call in case of an error
-    /// - returns: self, to be able to chain more actions to the page
-    public func onError(callback: (AMPError -> Void)) -> AMPPage {
-        return ErrorHandlingAMPPage(page: self, errorHandler: callback)
-    }
 
     /// Fork the work queue, the returning page has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
     public func cancelable() -> CancelableAMPPage {
         return CancelableAMPPage(page: self)
-    }
-    
-    /// override default error callback to bubble error up to collection
-    internal func callErrorHandler(error: AMPError) {
-        self.collection.callErrorHandler(error)
     }
     
     /// Callback when page fully loaded

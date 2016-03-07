@@ -9,6 +9,7 @@
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 import Foundation
+import Alamofire
 
 extension AMPPage {
     
@@ -17,12 +18,23 @@ extension AMPPage {
     /// - parameter identifier: identifier of child page
     /// - parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
     /// - returns: self, to be able to chain more actions to the page
-    public func child(identifier: String, callback: (AMPPage -> Void)) -> AMPPage {
-        self.collection.page(identifier) { page in
+    public func child(identifier: String, callback: (Result<AMPPage, AMPError> -> Void)) -> AMPPage {
+        self.collection.page(identifier) { result in
+            guard case .Success(let page) = result else {
+                if case .Failure(let error) = result
+                {
+                    callback(.Failure(error))
+                } else {
+                    callback(.Failure(AMPError.DidFail))
+                }
+                
+                return
+            }
+            
             if page.parent == self.identifier {
-                callback(page)
+                callback(.Success(page))
             } else {
-                self.callErrorHandler(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+                callback(.Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
             }
         }
         

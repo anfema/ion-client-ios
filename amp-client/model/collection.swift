@@ -47,7 +47,7 @@ public class AMPCollection {
     private var useCache = true
     
     /// block to call on completion
-    private var completionBlock: ((collection: AMPCollection, completed: Bool) -> Void)?
+    private var completionBlock: ((collection: Result<AMPCollection, AMPError>, completed: Bool) -> Void)?
     
     /// archive download url
     internal var archiveURL:String!
@@ -75,13 +75,26 @@ public class AMPCollection {
     /// - parameter locale: locale code to fetch
     /// - parameter useCache: set to false to force a refresh
     /// - parameter callback: block to call when collection is fully loaded
-    init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)?) {
+    init(identifier: String, locale: String, useCache: Bool, callback:(Result<AMPCollection, AMPError> -> Void)?) {
         self.locale = locale
         self.useCache = useCache
         self.identifier = identifier
         
         self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
-       
+        
+        func performCallback(result: Result<AMPCollection, AMPError>) {
+            guard let callback = callback else {
+                return
+            }
+            
+            dispatch_async(AMP.config.responseQueue) {
+                callback(result)
+                dispatch_barrier_async(self.workQueue) {
+                    self.checkCompleted()
+                }
+            }
+        }
+        
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
             self.parentLock.lock()
@@ -89,19 +102,11 @@ public class AMPCollection {
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    self.callErrorHandler(error)
+                    performCallback(.Failure(error))
                     self.hasFailed = true
                 } else {
                     AMP.collectionCache[identifier] = self
-                    
-                    if let cb = callback {
-                        dispatch_async(AMP.config.responseQueue) {
-                            cb(self)
-                            dispatch_barrier_async(self.workQueue) {
-                                self.checkCompleted()
-                            }
-                        }
-                    }
+                    performCallback(.Success(self))
                 }
                 dispatch_semaphore_signal(semaphore)
             }
@@ -117,7 +122,7 @@ public class AMPCollection {
     /// - parameter identifier: page identifier
     /// - parameter callback: the callback to call when the page becomes available
     /// - returns: self, to be able to chain more actions to the collection
-    public func page(identifier: String, callback:(AMPPage -> Void)) -> AMPCollection {
+    public func page(identifier: String, callback:(Result<AMPPage, AMPError> -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -130,7 +135,7 @@ public class AMPCollection {
                     }
                     self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: false, parent:meta.parent) { page in
                         page.position = meta.position
-                        callback(page)
+                        callback(.Success(page))
                         page.onCompletion { _,_ in
                             self.checkCompleted()
                         }
@@ -158,7 +163,7 @@ public class AMPCollection {
                         updateBlock()
                     } else {
                         dispatch_async(AMP.config.responseQueue) {
-                            callback(page)
+                            callback(.Success(page))
                             self.checkCompleted()
                         }
                     }
@@ -171,7 +176,7 @@ public class AMPCollection {
                             updateBlock()
                         } else {
                             dispatch_async(AMP.config.responseQueue) {
-                                callback(page)
+                                callback(.Success(page))
                                 self.checkCompleted()
                             }
                         }
@@ -179,9 +184,10 @@ public class AMPCollection {
                 }
             } else {
                 guard let meta = self.getPageMetaForPage(identifier) else {
-                    self.callErrorHandler(.PageNotFound(identifier))
+                    callback(.Failure(.PageNotFound(identifier)))
                     return
                 }
+                
                 self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: true, parent:meta.parent) { page in
                     page.position = meta.position
                     
@@ -266,7 +272,7 @@ public class AMPCollection {
     /// Enumerate pages
     ///
     /// - parameter callback: block to call for each page
-    public func pages(callback: (AMPPage -> Void)) -> AMPCollection {
+    public func pages(callback: (Result<AMPPage, AMPError> -> Void)) -> AMPCollection {
         // append page listing to work queue
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -275,19 +281,11 @@ public class AMPCollection {
             
             // only pages where no parent is set will be returned (top level)
             for meta in self.pageMeta where meta.parent == nil {
-                self.page(meta.identifier, callback:callback)
+                self.page(meta.identifier, callback: callback)
             }
         }
         
         return self
-    }
-    
-    /// Error handler to chain to the collection
-    ///
-    /// - parameter callback: the block to call in case of an error
-    /// - returns: self, to be able to chain more actions to the collection
-    public func onError(callback: (AMPError -> Void)) -> AMPCollection {
-        return ErrorHandlingAMPCollection(collection: self, errorHandler: callback)
     }
 
     /// Fork the work queue, the returning collection has to be finished or canceled, else you risk a memory leak
@@ -299,24 +297,22 @@ public class AMPCollection {
 
     // MARK: - Internal
     
-    /// override default error callback to bubble error up to AMP object
-    internal func callErrorHandler(error: AMPError) {
-        AMP.callError(self.identifier, error: error)
-    }
     
     /// Callback when collection fully loaded
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func waitUntilReady(callback: (AMPCollection -> Void)) -> AMPCollection {
+    public func waitUntilReady(callback: (Result<AMPCollection, AMPError> -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
+                callback(.Failure(AMPError.DidFail))
                 return
             }
             dispatch_async(AMP.config.responseQueue) {
-                callback(self)
+                callback(.Success(self))
             }
         }
+        
         return self
     }
 
@@ -327,10 +323,11 @@ public class AMPCollection {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: ((collection: AMPCollection, completed: Bool) -> Void)) -> AMPCollection {
+    public func onCompletion(callback: ((collection: Result<AMPCollection, AMPError>, completed: Bool) -> Void)) -> AMPCollection {
         dispatch_barrier_async(self.workQueue) {
             self.completionBlock = callback
         }
+        
         return self
     }
     
@@ -349,7 +346,7 @@ public class AMPCollection {
             if let completionBlock = self.completionBlock where completed == true {
                 self.completionBlock = nil
                 dispatch_async(AMP.config.responseQueue) {
-                    completionBlock(collection: self, completed: !self.hasFailed)
+                    completionBlock(collection: .Success(self), completed: !self.hasFailed)
                 }
             }
         }
@@ -454,37 +451,8 @@ public class AMPCollection {
             callback(nil)
         }
     }
- }
-
-
-
-class ErrorHandlingAMPCollection: AMPCollection {
-    private var errorHandler: (AMPError -> Void)
-    
-    init(collection: AMPCollection, errorHandler: (AMPError -> Void)) {
-        self.errorHandler = errorHandler
-        super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
-        
-        // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
-        dispatch_barrier_async(self.workQueue) {
-            collection.parentLock.lock()
-            self.identifier = collection.identifier
-            self.locale = collection.locale
-            self.defaultLocale = collection.defaultLocale
-            self.lastUpdate = collection.lastUpdate
-            self.pageMeta = collection.pageMeta
-            self.hasFailed = collection.hasFailed
-            collection.parentLock.unlock()
-            self.checkCompleted()
-        }
-
-    }
-    
-    /// override default error callback to bubble error up to AMP object
-    override internal func callErrorHandler(error: AMPError) {
-       errorHandler(error)
-    }
 }
+
 
 public class CancelableAMPCollection: AMPCollection {
     
