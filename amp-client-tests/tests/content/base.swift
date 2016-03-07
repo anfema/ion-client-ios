@@ -25,8 +25,14 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchSync() {
         let expectation = self.expectationWithDescription("testOutletFetchSync")
         
-        AMP.collection("test").page("page_001"){ page in
-            if let _ = page.outlet("text") {
+        AMP.collection("test").page("page_001"){ result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case .Success = page.outlet("text") {
                 // all ok
             } else {
                 XCTFail("outlet for name 'text' returned nil")
@@ -39,8 +45,12 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("text") { text in
-            XCTAssertNotNil(text)
+        AMP.collection("test").page("page_001").outlet("text") { result in
+            guard case .Success = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
@@ -49,14 +59,17 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchFail() {
         let expectation = self.expectationWithDescription("testOutletFetchFail")
         
-        AMP.collection("test").page("page_001").onError() { error in
-            if case .OutletNotFound(let name) = error {
-                XCTAssertEqual(name, "UnknownOutlet")
-            } else {
-                XCTFail()
+        AMP.collection("test").page("page_001").outlet("UnknownOutlet") { result in
+            guard case .Success = result else {
+                if case .OutletNotFound(let name) = result.error! {
+                    XCTAssertEqual(name, "UnknownOutlet")
+                } else {
+                    XCTFail()
+                }
+                expectation.fulfill()
+                return
             }
-            expectation.fulfill()
-        }.outlet("UnknownOutlet") { text in
+
             XCTFail()
             expectation.fulfill()
         }
@@ -76,7 +89,13 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayValues() {
         for i in 0..<32 {
             let expectation = self.expectationWithDescription("testOutletArrayValues")
-            AMP.collection("test").page("page_002").color("colorarray", position: i) { color in
+            AMP.collection("test").page("page_002").color("colorarray", position: i) { result in
+                guard case .Success(let color) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 var r = CGFloat(0)
                 var g = CGFloat(0)
                 var b = CGFloat(0)

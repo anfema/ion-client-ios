@@ -26,7 +26,13 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageFetchSync")
         AMP.resetMemCache()
         
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             let page = collection.page("page_001")
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
@@ -40,7 +46,13 @@ class pageTests: LoggedInXCTestCase {
         let expectation1 = self.expectationWithDescription("testPagePositionSync 1")
         let expectation2 = self.expectationWithDescription("testPagePositionSync 2")
         
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation1.fulfill()
+                return
+            }
+
             let page = collection.page("page_001")
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_001")
@@ -48,7 +60,13 @@ class pageTests: LoggedInXCTestCase {
             expectation1.fulfill()
         }
 
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation2.fulfill()
+                return
+            }
+
             let page = collection.page("page_002")
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "page_002")
@@ -62,11 +80,13 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchAsync() {
         let expectation = self.expectationWithDescription("testPageFetchAsync")
         
-        AMP.collection("test").onError() { error in
-            XCTFail()
-            expectation.fulfill()
-        }.page("page_001") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "page_001")
             XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
@@ -79,15 +99,25 @@ class pageTests: LoggedInXCTestCase {
         let expectation1 = self.expectationWithDescription("testPagePositionAync 1")
         let expectation2 = self.expectationWithDescription("testPagePositionAync 2")
         
-        AMP.collection("test").page("page_001") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation1.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "page_001")
             XCTAssert(page.position == 0)
             expectation1.fulfill()
         }
         
-        AMP.collection("test").page("page_002") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("page_002") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation2.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "page_002")
             XCTAssert(page.position == 1)
             expectation2.fulfill()
@@ -99,14 +129,17 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchFail() {
         let expectation = self.expectationWithDescription("testPageFetchFail")
         
-        AMP.collection("test").onError() { error in
-            if case .PageNotFound(let name) = error {
-                XCTAssertEqual(name, "unknown_page")
-            } else {
-                XCTFail()
+        AMP.collection("test").page("unknown_page") { result in
+            guard case .Success = result else {
+                if case .PageNotFound(let name) = result.error! {
+                    XCTAssertEqual(name, "unknown_page")
+                } else {
+                    XCTFail()
+                }
+                expectation.fulfill()
+                return
             }
-            expectation.fulfill()
-        }.page("unknown_page") { page in
+
             XCTFail()
             expectation.fulfill()
         }
@@ -116,8 +149,13 @@ class pageTests: LoggedInXCTestCase {
     func testPageParentAsync() {
         let expectation = self.expectationWithDescription("testPageParentAsync")
         
-        AMP.collection("test").page("subpage_001") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("subpage_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
             XCTAssert(page.layout == "layout-001")
@@ -138,8 +176,13 @@ class pageTests: LoggedInXCTestCase {
 
     func testPageParent() {
         let expectation = self.expectationWithDescription("testPageParent")
-        AMP.collection("test").page("subpage_001") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("subpage_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
             XCTAssert(page.layout == "layout-001")
@@ -151,8 +194,14 @@ class pageTests: LoggedInXCTestCase {
     func testPageChild() {
         let expectation = self.expectationWithDescription("testPageChild")
         
-        AMP.collection("test").page("page_002") { page in
-            guard let child = page.child("subpage_001") else {
+        AMP.collection("test").page("page_002") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            guard case .Success(let child) = page.child("subpage_001") else {
                 XCTFail("Child not found")
                 expectation.fulfill()
                 return
@@ -170,11 +219,13 @@ class pageTests: LoggedInXCTestCase {
     func testPageChildAsync() {
         let expectation = self.expectationWithDescription("testPageChildAsync")
         
-        AMP.collection("test").page("page_002").onError() { error in
-            print(error)
-            XCTFail()
-            expectation.fulfill()
-        }.child("subpage_001") { page in
+        AMP.collection("test").page("page_002").child("subpage_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page)
             XCTAssert(page.identifier == "subpage_001")
             XCTAssert(page.parent == "page_002")
@@ -187,24 +238,25 @@ class pageTests: LoggedInXCTestCase {
 
     func testPageChildFail() {
         let expectation = self.expectationWithDescription("testPageChildFail")
-        
-        AMP.config.errorHandler = { (collection, error) in
-            if case .InvalidPageHierarchy(let parent, let child) = error {
-                XCTAssert(parent == "page_002")
-                XCTAssert(child == "page_001")
-            } else {
-                XCTFail()
+
+        AMP.collection("test").page("page_002").child("page_001") { result in
+            guard case .Success = result else {
+                if case .InvalidPageHierarchy(let parent, let child) = result.error! {
+                    XCTAssert(parent == "page_002")
+                    XCTAssert(child == "page_001")
+                } else {
+                    XCTFail()
+                }
+
+                expectation.fulfill()
+                return
             }
-            expectation.fulfill()
-        }
-        
-        AMP.collection("test").page("page_002").child("page_001") { page in
+
             XCTFail()
             expectation.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
-        AMP.config.resetErrorHandler()
     }
     
 //    func testPageEnumeration() {
@@ -229,7 +281,13 @@ class pageTests: LoggedInXCTestCase {
     func testSubPageEnumeration() {
         let expectation = self.expectationWithDescription("testSubPageEnumeration")
         
-        AMP.collection("test").page("page_002").children { page in
+        AMP.collection("test").page("page_002").children { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(page.identifier == "subpage_001")
             expectation.fulfill()
         }
@@ -254,8 +312,12 @@ class pageTests: LoggedInXCTestCase {
     func testOutletExists() {
         let expectation = self.expectationWithDescription("testOutletExists")
         
-        AMP.collection("test").page("page_001") { page in
-            XCTAssertNotNil(page)
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             XCTAssert(page.outletExists("text") == true)
             XCTAssert(page.outletExists("Unknown_Outlet") == false)
             expectation.fulfill()
@@ -292,12 +354,24 @@ class pageTests: LoggedInXCTestCase {
         
         let expectation = self.expectationWithDescription("testCancelableCollection")
         
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             // now this one collection is in the cache and no page
             XCTAssert(AMP.collectionCache.count == 1)
             XCTAssert(collection.pageCache.count == 0)
             
-            collection.page("page_001") { page in
+            collection.page("page_001") { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 // now we have one page
                 XCTAssert(collection.pageCache.count == 1)
             
@@ -347,7 +421,13 @@ class pageTests: LoggedInXCTestCase {
     func testNumberOfContentsForOutletSync() {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletSync")
         
-        AMP.collection("test").page("page_001"){ page in
+        AMP.collection("test").page("page_001"){ result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page)
             XCTAssertEqual(page.numberOfContentsForOutlet("text"), 1)
             

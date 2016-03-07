@@ -25,9 +25,21 @@ class autoCacheTests: LoggedInXCTestCase {
     
     func testCollectionFetchNoTimeout() {
         let expectation = self.expectationWithDescription("testCollectionFetchNoTimeout")
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(collection.lastUpdate)
-            AMP.collection("test") { collection2 in
+            AMP.collection("test") { result in
+                guard case .Success(let collection2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssert(collection.lastUpdate == collection2.lastUpdate)
                 expectation.fulfill()
             }
@@ -39,10 +51,22 @@ class autoCacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionFetchWithTimeout")
         AMP.config.cacheTimeout = 1
         AMP.config.lastOnlineUpdate = [String:NSDate]()
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(collection.lastUpdate)
             sleep(2)
-            AMP.collection("test") { collection2 in
+            AMP.collection("test") { result in
+                guard case .Success(let collection2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssert(collection.lastUpdate != collection2.lastUpdate)
                 expectation.fulfill()
             }
@@ -84,7 +108,13 @@ class autoCacheTests: LoggedInXCTestCase {
 
         
         // check page cache content
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation2.fulfill()
+                return
+            }
+
             XCTAssert(page.layout == "layout-001")
             expectation2.fulfill()
         }
@@ -105,7 +135,13 @@ class autoCacheTests: LoggedInXCTestCase {
         }
 
         // check if page has updated
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation3.fulfill()
+                return
+            }
+
             XCTAssert(page.layout == "new-layout-001")
             expectation3.fulfill()
         }

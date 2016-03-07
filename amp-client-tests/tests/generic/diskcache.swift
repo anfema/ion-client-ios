@@ -26,10 +26,22 @@ class diskcacheTests: LoggedInXCTestCase {
     func testCollectionDiskCache() {
         let expectation = self.expectationWithDescription("testCollectionDiskCache")
         AMP.resetMemCache()
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(collection.lastUpdate)
             AMP.resetMemCache()
-            AMP.collection("test") { collection2 in
+            AMP.collection("test") { result in
+                guard case .Success(let collection2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssertNotNil(collection2.lastUpdate)
                 XCTAssert(collection2 !== collection)
                 XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedSame)
@@ -41,11 +53,23 @@ class diskcacheTests: LoggedInXCTestCase {
 
     func testCollectionDiskCacheClean() {
         let expectation = self.expectationWithDescription("testCollectionDiskCacheClean")
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(collection.lastUpdate)
             AMP.resetMemCache()
             AMP.resetDiskCache()
-            AMP.collection("test") { collection2 in
+            AMP.collection("test") { result in
+                guard case .Success(let collection2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssert(collection2 !== collection)
                 XCTAssert(collection2 == collection)
                 XCTAssertNotNil(collection2.lastUpdate)
@@ -58,10 +82,22 @@ class diskcacheTests: LoggedInXCTestCase {
 
     func testPageDiskCache() {
         let expectation = self.expectationWithDescription("testPageDiskCache")
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page.lastUpdate)
             AMP.resetMemCache()
-            AMP.collection("test").page("page_001") { page2 in
+            AMP.collection("test").page("page_001") { result in
+                guard case .Success(let page2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssertNotNil(page2.lastUpdate)
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
@@ -74,11 +110,23 @@ class diskcacheTests: LoggedInXCTestCase {
     
     func testPageDiskCacheClean() {
         let expectation = self.expectationWithDescription("testPageDiskCacheClean")
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page.lastUpdate)
             AMP.resetMemCache()
             AMP.resetDiskCache()
-            AMP.collection("test").page("page_001") { page2 in
+            AMP.collection("test").page("page_001") { result in
+                guard case .Success(let page2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
@@ -91,11 +139,23 @@ class diskcacheTests: LoggedInXCTestCase {
 
     func testPageDiskCacheLocaleClean() {
         let expectation = self.expectationWithDescription("testPageDiskCacheLocaleClean")
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page.lastUpdate)
             AMP.resetMemCache()
             AMP.resetDiskCache(locale: page.locale)
-            AMP.collection("test").page("page_001") { page2 in
+            AMP.collection("test").page("page_001") { result in
+                guard case .Success(let page2) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
@@ -110,9 +170,21 @@ class diskcacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesMiss")
         AMP.resetMemCache()
         AMP.resetDiskCache()
-        AMP.collection("test").page("page_001") { page in
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(page.lastUpdate)
-            if case let outlet as AMPImageContent = page.outlet("image") {
+            guard case .Success(let po) = page.outlet("image") else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            if case let outlet as AMPImageContent = po {
                 let result = AMPRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                 XCTAssertNotNil(result)
                 if case .Success(let filename) = result {
@@ -133,11 +205,23 @@ class diskcacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesHit")
         AMP.resetMemCache()
         AMP.resetDiskCache()
-        AMP.collection("test").page("page_001").image("image") { image in
+        AMP.collection("test").page("page_001").image("image") { result in
             XCTAssertNotNil(image)
             
-            AMP.collection("test").page("page_001") { page in
-                if case let outlet as AMPImageContent = page.outlet("image") {
+            AMP.collection("test").page("page_001") { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
+                guard case .Success(let po) = page.outlet("image") else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
+                if case let outlet as AMPImageContent = po {
                     let result = AMPRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
                     if case .Success(let filename) = result {
@@ -159,8 +243,20 @@ class diskcacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesChange")
         AMP.resetMemCache()
         AMP.resetDiskCache()
-        AMP.collection("test").page("page_001") { page in
-            if case let outlet as AMPImageContent = page.outlet("image") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            guard case .Success(let po) = page.outlet("image") else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case let outlet as AMPImageContent = po {
                 outlet.image() { image in
                     XCTAssertNotNil(image)
                     

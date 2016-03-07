@@ -48,8 +48,13 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletTempURL() {
         let expectation = self.expectationWithDescription("testImageOutletTempURL")
         
-        AMP.collection("test").page("page_001").temporaryURL("image") { url in
-            XCTAssertNotNil(url)
+        AMP.collection("test").page("page_001").temporaryURL("image") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(url.absoluteString.containsString("token="))
             expectation.fulfill()
         }

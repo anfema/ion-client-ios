@@ -25,8 +25,13 @@ class memcacheTests: LoggedInXCTestCase {
     func testCollectionMemcache() {
         let expectation = self.expectationWithDescription("testCollectionMemcache")
         
-        AMP.collection("test") { collection in
-            XCTAssertNotNil(collection)
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             let collection2 = AMP.collection("test")
             XCTAssert(collection2 === collection)
             expectation.fulfill()

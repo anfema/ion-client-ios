@@ -26,7 +26,13 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataFetchAsync")
         AMP.resetMemCache()
         
-        AMP.collection("test").metadata("page_001") { metadata in
+        AMP.collection("test").metadata("page_001") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(metadata.identifier == "page_001")
             XCTAssert(metadata.layout == "layout-001")
             XCTAssertNil(metadata.parent)
@@ -40,13 +46,19 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataFetchAsync2")
         AMP.resetMemCache()
         
-        AMP.collection("test").metadata("page_002") { metadata in
-                XCTAssert(metadata.identifier == "page_002")
-                XCTAssert(metadata.layout == "layout-002")
-                XCTAssertNil(metadata.parent)
-                XCTAssertNotNil(metadata["title"])
-                XCTAssert(metadata["title"] == "Donec ullamcorper")
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
                 expectation.fulfill()
+                return
+            }
+
+            XCTAssert(metadata.identifier == "page_002")
+            XCTAssert(metadata.layout == "layout-002")
+            XCTAssertNil(metadata.parent)
+            XCTAssertNotNil(metadata["title"])
+            XCTAssert(metadata["title"] == "Donec ullamcorper")
+            expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
@@ -103,7 +115,13 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataThumbnailAsync() {
         let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
         
-        AMP.collection("test").metadata("page_002") { metadata in
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             metadata.image { image in
                 XCTAssertNotNil(image)
                 let size = CGSize(width: 600, height: 400)
@@ -117,8 +135,13 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetaChildren() {
         let expectation = self.expectationWithDescription("testMetaChildren")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertNotNil(metadata.children)
             if let children = metadata.children {
                 XCTAssert(children.count == 1)
@@ -132,8 +155,13 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testOriginalImage() {
         let expectation = self.expectationWithDescription("testOriginalImage")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertEqual(metadata.originalImageURL, nil)
             expectation.fulfill()
         }
@@ -144,8 +172,13 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptSuccess1() {
         let expectation = self.expectationWithDescription("testSubscriptSuccess1")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssertEqual(metadata["title"], "Donec ullamcorper")
             expectation.fulfill()
         }
@@ -156,8 +189,12 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptSuccess2() {
         let expectation = self.expectationWithDescription("testSubscriptSuccess2")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             
             guard let value = metadata["title", 0] else
             {
@@ -175,8 +212,12 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptFail1() {
         let expectation = self.expectationWithDescription("testSubscriptFail1")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             XCTAssertNil(metadata["doesnotexist"])
             expectation.fulfill()
         }
@@ -187,8 +228,12 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptFail2() {
         let expectation = self.expectationWithDescription("testSubscriptFail2")
         
-        AMP.collection("test").metadata("page_002") { metadata in
-            XCTAssertNotNil(metadata)
+        AMP.collection("test").metadata("page_002") { result in
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             XCTAssertNil(metadata["title", 1])
             expectation.fulfill()
         }

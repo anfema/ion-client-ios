@@ -26,8 +26,14 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchSync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { page in
-            if let value = page.cachedColor("color") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case .Success(let value) = page.cachedColor("color") {
                 var r:CGFloat = 0.0
                 var g:CGFloat = 0.0
                 var b:CGFloat = 0.0
@@ -49,8 +55,14 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchSyncFail() {
         let expectation = self.expectationWithDescription("testColorOutletFetchSyncFail")
         
-        AMP.collection("test").page("page_001") { page in
-            if let value = page.cachedColor("missing_color") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case .Success(let value) = page.cachedColor("missing_color") {
                 XCTFail("color content 'Color' returned \(value)")
             } else {
                 expectation.fulfill()
@@ -64,7 +76,13 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").color("color") { value in
+        AMP.collection("test").page("page_001").color("color") { result in
+            guard case .Success(let value) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             var r:CGFloat = 0.0
             var g:CGFloat = 0.0
             var b:CGFloat = 0.0
@@ -84,18 +102,18 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchAsyncFail() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsyncFail")
         
-        AMP.collection("test").page("page_001").onError({ (e) -> Void in
-            
-            guard case .OutletNotFound(let error) = e else
-            {
-                XCTFail("wrong error: \(e). expected OutletNotFound")
+        AMP.collection("test").page("page_001").color("missing_color") { result in
+            guard case .Success = result else {
+                if case .OutletNotFound = result.error! {
+                    // ok
+                } else {
+                    XCTFail()
+                }
+                expectation.fulfill()
                 return
             }
             
-            XCTAssertNotNil(error)
             expectation.fulfill()
-        }).color("missing_color") { (value) -> Void in
-            XCTFail("color content 'Color' returned \(value)")
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)

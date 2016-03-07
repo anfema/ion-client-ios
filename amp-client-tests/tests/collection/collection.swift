@@ -273,21 +273,18 @@ class collectionTests: LoggedInXCTestCase {
     func testWaitUntilReady2() {
         let expectation = self.expectationWithDescription("testWaitUntilReady2")
         
-        AMP.config.errorHandler = { (str, error) in
-            AMP.config.resetErrorHandler()
-            
-            guard case AMPError.CollectionNotFound(let e) = error else
-            {
-                XCTFail("wrong error")
+        AMP.collection("gnarf").waitUntilReady{ result in
+            guard case .Success(let collection) = result else {
+                if case .CollectionNotFound = result.error! {
+                    // ok
+                } else {
+                    print(result.error)
+                    XCTFail()
+                }
                 expectation.fulfill()
                 return
             }
-            
-            XCTAssertNotNil(e)
-            expectation.fulfill()
-        }
-        
-        AMP.collection("gnarf").waitUntilReady{ collection in
+
             XCTFail("expected to fail. returned \(collection) instead")
         }
         

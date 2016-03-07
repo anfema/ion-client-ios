@@ -25,8 +25,14 @@ class textContentTests: LoggedInXCTestCase {
     func testTextOutletFetchSync() {
         let expectation = self.expectationWithDescription("testTextOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { page in
-            if let text = page.text("text") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case .Success(let text) = page.text("text") {
                 XCTAssert(text.hasPrefix("Donec ullamcorper nulla non"))
             } else {
                 XCTFail("text content 'text' returned nil")
@@ -39,7 +45,13 @@ class textContentTests: LoggedInXCTestCase {
     func testTextOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testTextOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").text("text") { text in
+        AMP.collection("test").page("page_001").text("text") { result in
+            guard case .Success(let text) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(text.hasPrefix("Donec ullamcorper nulla non"))
             expectation.fulfill()
         }
@@ -51,8 +63,20 @@ class textContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testTextOutletHTMLAsync")
         let outletName = "text"
         
-        AMP.collection("test").page("page_001").text(outletName) { plainText in
-            AMP.collection("test").page("page_001").html(outletName) { text in
+        AMP.collection("test").page("page_001").text(outletName) { result in
+            guard case .Success(let plainText) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            AMP.collection("test").page("page_001").html(outletName) { result in
+                guard case .Success(let text) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 let prefix = "<div class=\"ampcontent ampcontent__\(outletName)\">"
                 let suffix = "</div>"
                 
@@ -78,10 +102,15 @@ class textContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testTextOutletHTMLSync")
         let outletName = "text"
         
-        AMP.collection("test").page("page_001").text(outletName) { plainText in
+        AMP.collection("test").page("page_001").text(outletName) { result in
+            guard case .Success(let plainText) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             AMP.collection("test").page("page_001").waitUntilReady { page in
-                guard let text = page.html(outletName, position: 0) else
-                {
+                guard case .Success(let text) = page.html(outletName, position: 0) else {
                     XCTFail()
                     return
                 }
@@ -111,10 +140,20 @@ class textContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testTextOutletAttributedStringAsync")
         let outletName = "text"
         
-        AMP.collection("test").page("page_001").text(outletName) { plainText in
-            AMP.collection("test").page("page_001").attributedString(outletName) { text in
-                
-                XCTAssertNotNil(text)
+        AMP.collection("test").page("page_001").text(outletName) { result in
+            guard case .Success(let plainText) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            AMP.collection("test").page("page_001").attributedString(outletName) { result in
+                guard case .Success(let text) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 XCTAssertEqual(plainText.characters.count, text.string.characters.count)
                 
                 expectation.fulfill()
@@ -129,10 +168,15 @@ class textContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testTextOutletAttributedStringSync")
         let outletName = "text"
         
-        AMP.collection("test").page("page_001").text(outletName) { plainText in
+        AMP.collection("test").page("page_001").text(outletName) { result in
+            guard case .Success(let plainText) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             AMP.collection("test").page("page_001").waitUntilReady { page in
-                guard let text = page.attributedString(outletName, position: 0) else
-                {
+                guard case .Success(let text) = page.attributedString(outletName, position: 0) else {
                     XCTFail()
                     return
                 }
