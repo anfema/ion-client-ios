@@ -28,7 +28,7 @@ internal extension AMP {
             dispatch_barrier_async(c.workQueue) {
                 let sema = dispatch_semaphore_create(0)
                 
-                AMPRequest.fetchBinary(ftsURL, queryParameters: nil, cached: .Ignore, checksumMethod:"null", checksum: "") { result in
+                AMPRequest.fetchBinary(ftsURL, queryParameters: nil, cached: AMP.config.cacheBehaviour(.Ignore), checksumMethod:"null", checksum: "") { result in
                     defer {
                         dispatch_semaphore_signal(sema)
                     }

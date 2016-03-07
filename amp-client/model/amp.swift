@@ -80,10 +80,11 @@ public class AMP {
         }
         
         // try an online update
+        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
         let newCollection = AMPCollection(
             identifier: identifier,
             locale: AMP.config.locale,
-            useCache: (self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer
+            useCache: cache
         ) { collection in
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return
@@ -127,7 +128,8 @@ public class AMP {
         }
         
         // try an online update
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: (self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer) { collection in
+        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { collection in
             callback(collection)
             
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
