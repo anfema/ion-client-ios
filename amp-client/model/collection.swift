@@ -27,6 +27,9 @@ public class AMPCollection {
     
     /// last update date
     public var lastUpdate:NSDate?
+    
+    /// last change date on server
+    public var lastChanged:NSDate?
 
     /// this instance produced an error while fetching from net
     public var hasFailed: Bool = false
@@ -44,7 +47,7 @@ public class AMPCollection {
     internal var workQueue: dispatch_queue_t
 
     /// set to false to avoid using the cache (refreshes, etc.)
-    private var useCache = true
+    private var useCache = AMPCacheBehaviour.Prefer
     
     /// block to call on completion
     private var completionBlock: ((collection: AMPCollection, completed: Bool) -> Void)?
@@ -75,7 +78,7 @@ public class AMPCollection {
     /// - parameter locale: locale code to fetch
     /// - parameter useCache: set to false to force a refresh
     /// - parameter callback: block to call when collection is fully loaded
-    init(identifier: String, locale: String, useCache: Bool, callback:(AMPCollection -> Void)?) {
+    init(identifier: String, locale: String, useCache: AMPCacheBehaviour, callback:(AMPCollection -> Void)?) {
         self.locale = locale
         self.useCache = useCache
         self.identifier = identifier
@@ -89,8 +92,14 @@ public class AMPCollection {
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    self.callErrorHandler(error)
                     self.hasFailed = true
+                    if let cb = callback where useCache == .Force {
+                        dispatch_async(AMP.config.responseQueue) {
+                            cb(self)
+                        }
+                    } else {
+                        self.callErrorHandler(error)
+                    }
                 } else {
                     AMP.collectionCache[identifier] = self
                     
@@ -357,7 +366,7 @@ public class AMPCollection {
     
     private init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
         self.locale = locale
-        self.useCache = true
+        self.useCache = .Prefer
         self.identifier = identifier
         self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
@@ -417,7 +426,15 @@ public class AMPCollection {
                 if case .JSONString(let ftsURL) = rawFTSdb {
                     self.ftsDownloadURL = ftsURL
                 }
-            
+                
+                // extract last change date from collection, default to last update when not available
+                self.lastChanged = self.lastUpdate
+                if let rawLastChanged = dict["last_changed"] {
+                    if case .JSONString(let lastChanged) = rawLastChanged {
+                        self.lastChanged = NSDate(isoDateString: lastChanged)
+                    }
+                }
+                            
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
@@ -448,7 +465,7 @@ public class AMPCollection {
             }
             
             // revert to using cache
-            self.useCache = true
+            self.useCache = .Prefer
             
             // all finished, call callback
             callback(nil)

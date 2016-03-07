@@ -130,7 +130,7 @@ extension AMPCollection {
             })
             return result
         }
-        return nil
+//        return nil
     }
 
     /// Fetch a parent->child path

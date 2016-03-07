@@ -148,7 +148,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     ///
     /// - parameter callback: block to call when the download has finished, will not be called if there was an error
     public func cachedURL(callback: (NSURL -> Void)) {
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: true,
+        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: .Prefer,
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return

@@ -91,7 +91,7 @@ extension CanLoadImage {
         guard let url = self.imageURL else {
             return
         }
-        AMPRequest.fetchBinary(url.URLString, queryParameters: nil, cached: true,
+        AMPRequest.fetchBinary(url.URLString, queryParameters: nil, cached: .Prefer,
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
                 guard case .Success(let filename) = result else {
                     return
@@ -115,7 +115,7 @@ extension CanLoadImage {
         guard let url = self.originalImageURL else {
             return
         }
-        AMPRequest.fetchBinary(url.URLString, queryParameters: nil, cached: true,
+        AMPRequest.fetchBinary(url.URLString, queryParameters: nil, cached: .Prefer,
             checksumMethod:self.originalChecksumMethod, checksum: self.originalChecksum) { result in
                 guard case .Success(let filename) = result else {
                     return
