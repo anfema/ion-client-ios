@@ -25,8 +25,13 @@ class numberContentTests: LoggedInXCTestCase {
     func testNumberOutletFetchSync() {
         let expectation = self.expectationWithDescription("testNumberOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { page in
-            if let value = page.number("number") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                return
+            }
+
+            if case .Success(let value) = page.number("number") {
                 XCTAssertEqual(value, 123456.0)
             } else {
                 XCTFail("number content 'Number' returned nil")
@@ -39,7 +44,12 @@ class numberContentTests: LoggedInXCTestCase {
     func testNumberOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testNumberOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").number("number") { value in
+        AMP.collection("test").page("page_001").number("number") { result in
+            guard case .Success(let value) = result else {
+                XCTFail()
+                return
+            }
+
             XCTAssertEqual(value, 123456.0)
             expectation.fulfill()
         }

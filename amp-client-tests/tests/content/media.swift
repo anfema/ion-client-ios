@@ -26,8 +26,20 @@ class mediaContentTests: LoggedInXCTestCase {
     func testMediaOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testMediaOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("media") { outlet in
-            AMP.collection("test").page("page_001").mediaData("media") { data in
+        AMP.collection("test").page("page_001").outlet("media") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            AMP.collection("test").page("page_001").mediaData("media") { result in
+                guard case .Success(let data) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 guard case let file as AMPMediaContent = outlet else {
                         XCTFail("Media outlet not found or of wrong type \(outlet)")
                         expectation.fulfill()
@@ -44,7 +56,13 @@ class mediaContentTests: LoggedInXCTestCase {
     func testMediaOutletImageFetchAsync() {
         let expectation = self.expectationWithDescription("testMediaOutletImageFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("media") { outlet in
+        AMP.collection("test").page("page_001").outlet("media") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             guard case let mediaOutlet as AMPMediaContent = outlet else {
                 XCTFail()
                 expectation.fulfill()
@@ -75,9 +93,18 @@ class mediaContentTests: LoggedInXCTestCase {
     func testMediaOutletURLFetch() {
         let expectation = self.expectationWithDescription("testMediaOutletURLFetch")
         
-        AMP.collection("test").page("page_001") { page in
-            let mediaURL = page.mediaURL("media")
-            XCTAssertNotNil(mediaURL)
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            if case .Success = page.mediaURL("media") {
+                // ok
+            } else {
+                XCTFail()
+            }
             expectation.fulfill()
         }
         
@@ -87,8 +114,13 @@ class mediaContentTests: LoggedInXCTestCase {
     func testMediaOutletTempURL() {
         let expectation = self.expectationWithDescription("testMediaOutletTempURL")
         
-        AMP.collection("test").page("page_001").temporaryURL("media") { url in
-            XCTAssertNotNil(url)
+        AMP.collection("test").page("page_001").temporaryURL("media") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(url.absoluteString.containsString("token="))
             expectation.fulfill()
         }

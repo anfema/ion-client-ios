@@ -30,7 +30,12 @@ class collectionTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                return
+            }
+
             XCTAssertNotNil(collection)
             XCTAssert(collection.identifier == "test")
             expectation.fulfill()
@@ -43,23 +48,22 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetchError() {
         let expectation = self.expectationWithDescription("testCollectionFetchError")
         
-        AMP.config.errorHandler = { (collectionID, error) in
-            XCTAssertEqual(collectionID, "gnarf")
-            if case .CollectionNotFound(let name) = error {
-                XCTAssertEqual(name, "gnarf")
-            } else {
-                XCTFail()
+        AMP.collection("gnarf") { result in
+            guard case .Success = result else {
+                if case .CollectionNotFound(let name) = result.error! {
+                    XCTAssertEqual(name, "gnarf")
+                } else {
+                    XCTFail()
+                }
+                expectation.fulfill()
+                return
             }
-            expectation.fulfill()
-        }
-        
-        AMP.collection("gnarf") { collection in
+
             XCTFail()
             expectation.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
-        AMP.config.resetErrorHandler()
     }
 
     func testCollectionFetchNotAllowed() {
@@ -69,30 +73,34 @@ class collectionTests: LoggedInXCTestCase {
         
         let expectation = self.expectationWithDescription("testCollectionFetchNotAllowed")
         
-        AMP.config.errorHandler = { (collectionID, error) in
-            XCTAssertEqual(collectionID, "notallowed")
-            if case .NotAuthorized = error {
-                // ok
-            } else {
-                XCTFail()
+        AMP.collection("notallowed") { result in
+            guard case .Success = result else {
+                if case .NotAuthorized = result.error! {
+                    // ok
+                } else {
+                    XCTFail()
+                }
+                expectation.fulfill()
+                return
             }
-            expectation.fulfill()
-        }
-        
-        AMP.collection("notallowed") { collection in
+
             XCTFail()
             expectation.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
-        AMP.config.resetErrorHandler()
     }
 
     func testCollectionMetaPath() {
         let expectation = self.expectationWithDescription("testCollectionMetaPath")
 
-        AMP.collection("test") { collection in
-            XCTAssertNotNil(collection)
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             collection.metaPath("subpage_001") { path in
                 XCTAssert(path.count == 2)
                 if path.count == 2 {
@@ -109,8 +117,13 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionMetaList() {
         let expectation = self.expectationWithDescription("testCollectionMetaPath")
         
-        AMP.collection("test") { collection in
-            XCTAssertNotNil(collection)
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             if let list = collection.metadataList(nil) {
                 XCTAssert(list.count == 2)
                 if list.count == 2 {
@@ -164,7 +177,13 @@ class collectionTests: LoggedInXCTestCase {
         
         let expectation = self.expectationWithDescription("testCancelableCollection")
         
-        AMP.collection("test") { collection in
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             // now this one collection is in the cache
             XCTAssert(AMP.collectionCache.count == 1)
             
@@ -199,9 +218,21 @@ class collectionTests: LoggedInXCTestCase {
         var page1:AMPPage? = nil
         var page2:AMPPage? = nil
 
-        let collection = AMP.collection("test") { collection in
+        let collection = AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             page1 = collection.page("page_001")
-            collection.page("page_002") { page in
+            collection.page("page_002") { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 page2 = page
             }
         }
@@ -269,10 +300,26 @@ class collectionTests: LoggedInXCTestCase {
         
         var pages = 0
         
-        AMP.collection("test") { collection in
-            XCTAssertNotNil(collection)
+        AMP.collection("test") { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             
-            collection.pages({ page in
+            collection.pages { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    pages += 1
+                    
+                    // page_001 and page_002
+                    if pages == 2
+                    {
+                        expectation.fulfill()
+                    }
+                    return
+                }
+
                 XCTAssertNotNil(page)
                 XCTAssert(page.isReady == true)
                 
@@ -283,7 +330,7 @@ class collectionTests: LoggedInXCTestCase {
                 {
                     expectation.fulfill()
                 }
-            })
+            }
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
@@ -293,7 +340,13 @@ class collectionTests: LoggedInXCTestCase {
     func testPageByIndex(){
         let expectation = self.expectationWithDescription("testPageByIndex")
 
-        AMP.collection("test").waitUntilReady() { collection in
+        AMP.collection("test").waitUntilReady() { result in
+            guard case .Success(let collection) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             if let _ = collection.page(-1)
             {
                 XCTFail()

@@ -26,8 +26,13 @@ class connectionContentTests: LoggedInXCTestCase {
     func testConnectionOutletFetchSync() {
         let expectation = self.expectationWithDescription("testConnectionOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { page in
-            if let link = page.link("connection") {
+        AMP.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                return
+            }
+            
+            if case .Success(let link) = page.link("connection") {
                 XCTAssertEqual(link, NSURL(string: "amp://testconnection124"))
             } else {
                 XCTFail("connection content 'Connection' returned nil")
@@ -40,7 +45,12 @@ class connectionContentTests: LoggedInXCTestCase {
     func testConnectionOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testConnectionOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").link("connection") { link in
+        AMP.collection("test").page("page_001").link("connection") { result in
+            guard case .Success(let link) = result else {
+                XCTFail()
+                return
+            }
+
             XCTAssertEqual(link, NSURL(string: "amp://testconnection124"))
             expectation.fulfill()
         }

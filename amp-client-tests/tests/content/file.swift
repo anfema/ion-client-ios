@@ -26,9 +26,20 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("file") { outlet in
+        AMP.collection("test").page("page_001").outlet("file") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
 
-            AMP.collection("test").page("page_001").fileData("file") { data in
+            AMP.collection("test").page("page_001").fileData("file") { result in
+                guard case .Success(let data) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+
                 guard case let file as AMPFileContent = outlet else {
                         XCTFail("File outlet not found or of wrong type \(outlet)")
                         expectation.fulfill()
@@ -49,7 +60,13 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")
 
-        AMP.collection("test").page("page_001").outlet("file") { outlet in
+        AMP.collection("test").page("page_001").outlet("file") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             guard case let img as AMPFileContent = outlet else {
                 XCTFail("File outlet not found or of wrong type \(outlet)")
                 expectation.fulfill()
@@ -72,8 +89,13 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletTempURL() {
         let expectation = self.expectationWithDescription("testFileOutletTempURL")
         
-        AMP.collection("test").page("page_001").temporaryURL("file") { url in
-            XCTAssertNotNil(url)
+        AMP.collection("test").page("page_001").temporaryURL("file") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
             XCTAssert(url.absoluteString.containsString("token="))
             expectation.fulfill()
         }
@@ -101,13 +123,24 @@ class fileContentTests: LoggedInXCTestCase {
                 expectation1.fulfill()
             }
         }
-        AMP.collection("test").page("page_001").outlet("file") { outlet in
+        AMP.collection("test").page("page_001").outlet("file") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation2.fulfill()
+                return
+            }
+
             guard case let file as AMPFileContent = outlet else {
                 XCTFail("File outlet not found or of wrong type \(outlet)")
                 return
             }
-            file.data { data in
-                XCTAssertNotNil(data)
+            file.data { result in
+                guard case .Success(let data) = result else {
+                    XCTFail()
+                    expectation2.fulfill()
+                    return
+                }
+
                 XCTAssert(data.length == file.size)
                 expectation2.fulfill()
             }
