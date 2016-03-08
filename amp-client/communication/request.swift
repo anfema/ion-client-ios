@@ -78,14 +78,10 @@ public class AMPRequest {
             let result = fromCache(cacheName)
             if case .Success(let json) = result {
                 // call callback in correct queue
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Success(json))
-                }
+                responseQueueCallback(callback, parameter: .Success(json))
                 return
             } else if cached == .Force {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Failure(AMPError.ServerUnreachable))
-                }
+                responseQueueCallback(callback, parameter: .Failure(AMPError.ServerUnreachable))
                 return
             }
         }
@@ -105,9 +101,7 @@ public class AMPRequest {
         request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
                 if case .NotAuthorized = error {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(.Failure(error))
-                    }
+                    responseQueueCallback(callback, parameter: .Failure(error))
                     return
                 }
             }
@@ -138,9 +132,7 @@ public class AMPRequest {
                     }
                 }
             } else {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Failure(AMPError.NoData(nil)))
-                }
+                responseQueueCallback(callback, parameter: .Failure(AMPError.NoData(nil)))
             }
         }
         
@@ -161,14 +153,10 @@ public class AMPRequest {
         if cached == .Force || cached == .Prefer {
             let cacheResult = self.fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
             if case .Success = cacheResult {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(cacheResult)
-                }
+                responseQueueCallback(callback, parameter: cacheResult)
                 return
             } else if cached == .Force {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Failure(AMPError.ServerUnreachable))
-                }
+                responseQueueCallback(callback, parameter: .Failure(AMPError.ServerUnreachable))
                 return
             }
         }
@@ -210,16 +198,12 @@ public class AMPRequest {
                 }
                 
                 guard let response = response else {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(.Failure(.ServerUnreachable))
-                    }
+                    responseQueueCallback(callback, parameter: .Failure(.ServerUnreachable))
                     return
                 }
 
                 if response.statusCode == 401 || response.statusCode == 403 {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(.Failure(.NotAuthorized))
-                    }
+                    responseQueueCallback(callback, parameter: .Failure(.NotAuthorized))
                     return
                 }
 
@@ -251,9 +235,7 @@ public class AMPRequest {
                     try NSFileManager.defaultManager().moveItemAtPath(self.cacheName(url) + ".tmp", toPath: self.cacheName(url))
                 } catch {
                     // ok moving failed
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(Result.Failure(AMPError.NoData(error)))
-                    }
+                    responseQueueCallback(callback, parameter: Result.Failure(AMPError.NoData(error)))
                     return
                 }
                 
@@ -275,9 +257,7 @@ public class AMPRequest {
                 self.saveToCache(request!, checksumMethod: ckSumMethod, checksum: ckSum)
                 
                 // call callback in correct queue
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(Result.Success(self.cacheName(url)))
-                }
+                responseQueueCallback(callback, parameter: Result.Success(self.cacheName(url)))
             }
         }
         
@@ -318,9 +298,7 @@ public class AMPRequest {
         let request = AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
-            dispatch_async(AMP.config.responseQueue) {
-                callback(response.result)
-            }
+            responseQueueCallback(callback, parameter: response.result)
         }
         request.resume()
     }

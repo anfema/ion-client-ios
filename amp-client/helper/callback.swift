@@ -14,7 +14,7 @@ import Alamofire
 /// 
 /// - parameter callback:  The callback that will be called.
 /// - parameter parameter: The parameter of the callback.
-func responseQueueCallback <T> (callback: T -> Void, parameter: T) {
+func responseQueueCallback <T, U> (callback: T -> U, parameter: T) {
     dispatch_async(AMP.config.responseQueue) {
         callback(parameter)
     }
@@ -26,7 +26,7 @@ func responseQueueCallback <T> (callback: T -> Void, parameter: T) {
 ///
 /// - parameter callback:  The callback that will be called if not nil.
 /// - parameter parameter: The parameter of the callback.
-func responseQueueCallback <T> (callback: (T -> Void)?, parameter: T) {
+func responseQueueCallback <T, U> (callback: (T -> U)?, parameter: T) {
     guard let callback = callback else {
         return
     }
