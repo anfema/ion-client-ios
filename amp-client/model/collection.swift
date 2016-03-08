@@ -85,19 +85,6 @@ public class AMPCollection {
         
         self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
         
-        func performCallback(result: Result<AMPCollection, AMPError>) {
-            guard let callback = callback else {
-                return
-            }
-            
-            dispatch_async(AMP.config.responseQueue) {
-                callback(result)
-                dispatch_barrier_async(self.workQueue) {
-                    self.checkCompleted()
-                }
-            }
-        }
-        
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
             self.parentLock.lock()
@@ -105,11 +92,25 @@ public class AMPCollection {
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    performCallback(.Failure(error))
+                    if let cb = callback {
+                        dispatch_async(AMP.config.responseQueue) {
+                            cb(.Failure(error))
+                        }
+                    }
+                    
                     self.hasFailed = true
                 } else {
                     AMP.collectionCache[identifier] = self
-                    performCallback(.Success(self))
+                    
+                    if let cb = callback {
+                        dispatch_async(AMP.config.responseQueue) {
+                            cb(.Success(self))
+                            
+                            dispatch_barrier_async(self.workQueue) {
+                                self.checkCompleted()
+                            }
+                        }
+                    }
                 }
                 dispatch_semaphore_signal(semaphore)
             }
