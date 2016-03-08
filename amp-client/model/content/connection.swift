@@ -78,18 +78,18 @@ extension AMPPage {
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPConnectionContent = content {
                 if let url = content.url {
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self

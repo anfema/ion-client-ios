@@ -150,9 +150,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
                     return
             }
             
-            dispatch_async(AMP.config.responseQueue) {
-                callback(NSURL(string: url)!)
-            }
+            responseQueueCallback(callback, parameter: NSURL(string: url)!)
         }
     }
 
@@ -181,7 +179,7 @@ extension AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
@@ -203,7 +201,7 @@ extension AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
@@ -226,7 +224,7 @@ extension AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
     
@@ -247,7 +245,7 @@ extension AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
     

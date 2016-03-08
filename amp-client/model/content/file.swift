@@ -87,11 +87,9 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             }
             do {
                 let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(.Success(data))
-                }
+                responseQueueCallback(callback, parameter: .Success(data))
             } catch {
-                callback(.Failure(.NoData(error)))
+                responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
             }
         }
     }
@@ -113,9 +111,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
                     return
             }
             
-            dispatch_async(AMP.config.responseQueue) {
-                callback(NSURL(string: url)!)
-            }
+            responseQueueCallback(callback, parameter: NSURL(string: url)!)
         }
     }
     
@@ -147,7 +143,7 @@ extension AMPPage {
     public func fileData(name: String, position: Int = 0, callback: (Result<NSData, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             if case let content as AMPFileContent = content {

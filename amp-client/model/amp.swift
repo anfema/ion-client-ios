@@ -45,16 +45,13 @@ public class AMP {
                   case .JSONString(let token) = loginDict["token"]! else {
 
                 self.config.sessionToken = nil
-                dispatch_async(self.config.responseQueue) {
-                    callback(false)
-                }
+                responseQueueCallback(callback, parameter: false)
+                
                 return
             }
             
             self.config.sessionToken = token
-            dispatch_async(self.config.responseQueue) {
-                callback(true)
-            }
+            responseQueueCallback(callback, parameter: true)
         }
     }
     
@@ -117,9 +114,7 @@ public class AMP {
                     self.callError(identifier, error: .CollectionNotFound(identifier))
                 } else {
                     dispatch_async(cachedCollection.workQueue) {
-                        dispatch_async(self.config.responseQueue) {
-                            callback(.Success(cachedCollection))
-                        }
+                        responseQueueCallback(callback, parameter: .Success(cachedCollection))
                     }
                 }
                 return cachedCollection
@@ -133,10 +128,11 @@ public class AMP {
         let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
         let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { result in
             guard case .Success(let collection) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
-            callback(.Success(collection))
+            
+            responseQueueCallback(callback, parameter: .Success(collection))
             
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return

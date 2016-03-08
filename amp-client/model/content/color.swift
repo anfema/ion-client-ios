@@ -114,18 +114,18 @@ extension AMPPage {
     public func color(name: String, position: Int = 0, callback: (Result<NSColor, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
-                    callback(.Success(c))
+                    responseQueueCallback(callback, parameter: .Success(c))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -165,18 +165,18 @@ extension AMPPage {
     public func color(name: String, position: Int = 0, callback: (Result<UIColor, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPColorContent = content {
                 if let c = content.color() {
-                    callback(.Success(c))
+                    responseQueueCallback(callback, parameter: .Success(c))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self

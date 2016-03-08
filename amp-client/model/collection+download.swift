@@ -56,9 +56,7 @@ extension AMPCollection {
     public func download(callback: (Bool -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             guard self.archiveURL != nil else {
-                dispatch_async(AMP.config.responseQueue){
-                    callback(false)
-                }
+                responseQueueCallback(callback, parameter: false)
                 return
             }
 
@@ -77,16 +75,12 @@ extension AMPCollection {
             AMPRequest.fetchBinary(url, queryParameters: q, cached: AMP.config.cacheBehaviour(.Ignore),
                 checksumMethod:"null", checksum: "") { result in
                     guard case .Success(let filename) = result else {
-                        dispatch_async(AMP.config.responseQueue) {
-                            callback(false)
-                        }
+                        responseQueueCallback(callback, parameter: false)
                         return
                     }
                     
-                    if filename == "" {
-                        dispatch_async(AMP.config.responseQueue) {
-                            callback(true)
-                        }
+                    if filename.isEmpty {
+                        responseQueueCallback(callback, parameter: true)
                         return
                     }
 

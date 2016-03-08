@@ -143,7 +143,7 @@ public class AMPCollection {
                             return
                         }
                         page.position = meta.position
-                        callback(.Success(page))
+                        responseQueueCallback(callback, parameter: .Success(page))
                         page.onCompletion { _,_ in
                             self.checkCompleted()
                         }
@@ -192,7 +192,7 @@ public class AMPCollection {
                 }
             } else {
                 guard let meta = self.getPageMetaForPage(identifier) else {
-                    callback(.Failure(.PageNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .Failure(.PageNotFound(identifier)))
                     return
                 }
                 self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
@@ -204,6 +204,7 @@ public class AMPCollection {
                     
                     // recursive call to use update check from "page is caches" path
                     self.page(identifier) { page in
+                        // Fixme: Should this be called in response queue?
                         callback(page)
                     }
                 }
@@ -316,12 +317,11 @@ public class AMPCollection {
     public func waitUntilReady(callback: (Result<AMPCollection, AMPError> -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
-                callback(.Failure(AMPError.DidFail))
+                responseQueueCallback(callback, parameter: .Failure(AMPError.DidFail))
                 return
             }
-            dispatch_async(AMP.config.responseQueue) {
-                callback(.Success(self))
-            }
+            
+            responseQueueCallback(callback, parameter: .Success(self))
         }
         
         return self

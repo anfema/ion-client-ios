@@ -22,9 +22,7 @@ extension AMPCollection {
         // append page count to work queue
         dispatch_async(self.workQueue) {
             if let result = self.pageCount(parent) {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(result)
-                }
+                responseQueueCallback(callback, parameter: result)
             }
         }
         
@@ -52,9 +50,7 @@ extension AMPCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
             let result = self.metadata(identifier)
-            dispatch_async(AMP.config.responseQueue) {
-                callback(result)
-            }
+            responseQueueCallback(callback, parameter: result)
         }
         
         return self
@@ -97,9 +93,7 @@ extension AMPCollection {
     public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {
-            dispatch_async(AMP.config.responseQueue) {
-                callback(self.metadataList(parent) ?? [])
-            }
+            responseQueueCallback(callback, parameter: self.metadataList(parent) ?? [])
         }
         
         return self
@@ -140,9 +134,7 @@ extension AMPCollection {
     public func metaPath(pageIdentifier: String, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
         dispatch_async(self.workQueue) {
             if let result = self.metaPath(pageIdentifier) {
-                dispatch_async(AMP.config.responseQueue) {
-                    callback(result)
-                }
+                responseQueueCallback(callback, parameter: result)
             }
         }
         return self
@@ -184,9 +176,7 @@ extension AMPCollection {
                 return self.page(meta.identifier)
             })
             
-            dispatch_async(AMP.config.responseQueue) {
-                callback(result)
-            }
+            responseQueueCallback(callback, parameter: result)
         }
     }
     
@@ -216,9 +206,7 @@ extension AMPCollection {
             
             let result: [String] = temp.flatMap({ $0.identifier })
             
-            dispatch_async(AMP.config.responseQueue) {
-                callback(result)
-            }
+            responseQueueCallback(callback, parameter: result)
         }
     }
     

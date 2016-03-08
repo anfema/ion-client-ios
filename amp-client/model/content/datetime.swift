@@ -72,18 +72,18 @@ extension AMPPage {
     public func date(name: String, position: Int = 0, callback: (Result<NSDate, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPDateTimeContent = content {
                 if let d = content.date {
-                    callback(.Success(d))
+                    responseQueueCallback(callback, parameter: .Success(d))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
