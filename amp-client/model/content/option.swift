@@ -69,18 +69,18 @@ extension AMPPage {
     public func selectedOption(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPOptionContent = content {
                 if let value = content.value {
-                    callback(.Success(value))
+                    responseQueueCallback(callback, parameter: .Success(value))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
