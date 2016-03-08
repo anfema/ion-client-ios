@@ -10,6 +10,8 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
+import Alamofire
+
 #if os(OSX)
     import AppKit
 #elseif os(iOS)
@@ -175,8 +177,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func image(name: String, position: Int = 0, callback: (Result<UIImage, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else
+            {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPImageContent = content {
                 content.image(callback: callback)
             }
@@ -191,8 +199,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func originalImage(name: String, position: Int = 0, callback: (UIImage -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else
+            {
+                callback(.Failure(result.error!))
+                return
+            }
+            
             if case let content as AMPImageContent = content {
                 content.originalImage(callback)
             }
@@ -208,8 +222,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func image(name: String, position: Int = 0, callback: (Result<NSImage, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else
+            {
+                callback(.Failure(result.error!))
+                return
+            }
+    
             if case let content as AMPImageContent = content {
                 content.image(callback: callback)
             }
@@ -223,8 +243,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func originalImage(name: String, position: Int = 0, callback: (NSImage -> Void)) -> AMPPage {
-        self.outlet(name, position: position) { content in
+    public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, AMPError> -> Void)) -> AMPPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else
+            {
+                callback(.Failure(result.error!))
+                return
+            }
+    
             if case let content as AMPImageContent = content {
                 content.originalImage(callback)
             }
