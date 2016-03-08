@@ -33,6 +33,7 @@ class collectionTests: LoggedInXCTestCase {
         ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
+                expectation.fulfill()
                 return
             }
 
@@ -102,10 +103,11 @@ class collectionTests: LoggedInXCTestCase {
             }
             
             collection.metaPath("subpage_001") { path in
-                XCTAssert(path.count == 2)
                 if path.count == 2 {
                     XCTAssert(path[0].identifier == "page_002")
                     XCTAssert(path[1].identifier == "subpage_001")
+                } else {
+                    XCTFail()
                 }
                 expectation.fulfill()
             }
@@ -125,10 +127,11 @@ class collectionTests: LoggedInXCTestCase {
             }
 
             if let list = collection.metadataList(nil) {
-                XCTAssert(list.count == 2)
                 if list.count == 2 {
                     XCTAssert(list[0].identifier == "page_001")
                     XCTAssert(list[1].identifier == "page_002")
+                } else {
+                    XCTFail()
                 }
             } else {
                 XCTFail()
@@ -143,10 +146,11 @@ class collectionTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testLeavesList")
         
         ION.collection("test").leaves(nil) { pages in
-            XCTAssert(pages.count == 2)
             if pages.count == 2 {
                 XCTAssert(pages[0].identifier == "page_001")
                 XCTAssert(pages[1].identifier == "subpage_001")
+            } else {
+                XCTFail()
             }
             expectation.fulfill()
         }
@@ -221,7 +225,6 @@ class collectionTests: LoggedInXCTestCase {
         let collection = ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
-                expectation.fulfill()
                 return
             }
 
@@ -229,7 +232,6 @@ class collectionTests: LoggedInXCTestCase {
             collection.page("page_002") { result in
                 guard case .Success(let page) = result else {
                     XCTFail()
-                    expectation.fulfill()
                     return
                 }
 

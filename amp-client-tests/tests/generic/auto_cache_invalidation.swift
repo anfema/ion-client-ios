@@ -80,6 +80,8 @@ class autoCacheTests: LoggedInXCTestCase {
         guard self.mock == true else {
             return // only works with mocking enabled
         }
+        
+        var fail = false
 
         // set default mock bundle
         var path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
@@ -87,6 +89,7 @@ class autoCacheTests: LoggedInXCTestCase {
             try MockingBird.setMockBundle(path)
         } catch {
             XCTFail("Could not set up API mocking")
+            return
         }
 
         
@@ -99,18 +102,21 @@ class autoCacheTests: LoggedInXCTestCase {
         // seed cache
         ION.collection("test").download { success in
             XCTAssert(success == true)
-            
+            fail = true
             expectation.fulfill()
         }
 
         self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        if fail {
+            return
+        }
         let expectation2 = self.expectationWithDescription("testAutoPageUpdate2")
-
         
         // check page cache content
         ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
+                fail = true
                 expectation2.fulfill()
                 return
             }
@@ -120,11 +126,14 @@ class autoCacheTests: LoggedInXCTestCase {
         }
 
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        if fail {
+            return
+        }
+        let expectation3 = self.expectationWithDescription("testAutoPageUpdate3")
 
         // reset online update so the next call fetches the collection again
         ION.config.lastOnlineUpdate = [String:NSDate]()
         
-        let expectation3 = self.expectationWithDescription("testAutoPageUpdate3")
 
         // Switch to other mock bundle
         path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion_refresh"
@@ -132,8 +141,9 @@ class autoCacheTests: LoggedInXCTestCase {
             try MockingBird.setMockBundle(path)
         } catch {
             XCTFail("Could not set up API mocking")
+            return
         }
-
+        
         // check if page has updated
         ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
@@ -147,6 +157,15 @@ class autoCacheTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        
+        // set default mock bundle
+        path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
+        do {
+            try MockingBird.setMockBundle(path)
+        } catch {
+            XCTFail("Could not set up API mocking")
+            return
+        }
     }
     
 }

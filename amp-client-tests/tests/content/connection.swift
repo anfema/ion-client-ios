@@ -29,6 +29,7 @@ class connectionContentTests: LoggedInXCTestCase {
         ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
+                expectation.fulfill()
                 return
             }
             
@@ -48,6 +49,7 @@ class connectionContentTests: LoggedInXCTestCase {
         ION.collection("test").page("page_001").link("connection") { result in
             guard case .Success(let link) = result else {
                 XCTFail()
+                expectation.fulfill()
                 return
             }
 

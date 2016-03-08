@@ -109,6 +109,9 @@ class fileContentTests: LoggedInXCTestCase {
     }
     
     func testFileDownloadProgress() {
+        if self.mock == true {
+            return
+        }
         let expectation1 = self.expectationWithDescription("testFileDownloadProgress")
         let expectation2 = self.expectationWithDescription("testFileDownloadFinished")
 
