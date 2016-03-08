@@ -98,9 +98,7 @@ extension CanLoadImage {
                     return
                 }
                 if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(dataProvider)
-                    }
+                    responseQueueCallback(callback, parameter: dataProvider)
                 } else {
                     if AMP.config.loggingEnabled {
                         print("AMP: Could not create dataprovider from file \(filename)")
@@ -122,9 +120,7 @@ extension CanLoadImage {
                     return
                 }
                 if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    dispatch_async(AMP.config.responseQueue) {
-                        callback(dataProvider)
-                    }
+                    responseQueueCallback(callback, parameter: dataProvider)
                 } else {
                     if AMP.config.loggingEnabled {
                         print("AMP: Could not create dataprovider from file \(filename)")
@@ -143,7 +139,7 @@ extension CanLoadImage {
             let options = Dictionary<String, AnyObject>()
             if let src = CGImageSourceCreateWithDataProvider(provider, options) {
                 if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
-                    callback(.Success(img))
+                    responseQueueCallback(callback, parameter: .Success(img))
                 }
             }
         }
@@ -166,12 +162,12 @@ extension CanLoadImage {
     public func image(original original: Bool = false, callback: (Result<UIImage, AMPError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             let uiImage = UIImage(CGImage: img, scale: AMP.config.variationScaleFactors[self.variation]!, orientation: .Up)
-            callback(.Success(uiImage))
+            responseQueueCallback(callback, parameter: .Success(uiImage))
         }
     }
 
@@ -190,12 +186,12 @@ extension CanLoadImage {
     public func image(original original: Bool = false, callback: (Result<NSImage, AMPError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
     
             let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
-            callback(.Success(nsImage))
+            responseQueueCallback(callback, parameter: .Success(nsImage))
         }
     }
 
