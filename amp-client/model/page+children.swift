@@ -23,18 +23,18 @@ extension AMPPage {
             guard case .Success(let page) = result else {
                 if case .Failure(let error) = result
                 {
-                    callback(.Failure(error))
+                    responseQueueCallback(callback, parameter: .Failure(error))
                 } else {
-                    callback(.Failure(AMPError.DidFail))
+                    responseQueueCallback(callback, parameter: .Failure(AMPError.DidFail))
                 }
                 
                 return
             }
             
             if page.parent == self.identifier {
-                callback(.Success(page))
+                responseQueueCallback(callback, parameter: .Success(page))
             } else {
-                callback(.Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
+                responseQueueCallback(callback, parameter: .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
             }
         }
         
@@ -77,7 +77,7 @@ extension AMPPage {
                 let page = self.collection.page(child)
                 result.append(page)
             }
-            callback(result)
+            responseQueueCallback(callback, parameter: result)
         }
     }
 }
