@@ -67,13 +67,13 @@ extension AMPPage {
     public func number(name: String, position: Int = 0, callback: (Result<Double, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             if case let content as AMPNumberContent = content {
-                callback(.Success(content.value))
+                responseQueueCallback(callback, parameter: .Success(content.value))
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
