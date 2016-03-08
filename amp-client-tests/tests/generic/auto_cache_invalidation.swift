@@ -67,7 +67,7 @@ class autoCacheTests: LoggedInXCTestCase {
                     return
                 }
 
-                XCTAssert(collection.lastUpdate != collection2.lastUpdate)
+                XCTAssert(collection.lastUpdate == collection2.lastUpdate)
                 expectation.fulfill()
             }
         }

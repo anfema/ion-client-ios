@@ -275,7 +275,7 @@ class collectionTests: LoggedInXCTestCase {
         
         AMP.collection("gnarf").waitUntilReady{ result in
             guard case .Success(let collection) = result else {
-                if case .CollectionNotFound = result.error! {
+                if case .DidFail = result.error! {
                     // ok
                 } else {
                     print(result.error)

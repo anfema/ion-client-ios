@@ -73,7 +73,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssert(collection2 !== collection)
                 XCTAssert(collection2 == collection)
                 XCTAssertNotNil(collection2.lastUpdate)
-                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedDescending)
+                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedSame)
                 expectation.fulfill()
             }
         }
