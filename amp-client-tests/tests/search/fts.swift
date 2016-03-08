@@ -1,16 +1,16 @@
 //
 //  fts.swift
-//  amp-tests
+//  ion-tests
 //
 //  Created by Johannes Schriewer on 12/11/15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class ftsTests: LoggedInXCTestCase {
     

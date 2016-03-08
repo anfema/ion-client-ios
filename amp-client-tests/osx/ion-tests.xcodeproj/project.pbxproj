@@ -17,14 +17,14 @@
 		8F78B2BF1BF36216009D4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */; };
 		8F78B2C11BF36216009D4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F78B2C01BF36216009D4B67 /* Assets.xcassets */; };
 		8F78B2C41BF36216009D4B67 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8F78B2C21BF36216009D4B67 /* MainMenu.xib */; };
-		8F78B2E21BF36392009D4B67 /* amp_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F78B2E11BF36392009D4B67 /* amp_client.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8F78B2E61BF36392009D4B67 /* amp_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2DF1BF36392009D4B67 /* amp_client.framework */; };
-		8F78B2E71BF36392009D4B67 /* amp_client.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2DF1BF36392009D4B67 /* amp_client.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8F78B2E21BF36392009D4B67 /* ion_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F78B2E11BF36392009D4B67 /* ion_client.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8F78B2E61BF36392009D4B67 /* ion_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2DF1BF36392009D4B67 /* ion_client.framework */; };
+		8F78B2E71BF36392009D4B67 /* ion_client.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B2DF1BF36392009D4B67 /* ion_client.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8F78B3051BF363AA009D4B67 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2ED1BF363AA009D4B67 /* request_cache.swift */; };
 		8F78B3061BF363AA009D4B67 /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2EF1BF363AA009D4B67 /* request.swift */; };
 		8F78B3071BF363AA009D4B67 /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F01BF363AA009D4B67 /* response_serializer.swift */; };
 		8F78B3081BF363AA009D4B67 /* imageloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F21BF363AA009D4B67 /* imageloader.swift */; };
-		8F78B3091BF363AA009D4B67 /* amp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F41BF363AA009D4B67 /* amp.swift */; };
+		8F78B3091BF363AA009D4B67 /* ion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F41BF363AA009D4B67 /* ion.swift */; };
 		8F78B30A1BF363AA009D4B67 /* collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F51BF363AA009D4B67 /* collection.swift */; };
 		8F78B30B1BF363AA009D4B67 /* color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F71BF363AA009D4B67 /* color.swift */; };
 		8F78B30C1BF363AA009D4B67 /* container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2F81BF363AA009D4B67 /* container.swift */; };
@@ -75,9 +75,9 @@
 		8FF9DB741BF9E38400935748 /* collection+metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB731BF9E38400935748 /* collection+metadata.swift */; };
 		8FF9DB771BF9E59900935748 /* page+native_extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB761BF9E59900935748 /* page+native_extensions.swift */; };
 		8FF9DB791BF9E5CC00935748 /* page+children.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB781BF9E5CC00935748 /* page+children.swift */; };
-		8FF9DB7D1BF9E7D600935748 /* amp+cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7C1BF9E7D600935748 /* amp+cache.swift */; };
-		8FF9DB7F1BF9E7EA00935748 /* ampconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7E1BF9E7EA00935748 /* ampconfig.swift */; };
-		8FF9DB811BF9EDD000935748 /* amp+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB801BF9EDD000935748 /* amp+search.swift */; };
+		8FF9DB7D1BF9E7D600935748 /* ion+cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */; };
+		8FF9DB7F1BF9E7EA00935748 /* ionconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */; };
+		8FF9DB811BF9EDD000935748 /* ion+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB801BF9EDD000935748 /* ion+search.swift */; };
 		8FF9DB831BF9EDDD00935748 /* collection+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF9DB821BF9EDDD00935748 /* collection+search.swift */; };
 		DAC40154329D6BB7227667DF /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C5F81A940CAE21C579A116 /* Pods.framework */; };
 /* End PBXBuildFile section */
@@ -106,7 +106,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8F78B2E71BF36392009D4B67 /* amp_client.framework in Embed Frameworks */,
+				8F78B2E71BF36392009D4B67 /* ion_client.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,20 +123,20 @@
 		8F114C6D1C15F44100977640 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundles; path = ../../bundles; sourceTree = "<group>"; };
 		8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8F5872761C89A567005567E1 /* notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
-		8F78B2BB1BF36216009D4B67 /* amp-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "amp-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F78B2BB1BF36216009D4B67 /* ion-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ion-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F78B2C01BF36216009D4B67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F78B2C31BF36216009D4B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		8F78B2C51BF36216009D4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F78B2CA1BF36216009D4B67 /* tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F78B2DF1BF36392009D4B67 /* amp_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = amp_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F78B2E11BF36392009D4B67 /* amp_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = amp_client.h; path = amp_client/amp_client.h; sourceTree = "<group>"; };
+		8F78B2DF1BF36392009D4B67 /* ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F78B2E11BF36392009D4B67 /* ion_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ion_client.h; path = amp_client/ion_client.h; sourceTree = "<group>"; };
 		8F78B2E31BF36392009D4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = amp_client/Info.plist; sourceTree = "<group>"; };
 		8F78B2ED1BF363AA009D4B67 /* request_cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request_cache.swift; sourceTree = "<group>"; };
 		8F78B2EF1BF363AA009D4B67 /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		8F78B2F01BF363AA009D4B67 /* response_serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = response_serializer.swift; sourceTree = "<group>"; };
 		8F78B2F21BF363AA009D4B67 /* imageloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = imageloader.swift; sourceTree = "<group>"; };
-		8F78B2F41BF363AA009D4B67 /* amp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = amp.swift; sourceTree = "<group>"; };
+		8F78B2F41BF363AA009D4B67 /* ion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ion.swift; sourceTree = "<group>"; };
 		8F78B2F51BF363AA009D4B67 /* collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = collection.swift; sourceTree = "<group>"; };
 		8F78B2F71BF363AA009D4B67 /* color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = color.swift; sourceTree = "<group>"; };
 		8F78B2F81BF363AA009D4B67 /* container.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = container.swift; sourceTree = "<group>"; };
@@ -188,9 +188,9 @@
 		8FF9DB731BF9E38400935748 /* collection+metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+metadata.swift"; sourceTree = "<group>"; };
 		8FF9DB761BF9E59900935748 /* page+native_extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "page+native_extensions.swift"; sourceTree = "<group>"; };
 		8FF9DB781BF9E5CC00935748 /* page+children.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "page+children.swift"; sourceTree = "<group>"; };
-		8FF9DB7C1BF9E7D600935748 /* amp+cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "amp+cache.swift"; sourceTree = "<group>"; };
-		8FF9DB7E1BF9E7EA00935748 /* ampconfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ampconfig.swift; sourceTree = "<group>"; };
-		8FF9DB801BF9EDD000935748 /* amp+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "amp+search.swift"; sourceTree = "<group>"; };
+		8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+cache.swift"; sourceTree = "<group>"; };
+		8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ionconfig.swift; sourceTree = "<group>"; };
+		8FF9DB801BF9EDD000935748 /* ion+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+search.swift"; sourceTree = "<group>"; };
 		8FF9DB821BF9EDDD00935748 /* collection+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
 		B3F9CD87D65234B2DDB8B50D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -201,7 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */,
-				8F78B2E61BF36392009D4B67 /* amp_client.framework in Frameworks */,
+				8F78B2E61BF36392009D4B67 /* ion_client.framework in Frameworks */,
 				DAC40154329D6BB7227667DF /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,7 +255,7 @@
 		8F78B2B21BF36216009D4B67 = {
 			isa = PBXGroup;
 			children = (
-				8F78B2D91BF3637B009D4B67 /* amp-client */,
+				8F78B2D91BF3637B009D4B67 /* ion-client */,
 				8F78B2CD1BF36216009D4B67 /* tests */,
 				8F78B2BD1BF36216009D4B67 /* test host */,
 				8F78B2BC1BF36216009D4B67 /* Products */,
@@ -267,9 +267,9 @@
 		8F78B2BC1BF36216009D4B67 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8F78B2BB1BF36216009D4B67 /* amp-tests.app */,
+				8F78B2BB1BF36216009D4B67 /* ion-tests.app */,
 				8F78B2CA1BF36216009D4B67 /* tests.xctest */,
-				8F78B2DF1BF36392009D4B67 /* amp_client.framework */,
+				8F78B2DF1BF36392009D4B67 /* ion_client.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -302,10 +302,10 @@
 			path = tests;
 			sourceTree = "<group>";
 		};
-		8F78B2D91BF3637B009D4B67 /* amp-client */ = {
+		8F78B2D91BF3637B009D4B67 /* ion-client */ = {
 			isa = PBXGroup;
 			children = (
-				8F78B2E11BF36392009D4B67 /* amp_client.h */,
+				8F78B2E11BF36392009D4B67 /* ion_client.h */,
 				8F78B2E31BF36392009D4B67 /* Info.plist */,
 				8FAD5CC31BF4EFE4000C3119 /* search */,
 				8F78B2EC1BF363AA009D4B67 /* cache */,
@@ -313,7 +313,7 @@
 				8F78B2F11BF363AA009D4B67 /* helper */,
 				8F78B2F31BF363AA009D4B67 /* model */,
 			);
-			name = "amp-client";
+			name = "ion-client";
 			sourceTree = "<group>";
 		};
 		8F78B2EC1BF363AA009D4B67 /* cache */ = {
@@ -437,7 +437,7 @@
 				8F5872761C89A567005567E1 /* notifications.swift */,
 				8FAD5CC41BF4EFFA000C3119 /* search.swift */,
 				8FAD5CD11BF503B2000C3119 /* module.modulemap */,
-				8FF9DB801BF9EDD000935748 /* amp+search.swift */,
+				8FF9DB801BF9EDD000935748 /* ion+search.swift */,
 				8FF9DB821BF9EDDD00935748 /* collection+search.swift */,
 			);
 			name = search;
@@ -487,9 +487,9 @@
 		8FF9DB7B1BF9E7BE00935748 /* amp */ = {
 			isa = PBXGroup;
 			children = (
-				8F78B2F41BF363AA009D4B67 /* amp.swift */,
-				8FF9DB7E1BF9E7EA00935748 /* ampconfig.swift */,
-				8FF9DB7C1BF9E7D600935748 /* amp+cache.swift */,
+				8F78B2F41BF363AA009D4B67 /* ion.swift */,
+				8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */,
+				8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */,
 			);
 			name = amp;
 			sourceTree = "<group>";
@@ -501,16 +501,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F78B2E21BF36392009D4B67 /* amp_client.h in Headers */,
+				8F78B2E21BF36392009D4B67 /* ion_client.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8F78B2BA1BF36216009D4B67 /* amp-tests */ = {
+		8F78B2BA1BF36216009D4B67 /* ion-tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F78B2D31BF36216009D4B67 /* Build configuration list for PBXNativeTarget "amp-tests" */;
+			buildConfigurationList = 8F78B2D31BF36216009D4B67 /* Build configuration list for PBXNativeTarget "ion-tests" */;
 			buildPhases = (
 				A1B25B85621D1A8BC9F6F64B /* Check Pods Manifest.lock */,
 				8F78B2B71BF36216009D4B67 /* Sources */,
@@ -525,9 +525,9 @@
 			dependencies = (
 				8F78B2E51BF36392009D4B67 /* PBXTargetDependency */,
 			);
-			name = "amp-tests";
+			name = "ion-tests";
 			productName = "amp-tests";
-			productReference = 8F78B2BB1BF36216009D4B67 /* amp-tests.app */;
+			productReference = 8F78B2BB1BF36216009D4B67 /* ion-tests.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8F78B2C91BF36216009D4B67 /* tests */ = {
@@ -548,9 +548,9 @@
 			productReference = 8F78B2CA1BF36216009D4B67 /* tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8F78B2DE1BF36392009D4B67 /* amp_client */ = {
+		8F78B2DE1BF36392009D4B67 /* ion_client */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8F78B2E81BF36392009D4B67 /* Build configuration list for PBXNativeTarget "amp_client" */;
+			buildConfigurationList = 8F78B2E81BF36392009D4B67 /* Build configuration list for PBXNativeTarget "ion_client" */;
 			buildPhases = (
 				8F78B2DA1BF36392009D4B67 /* Sources */,
 				8F78B2DB1BF36392009D4B67 /* Frameworks */,
@@ -562,9 +562,9 @@
 			);
 			dependencies = (
 			);
-			name = amp_client;
+			name = ion_client;
 			productName = amp_client;
-			productReference = 8F78B2DF1BF36392009D4B67 /* amp_client.framework */;
+			productReference = 8F78B2DF1BF36392009D4B67 /* ion_client.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -589,7 +589,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8F78B2B61BF36216009D4B67 /* Build configuration list for PBXProject "amp-tests" */;
+			buildConfigurationList = 8F78B2B61BF36216009D4B67 /* Build configuration list for PBXProject "ion-tests" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -602,9 +602,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8F78B2BA1BF36216009D4B67 /* amp-tests */,
+				8F78B2BA1BF36216009D4B67 /* ion-tests */,
 				8F78B2C91BF36216009D4B67 /* tests */,
-				8F78B2DE1BF36392009D4B67 /* amp_client */,
+				8F78B2DE1BF36392009D4B67 /* ion_client */,
 			);
 		};
 /* End PBXProject section */
@@ -751,8 +751,8 @@
 				8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */,
 				8F78B3151BF363AA009D4B67 /* option.swift in Sources */,
 				8F78B3051BF363AA009D4B67 /* request_cache.swift in Sources */,
-				8FF9DB7D1BF9E7D600935748 /* amp+cache.swift in Sources */,
-				8F78B3091BF363AA009D4B67 /* amp.swift in Sources */,
+				8FF9DB7D1BF9E7D600935748 /* ion+cache.swift in Sources */,
+				8F78B3091BF363AA009D4B67 /* ion.swift in Sources */,
 				8F78B3071BF363AA009D4B67 /* response_serializer.swift in Sources */,
 				8F78B3081BF363AA009D4B67 /* imageloader.swift in Sources */,
 				8F78B3181BF363AA009D4B67 /* page.swift in Sources */,
@@ -768,11 +768,11 @@
 				8F78B30C1BF363AA009D4B67 /* container.swift in Sources */,
 				8FF9DB771BF9E59900935748 /* page+native_extensions.swift in Sources */,
 				8FF9DB701BF9E32200935748 /* collection+native_extensions.swift in Sources */,
-				8FF9DB7F1BF9E7EA00935748 /* ampconfig.swift in Sources */,
+				8FF9DB7F1BF9E7EA00935748 /* ionconfig.swift in Sources */,
 				8FF9DB721BF9E35100935748 /* page_metadata.swift in Sources */,
 				8FF9DB741BF9E38400935748 /* collection+metadata.swift in Sources */,
 				6AD50C4B1C8ED0CC00A05C20 /* callback.swift in Sources */,
-				8FF9DB811BF9EDD000935748 /* amp+search.swift in Sources */,
+				8FF9DB811BF9EDD000935748 /* ion+search.swift in Sources */,
 				8F78B30F1BF363AA009D4B67 /* file.swift in Sources */,
 				8FF9DB831BF9EDDD00935748 /* collection+search.swift in Sources */,
 				8F78B3061BF363AA009D4B67 /* request.swift in Sources */,
@@ -785,12 +785,12 @@
 /* Begin PBXTargetDependency section */
 		8F78B2CC1BF36216009D4B67 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F78B2BA1BF36216009D4B67 /* amp-tests */;
+			target = 8F78B2BA1BF36216009D4B67 /* ion-tests */;
 			targetProxy = 8F78B2CB1BF36216009D4B67 /* PBXContainerItemProxy */;
 		};
 		8F78B2E51BF36392009D4B67 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8F78B2DE1BF36392009D4B67 /* amp_client */;
+			target = 8F78B2DE1BF36392009D4B67 /* ion_client */;
 			targetProxy = 8F78B2E41BF36392009D4B67 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -896,8 +896,8 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "amp-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
+				PRODUCT_NAME = "ion-tests";
 			};
 			name = Debug;
 		};
@@ -910,8 +910,8 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "amp-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
+				PRODUCT_NAME = "ion-tests";
 			};
 			name = Release;
 		};
@@ -926,7 +926,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-testsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/amp-tests.app/Contents/MacOS/amp-tests";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/Contents/MacOS/ion-tests";
 			};
 			name = Debug;
 		};
@@ -940,7 +940,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-testsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/amp-tests.app/Contents/MacOS/amp-tests";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/Contents/MacOS/ion-tests";
 			};
 			name = Release;
 		};
@@ -960,7 +960,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
@@ -987,7 +987,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.amp-client";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
@@ -1000,7 +1000,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8F78B2B61BF36216009D4B67 /* Build configuration list for PBXProject "amp-tests" */ = {
+		8F78B2B61BF36216009D4B67 /* Build configuration list for PBXProject "ion-tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F78B2D11BF36216009D4B67 /* Debug */,
@@ -1009,7 +1009,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F78B2D31BF36216009D4B67 /* Build configuration list for PBXNativeTarget "amp-tests" */ = {
+		8F78B2D31BF36216009D4B67 /* Build configuration list for PBXNativeTarget "ion-tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F78B2D41BF36216009D4B67 /* Debug */,
@@ -1027,7 +1027,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8F78B2E81BF36392009D4B67 /* Build configuration list for PBXNativeTarget "amp_client" */ = {
+		8F78B2E81BF36392009D4B67 /* Build configuration list for PBXNativeTarget "ion_client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8F78B2E91BF36392009D4B67 /* Debug */,

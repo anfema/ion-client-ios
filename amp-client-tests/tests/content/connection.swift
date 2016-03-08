@@ -1,16 +1,16 @@
 //
 //  connection.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class connectionContentTests: LoggedInXCTestCase {
     
@@ -33,7 +33,7 @@ class connectionContentTests: LoggedInXCTestCase {
             }
             
             if case .Success(let link) = page.link("connection") {
-                XCTAssertEqual(link, NSURL(string: "amp://testconnection124"))
+                XCTAssertEqual(link, NSURL(string: "ion://testconnection124"))
             } else {
                 XCTFail("connection content 'Connection' returned nil")
             }
@@ -51,7 +51,7 @@ class connectionContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssertEqual(link, NSURL(string: "amp://testconnection124"))
+            XCTAssertEqual(link, NSURL(string: "ion://testconnection124"))
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
