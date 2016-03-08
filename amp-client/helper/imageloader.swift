@@ -189,9 +189,15 @@ extension CanLoadImage {
     ///
     /// - parameter callback: block to execute when the image has been allocated
     public func image(original original: Bool = false, callback: (Result<NSImage, AMPError> -> Void)) {
-        self.cgImage(original: original) { img in
+        self.cgImage(original: original) { result in
+            guard case .Success(let img) = result else
+            {
+                callback(.Failure(result.error!))
+                return
+            }
+    
             let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
-            callback(nsImage)
+            callback(.Success(nsImage))
         }
     }
 
