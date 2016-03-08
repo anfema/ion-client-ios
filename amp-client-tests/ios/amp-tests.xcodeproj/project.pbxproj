@@ -560,7 +560,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = "Johannes Schriewer";
+				ORGANIZATIONNAME = "anfema GmbH";
 				TargetAttributes = {
 					8F78B1E31BF35689009D4B67 = {
 						CreatedOnToolsVersion = 7.1;
