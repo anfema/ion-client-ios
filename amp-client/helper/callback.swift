@@ -19,3 +19,17 @@ func responseQueueCallback <T> (callback: T -> Void, parameter: T) {
         callback(parameter)
     }
 }
+
+
+
+/// Performs the callback in the responseQueue defined in AMP.config.responseQueue
+///
+/// - parameter callback:  The callback that will be called if not nil.
+/// - parameter parameter: The parameter of the callback.
+func responseQueueCallback <T> (callback: (T -> Void)?, parameter: T) {
+    guard let callback = callback else {
+        return
+    }
+    
+    responseQueueCallback(callback, parameter: parameter)
+}

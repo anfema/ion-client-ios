@@ -90,19 +90,7 @@ public class AMPPage {
         self.locale = self.collection.locale
         
         self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier)", DISPATCH_QUEUE_SERIAL)
-        
-        
-        func performCallback(result: Result<AMPPage, AMPError>) {
-            guard let cb = callback else {
-                return
-            }
-            
-            dispatch_async(AMP.config.responseQueue) {
-                cb(result)
-            }
-        }
-        
-        
+
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
             self.parentLock.lock()
@@ -111,7 +99,7 @@ public class AMPPage {
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     self.hasFailed = true
-                    performCallback(.Failure(error))
+                    responseQueueCallback(callback, parameter: .Failure(error))
                     
                 } else {
                     if self.content.count > 0 {
@@ -121,7 +109,7 @@ public class AMPPage {
                     }
 
                     self.isReady = true
-                    performCallback(.Success(self))
+                    responseQueueCallback(callback, parameter: .Success(self))
                 }
                 dispatch_semaphore_signal(semaphore)
             }
@@ -149,9 +137,8 @@ public class AMPPage {
             guard !self.hasFailed else {
                 return
             }
-            dispatch_async(AMP.config.responseQueue) {
-                callback(self)
-            }
+            
+            responseQueueCallback(callback, parameter: self)
         }
         return self
     }
@@ -190,12 +177,10 @@ public class AMPPage {
                 return obj.outlet == name && obj.position == position
             }).first
 
-            dispatch_async(AMP.config.responseQueue) {
-                if let c = cObj {
-                    callback(.Success(c))
-                } else {
-                    callback(.Failure(.OutletNotFound(name)))
-                }
+            if let c = cObj {
+                responseQueueCallback(callback, parameter: .Success(c))
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletNotFound(name)))
             }
         }
         return self
@@ -244,9 +229,8 @@ public class AMPPage {
                     break
                 }
             }
-            dispatch_async(AMP.config.responseQueue) {
-                callback(found)
-            }
+            
+            responseQueueCallback(callback, parameter: found)
         }
         return self
     }
@@ -287,9 +271,7 @@ public class AMPPage {
             // search content
             let count = self.content.filter({ $0.outlet == name }).count
             
-            dispatch_async(AMP.config.responseQueue) {
-                callback(count)
-            }
+            responseQueueCallback(callback, parameter: count)
         }
         return self
     }
