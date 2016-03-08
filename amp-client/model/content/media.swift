@@ -136,9 +136,9 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         self.cachedURL { url in
             do {
                 let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                callback(.Success(data))
+                responseQueueCallback(callback, parameter: .Success(data))
             } catch {
-                callback(.Failure(.NoData(error)))
+                responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
             }
         }
     }
@@ -152,9 +152,8 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             guard case .Success(let filename) = result else {
                 return
             }
-            dispatch_async(AMP.config.responseQueue) {
-                callback(NSURL(fileURLWithPath: filename))
-            }
+                
+            responseQueueCallback(callback, parameter: NSURL(fileURLWithPath: filename))
         }
     }
     
@@ -172,9 +171,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
                     return
             }
 
-            dispatch_async(AMP.config.responseQueue) {
-                callback(NSURL(string: url)!)
-            }
+            responseQueueCallback(callback, parameter: NSURL(string: url)!)
         }
     }
     
@@ -231,24 +228,24 @@ extension AMPPage {
     public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPMediaContent = content {
                 if let url = content.url {
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else if case let content as AMPFileContent = content {
                 if let url = content.url {
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -265,16 +262,16 @@ extension AMPPage {
         // TODO: Test this
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
             if case let content as AMPMediaContent = content {
                 content.cachedURL { url in
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -290,24 +287,24 @@ extension AMPPage {
     public func temporaryURL(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
             if case let content as AMPMediaContent = content {
                 content.temporaryURL { url in
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else if case let content as AMPFileContent = content {
                 content.temporaryURL { url in
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else if case let content as AMPImageContent = content {
                 content.temporaryURL { url in
-                    callback(.Success(url))
+                    responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -323,14 +320,14 @@ extension AMPPage {
     public func mediaData(name: String, position: Int = 0, callback: (Result<NSData, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
             if case let content as AMPMediaContent = content {
                 content.data(callback)
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
