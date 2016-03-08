@@ -3,6 +3,6 @@ module sqlite {
     export *
 }
 
-framework module amp_client {
+framework module ion_client {
     export *
 }
