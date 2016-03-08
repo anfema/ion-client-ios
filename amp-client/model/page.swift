@@ -91,6 +91,18 @@ public class AMPPage {
         
         self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier)", DISPATCH_QUEUE_SERIAL)
         
+        
+        func performCallback(result: Result<AMPPage, AMPError>) {
+            guard let cb = callback else {
+                return
+            }
+            
+            dispatch_async(AMP.config.responseQueue) {
+                cb(result)
+            }
+        }
+        
+        
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
             self.parentLock.lock()
@@ -99,9 +111,7 @@ public class AMPPage {
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     self.hasFailed = true
-                    if let cb = callback {
-                        cb(.Failure(error))
-                    }
+                    performCallback(.Failure(error))
                     
                 } else {
                     if self.content.count > 0 {
@@ -111,11 +121,7 @@ public class AMPPage {
                     }
 
                     self.isReady = true
-                    if let cb = callback {
-                        dispatch_async(AMP.config.responseQueue) {
-                            cb(.Success(self))
-                        }
-                    }
+                    performCallback(.Success(self))
                 }
                 dispatch_semaphore_signal(semaphore)
             }
