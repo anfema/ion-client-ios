@@ -105,10 +105,6 @@ public class AMPCollection {
                     if let cb = callback {
                         dispatch_async(AMP.config.responseQueue) {
                             cb(.Success(self))
-                            
-                            dispatch_barrier_async(self.workQueue) {
-                                self.checkCompleted()
-                            }
                         }
                     }
                 }
@@ -132,7 +128,7 @@ public class AMPCollection {
                 return
             }
             if let page = self.pageCache[identifier] {
-                let updateBlock:(Void -> Void) = {
+                func update() {
                     // fetch page update
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
@@ -150,7 +146,7 @@ public class AMPCollection {
                     }
                 }
                 
-                let checkNeedsUpdate:(Void -> Bool) = {
+                func checkNeedsUpdate() -> Bool {
                     // ready, check if we need to update
                     if page.hasFailed {
                         return true
@@ -168,11 +164,13 @@ public class AMPCollection {
                 
                 if page.isReady {
                     if checkNeedsUpdate() {
-                        updateBlock()
+                        update()
                     } else {
                         dispatch_async(AMP.config.responseQueue) {
                             callback(.Success(page))
-                            self.checkCompleted()
+                            dispatch_barrier_async(self.workQueue) {
+                                self.checkCompleted()
+                            }
                         }
                     }
                 } else {
@@ -181,11 +179,13 @@ public class AMPCollection {
                             return
                         }
                         if checkNeedsUpdate() {
-                            updateBlock()
+                            update()
                         } else {
                             dispatch_async(AMP.config.responseQueue) {
                                 callback(.Success(page))
-                                self.checkCompleted()
+                                dispatch_barrier_async(self.workQueue) {
+                                    self.checkCompleted()
+                                }
                             }
                         }
                     }
@@ -204,7 +204,6 @@ public class AMPCollection {
                     
                     // recursive call to use update check from "page is caches" path
                     self.page(identifier) { page in
-                        // Fixme: Should this be called in response queue?
                         callback(page)
                     }
                 }
@@ -247,7 +246,7 @@ public class AMPCollection {
             
             // not cached, fetch from web and add it to the cache
             let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
-                dispatch_async(self.workQueue) {
+                dispatch_barrier_async(self.workQueue) {
                     self.checkCompleted()
                 }
             }
@@ -330,7 +329,8 @@ public class AMPCollection {
     /// Callback when collection work queue is empty
     ///
     /// Attention: This blocks all queries that follow this call until the callback
-    /// has completed
+    /// has completed, the callback will only be called if the collection fetches any page,
+    /// it will not fire when no other actions than loading the collection itself occur.
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining

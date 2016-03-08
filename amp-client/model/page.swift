@@ -152,9 +152,7 @@ public class AMPPage {
     /// - returns: self for chaining
     public func onCompletion(callback: ((page: AMPPage, completed: Bool) -> Void)) -> AMPPage {
         dispatch_barrier_async(self.workQueue) {
-            dispatch_async(AMP.config.responseQueue) {
-                callback(page: self, completed: !self.hasFailed)
-            }
+            responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
         }
         return self
     }
