@@ -159,18 +159,18 @@ extension AMPPage {
     public func text(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
             if case let content as AMPTextContent = content {
                 if let text = content.plainText() {
-                    callback(.Success(text))
+                    responseQueueCallback(callback, parameter: .Success(text))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -208,18 +208,18 @@ extension AMPPage {
     public func html(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
             if case let content as AMPTextContent = content {
                 if let text = content.htmlText() {
-                    callback(.Success(text))
+                    responseQueueCallback(callback, parameter: .Success(text))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
@@ -257,21 +257,20 @@ extension AMPPage {
     public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, AMPError> -> Void)) -> AMPPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                callback(.Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
             if case let content as AMPTextContent = content {
                 if let text = content.attributedString() {
-                    callback(.Success(text))
+                    responseQueueCallback(callback, parameter: .Success(text))
                 } else {
-                    callback(.Failure(.OutletEmpty))
+                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
             } else {
-                callback(.Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
     }
-
 }
