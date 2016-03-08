@@ -351,7 +351,7 @@
 		8F78B2F31BF363AA009D4B67 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				8FF9DB7B1BF9E7BE00935748 /* amp */,
+				8FF9DB7B1BF9E7BE00935748 /* ion */,
 				8FF9DB751BF9E58400935748 /* page */,
 				8FF9DB6E1BF9E2F000935748 /* collection */,
 				8F78B2F61BF363AA009D4B67 /* content */,
@@ -484,14 +484,14 @@
 			name = page;
 			sourceTree = "<group>";
 		};
-		8FF9DB7B1BF9E7BE00935748 /* amp */ = {
+		8FF9DB7B1BF9E7BE00935748 /* ion */ = {
 			isa = PBXGroup;
 			children = (
 				8F78B2F41BF363AA009D4B67 /* ion.swift */,
 				8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */,
 				8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */,
 			);
-			name = amp;
+			name = ion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
