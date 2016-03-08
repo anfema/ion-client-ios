@@ -87,14 +87,14 @@
 			containerPortal = 8F78B1DC1BF35689009D4B67 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8F78B1E31BF35689009D4B67;
-			remoteInfo = "amp-tests";
+			remoteInfo = "ion-tests";
 		};
 		8F78B28A1BF35A9E009D4B67 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8F78B1DC1BF35689009D4B67 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 8F78B2841BF35A9E009D4B67;
-			remoteInfo = "amp-client";
+			remoteInfo = "ion-client";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -377,7 +377,7 @@
 				8FCFADDE1BFCD7980051981F /* request_cache.swift */,
 			);
 			name = cache;
-			path = "../../amp-client/cache";
+			path = "../../ion-client/cache";
 			sourceTree = "<group>";
 		};
 		8FCFADDF1BFCD7980051981F /* communication */ = {
@@ -387,7 +387,7 @@
 				8FCFADE11BFCD7980051981F /* response_serializer.swift */,
 			);
 			name = communication;
-			path = "../../amp-client/communication";
+			path = "../../ion-client/communication";
 			sourceTree = "<group>";
 		};
 		8FCFADE21BFCD7980051981F /* helper */ = {
@@ -399,7 +399,7 @@
 				6AD50C4C1C8ED95C00A05C20 /* callback.swift */,
 			);
 			name = helper;
-			path = "../../amp-client/helper";
+			path = "../../ion-client/helper";
 			sourceTree = "<group>";
 		};
 		8FCFADE51BFCD7980051981F /* model */ = {
@@ -412,7 +412,7 @@
 				8FCFADF91BFCD7980051981F /* error.swift */,
 			);
 			name = model;
-			path = "../../amp-client/model";
+			path = "../../ion-client/model";
 			sourceTree = "<group>";
 		};
 		8FCFADEC1BFCD7980051981F /* content */ = {
@@ -444,7 +444,7 @@
 				8FCFAE021BFCD7980051981F /* search.swift */,
 			);
 			name = search;
-			path = "../../amp-client/search";
+			path = "../../ion-client/search";
 			sourceTree = "<group>";
 		};
 		8FCFAE221BFCD7AC0051981F /* ion */ = {
@@ -511,7 +511,7 @@
 				8F78B28B1BF35A9E009D4B67 /* PBXTargetDependency */,
 			);
 			name = "ion-tests";
-			productName = "amp-tests";
+			productName = "ion-tests";
 			productReference = 8F78B1E41BF35689009D4B67 /* ion-tests.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -548,7 +548,7 @@
 			dependencies = (
 			);
 			name = ion_client;
-			productName = "amp-client";
+			productName = "ion-client";
 			productReference = 8F78B2851BF35A9E009D4B67 /* ion_client.framework */;
 			productType = "com.apple.product-type.framework";
 		};
@@ -665,7 +665,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/../../amp-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
+			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/../../ion-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
 		};
 		F82B11482505A8921E6C1162 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -951,7 +951,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -973,7 +973,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../amp-client/search";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
