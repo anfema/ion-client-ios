@@ -292,7 +292,7 @@
 			);
 			name = "test host";
 			path = "ion-tests";
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		8F78B1F91BF35925009D4B67 /* tests */ = {
 			isa = PBXGroup;
@@ -308,7 +308,7 @@
 			);
 			name = tests;
 			path = ../tests;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		8F78B2221BF35998009D4B67 /* collection */ = {
 			isa = PBXGroup;
@@ -368,7 +368,7 @@
 				8FCFADFE1BFCD7980051981F /* search */,
 			);
 			name = "ion-client";
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		8FCFADDD1BFCD7980051981F /* cache */ = {
 			isa = PBXGroup;
