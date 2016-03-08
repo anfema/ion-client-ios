@@ -1,9 +1,9 @@
 //
 //  fts.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 12/11/15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -22,10 +22,10 @@ internal extension String {
 }
 
 /// Full text search result item
-public class AMPSearchResult {
+public class IONSearchResult {
     
     /// Page metadata object for search result
-    public var meta: AMPPageMeta?
+    public var meta: IONPageMeta?
     
     /// Outlet name where the search hit
     public let outletName: String
@@ -33,7 +33,7 @@ public class AMPSearchResult {
     /// Text snippet of hit
     private let snippet: String
     
-    internal init(collection: AMPCollection, page: String, outlet: String, snippet: String) {
+    internal init(collection: IONCollection, page: String, outlet: String, snippet: String) {
         self.outletName = outlet
         self.snippet = snippet
         for meta in collection.pageMeta {
@@ -54,16 +54,16 @@ public class AMPSearchResult {
     ///
     /// - returns: attributed string of snippet
     public func attributedString() -> NSAttributedString {
-        return MDParser(markdown: self.snippet).render().renderAttributedString(AMP.config.stringStyling)
+        return MDParser(markdown: self.snippet).render().renderAttributedString(ION.config.stringStyling)
     }
 }
 
 
 /// Full text search handle to be re-used for subsequent fast searches
-public class AMPSearchHandle {
+public class IONSearchHandle {
     
     /// Collection for this handle
-    public let collection: AMPCollection
+    public let collection: IONCollection
 
     /// SQLite DB handle
     private var dbHandle: COpaquePointer = nil
@@ -79,13 +79,13 @@ public class AMPSearchHandle {
     ///
     /// - parameter text: text to search for
     /// - returns: list with search results, may be an empty list
-    public func search(text: String) -> [AMPSearchResult] {
+    public func search(text: String) -> [IONSearchResult] {
         let searchTerm = self.fixSearchTerm(text)
         
-        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), AMP.config.locale, AMP.config.locale.byteLength, SQLITE_TRANSIENT)
+        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, SQLITE_TRANSIENT)
         sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, SQLITE_TRANSIENT)
 
-        var items = [AMPSearchResult]()
+        var items = [IONSearchResult]()
         var finished = false
         while !finished {
             let result = sqlite3_step(stmt)
@@ -96,7 +96,7 @@ public class AMPSearchHandle {
                       let snippet        = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 2)), encoding: NSUTF8StringEncoding) else {
                         continue
                 }
-                items.append(AMPSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
+                items.append(IONSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
             case SQLITE_DONE:
                 finished = true
             default:
@@ -109,11 +109,11 @@ public class AMPSearchHandle {
     
     // MARK: - Internal
 
-    internal init?(collection: AMPCollection) {
+    internal init?(collection: IONCollection) {
         self.collection = collection
         
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateFTSDB:", name: AMPFTSDBDidUpdateNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateFTSDB:", name: IONFTSDBDidUpdateNotification, object: nil)
         
         guard setupSqliteConnection() else
         {
@@ -141,7 +141,7 @@ public class AMPSearchHandle {
     
     
     internal func setupSqliteConnection() -> Bool {
-        guard sqlite3_open_v2(AMP.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard sqlite3_open_v2(ION.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return false
         }
         

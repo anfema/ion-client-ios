@@ -1,9 +1,9 @@
 //
 //  auth.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -11,7 +11,7 @@
 
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class authTests: DefaultXCTestCase {
     
@@ -26,9 +26,9 @@ class authTests: DefaultXCTestCase {
     func testLoginSuccess() {
         let expectation = self.expectationWithDescription("testLoginSuccess")
         
-        AMP.login("admin@anfe.ma", password: "test") { success in
+        ION.login("admin@anfe.ma", password: "test") { success in
             XCTAssert(success)
-            XCTAssertNotNil(AMP.config.sessionToken)
+            XCTAssertNotNil(ION.config.sessionToken)
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
@@ -38,9 +38,9 @@ class authTests: DefaultXCTestCase {
         if !self.mock {
             let expectation = self.expectationWithDescription("testLoginFailure")
         
-            AMP.login("admin@anfe.ma", password: "wrongpassword") { success in
+            ION.login("admin@anfe.ma", password: "wrongpassword") { success in
                 XCTAssert(!success)
-                XCTAssertNil(AMP.config.sessionToken)
+                XCTAssertNil(ION.config.sessionToken)
                 expectation.fulfill()
             }
             self.waitForExpectationsWithTimeout(1.0, handler: nil)

@@ -1,16 +1,16 @@
 //
 //  page.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class pageTests: LoggedInXCTestCase {
     
@@ -24,9 +24,9 @@ class pageTests: LoggedInXCTestCase {
 
     func testPageFetchSync() {
         let expectation = self.expectationWithDescription("testPageFetchSync")
-        AMP.resetMemCache()
+        ION.resetMemCache()
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -46,7 +46,7 @@ class pageTests: LoggedInXCTestCase {
         let expectation1 = self.expectationWithDescription("testPagePositionSync 1")
         let expectation2 = self.expectationWithDescription("testPagePositionSync 2")
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation1.fulfill()
@@ -60,7 +60,7 @@ class pageTests: LoggedInXCTestCase {
             expectation1.fulfill()
         }
 
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation2.fulfill()
@@ -80,7 +80,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchAsync() {
         let expectation = self.expectationWithDescription("testPageFetchAsync")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -99,7 +99,7 @@ class pageTests: LoggedInXCTestCase {
         let expectation1 = self.expectationWithDescription("testPagePositionAync 1")
         let expectation2 = self.expectationWithDescription("testPagePositionAync 2")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation1.fulfill()
@@ -111,7 +111,7 @@ class pageTests: LoggedInXCTestCase {
             expectation1.fulfill()
         }
         
-        AMP.collection("test").page("page_002") { result in
+        ION.collection("test").page("page_002") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation2.fulfill()
@@ -129,7 +129,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageFetchFail() {
         let expectation = self.expectationWithDescription("testPageFetchFail")
         
-        AMP.collection("test").page("unknown_page") { result in
+        ION.collection("test").page("unknown_page") { result in
             guard case .Success = result else {
                 if case .PageNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "unknown_page")
@@ -149,7 +149,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageParentAsync() {
         let expectation = self.expectationWithDescription("testPageParentAsync")
         
-        AMP.collection("test").page("subpage_001") { result in
+        ION.collection("test").page("subpage_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -166,17 +166,17 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageCount() {
-        AMP.collection("test").pageCount(nil) { count in
+        ION.collection("test").pageCount(nil) { count in
             XCTAssert(count == 2)
         }
-        AMP.collection("test").pageCount("page_002") { count in
+        ION.collection("test").pageCount("page_002") { count in
             XCTAssert(count == 1)
         }
     }
 
     func testPageParent() {
         let expectation = self.expectationWithDescription("testPageParent")
-        AMP.collection("test").page("subpage_001") { result in
+        ION.collection("test").page("subpage_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -194,7 +194,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageChild() {
         let expectation = self.expectationWithDescription("testPageChild")
         
-        AMP.collection("test").page("page_002") { result in
+        ION.collection("test").page("page_002") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -219,7 +219,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageChildAsync() {
         let expectation = self.expectationWithDescription("testPageChildAsync")
         
-        AMP.collection("test").page("page_002").child("subpage_001") { result in
+        ION.collection("test").page("page_002").child("subpage_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -239,7 +239,7 @@ class pageTests: LoggedInXCTestCase {
     func testPageChildFail() {
         let expectation = self.expectationWithDescription("testPageChildFail")
 
-        AMP.collection("test").page("page_002").child("page_001") { result in
+        ION.collection("test").page("page_002").child("page_001") { result in
             guard case .Success = result else {
                 if case .InvalidPageHierarchy(let parent, let child) = result.error! {
                     XCTAssert(parent == "page_002")
@@ -263,7 +263,7 @@ class pageTests: LoggedInXCTestCase {
 //        let expectation = self.expectationWithDescription("testPageEnumeration")
 //
 //        var pageCount = 0;
-//        AMP.collection("test").pages { page in
+//        ION.collection("test").pages { page in
 //            XCTAssert(page.position == pageCount)
 //            pageCount++
 //            if (page.identifier != "page_001") && (page.identifier != "page_002") {
@@ -281,7 +281,7 @@ class pageTests: LoggedInXCTestCase {
     func testSubPageEnumeration() {
         let expectation = self.expectationWithDescription("testSubPageEnumeration")
         
-        AMP.collection("test").page("page_002").children { result in
+        ION.collection("test").page("page_002").children { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -298,7 +298,7 @@ class pageTests: LoggedInXCTestCase {
     func testSubPageList() {
         let expectation = self.expectationWithDescription("testSubPageList")
         
-        AMP.collection("test").page("page_002").childrenList { list in
+        ION.collection("test").page("page_002").childrenList { list in
             XCTAssert(list.count == 1)
             if list.count == 1 {
                 XCTAssert(list[0].identifier == "subpage_001")
@@ -312,7 +312,7 @@ class pageTests: LoggedInXCTestCase {
     func testOutletExists() {
         let expectation = self.expectationWithDescription("testOutletExists")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -329,7 +329,7 @@ class pageTests: LoggedInXCTestCase {
     func testOutletExistsAsync() {
         let expectation = self.expectationWithDescription("testOutletExistsAsync")
         
-        AMP.collection("test").page("page_001").outletExists("text") { exists in
+        ION.collection("test").page("page_001").outletExists("text") { exists in
             XCTAssertTrue(exists)
             expectation.fulfill()
         }
@@ -340,7 +340,7 @@ class pageTests: LoggedInXCTestCase {
     func testOutletDoesNotExistAsync() {
         let expectation = self.expectationWithDescription("testOutletDoesNotExistAsync")
         
-        AMP.collection("test").page("page_001").outletExists("Unknown_Outlet") { exists in
+        ION.collection("test").page("page_001").outletExists("Unknown_Outlet") { exists in
             XCTAssertFalse(exists)
             expectation.fulfill()
         }
@@ -349,12 +349,12 @@ class pageTests: LoggedInXCTestCase {
     }
     
     func testCancelablePage() {
-        AMP.resetMemCache()
-        XCTAssert(AMP.collectionCache.count == 0)
+        ION.resetMemCache()
+        XCTAssert(ION.collectionCache.count == 0)
         
         let expectation = self.expectationWithDescription("testCancelableCollection")
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -362,7 +362,7 @@ class pageTests: LoggedInXCTestCase {
             }
 
             // now this one collection is in the cache and no page
-            XCTAssert(AMP.collectionCache.count == 1)
+            XCTAssert(ION.collectionCache.count == 1)
             XCTAssert(collection.pageCache.count == 0)
             
             collection.page("page_001") { result in
@@ -409,7 +409,7 @@ class pageTests: LoggedInXCTestCase {
     func testWaitUntilReady() {
         let expectation = self.expectationWithDescription("testWaitUntilReady")
 
-        AMP.collection("test").page("page_001").waitUntilReady{ page in
+        ION.collection("test").page("page_001").waitUntilReady{ page in
             XCTAssertNotNil(page)
             expectation.fulfill()
         }
@@ -421,7 +421,7 @@ class pageTests: LoggedInXCTestCase {
     func testNumberOfContentsForOutletSync() {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletSync")
         
-        AMP.collection("test").page("page_001"){ result in
+        ION.collection("test").page("page_001"){ result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -441,7 +441,7 @@ class pageTests: LoggedInXCTestCase {
     func testNumberOfContentsForOutletAsync() {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletAsync")
         
-        AMP.collection("test").page("page_001").numberOfContentsForOutlet("text") { count in
+        ION.collection("test").page("page_001").numberOfContentsForOutlet("text") { count in
             XCTAssertNotNil(count)
             XCTAssertEqual(count, 1)
             

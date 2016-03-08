@@ -1,9 +1,9 @@
 //
 //  collection.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,7 +14,7 @@ import Alamofire
 import DEjson
 
 /// Collection class, contains pages, has functionality to async fetch data
-public class AMPCollection {
+public class IONCollection {
     
     /// identifier
     public var identifier:String!
@@ -35,10 +35,10 @@ public class AMPCollection {
     public var hasFailed: Bool = false
 
     /// page metadata
-    internal var pageMeta = [AMPPageMeta]()
+    internal var pageMeta = [IONPageMeta]()
 
     /// memory cache for pages
-    internal var pageCache = [String:AMPPage]()
+    internal var pageCache = [String: IONPage]()
 
     /// internal lock for errorhandler
     internal var parentLock = NSLock()
@@ -47,10 +47,10 @@ public class AMPCollection {
     internal var workQueue: dispatch_queue_t
 
     /// set to false to avoid using the cache (refreshes, etc.)
-    private var useCache = AMPCacheBehaviour.Prefer
+    private var useCache = IONCacheBehaviour.Prefer
     
     /// block to call on completion
-    private var completionBlock: ((collection: Result<AMPCollection, AMPError>, completed: Bool) -> Void)?
+    private var completionBlock: ((collection: Result<IONCollection, IONError>, completed: Bool) -> Void)?
     
     /// archive download url
     internal var archiveURL:String!
@@ -61,7 +61,7 @@ public class AMPCollection {
     /// internal id
     internal var uuid = NSUUID().UUIDString
     
-    /// internal identifier used to store the collection into the `AMP.collectionCache`
+    /// internal identifier used to store the collection into the `ION.collectionCache`
     /// when using the `forkedWorkQueueWithCollection` initializer
     lazy internal var forkedIdentifier: String = {
         return "\(self.identifier)-\(self.uuid)"
@@ -72,18 +72,18 @@ public class AMPCollection {
     
     /// Initialize collection async
     ///
-    /// use `collection` method of `AMP` class instead!
+    /// use `collection` method of `ION` class instead!
     ///
     /// - parameter identifier: the collection identifier
     /// - parameter locale: locale code to fetch
     /// - parameter useCache: set to false to force a refresh
     /// - parameter callback: block to call when collection is fully loaded
-    init(identifier: String, locale: String, useCache: AMPCacheBehaviour, callback:(Result<AMPCollection, AMPError> -> Void)?) {
+    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback:(Result<IONCollection, IONError> -> Void)?) {
         self.locale = locale
         self.useCache = useCache
         self.identifier = identifier
         
-        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.ion.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
         
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
@@ -93,17 +93,17 @@ public class AMPCollection {
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     if let cb = callback {
-                        dispatch_async(AMP.config.responseQueue) {
+                        dispatch_async(ION.config.responseQueue) {
                             cb(.Failure(error))
                         }
                     }
                     
                     self.hasFailed = true
                 } else {
-                    AMP.collectionCache[identifier] = self
+                    ION.collectionCache[identifier] = self
                     
                     if let cb = callback {
-                        dispatch_async(AMP.config.responseQueue) {
+                        dispatch_async(ION.config.responseQueue) {
                             cb(.Success(self))
                         }
                     }
@@ -122,7 +122,7 @@ public class AMPCollection {
     /// - parameter identifier: page identifier
     /// - parameter callback: the callback to call when the page becomes available
     /// - returns: self, to be able to chain more actions to the collection
-    public func page(identifier: String, callback:(Result<AMPPage, AMPError> -> Void)) -> AMPCollection {
+    public func page(identifier: String, callback:(Result<IONPage, IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -133,7 +133,7 @@ public class AMPCollection {
                     guard let meta = self.getPageMetaForPage(identifier) else {
                         return
                     }
-                    self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
+                    self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
                         guard case .Success(let page) = result else {
                             // FIXME: what happens in the error case?
                             return
@@ -166,7 +166,7 @@ public class AMPCollection {
                     if checkNeedsUpdate() {
                         update()
                     } else {
-                        dispatch_async(AMP.config.responseQueue) {
+                        dispatch_async(ION.config.responseQueue) {
                             callback(.Success(page))
                             dispatch_barrier_async(self.workQueue) {
                                 self.checkCompleted()
@@ -181,7 +181,7 @@ public class AMPCollection {
                         if checkNeedsUpdate() {
                             update()
                         } else {
-                            dispatch_async(AMP.config.responseQueue) {
+                            dispatch_async(ION.config.responseQueue) {
                                 callback(.Success(page))
                                 dispatch_barrier_async(self.workQueue) {
                                     self.checkCompleted()
@@ -195,7 +195,7 @@ public class AMPCollection {
                     responseQueueCallback(callback, parameter: .Failure(.PageNotFound(identifier)))
                     return
                 }
-                self.pageCache[identifier] = AMPPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
+                self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
                     guard case .Success(let page) = result else {
                         // FIXME: What happens in error case?
                         return
@@ -221,7 +221,7 @@ public class AMPCollection {
     ///
     /// - parameter identifier: page identifier
     /// - returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
-    public func page(identifier: String) -> AMPPage {
+    public func page(identifier: String) -> IONPage {
         // fetch page and resume processing when ready
         var fetch = true
         
@@ -245,7 +245,7 @@ public class AMPCollection {
             }
             
             // not cached, fetch from web and add it to the cache
-            let page = AMPPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
+            let page = IONPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
                 dispatch_barrier_async(self.workQueue) {
                     self.checkCompleted()
                 }
@@ -264,7 +264,7 @@ public class AMPCollection {
     ///
     /// - parameter index: position of the page in the collection
     /// - returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
-    public func page(index: Int) -> AMPPage? {
+    public func page(index: Int) -> IONPage? {
         guard index > 0 else
         {
             return nil
@@ -283,7 +283,7 @@ public class AMPCollection {
     /// Enumerate pages
     ///
     /// - parameter callback: block to call for each page
-    public func pages(callback: (Result<AMPPage, AMPError> -> Void)) -> AMPCollection {
+    public func pages(callback: (Result<IONPage, IONError> -> Void)) -> IONCollection {
         // append page listing to work queue
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -302,8 +302,8 @@ public class AMPCollection {
     /// Fork the work queue, the returning collection has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
-    public func cancelable() -> CancelableAMPCollection {
-        return CancelableAMPCollection(collection: self)
+    public func cancelable() -> CancelableIONCollection {
+        return CancelableIONCollection(collection: self)
     }
 
     // MARK: - Internal
@@ -313,10 +313,10 @@ public class AMPCollection {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func waitUntilReady(callback: (Result<AMPCollection, AMPError> -> Void)) -> AMPCollection {
+    public func waitUntilReady(callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
-                responseQueueCallback(callback, parameter: .Failure(AMPError.DidFail))
+                responseQueueCallback(callback, parameter: .Failure(IONError.DidFail))
                 return
             }
             
@@ -334,7 +334,7 @@ public class AMPCollection {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: ((collection: Result<AMPCollection, AMPError>, completed: Bool) -> Void)) -> AMPCollection {
+    public func onCompletion(callback: ((collection: Result<IONCollection, IONError>, completed: Bool) -> Void)) -> IONCollection {
         dispatch_barrier_async(self.workQueue) {
             self.completionBlock = callback
         }
@@ -356,7 +356,7 @@ public class AMPCollection {
             
             if let completionBlock = self.completionBlock where completed == true {
                 self.completionBlock = nil
-                dispatch_async(AMP.config.responseQueue) {
+                dispatch_async(ION.config.responseQueue) {
                     completionBlock(collection: .Success(self), completed: !self.hasFailed)
                 }
             }
@@ -367,23 +367,23 @@ public class AMPCollection {
         self.locale = locale
         self.useCache = .Prefer
         self.identifier = identifier
-        self.workQueue = dispatch_queue_create("com.anfema.amp.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.ion.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
-        AMP.collectionCache[self.forkedIdentifier] = self
+        ION.collectionCache[self.forkedIdentifier] = self
     }
 
     /// Fetch collection from cache or web
     ///
     /// - parameter identifier: collection identifier to get
     /// - parameter callback: block to call when the fetch finished
-    private func fetch(identifier: String, callback:(AMPError? -> Void)) {
-        AMPRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached:self.useCache) { result in
+    private func fetch(identifier: String, callback:(IONError? -> Void)) {
+        IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation" : ION.config.variation ], cached:self.useCache) { result in
             if case .Failure(let error) = result {
                 if case .NotAuthorized = error {
                     callback(error)
                 } else {
-                    callback(AMPError.CollectionNotFound(identifier))
+                    callback(IONError.CollectionNotFound(identifier))
                 }
                 return nil
             }
@@ -391,18 +391,18 @@ public class AMPCollection {
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
-                    callback(AMPError.JSONObjectExpected(result.value!))
+                    callback(IONError.JSONObjectExpected(result.value!))
                     return nil
             }
             
             // furthermore we need a collection and a last_updated element
             guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
                   case .JSONArray(let array)      = rawCollection,
-                  case .JSONNumber(let timestamp) = rawLastUpdated else {
-                    callback(AMPError.JSONObjectExpected(result.value!))
+                  case .JSONNumber(let timestion) = rawLastUpdated else {
+                    callback(IONError.JSONObjectExpected(result.value!))
                     return nil
             }
-            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
+            self.lastUpdate = NSDate(timeIntervalSince1970: timestion)
 
             // if we have a nonzero result
             if case .JSONDictionary(let dict) = array[0] {
@@ -414,7 +414,7 @@ public class AMPCollection {
                       case .JSONString(let defaultLocale)  = rawDefaultLocale,
                       case .JSONString(let archiveURL)     = rawArchive,
                       case .JSONArray(let pages)           = rawPages else {
-                        callback(AMPError.InvalidJSON(result.value!))
+                        callback(IONError.InvalidJSON(result.value!))
                         return nil
                 }
             
@@ -438,7 +438,7 @@ public class AMPCollection {
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
-                        let obj = try AMPPageMeta(json: page, position: 0, collection: self)
+                        let obj = try IONPageMeta(json: page, position: 0, collection: self)
 
                         // find max position for current parent
                         var position = -1
@@ -452,11 +452,11 @@ public class AMPCollection {
                         self.pageMeta.append(obj)
                     } catch {
                         if let json = JSONEncoder(page).prettyJSONString {
-                            if AMP.config.loggingEnabled {
+                            if ION.config.loggingEnabled {
                                 print("Invalid page: " + json)
                             }
                         } else {
-                            if AMP.config.loggingEnabled {
+                            if ION.config.loggingEnabled {
                                 print("Invalid page, invalid json")
                             }
                         }
@@ -476,9 +476,9 @@ public class AMPCollection {
 }
 
 
-public class CancelableAMPCollection: AMPCollection {
+public class CancelableIONCollection: IONCollection {
     
-    init(collection: AMPCollection) {
+    init(collection: IONCollection) {
         super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
         
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
@@ -501,7 +501,7 @@ public class CancelableAMPCollection: AMPCollection {
             
             // TODO: Test cancelling of page loads, needs support in mock framework
             for (_, page) in self.pageCache {
-                if case let p as CancelableAMPPage = page {
+                if case let p as CancelableIONPage = page {
                     p.cancel()
                 }
             }
@@ -516,7 +516,7 @@ public class CancelableAMPCollection: AMPCollection {
     public func finish() {
         dispatch_barrier_async(self.workQueue) {
             self.pageCache.removeAll() // break cycle
-            AMP.collectionCache.removeValueForKey(self.forkedIdentifier)
+            ION.collectionCache.removeValueForKey(self.forkedIdentifier)
         }
     }
 }

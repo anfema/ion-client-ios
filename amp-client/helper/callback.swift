@@ -1,28 +1,27 @@
 //
 //  callback.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Dominik Felber on 08.03.16.
-//  Copyright © 2016 anfema. All rights reserved.
+//  Copyright © 2016 anfema GmbH. All rights reserved.
 //
 
 import Foundation
 import Alamofire
 
-
-/// Performs the callback in the responseQueue defined in AMP.config.responseQueue
+/// Performs the callback in the responseQueue defined in ION.config.responseQueue
 /// 
 /// - parameter callback:  The callback that will be called.
 /// - parameter parameter: The parameter of the callback.
 func responseQueueCallback <T, U> (callback: T -> U, parameter: T) {
-    dispatch_async(AMP.config.responseQueue) {
+    dispatch_async(ION.config.responseQueue) {
         callback(parameter)
     }
 }
 
 
 
-/// Performs the callback in the responseQueue defined in AMP.config.responseQueue
+/// Performs the callback in the responseQueue defined in ION.config.responseQueue
 ///
 /// - parameter callback:  The callback that will be called if not nil.
 /// - parameter parameter: The parameter of the callback.

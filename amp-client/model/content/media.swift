@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,7 +14,7 @@ import DEjson
 import Alamofire
 
 /// Media content, may be image, audio or video content
-public class AMPMediaContent : AMPContent, CanLoadImage {
+public class IONMediaContent: IONContent, CanLoadImage {
     
     // original file name
     public var filename:String!
@@ -71,7 +71,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawName = dict["name"], rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawFile = dict["file"],
@@ -90,7 +90,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
             case .JSONNumber(let oFileSize) = rawOriginalFileSize,
             case .JSONNumber(let length)    = rawLength,
             case .JSONNumber(let oLength)   = rawOriginalLength else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.filename = name
@@ -132,7 +132,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     ///
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
-    public func data(callback: (Result<NSData, AMPError> -> Void)) {
+    public func data(callback: (Result<NSData, IONError> -> Void)) {
         self.cachedURL { url in
             do {
                 let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
@@ -147,7 +147,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     ///
     /// - parameter callback: block to call when the download has finished, will not be called if there was an error
     public func cachedURL(callback: (NSURL -> Void)) {
-        AMPRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: AMP.config.cacheBehaviour(.Prefer),
+        IONRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
@@ -162,7 +162,7 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     /// - parameter callback: block to call with the temporary URL, will not be called if there was an error while
     ///                       fetching the URL from the server
     public func temporaryURL(callback: (NSURL -> Void)) {
-        AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : self.url.absoluteString ]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : self.url.absoluteString ]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -192,22 +192,22 @@ public class AMPMediaContent : AMPContent, CanLoadImage {
     }
 }
 
-/// Media content extensions to AMPPage
-extension AMPPage {
+/// Media content extensions to IONPage
+extension IONPage {
     
     /// Fetch URL from named outlet
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
-    public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, AMPError> {
+    public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
         if case .Success(let content) = result {
-            if case let content as AMPMediaContent = content {
+            if case let content as IONMediaContent = content {
                 return .Success(content.url)
             }
 
-            if case let content as AMPFileContent = content {
+            if case let content as IONFileContent = content {
                 if let url = content.url {
                     return .Success(url)
                 }
@@ -225,20 +225,20 @@ extension AMPPage {
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
+    public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
-            if case let content as AMPMediaContent = content {
+            if case let content as IONMediaContent = content {
                 if let url = content.url {
                     responseQueueCallback(callback, parameter: .Success(url))
                 } else {
                     responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
                 }
-            } else if case let content as AMPFileContent = content {
+            } else if case let content as IONFileContent = content {
                 if let url = content.url {
                     responseQueueCallback(callback, parameter: .Success(url))
                 } else {
@@ -258,7 +258,7 @@ extension AMPPage {
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func cachedMediaURL(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
+    public func cachedMediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         // TODO: Test this
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -266,7 +266,7 @@ extension AMPPage {
                 return
             }
 
-            if case let content as AMPMediaContent = content {
+            if case let content as IONMediaContent = content {
                 content.cachedURL { url in
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
@@ -284,22 +284,22 @@ extension AMPPage {
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func temporaryURL(name: String, position: Int = 0, callback: (Result<NSURL, AMPError> -> Void)) -> AMPPage {
+    public func temporaryURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
-            if case let content as AMPMediaContent = content {
+            if case let content as IONMediaContent = content {
                 content.temporaryURL { url in
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
-            } else if case let content as AMPFileContent = content {
+            } else if case let content as IONFileContent = content {
                 content.temporaryURL { url in
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
-            } else if case let content as AMPImageContent = content {
+            } else if case let content as IONImageContent = content {
                 content.temporaryURL { url in
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
@@ -317,14 +317,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func mediaData(name: String, position: Int = 0, callback: (Result<NSData, AMPError> -> Void)) -> AMPPage {
+    public func mediaData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
-            if case let content as AMPMediaContent = content {
+            if case let content as IONMediaContent = content {
                 content.data(callback)
             } else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))

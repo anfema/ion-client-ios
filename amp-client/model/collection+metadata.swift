@@ -1,9 +1,9 @@
 //
 //  collection+metadata.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -12,13 +12,13 @@
 import Foundation
 import Alamofire
 
-extension AMPCollection {
+extension IONCollection {
  
     /// Fetch page count
     ///
     /// - parameter parent: parent to get page count for, nil == top level
     /// - parameter callback: block to call for page count return value
-    public func pageCount(parent: String?, callback: (Int -> Void)) -> AMPCollection {
+    public func pageCount(parent: String?, callback: (Int -> Void)) -> IONCollection {
         // append page count to work queue
         dispatch_async(self.workQueue) {
             if let result = self.pageCount(parent) {
@@ -46,7 +46,7 @@ extension AMPCollection {
     ///
     /// - parameter identifier: page identifier to get metadata for
     /// - parameter callback: callback to call with metadata
-    public func metadata(identifier: String, callback: (Result<AMPPageMeta, AMPError> -> Void)) -> AMPCollection {
+    public func metadata(identifier: String, callback: (Result<IONPageMeta, IONError> -> Void)) -> IONCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
             let result = self.metadata(identifier)
@@ -59,8 +59,8 @@ extension AMPCollection {
     /// Fetch metadata sync
     ///
     /// - parameter identifier: page identifier to get metadata for
-    /// - returns: AMPPageMeta object or nil if collection is not loaded
-    public func metadata(identifier: String) -> Result<AMPPageMeta, AMPError> {
+    /// - returns: IONPageMeta object or nil if collection is not loaded
+    public func metadata(identifier: String) -> Result<IONPageMeta, IONError> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .Failure(.DidFail)
         }
@@ -76,7 +76,7 @@ extension AMPCollection {
     ///
     /// - parameter parent: parent to enumerate metadata for, nil == top level
     /// - parameter callback: callback to call with metadata
-    public func enumerateMetadata(parent: String?, callback: (AMPPageMeta -> Void)) -> AMPCollection {
+    public func enumerateMetadata(parent: String?, callback: (IONPageMeta -> Void)) -> IONCollection {
         self.metadataList(parent) { list in
             for listItem in list {
                 callback(listItem)
@@ -90,7 +90,7 @@ extension AMPCollection {
     ///
     /// - parameter parent: parent to enumerate metadata for, nil == top level
     /// - parameter callback: callback to call with metadata
-    public func metadataList(parent: String?, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
+    public func metadataList(parent: String?, callback: ([IONPageMeta] -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {
             responseQueueCallback(callback, parameter: self.metadataList(parent) ?? [])
@@ -103,7 +103,7 @@ extension AMPCollection {
     ///
     /// - parameter parent: parent to enumerate metadata for, nil == top level
     /// - returns: metadata or nil if collection is not ready yet
-    public func metadataList(parent: String?) -> [AMPPageMeta]? {
+    public func metadataList(parent: String?) -> [IONPageMeta]? {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return nil
         }
@@ -131,7 +131,7 @@ extension AMPCollection {
     /// - parameter pageIdentifier: the page identifier to calculate the path for
     /// - parameter callback: callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
     /// - returns: self for chaining
-    public func metaPath(pageIdentifier: String, callback: ([AMPPageMeta] -> Void)) -> AMPCollection {
+    public func metaPath(pageIdentifier: String, callback: ([IONPageMeta] -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             if let result = self.metaPath(pageIdentifier) {
                 responseQueueCallback(callback, parameter: result)
@@ -144,7 +144,7 @@ extension AMPCollection {
     ///
     /// - parameter pageIdentifier: the page identifier to calculate the path for
     /// - returns: a list of metadata items (last item is requested page, first item is toplevel parent) or nil if collection not ready
-    public func metaPath(pageIdentifier: String) -> [AMPPageMeta]? {
+    public func metaPath(pageIdentifier: String) -> [IONPageMeta]? {
         guard !self.hasFailed && self.lastUpdate != nil,
             let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
                 return nil
@@ -168,11 +168,11 @@ extension AMPCollection {
     ///
     /// - parameter parent:   parent from where to start the leave search (nil for toplevel)
     /// - parameter callback: callback called with unrealized page objects
-    public func leaves(parent: String?, callback:([AMPPage] -> Void)) {
+    public func leaves(parent: String?, callback:([IONPage] -> Void)) {
         dispatch_async(self.workQueue) {
             let metaItems = self.metaLeaves(parent)
 
-            let result:[AMPPage] = metaItems.map({ meta -> AMPPage in
+            let result:[IONPage] = metaItems.map({ meta -> IONPage in
                 return self.page(meta.identifier)
             })
             
@@ -184,8 +184,8 @@ extension AMPCollection {
     /// Fetch page tree metadata leaves from parent (walks down the page tree and returns all leaves at the end)
     ///
     /// - parameter parent:   parent from where to start the leave search (nil for toplevel)
-    /// - returns:            array of `AMPPageMeta` objects
-    public func metaLeaves(parent: String?) -> [AMPPageMeta] {
+    /// - returns:            array of `IONPageMeta` objects
+    public func metaLeaves(parent: String?) -> [IONPageMeta] {
         
         let toplevel = self.pageMeta.filter { $0.parent == parent }
         let result = self.leaveRecursive(toplevel)
@@ -198,7 +198,7 @@ extension AMPCollection {
     
     internal func getChildIdentifiersForPage(parent: String, callback:([String] -> Void)) {
         dispatch_async(self.workQueue) {
-            var temp:[AMPPageMeta] = self.pageMeta.filter({ $0.parent == parent })
+            var temp:[IONPageMeta] = self.pageMeta.filter({ $0.parent == parent })
             
             temp.sortInPlace({ (page1, page2) -> Bool in
                 return page1.position < page2.position
@@ -210,8 +210,8 @@ extension AMPCollection {
         }
     }
     
-    internal func getPageMetaForPage(identifier: String) -> AMPPageMeta? {
-        var result: AMPPageMeta? = nil
+    internal func getPageMetaForPage(identifier: String) -> IONPageMeta? {
+        var result: IONPageMeta? = nil
         for meta in self.pageMeta {
             if meta.identifier == identifier {
                 result = meta
@@ -222,9 +222,9 @@ extension AMPCollection {
     }
 
     // MARK: - Private
-    private func leaveRecursive(pages: [AMPPageMeta]) -> [AMPPageMeta] {
-        var result = [AMPPageMeta]()
-        var check = [AMPPageMeta]()
+    private func leaveRecursive(pages: [IONPageMeta]) -> [IONPageMeta] {
+        var result = [IONPageMeta]()
+        var check = [IONPageMeta]()
         for page in pages {
             var is_leaf = true
             for meta in self.pageMeta {

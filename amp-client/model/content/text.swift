@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -16,7 +16,7 @@ import html5tokenizer
 import Alamofire
 
 /// Text content, may be rendered in different markup
-public class AMPTextContent : AMPContent {
+public class IONTextContent: IONContent {
     /// mime type of the contained text (usually one of: text/plain, text/html, text/markdown)
     public var mimeType:String = "text/plain"
     
@@ -33,14 +33,14 @@ public class AMPTextContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawMimeType = dict["mime_type"], rawIsMultiline = dict["is_multiline"], rawText = dict["text"],
             case .JSONString(let mimeType) = rawMimeType,
             case .JSONBoolean(let multiLine) = rawIsMultiline,
             case .JSONString(let text) = rawText else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType
@@ -52,8 +52,8 @@ public class AMPTextContent : AMPContent {
     ///
     /// All HTML gets wrapped in a `div` tag with 2 css classes applied:
     ///
-    /// - `ampcontent`
-    /// - `ampcontent__<outlet_name>`
+    /// - `ioncontent`
+    /// - `ioncontent__<outlet_name>`
     ///
     /// Available converters:
     ///
@@ -75,7 +75,7 @@ public class AMPTextContent : AMPContent {
         default:
             return nil
         }
-        return "<div class=\"ampcontent ampcontent__\(self.outlet)\">\(text)</div>"
+        return "<div class=\"ioncontent ioncontent__\(self.outlet)\">\(text)</div>"
     }
     
     /// Fetch NSAttributed String version of the text
@@ -91,9 +91,9 @@ public class AMPTextContent : AMPContent {
         // TODO: Write tests for attributedString() function in TextContent
         switch (self.mimeType) {
         case "text/html":
-            return HTMLParser(html: self.text).renderAttributedString(AMP.config.stringStyling)
+            return HTMLParser(html: self.text).renderAttributedString(ION.config.stringStyling)
         case "text/markdown":
-            return MDParser(markdown: self.text).render().renderAttributedString(AMP.config.stringStyling)
+            return MDParser(markdown: self.text).render().renderAttributedString(ION.config.stringStyling)
         case "text/plain":
             return NSAttributedString(string: self.text)
         default:
@@ -126,20 +126,20 @@ public class AMPTextContent : AMPContent {
     }
 }
 
-/// Text rendering extensions for AMPPage
-extension AMPPage {
+/// Text rendering extensions for IONPage
+extension IONPage {
     
     /// Fetch plaintext string from named outlet
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
-    public func text(name: String, position: Int = 0) -> Result<String, AMPError> {
+    public func text(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
-        if case let content as AMPTextContent = content {
+        if case let content as IONTextContent = content {
             if let text = content.plainText() {
                 return .Success(text)
             } else {
@@ -156,14 +156,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func text(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
+    public func text(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
-            if case let content as AMPTextContent = content {
+            if case let content as IONTextContent = content {
                 if let text = content.plainText() {
                     responseQueueCallback(callback, parameter: .Success(text))
                 } else {
@@ -181,13 +181,13 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: html string if the outlet was a text outlet and the page was already cached, else nil
-    public func html(name: String, position: Int = 0) -> Result<String, AMPError> {
+    public func html(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
         
-        if case let content as AMPTextContent = content {
+        if case let content as IONTextContent = content {
             if let text = content.htmlText() {
                 return .Success(text)
             } else {
@@ -205,14 +205,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func html(name: String, position: Int = 0, callback: (Result<String, AMPError> -> Void)) -> AMPPage {
+    public func html(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
-            if case let content as AMPTextContent = content {
+            if case let content as IONTextContent = content {
                 if let text = content.htmlText() {
                     responseQueueCallback(callback, parameter: .Success(text))
                 } else {
@@ -230,13 +230,13 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
-    public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, AMPError> {
+    public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
 
-        if case let content as AMPTextContent = content {
+        if case let content as IONTextContent = content {
             if let text = content.attributedString() {
                 return .Success(text)
             } else {
@@ -254,14 +254,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, AMPError> -> Void)) -> AMPPage {
+    public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
 
-            if case let content as AMPTextContent = content {
+            if case let content as IONTextContent = content {
                 if let text = content.attributedString() {
                     responseQueueCallback(callback, parameter: .Success(text))
                 } else {

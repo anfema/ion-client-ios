@@ -3,15 +3,15 @@
 //  amp-tests
 //
 //  Created by Johannes Schriewer on 11/11/15.
-//  Copyright © 2015 Johannes Schriewer. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 
 import UIKit
 import html5tokenizer
-import amp_client
+import ion_client
 import Markdown
 
-@testable import amp_client
+@testable import ion_client
 
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!

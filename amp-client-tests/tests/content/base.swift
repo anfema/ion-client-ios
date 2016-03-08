@@ -1,16 +1,16 @@
 //
 //  base.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class contentBaseTests: LoggedInXCTestCase {
     
@@ -25,7 +25,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchSync() {
         let expectation = self.expectationWithDescription("testOutletFetchSync")
         
-        AMP.collection("test").page("page_001"){ result in
+        ION.collection("test").page("page_001"){ result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -45,7 +45,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("text") { result in
+        ION.collection("test").page("page_001").outlet("text") { result in
             guard case .Success = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -59,7 +59,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletFetchFail() {
         let expectation = self.expectationWithDescription("testOutletFetchFail")
         
-        AMP.collection("test").page("page_001").outlet("UnknownOutlet") { result in
+        ION.collection("test").page("page_001").outlet("UnknownOutlet") { result in
             guard case .Success = result else {
                 if case .OutletNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "UnknownOutlet")
@@ -79,7 +79,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayCount() {
         let expectation = self.expectationWithDescription("testOutletArrayCount")
         
-        AMP.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { count in
+        ION.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { count in
             XCTAssertEqual(count, 32)
             expectation.fulfill()
         }
@@ -89,7 +89,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayValues() {
         for i in 0..<32 {
             let expectation = self.expectationWithDescription("testOutletArrayValues")
-            AMP.collection("test").page("page_002").color("colorarray", position: i) { result in
+            ION.collection("test").page("page_002").color("colorarray", position: i) { result in
                 guard case .Success(let color) = result else {
                     XCTFail()
                     expectation.fulfill()

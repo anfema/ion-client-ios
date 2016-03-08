@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -19,7 +19,7 @@ import DEjson
 import Alamofire
 
 /// Color content
-public class AMPColorContent : AMPContent {
+public class IONColorContent : IONContent {
     /// red component (0-255)
     public var r:Int!
     
@@ -40,7 +40,7 @@ public class AMPColorContent : AMPContent {
         
         // make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         // make sure all data is there
@@ -49,7 +49,7 @@ public class AMPColorContent : AMPContent {
             case .JSONNumber(let g) = rawG,
             case .JSONNumber(let b) = rawB,
             case .JSONNumber(let a) = rawA else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         // init from deserialized data
@@ -78,8 +78,8 @@ public class AMPColorContent : AMPContent {
     #endif
 }
 
-/// Color extension to AMPPage
-extension AMPPage {
+/// Color extension to IONPage
+extension IONPage {
     
     #if os(OSX)
     /// Fetch `NSColor` object from named outlet
@@ -87,13 +87,13 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, AMPError> {
+    public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
         
-        if case let content as AMPColorContent = content {
+        if case let content as IONColorContent = content {
             if let color = content.color() {
                 return .Success(color)
             } else {
@@ -111,14 +111,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, position: Int = 0, callback: (Result<NSColor, AMPError> -> Void)) -> AMPPage {
+    public func color(name: String, position: Int = 0, callback: (Result<NSColor, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
-            if case let content as AMPColorContent = content {
+            if case let content as IONColorContent = content {
                 if let c = content.color() {
                     responseQueueCallback(callback, parameter: .Success(c))
                 } else {
@@ -138,13 +138,13 @@ extension AMPPage {
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
-    public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, AMPError> {
+    public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
     
-        if case let content as AMPColorContent = content {
+        if case let content as IONColorContent = content {
             if let color = content.color() {
                 return .Success(color)
             } else {
@@ -162,14 +162,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func color(name: String, position: Int = 0, callback: (Result<UIColor, AMPError> -> Void)) -> AMPPage {
+    public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
-            if case let content as AMPColorContent = content {
+            if case let content as IONColorContent = content {
                 if let c = content.color() {
                     responseQueueCallback(callback, parameter: .Success(c))
                 } else {

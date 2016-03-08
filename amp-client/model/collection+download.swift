@@ -1,9 +1,9 @@
 //
 //  collection+download.swift
-//  amp-tests
+//  ion-client
 //
 //  Created by Johannes Schriewer on 27/11/15.
-//  Copyright © 2015 Johannes Schriewer. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,9 +14,9 @@ import Tarpit
 import DEjson
 
 
-extension AMPCollection {
+extension IONCollection {
     private var lastUpdatedIdentifier: String {
-        return "AMP.collection.lastUpdated"
+        return "ION.collection.lastUpdated"
     }
     
     public var lastCompleteUpdate: NSDate? {
@@ -53,7 +53,7 @@ extension AMPCollection {
         }
     }
     
-    public func download(callback: (Bool -> Void)) -> AMPCollection {
+    public func download(callback: (Bool -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard self.archiveURL != nil else {
                 responseQueueCallback(callback, parameter: false)
@@ -72,7 +72,7 @@ extension AMPCollection {
                 }
             }
             
-            AMPRequest.fetchBinary(url, queryParameters: q, cached: AMP.config.cacheBehaviour(.Ignore),
+            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.Ignore),
                 checksumMethod:"null", checksum: "") { result in
                     guard case .Success(let filename) = result else {
                         responseQueueCallback(callback, parameter: false)
@@ -86,12 +86,12 @@ extension AMPCollection {
 
                     dispatch_async(self.workQueue) {
                         let result = self.unpackToCache(filename)
-                        dispatch_async(AMP.config.responseQueue){
+                        dispatch_async(ION.config.responseQueue){
                             if result == true {
                                 self.lastCompleteUpdate = NSDate()
-                                AMP.resetMemCache()
-                                for (_, collection) in AMP.collectionCache where collection.identifier == self.identifier {
-                                    AMP.config.lastOnlineUpdate[collection.identifier] = self.lastCompleteUpdate
+                                ION.resetMemCache()
+                                for (_, collection) in ION.collectionCache where collection.identifier == self.identifier {
+                                    ION.config.lastOnlineUpdate[collection.identifier] = self.lastCompleteUpdate
                                 }
                             }
                             callback(result)
@@ -107,7 +107,7 @@ extension AMPCollection {
         var index = [JSONObject]()
         
         defer {
-            AMPRequest.saveCacheDB()
+            IONRequest.saveCacheDB()
         }
         
         do {
@@ -143,7 +143,7 @@ extension AMPCollection {
                         }
                         
                         if filename == file.filename {
-                            AMPRequest.saveToCache(file.data, url: url, checksum: checksum, last_updated: file.mtime)
+                            IONRequest.saveToCache(file.data, url: url, checksum: checksum, last_updated: file.mtime)
                             found = idx
                             break
                         }

@@ -1,9 +1,9 @@
 //
 //  collection+search.swift
-//  amp-tests
+//  ion-client
 //
 //  Created by Johannes Schriewer on 16/11/15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -11,26 +11,26 @@
 
 import Foundation
 
-public extension AMPCollection {
+public extension IONCollection {
     
     /// Get a fulltext search handle
     ///
     /// - parameter callback: callback to be called if the search handle is ready
-    public func getSearchHandle(callback: (AMPSearchHandle -> Void)) {
-        guard AMP.config.isFTSEnabled(self.identifier) else {
+    public func getSearchHandle(callback: (IONSearchHandle -> Void)) {
+        guard ION.config.isFTSEnabled(self.identifier) else {
             return
         }
-        if !NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(self.identifier)) {
-            AMP.downloadFTSDB(self.identifier) {
+        if !NSFileManager.defaultManager().fileExistsAtPath(ION.searchIndex(self.identifier)) {
+            ION.downloadFTSDB(self.identifier) {
                 dispatch_async(self.workQueue) {
-                    if let handle = AMPSearchHandle(collection: self) {
+                    if let handle = IONSearchHandle(collection: self) {
                         callback(handle)
                     }
                 }
             }
         } else {
             dispatch_async(self.workQueue) {
-                if let handle = AMPSearchHandle(collection: self) {
+                if let handle = IONSearchHandle(collection: self) {
                     callback(handle)
                 }
             }

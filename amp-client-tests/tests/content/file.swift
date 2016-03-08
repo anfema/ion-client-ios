@@ -1,9 +1,9 @@
 //
 //  file.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -11,7 +11,7 @@
 
 import XCTest
 import HashExtensions
-@testable import amp_client
+@testable import ion_client
 
 class fileContentTests: LoggedInXCTestCase {
     
@@ -26,21 +26,21 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").outlet("file") { result in
+        ION.collection("test").page("page_001").outlet("file") { result in
             guard case .Success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            AMP.collection("test").page("page_001").fileData("file") { result in
+            ION.collection("test").page("page_001").fileData("file") { result in
                 guard case .Success(let data) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
 
-                guard case let file as AMPFileContent = outlet else {
+                guard case let file as IONFileContent = outlet else {
                         XCTFail("File outlet not found or of wrong type \(outlet)")
                         expectation.fulfill()
                         return
@@ -60,14 +60,14 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")
 
-        AMP.collection("test").page("page_001").outlet("file") { result in
+        ION.collection("test").page("page_001").outlet("file") { result in
             guard case .Success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            guard case let img as AMPFileContent = outlet else {
+            guard case let img as IONFileContent = outlet else {
                 XCTFail("File outlet not found or of wrong type \(outlet)")
                 expectation.fulfill()
                 return
@@ -94,7 +94,7 @@ class fileContentTests: LoggedInXCTestCase {
     func testFileOutletTempURL() {
         let expectation = self.expectationWithDescription("testFileOutletTempURL")
         
-        AMP.collection("test").page("page_001").temporaryURL("file") { result in
+        ION.collection("test").page("page_001").temporaryURL("file") { result in
             guard case .Success(let url) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -112,11 +112,11 @@ class fileContentTests: LoggedInXCTestCase {
         let expectation1 = self.expectationWithDescription("testFileDownloadProgress")
         let expectation2 = self.expectationWithDescription("testFileDownloadFinished")
 
-        AMP.resetDiskCache()
+        ION.resetDiskCache()
         
         // FIXME: Why is this called 2 times for 100%?
         var flag = false
-        AMP.config.progressHandler = { total, downloaded, count in
+        ION.config.progressHandler = { total, downloaded, count in
             if count > 0 {
                 XCTAssert(total > 0)
                 let percent: Float = Float(downloaded) / Float(total) * 100.0
@@ -128,14 +128,14 @@ class fileContentTests: LoggedInXCTestCase {
                 expectation1.fulfill()
             }
         }
-        AMP.collection("test").page("page_001").outlet("file") { result in
+        ION.collection("test").page("page_001").outlet("file") { result in
             guard case .Success(let outlet) = result else {
                 XCTFail()
                 expectation2.fulfill()
                 return
             }
 
-            guard case let file as AMPFileContent = outlet else {
+            guard case let file as IONFileContent = outlet else {
                 XCTFail("File outlet not found or of wrong type \(outlet)")
                 return
             }
@@ -152,6 +152,6 @@ class fileContentTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
-        AMP.config.progressHandler = nil
+        ION.config.progressHandler = nil
     }
 }

@@ -1,16 +1,16 @@
 //
 //  page_metadata.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class pageMetadataTests: LoggedInXCTestCase {
     
@@ -24,9 +24,9 @@ class pageMetadataTests: LoggedInXCTestCase {
     
     func testMetadataFetchAsync() {
         let expectation = self.expectationWithDescription("testMetadataFetchAsync")
-        AMP.resetMemCache()
+        ION.resetMemCache()
         
-        AMP.collection("test").metadata("page_001") { result in
+        ION.collection("test").metadata("page_001") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -44,9 +44,9 @@ class pageMetadataTests: LoggedInXCTestCase {
 
     func testMetadataFetchAsync2() {
         let expectation = self.expectationWithDescription("testMetadataFetchAsync2")
-        AMP.resetMemCache()
+        ION.resetMemCache()
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -67,7 +67,7 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataEnumerateAsync")
        
         var count = 0
-        AMP.collection("test").enumerateMetadata(nil) { metadata in
+        ION.collection("test").enumerateMetadata(nil) { metadata in
             XCTAssertNil(metadata.parent)
             count++
             if count == 2 {
@@ -81,7 +81,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataEnumerateAsync2() {
         let expectation = self.expectationWithDescription("testMetadataEnumerateAsync2")
         
-        AMP.collection("test").enumerateMetadata("page_002") { metadata in
+        ION.collection("test").enumerateMetadata("page_002") { metadata in
             XCTAssert(metadata.parent == "page_002")
             expectation.fulfill()
         }
@@ -91,7 +91,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataListAsync() {
         let expectation = self.expectationWithDescription("testMetadataListAsync")
         
-        AMP.collection("test").metadataList(nil) { list in
+        ION.collection("test").metadataList(nil) { list in
             XCTAssert(list.count == 2)
             XCTAssert(list[0].position == 0)
             XCTAssert(list[0].identifier == "page_001")
@@ -105,7 +105,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataListAsync2() {
         let expectation = self.expectationWithDescription("testMetadataListAsync2")
         
-        AMP.collection("test").metadataList("page_002") { list in
+        ION.collection("test").metadataList("page_002") { list in
             XCTAssert(list.count == 1)
             expectation.fulfill()
         }
@@ -115,7 +115,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataThumbnailAsync() {
         let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -140,7 +140,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetaChildren() {
         let expectation = self.expectationWithDescription("testMetaChildren")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -160,7 +160,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testOriginalImage() {
         let expectation = self.expectationWithDescription("testOriginalImage")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -177,7 +177,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptSuccess1() {
         let expectation = self.expectationWithDescription("testSubscriptSuccess1")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -194,7 +194,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptSuccess2() {
         let expectation = self.expectationWithDescription("testSubscriptSuccess2")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -217,7 +217,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptFail1() {
         let expectation = self.expectationWithDescription("testSubscriptFail1")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -233,7 +233,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testSubscriptFail2() {
         let expectation = self.expectationWithDescription("testSubscriptFail2")
         
-        AMP.collection("test").metadata("page_002") { result in
+        ION.collection("test").metadata("page_002") { result in
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()

@@ -1,16 +1,16 @@
 //
 //  number.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class numberContentTests: LoggedInXCTestCase {
     
@@ -25,7 +25,7 @@ class numberContentTests: LoggedInXCTestCase {
     func testNumberOutletFetchSync() {
         let expectation = self.expectationWithDescription("testNumberOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 return
@@ -44,7 +44,7 @@ class numberContentTests: LoggedInXCTestCase {
     func testNumberOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testNumberOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").number("number") { result in
+        ION.collection("test").page("page_001").number("number") { result in
             guard case .Success(let value) = result else {
                 XCTFail()
                 return

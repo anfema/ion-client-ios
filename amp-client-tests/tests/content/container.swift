@@ -1,16 +1,16 @@
 //
 //  container.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class containerContentTests: LoggedInXCTestCase {
     
@@ -25,7 +25,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletFetchSync() {
         let expectation = self.expectationWithDescription("testContainerOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -45,7 +45,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testContainerOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").children("layout-001") { result in
+        ION.collection("test").page("page_001").children("layout-001") { result in
             guard case .Success(let children) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -61,14 +61,14 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletSubscripting() {
         let expectation = self.expectationWithDescription("fetch outlet")
         
-        AMP.collection("test").page("page_001").outlet("layout-001") { result in
+        ION.collection("test").page("page_001").outlet("layout-001") { result in
             guard case .Success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            if case let container as AMPContainerContent = outlet {
+            if case let container as IONContainerContent = outlet {
                 XCTAssertEqual(container.children.count, 10)
                 XCTAssertNotNil(container[0])
                 XCTAssertNil(container[10])

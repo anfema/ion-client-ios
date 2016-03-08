@@ -1,13 +1,13 @@
 //
 //  NSDate+ISODate.swift
-//  amp-tests
+//  ion-tests
 //
 //  Created by Dominik Felber on 13.01.16.
-//  Copyright © 2016 Johannes Schriewer. All rights reserved.
+//  Copyright © 2016 anfema GmbH. All rights reserved.
 //
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class NSDate_ISODate: XCTestCase {
     

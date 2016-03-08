@@ -1,9 +1,9 @@
 //
 //  request.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 22.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -17,7 +17,7 @@ import DEjson
 
 // TODO: Export interface and make generic to use cache for other requests
 
-public enum AMPCacheBehaviour {
+public enum IONCacheBehaviour {
     case Prefer
     case Force
     case Ignore
@@ -40,22 +40,22 @@ public extension NSData {
 
 
 /// Base Request class that handles caching
-public class AMPRequest {
+public class IONRequest {
     static var cacheDB:[JSONObject]?
     
     // MARK: - API
 
-    /// Async fetch JSON from AMP Server
+    /// Async fetch JSON from ION Server
     ///
     /// - parameter endpoint: the API endpoint to query
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
-    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, callback: (Result<JSONObject, AMPError> -> NSDate?)) {
+    /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
+    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, callback: (Result<JSONObject, IONError> -> NSDate?)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         let cacheName = self.cacheName(NSURL(string: urlString)!)
 
-        let fromCache:(String -> Result<JSONObject, AMPError>) = { cacheName in
+        let fromCache:(String -> Result<JSONObject, IONError>) = { cacheName in
             // Check disk cache before running HTTP request
             if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
                 // return from cache instantly
@@ -71,7 +71,7 @@ public class AMPRequest {
                     // do nothing, fallthrough to HTTP request
                 }
             }
-            return .Failure(AMPError.NoData(nil))
+            return .Failure(IONError.NoData(nil))
         }
         
         if cached == .Prefer || cached == .Force {
@@ -81,7 +81,7 @@ public class AMPRequest {
                 responseQueueCallback(callback, parameter: .Success(json))
                 return
             } else if cached == .Force {
-                responseQueueCallback(callback, parameter: .Failure(AMPError.ServerUnreachable))
+                responseQueueCallback(callback, parameter: .Failure(IONError.ServerUnreachable))
                 return
             }
         }
@@ -90,13 +90,13 @@ public class AMPRequest {
         headers["Accept"] = "application/json"
         if let index = self.getCacheDBEntry(urlString) {
             if let rawLastUpdated = index["last_updated"],
-               case .JSONNumber(let timestamp) = rawLastUpdated {
-                let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestamp))
+               case .JSONNumber(let timestion) = rawLastUpdated {
+                let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestion))
                 headers["If-Modified-Since"] = lastUpdated.rfc822DateString
             }
         }
         
-        let request = AMP.config.alamofire.request(.GET, urlString, headers:headers)
+        let request = ION.config.alamofire.request(.GET, urlString, headers:headers)
         
         request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
@@ -124,29 +124,29 @@ public class AMPRequest {
             
             if let jsonObject = jsonObject {
                 // patch last_updated into response
-                let patchedResult:Result<JSONObject, AMPError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
+                let patchedResult:Result<JSONObject, IONError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
                 // call callback in correct queue
-                dispatch_async(AMP.config.responseQueue) {
+                dispatch_async(ION.config.responseQueue) {
                     if let date = callback(patchedResult) {
                         self.saveToCache(response.request!, checksumMethod: "null", checksum: "", lastUpdate: date)
                     }
                 }
             } else {
-                responseQueueCallback(callback, parameter: .Failure(AMPError.NoData(nil)))
+                responseQueueCallback(callback, parameter: .Failure(IONError.NoData(nil)))
             }
         }
         
         request.resume()
     }
     
-    /// Async fetch a binary file from AMP Server
+    /// Async fetch a binary file from ION Server
     ///
     /// - parameter urlString: the URL to fetch, has to be a complete and valid URL
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
-    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`,
+    /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: AMPCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, AMPError> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, IONError> -> Void)) {
         let headers = self.headers()
         let url = NSURL(string: urlString)!
         
@@ -156,7 +156,7 @@ public class AMPRequest {
                 responseQueueCallback(callback, parameter: cacheResult)
                 return
             } else if cached == .Force {
-                responseQueueCallback(callback, parameter: .Failure(AMPError.ServerUnreachable))
+                responseQueueCallback(callback, parameter: .Failure(IONError.ServerUnreachable))
                 return
             }
         }
@@ -167,7 +167,7 @@ public class AMPRequest {
         }
 
         // Start download task
-        let downloadTask = AMP.config.alamofire.download(
+        let downloadTask = ION.config.alamofire.download(
             .GET, urlString,
             parameters: queryParameters,
             encoding: .URLEncodedInURL,
@@ -178,10 +178,10 @@ public class AMPRequest {
             // Register the download with the global progress handler
             if totalBytesExpectedToRead < 0 {
                 // server sent no content-length header, we expect one byte more than we got
-                AMP.registerProgress(totalBytesRead, bytesExpected: totalBytesRead + 1, urlString: urlString)
+                ION.registerProgress(totalBytesRead, bytesExpected: totalBytesRead + 1, urlString: urlString)
             } else {
                 // server sent a content-length header, trust it
-                AMP.registerProgress(totalBytesRead, bytesExpected: totalBytesExpectedToRead, urlString: urlString)
+                ION.registerProgress(totalBytesRead, bytesExpected: totalBytesExpectedToRead, urlString: urlString)
             }
         }
         
@@ -210,11 +210,11 @@ public class AMPRequest {
                 // call final update for progress, we're using 1 here because the user likely wants to
                 // calculate a percentage and thus divides those numbers
                 if response.allHeaderFields["Content-Length"] == nil {
-                    AMP.registerProgress(1, bytesExpected: 1, urlString: urlString)
+                    ION.registerProgress(1, bytesExpected: 1, urlString: urlString)
                 }
 
                 // try falling back to cache
-                dispatch_async(AMP.config.responseQueue) {
+                dispatch_async(ION.config.responseQueue) {
                     let result = fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
                     if case .Failure = result {
                         if response.statusCode == 304 {
@@ -235,7 +235,7 @@ public class AMPRequest {
                     try NSFileManager.defaultManager().moveItemAtPath(self.cacheName(url) + ".tmp", toPath: self.cacheName(url))
                 } catch {
                     // ok moving failed
-                    responseQueueCallback(callback, parameter: Result.Failure(AMPError.NoData(error)))
+                    responseQueueCallback(callback, parameter: Result.Failure(IONError.NoData(error)))
                     return
                 }
                 
@@ -251,7 +251,7 @@ public class AMPRequest {
                 // finish up progress reporting
                 if let unwrapped = response where unwrapped.allHeaderFields["Content-Length"] == nil {
                     let bytes: Int64 = Int64(self.cachedFile(urlString)!.length)
-                    AMP.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
+                    ION.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
                 }
 
                 self.saveToCache(request!, checksumMethod: ckSumMethod, checksum: ckSum)
@@ -283,19 +283,19 @@ public class AMPRequest {
         return data
     }
     
-    /// Async POST JSON to AMP Server
+    /// Async POST JSON to ION Server
     ///
     /// - parameter endpoint: the API endpoint to post to
     /// - parameter queryParameters: any get parameters to include in the query or nil
     /// - parameter body: dictionary with parameters (will be JSON encoded)
-    /// - parameter callback: a block to call when the request finishes, will be called in `AMP.config.responseQueue`
-    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONResponse, AMPError> -> Void)) {
+    /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
+    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONResponse, IONError> -> Void)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
         var headers = self.headers()
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
         
-        let request = AMP.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
+        let request = ION.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
             responseQueueCallback(callback, parameter: response.result)
@@ -309,10 +309,10 @@ public class AMPRequest {
     ///
     /// - parameter endpoint: the API endpoint
     /// - parameter queryParameters: any query parameters to include in the query or nil
-    /// - returns: complete valid URL string for query based on `AMP.config`
+    /// - returns: complete valid URL string for query based on `ION.config`
     private class func buildURL(endpoint: String, queryParameters: [String:String]?) -> String {
         // append endpoint to base url
-        let url = AMP.config.serverURL.URLByAppendingPathComponent(endpoint)
+        let url = ION.config.serverURL.URLByAppendingPathComponent(endpoint)
         
         // add query parameters
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
@@ -332,9 +332,9 @@ public class AMPRequest {
     ///
     /// - returns: Headers-Dictionary for use in Alamofire request
     private class func headers() -> [String:String] {
-        var headers = AMP.config.additionalHeaders
+        var headers = ION.config.additionalHeaders
         
-        if let token = AMP.config.sessionToken {
+        if let token = ION.config.sessionToken {
             headers["Authorization"] = "Token " + token
         }
         
@@ -347,7 +347,7 @@ public class AMPRequest {
     /// - parameter urlString: the request URL (used to find the last update date in cache DB)
     /// - returns: new JSON object with added `last_updated` field if input was a dictionary, does not change arrays
     private class func augmentJSONWithChangeDate(json: JSONObject, urlString: String) -> JSONObject {
-        // augment json with timestamp for last update
+        // augment json with timestion for last update
         guard case .JSONDictionary(var dict) = json,
               let cacheDBEntry = self.getCacheDBEntry(urlString) where cacheDBEntry["last_updated"] != nil,
               case .JSONNumber = cacheDBEntry["last_updated"]! else {
@@ -365,12 +365,12 @@ public class AMPRequest {
     /// - parameter checksumMethod: used checksumming method
     /// - parameter checksum: checksum to compare to
     /// - returns: Success with cached file name or Failure
-    internal class func fetchFromCache(urlString: String, checksumMethod: String, checksum: String) -> Result<String, AMPError> {
+    internal class func fetchFromCache(urlString: String, checksumMethod: String, checksum: String) -> Result<String, IONError> {
         let url = NSURL(string: urlString)!
 
         // validate checksum
         guard let cacheDBEntry = self.getCacheDBEntry(urlString) else {
-            return .Failure(AMPError.InvalidJSON(nil))
+            return .Failure(IONError.InvalidJSON(nil))
         }
         
         guard let rawFileName = cacheDBEntry["filename"],
@@ -379,10 +379,10 @@ public class AMPRequest {
             case .JSONString(let filename)             = rawFileName,
             case .JSONString(let cachedChecksumMethod) = rawChecksumMethod,
             case .JSONString(let cachedChecksum)       = rawChecksum else {
-                return .Failure(AMPError.InvalidJSON(nil))
+                return .Failure(IONError.InvalidJSON(nil))
         }
         
-        let fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
+        let fileURL = self.cacheBaseDir(url.host!, locale: ION.config.locale)
         let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
         
         // ios 8.4 inserts spaces into our checksums, so remove them again
@@ -394,7 +394,7 @@ public class AMPRequest {
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-                return .Failure(AMPError.NoData(nil))
+                return .Failure(IONError.NoData(nil))
             }
         }
         
@@ -402,7 +402,7 @@ public class AMPRequest {
         if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
             return .Success(cacheName)
         } else {
-            return .Failure(AMPError.NoData(nil))
+            return .Failure(IONError.NoData(nil))
         }
     }
 

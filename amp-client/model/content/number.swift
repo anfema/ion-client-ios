@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,7 +14,7 @@ import DEjson
 import Alamofire
 
 /// Number content, has a float value
-public class AMPNumberContent : AMPContent {
+public class IONNumberContent: IONContent {
     /// value
     public var value:Double = 0.0
     
@@ -25,33 +25,33 @@ public class AMPNumberContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawValue = dict["value"],
             case .JSONNumber(let value) = rawValue else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.value = value
     }
 }
 
-/// Number extension to AMPPage
-extension AMPPage {
+/// Number extension to IONPage
+extension IONPage {
     
     /// Return value for named number outlet
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: value if the outlet was a number outlet and the page was already cached, else nil
-    public func number(name: String, position: Int = 0) -> Result<Double, AMPError> {
+    public func number(name: String, position: Int = 0) -> Result<Double, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
         
-        if case let content as AMPNumberContent = content {
+        if case let content as IONNumberContent = content {
             return .Success(content.value)
         }
         return .Failure(.OutletIncompatible)
@@ -64,13 +64,13 @@ extension AMPPage {
     /// - parameter callback: block to call when the number becomes available, will not be called if the outlet
     ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func number(name: String, position: Int = 0, callback: (Result<Double, AMPError> -> Void)) -> AMPPage {
+    public func number(name: String, position: Int = 0, callback: (Result<Double, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
-            if case let content as AMPNumberContent = content {
+            if case let content as IONNumberContent = content {
                 responseQueueCallback(callback, parameter: .Success(content.value))
             } else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))

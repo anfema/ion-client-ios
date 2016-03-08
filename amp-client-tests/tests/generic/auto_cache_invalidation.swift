@@ -1,16 +1,16 @@
 //
 //  auto_cache_invalidation.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 import anfema_mockingbird
 
 class autoCacheTests: LoggedInXCTestCase {
@@ -25,7 +25,7 @@ class autoCacheTests: LoggedInXCTestCase {
     
     func testCollectionFetchNoTimeout() {
         let expectation = self.expectationWithDescription("testCollectionFetchNoTimeout")
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -33,7 +33,7 @@ class autoCacheTests: LoggedInXCTestCase {
             }
 
             XCTAssertNotNil(collection.lastUpdate)
-            AMP.collection("test") { result in
+            ION.collection("test") { result in
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -49,9 +49,9 @@ class autoCacheTests: LoggedInXCTestCase {
 
     func testCollectionFetchWithTimeout() {
         let expectation = self.expectationWithDescription("testCollectionFetchWithTimeout")
-        AMP.config.cacheTimeout = 1
-        AMP.config.lastOnlineUpdate = [String:NSDate]()
-        AMP.collection("test") { result in
+        ION.config.cacheTimeout = 1
+        ION.config.lastOnlineUpdate = [String:NSDate]()
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -60,7 +60,7 @@ class autoCacheTests: LoggedInXCTestCase {
 
             XCTAssertNotNil(collection.lastUpdate)
             sleep(2)
-            AMP.collection("test") { result in
+            ION.collection("test") { result in
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -72,7 +72,7 @@ class autoCacheTests: LoggedInXCTestCase {
             }
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
-        AMP.config.cacheTimeout = 600
+        ION.config.cacheTimeout = 600
     }
 
     
@@ -82,7 +82,7 @@ class autoCacheTests: LoggedInXCTestCase {
         }
 
         // set default mock bundle
-        var path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/amp"
+        var path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
         do {
             try MockingBird.setMockBundle(path)
         } catch {
@@ -91,13 +91,13 @@ class autoCacheTests: LoggedInXCTestCase {
 
         
         // clear cache
-        AMP.resetDiskCache()
-        AMP.resetMemCache()
+        ION.resetDiskCache()
+        ION.resetMemCache()
         
         let expectation = self.expectationWithDescription("testAutoPageUpdate1")
 
         // seed cache
-        AMP.collection("test").download { success in
+        ION.collection("test").download { success in
             XCTAssert(success == true)
             
             expectation.fulfill()
@@ -108,7 +108,7 @@ class autoCacheTests: LoggedInXCTestCase {
 
         
         // check page cache content
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation2.fulfill()
@@ -122,12 +122,12 @@ class autoCacheTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
 
         // reset online update so the next call fetches the collection again
-        AMP.config.lastOnlineUpdate = [String:NSDate]()
+        ION.config.lastOnlineUpdate = [String:NSDate]()
         
         let expectation3 = self.expectationWithDescription("testAutoPageUpdate3")
 
         // Switch to other mock bundle
-        path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/amp_refresh"
+        path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion_refresh"
         do {
             try MockingBird.setMockBundle(path)
         } catch {
@@ -135,7 +135,7 @@ class autoCacheTests: LoggedInXCTestCase {
         }
 
         // check if page has updated
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation3.fulfill()

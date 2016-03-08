@@ -1,9 +1,9 @@
 //
 //  NSDate+ISODate.swift
-//  amp-tests
+//  ion-client
 //
 //  Created by Johannes Schriewer on 11/12/15.
-//  Copyright © 2015 Johannes Schriewer. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 
 import Foundation

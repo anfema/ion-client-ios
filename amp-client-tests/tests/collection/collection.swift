@@ -1,16 +1,16 @@
 //
 //  collection.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
-@testable import amp_client
+@testable import ion_client
 
 class collectionTests: LoggedInXCTestCase {
     
@@ -25,12 +25,12 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetch() {
         let expectation = self.expectationWithDescription("testCollectionFetch")
         
-        AMP.config.errorHandler = { collection, error in
+        ION.config.errorHandler = { collection, error in
             XCTFail()
             expectation.fulfill()
         }
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 return
@@ -42,13 +42,13 @@ class collectionTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
-        AMP.config.resetErrorHandler()
+        ION.config.resetErrorHandler()
     }
     
     func testCollectionFetchError() {
         let expectation = self.expectationWithDescription("testCollectionFetchError")
         
-        AMP.collection("gnarf") { result in
+        ION.collection("gnarf") { result in
             guard case .Success = result else {
                 if case .CollectionNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "gnarf")
@@ -73,7 +73,7 @@ class collectionTests: LoggedInXCTestCase {
         
         let expectation = self.expectationWithDescription("testCollectionFetchNotAllowed")
         
-        AMP.collection("notallowed") { result in
+        ION.collection("notallowed") { result in
             guard case .Success = result else {
                 if case .NotAuthorized = result.error! {
                     // ok
@@ -94,7 +94,7 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionMetaPath() {
         let expectation = self.expectationWithDescription("testCollectionMetaPath")
 
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -117,7 +117,7 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionMetaList() {
         let expectation = self.expectationWithDescription("testCollectionMetaPath")
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -142,7 +142,7 @@ class collectionTests: LoggedInXCTestCase {
     func testLeavesList() {
         let expectation = self.expectationWithDescription("testLeavesList")
         
-        AMP.collection("test").leaves(nil) { pages in
+        ION.collection("test").leaves(nil) { pages in
             XCTAssert(pages.count == 2)
             if pages.count == 2 {
                 XCTAssert(pages[0].identifier == "page_001")
@@ -156,28 +156,28 @@ class collectionTests: LoggedInXCTestCase {
     
     func testCollectionDownload() {
         let expectation = self.expectationWithDescription("testCollectionDownload")
-        AMP.resetDiskCache()
+        ION.resetDiskCache()
         
-        AMP.collection("test").download { success in
+        ION.collection("test").download { success in
             XCTAssertTrue(success)
-            AMP.collection("test").download { success in
+            ION.collection("test").download { success in
                 XCTAssertTrue(success)
                 expectation.fulfill()
             }
         }
         
         self.waitForExpectationsWithTimeout(10.0, handler: nil)
-        AMP.resetDiskCache()
-        AMP.resetMemCache()
+        ION.resetDiskCache()
+        ION.resetMemCache()
     }
 
     func testCancelableCollection() {
-        AMP.resetMemCache()
-        XCTAssert(AMP.collectionCache.count == 0)
+        ION.resetMemCache()
+        XCTAssert(ION.collectionCache.count == 0)
         
         let expectation = self.expectationWithDescription("testCancelableCollection")
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -185,20 +185,20 @@ class collectionTests: LoggedInXCTestCase {
             }
 
             // now this one collection is in the cache
-            XCTAssert(AMP.collectionCache.count == 1)
+            XCTAssert(ION.collectionCache.count == 1)
             
             // let's get a cancelable fork
             let c = collection.cancelable()
             
             // now we have 2 collections in the cache
-            XCTAssert(AMP.collectionCache.count == 2)
+            XCTAssert(ION.collectionCache.count == 2)
             
             // on completion will now be called after cancelling
             c.onCompletion() { collection, completed in
                 XCTAssert(completed == false)
                 // cancel/finish has happened here already so only the original collection should be in the cache
                 dispatch_async(c.workQueue) {
-                    XCTAssert(AMP.collectionCache.count == 1)
+                    XCTAssert(ION.collectionCache.count == 1)
                     expectation.fulfill()
                 }
             }
@@ -211,14 +211,14 @@ class collectionTests: LoggedInXCTestCase {
     }
     
     func testCollectionCompletion() {
-        AMP.resetMemCache()
-        XCTAssert(AMP.collectionCache.count == 0)
+        ION.resetMemCache()
+        XCTAssert(ION.collectionCache.count == 0)
         
         let expectation = self.expectationWithDescription("testCollectionCompletion")
-        var page1:AMPPage? = nil
-        var page2:AMPPage? = nil
+        var page1:IONPage? = nil
+        var page2:IONPage? = nil
 
-        let collection = AMP.collection("test") { result in
+        let collection = ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -262,7 +262,7 @@ class collectionTests: LoggedInXCTestCase {
     func testWaitUntilReady() {
         let expectation = self.expectationWithDescription("testWaitUntilReady")
         
-        AMP.collection("test").waitUntilReady{ collection in
+        ION.collection("test").waitUntilReady{ collection in
             XCTAssertNotNil(collection)
             expectation.fulfill()
         }
@@ -273,7 +273,7 @@ class collectionTests: LoggedInXCTestCase {
     func testWaitUntilReady2() {
         let expectation = self.expectationWithDescription("testWaitUntilReady2")
         
-        AMP.collection("gnarf").waitUntilReady{ result in
+        ION.collection("gnarf").waitUntilReady{ result in
             guard case .Success(let collection) = result else {
                 if case .DidFail = result.error! {
                     // ok
@@ -297,7 +297,7 @@ class collectionTests: LoggedInXCTestCase {
         
         var pages = 0
         
-        AMP.collection("test") { result in
+        ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -337,7 +337,7 @@ class collectionTests: LoggedInXCTestCase {
     func testPageByIndex(){
         let expectation = self.expectationWithDescription("testPageByIndex")
 
-        AMP.collection("test").waitUntilReady() { result in
+        ION.collection("test").waitUntilReady() { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()

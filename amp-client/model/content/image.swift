@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -20,7 +20,7 @@ import Alamofire
 import DEjson
 
 /// Image content, has OS specific image loading functionality
-public class AMPImageContent : AMPContent, CanLoadImage {
+public class IONImageContent: IONContent, CanLoadImage {
     
     /// mime type of the image
     public var mimeType:String!
@@ -74,7 +74,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawMimeType = dict["mime_type"], rawOriginalMimeType = dict["original_mime_type"], rawImage = dict["image"],
@@ -93,7 +93,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
             case .JSONNumber(let scale)     = rawScale,
             case .JSONNumber(let transX)    = rawTranslationX,
             case .JSONNumber(let transY)    = rawTranslationY else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType
@@ -141,7 +141,7 @@ public class AMPImageContent : AMPContent, CanLoadImage {
         guard let myURL = self.url else {
             return
         }
-        AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : myURL.absoluteString ]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : myURL.absoluteString ]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -165,8 +165,8 @@ public class AMPImageContent : AMPContent, CanLoadImage {
     }
 }
 
-/// Image extension to AMPPage
-extension AMPPage {
+/// Image extension to IONPage
+extension IONPage {
     #if os(iOS)
     /// Allocate `UIImage` for named outlet async
     ///
@@ -175,7 +175,7 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, position: Int = 0, callback: (Result<UIImage, AMPError> -> Void)) -> AMPPage {
+    public func image(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
@@ -183,7 +183,7 @@ extension AMPPage {
                 return
             }
             
-            if case let content as AMPImageContent = content {
+            if case let content as IONImageContent = content {
                 content.image(callback: callback)
             }
         }
@@ -197,7 +197,7 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, AMPError> -> Void)) -> AMPPage {
+    public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
@@ -205,7 +205,7 @@ extension AMPPage {
                 return
             }
             
-            if case let content as AMPImageContent = content {
+            if case let content as IONImageContent = content {
                 content.originalImage(callback)
             }
         }
@@ -220,7 +220,7 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func image(name: String, position: Int = 0, callback: (Result<NSImage, AMPError> -> Void)) -> AMPPage {
+    public func image(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
@@ -228,7 +228,7 @@ extension AMPPage {
                 return
             }
     
-            if case let content as AMPImageContent = content {
+            if case let content as IONImageContent = content {
                 content.image(callback: callback)
             }
         }
@@ -241,7 +241,7 @@ extension AMPPage {
     /// - parameter callback: block to call when the image becomes available, will not be called if the outlet
     ///                       is not a image outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, AMPError> -> Void)) -> AMPPage {
+    public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else
             {
@@ -249,7 +249,7 @@ extension AMPPage {
                 return
             }
     
-            if case let content as AMPImageContent = content {
+            if case let content as IONImageContent = content {
                 content.originalImage(callback)
             }
         }

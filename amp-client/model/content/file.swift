@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,7 +14,7 @@ import DEjson
 import Alamofire
 
 /// File content
-public class AMPFileContent : AMPContent, CanLoadImage {
+public class IONFileContent: IONContent, CanLoadImage {
     /// mime type of file
     public var mimeType:String!
     
@@ -43,7 +43,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawMimeType = dict["mime_type"], rawName = dict["name"], rawFileSize = dict["file_size"],
@@ -51,7 +51,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
             case .JSONString(let mimeType) = rawMimeType,
             case .JSONString(let fileName) = rawName,
             case .JSONNumber(let size)     = rawFileSize else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.mimeType = mimeType
@@ -76,11 +76,11 @@ public class AMPFileContent : AMPContent, CanLoadImage {
     ///
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
-    public func data(callback: (Result<NSData, AMPError> -> Void)) {
+    public func data(callback: (Result<NSData, IONError> -> Void)) {
         guard self.isValid else {
             return
         }
-        AMPRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: AMP.config.cacheBehaviour(.Prefer),
+        IONRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
@@ -102,7 +102,7 @@ public class AMPFileContent : AMPContent, CanLoadImage {
         guard let myURL = self.url else {
             return
         }
-        AMPRequest.postJSON("tokenize", queryParameters: nil, body: [ "url" : myURL.absoluteString ]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : myURL.absoluteString ]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -130,8 +130,8 @@ public class AMPFileContent : AMPContent, CanLoadImage {
 
 }
 
-/// File data extension to AMPPage
-extension AMPPage {
+/// File data extension to IONPage
+extension IONPage {
     
     /// Fetch data for file async
     ///
@@ -140,13 +140,13 @@ extension AMPPage {
     /// - parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func fileData(name: String, position: Int = 0, callback: (Result<NSData, AMPError> -> Void)) -> AMPPage {
+    public func fileData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
-            if case let content as AMPFileContent = content {
+            if case let content as IONFileContent = content {
                 content.data(callback)
             }
         }

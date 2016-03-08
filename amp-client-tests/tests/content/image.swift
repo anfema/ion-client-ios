@@ -1,9 +1,9 @@
 //
 //  image.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -11,7 +11,7 @@
 
 import XCTest
 import DEjson
-@testable import amp_client
+@testable import ion_client
 
 class imageContentTests: LoggedInXCTestCase {
     
@@ -26,7 +26,7 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
         
-        AMP.collection("test").page("page_001").image("image") { result in
+        ION.collection("test").page("page_001").image("image") { result in
             guard case .Success(let image) = result else {
                 XCTFail()
                 return
@@ -42,7 +42,7 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletFetchAsyncOriginalCGImage() {
         let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
         
-        AMP.collection("test").page("page_001").originalImage("image") { result in
+        ION.collection("test").page("page_001").originalImage("image") { result in
             guard case .Success(let image) = result else {
                 XCTFail()
                 return
@@ -58,7 +58,7 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletTempURL() {
         let expectation = self.expectationWithDescription("testImageOutletTempURL")
         
-        AMP.collection("test").page("page_001").temporaryURL("image") { result in
+        ION.collection("test").page("page_001").temporaryURL("image") { result in
             guard case .Success(let url) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -76,11 +76,11 @@ class imageContentTests: LoggedInXCTestCase {
         let json: JSONObject = .JSONString("invalid")
         
         do {
-            let image = try AMPImageContent(json: json)
+            let image = try IONImageContent(json: json)
             XCTFail("should have failed. returned \(image) instead")
         }
             
-        catch let e as AMPError
+        catch let e as IONError
         {
             XCTAssertNotNil(e)
             
@@ -104,11 +104,11 @@ class imageContentTests: LoggedInXCTestCase {
         let json: JSONObject = .JSONDictionary(["variation": .JSONString("@2x"), "outlet": .JSONString("titleImage")])
         
         do {
-            let image = try AMPImageContent(json: json)
+            let image = try IONImageContent(json: json)
             XCTFail("should have failed. returned \(image) instead")
         }
             
-        catch let e as AMPError
+        catch let e as IONError
         {
             XCTAssertNotNil(e)
     

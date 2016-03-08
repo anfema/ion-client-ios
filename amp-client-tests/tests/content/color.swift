@@ -1,9 +1,9 @@
 //
 //  color.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 28.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -11,7 +11,7 @@
 
 import XCTest
 import DEjson
-@testable import amp_client
+@testable import ion_client
 
 class colorContentTests: LoggedInXCTestCase {
     
@@ -26,7 +26,7 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchSync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchSync")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -55,7 +55,7 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchSyncFail() {
         let expectation = self.expectationWithDescription("testColorOutletFetchSyncFail")
         
-        AMP.collection("test").page("page_001") { result in
+        ION.collection("test").page("page_001") { result in
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -76,7 +76,7 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsync")
         
-        AMP.collection("test").page("page_001").color("color") { result in
+        ION.collection("test").page("page_001").color("color") { result in
             guard case .Success(let value) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -102,7 +102,7 @@ class colorContentTests: LoggedInXCTestCase {
     func testColorOutletFetchAsyncFail() {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsyncFail")
         
-        AMP.collection("test").page("page_001").color("missing_color") { result in
+        ION.collection("test").page("page_001").color("missing_color") { result in
             guard case .Success = result else {
                 if case .OutletNotFound = result.error! {
                     // ok
@@ -130,7 +130,7 @@ class colorContentTests: LoggedInXCTestCase {
             "outlet": .JSONString("color")])
 
         do {
-            let color = try AMPColorContent(json: json)
+            let color = try IONColorContent(json: json)
             XCTAssertNotNil(color)
         }
             
@@ -150,11 +150,11 @@ class colorContentTests: LoggedInXCTestCase {
             "outlet": .JSONString("color")])
         
         do {
-            let color = try AMPColorContent(json: json)
+            let color = try IONColorContent(json: json)
             XCTFail("should have failed. returned \(color) instead")
         }
             
-        catch let e as AMPError
+        catch let e as IONError
         {
             XCTAssertNotNil(e)
             
@@ -183,11 +183,11 @@ class colorContentTests: LoggedInXCTestCase {
             "outlet": .JSONString("color")])
         
         do {
-            let color = try AMPColorContent(json: json)
+            let color = try IONColorContent(json: json)
             XCTFail("should have failed. returned \(color) instead")
         }
             
-        catch let e as AMPError
+        catch let e as IONError
         {
             XCTAssertNotNil(e)
             
@@ -211,11 +211,11 @@ class colorContentTests: LoggedInXCTestCase {
         let json: JSONObject = .JSONString("invalid")
         
         do {
-            let color = try AMPColorContent(json: json)
+            let color = try IONColorContent(json: json)
             XCTFail("should have failed. returned \(color) instead")
         }
             
-        catch let e as AMPError
+        catch let e as IONError
         {
             XCTAssertNotNil(e)
             

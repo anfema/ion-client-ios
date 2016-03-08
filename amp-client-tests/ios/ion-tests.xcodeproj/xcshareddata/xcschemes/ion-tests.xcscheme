@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8F78B2841BF35A9E009D4B67"
-               BuildableName = "amp_client.framework"
-               BlueprintName = "amp_client"
-               ReferencedContainer = "container:amp-tests.xcodeproj">
+               BlueprintIdentifier = "8F78B1E31BF35689009D4B67"
+               BuildableName = "ion-tests.app"
+               BlueprintName = "ion-tests"
+               ReferencedContainer = "container:ion-tests.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -29,7 +29,26 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8F78B2171BF35945009D4B67"
+               BuildableName = "tests.xctest"
+               BlueprintName = "tests"
+               ReferencedContainer = "container:ion-tests.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8F78B1E31BF35689009D4B67"
+            BuildableName = "ion-tests.app"
+            BlueprintName = "ion-tests"
+            ReferencedContainer = "container:ion-tests.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -43,15 +62,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8F78B2841BF35A9E009D4B67"
-            BuildableName = "amp_client.framework"
-            BlueprintName = "amp_client"
-            ReferencedContainer = "container:amp-tests.xcodeproj">
+            BlueprintIdentifier = "8F78B1E31BF35689009D4B67"
+            BuildableName = "ion-tests.app"
+            BlueprintName = "ion-tests"
+            ReferencedContainer = "container:ion-tests.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -61,15 +81,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8F78B2841BF35A9E009D4B67"
-            BuildableName = "amp_client.framework"
-            BlueprintName = "amp_client"
-            ReferencedContainer = "container:amp-tests.xcodeproj">
+            BlueprintIdentifier = "8F78B1E31BF35689009D4B67"
+            BuildableName = "ion-tests.app"
+            BlueprintName = "ion-tests"
+            ReferencedContainer = "container:ion-tests.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

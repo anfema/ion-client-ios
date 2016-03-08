@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,7 +14,7 @@ import DEjson
 import Alamofire
 
 /// DateTime content
-public class AMPDateTimeContent : AMPContent {
+public class IONDateTimeContent: IONContent {
     /// parsed date
     public var date:NSDate? = nil
     
@@ -25,11 +25,11 @@ public class AMPDateTimeContent : AMPContent {
         try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawDateTime = dict["datetime"] else {
-            throw AMPError.InvalidJSON(json)
+            throw IONError.InvalidJSON(json)
         }
         
         if case .JSONString(let datetime) = rawDateTime {
@@ -38,21 +38,21 @@ public class AMPDateTimeContent : AMPContent {
     }
 }
 
-/// Date extension to AMPPage
-extension AMPPage {
+/// Date extension to IONPage
+extension IONPage {
     
     /// Fetch `NSDate` object from named outlet
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
     /// - returns: `NSDate` object if the outlet was a datetime outlet and the page was already cached, else nil
-    public func date(name: String, position: Int = 0) -> Result<NSDate, AMPError> {
+    public func date(name: String, position: Int = 0) -> Result<NSDate, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
             return .Failure(result.error!)
         }
 
-        if case let content as AMPDateTimeContent = content {
+        if case let content as IONDateTimeContent = content {
             if let date = content.date {
                 return .Success(date)
             } else {
@@ -69,14 +69,14 @@ extension AMPPage {
     /// - parameter callback: block to call when the date object becomes available, will not be called if the outlet
     ///                       is not a datetime outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
-    public func date(name: String, position: Int = 0, callback: (Result<NSDate, AMPError> -> Void)) -> AMPPage {
+    public func date(name: String, position: Int = 0, callback: (Result<NSDate, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
             }
             
-            if case let content as AMPDateTimeContent = content {
+            if case let content as IONDateTimeContent = content {
                 if let d = content.date {
                     responseQueueCallback(callback, parameter: .Success(d))
                 } else {

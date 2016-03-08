@@ -1,14 +1,14 @@
 //
-//  amp+cache.swift
-//  amp-tests
+//  ion+cache.swift
+//  ion-client
 //
 //  Created by Johannes Schriewer on 16/11/15.
-//  Copyright © 2015 Johannes Schriewer. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 
 import Foundation
 
-extension AMP {
+extension ION {
     /// Clear memory cache
     ///
     /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
@@ -41,7 +41,7 @@ extension AMP {
         for (_, collection) in self.collectionCache {
             collection.lastCompleteUpdate = nil
         }
-        AMPRequest.resetCache(locale: self.config.locale)
+        IONRequest.resetCache(locale: self.config.locale)
     }
     
     /// Clear disk cache for specific locale and all hosts
@@ -51,9 +51,9 @@ extension AMP {
     public class func resetDiskCache(locale locale: String) {
         self.config.lastOnlineUpdate.removeAll()
         let prefs = NSUserDefaults.standardUserDefaults()
-        prefs.removeObjectForKey("AMP.collection.lastUpdated")
+        prefs.removeObjectForKey("ION.collection.lastUpdated")
         prefs.synchronize()
-        AMPRequest.resetCache(locale: locale)
+        IONRequest.resetCache(locale: locale)
     }
     
     /// Determine if collection cache has timed out

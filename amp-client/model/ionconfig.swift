@@ -1,9 +1,9 @@
 //
-//  ampconfig.swift
-//  amp-tests
+//  ionconfig.swift
+//  ion-client
 //
 //  Created by Johannes Schriewer on 16/11/15.
-//  Copyright © 2015 Johannes Schriewer. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 
 import Foundation
@@ -11,10 +11,10 @@ import Alamofire
 import Markdown
 import DEjson
 
-/// AMP configuration object
+/// ION configuration object
 ///
-/// access with `AMP.config`
-public struct AMPConfig {
+/// access with `ION.config`
+public struct IONConfig {
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
     public var serverURL:NSURL!
     
@@ -31,15 +31,15 @@ public struct AMPConfig {
     public var variationScaleFactors:[String:CGFloat]
     
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
-    public var responseQueue = dispatch_queue_create("com.anfema.amp.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
+    public var responseQueue = dispatch_queue_create("com.anfema.ion.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
     /// global error handler (catches all errors that have not been caught by a `.onError` somewhere)
-    public var errorHandler:((String, AMPError) -> Void)!
+    public var errorHandler:((String, IONError) -> Void)!
     
     /// global request progress handler (will be called periodically when progress updates)
     public var progressHandler:((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
     
-    /// the session token usually set by `AMP.login` but may be overridden for custom login functionality
+    /// the session token usually set by `ION.login` but may be overridden for custom login functionality
     public var sessionToken:String?
     
     /// Additional Headers that should be added to the requests
@@ -57,20 +57,20 @@ public struct AMPConfig {
     /// styling for attributed string conversion of markdown text
     public var stringStyling = AttributedStringStyling()
     
-    /// AMP Device ID, will be generated on first use
+    /// ION Device ID, will be generated on first use
     public var deviceID:String {
-        if let deviceID = NSUserDefaults.standardUserDefaults().stringForKey("AMPDeviceID") {
+        if let deviceID = NSUserDefaults.standardUserDefaults().stringForKey("IONDeviceID") {
             return deviceID
         }
         
         let devID = NSUUID().UUIDString
-        NSUserDefaults.standardUserDefaults().setObject(devID as NSString, forKey: "AMPDeviceID")
+        NSUserDefaults.standardUserDefaults().setObject(devID as NSString, forKey: "IONDeviceID")
         NSUserDefaults.standardUserDefaults().synchronize()
         return devID
     }
     
     /// Needed to register additional content types with the default dispatcher
-    public typealias ContentTypeLambda = (JSONObject throws -> AMPContent)
+    public typealias ContentTypeLambda = (JSONObject throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     var alamofire: Alamofire.Manager! = nil
@@ -84,7 +84,7 @@ public struct AMPConfig {
     /// full text search settings
     private var ftsEnabled:[String:Bool]
     
-    /// only the AMP class may init this
+    /// only the ION class may init this
     internal init() {
         let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
@@ -92,7 +92,7 @@ public struct AMPConfig {
         configuration.HTTPShouldSetCookies = false
         
         var protocolClasses = [AnyClass]()
-        protocolClasses.append(AMPCacheAvoidance)
+        protocolClasses.append(IONCacheAvoidance)
         configuration.protocolClasses = protocolClasses
         
         #if DEBUG
@@ -119,39 +119,39 @@ public struct AMPConfig {
         self.resetErrorHandler()
         
         self.registerContentType("colorcontent") { json in
-            return try AMPColorContent(json: json)
+            return try IONColorContent(json: json)
         }
         self.registerContentType("connectioncontent") { json in
-            return try AMPConnectionContent(json: json)
+            return try IONConnectionContent(json: json)
         }
         self.registerContentType("datetimecontent") { json in
-            return try AMPDateTimeContent(json: json)
+            return try IONDateTimeContent(json: json)
         }
         self.registerContentType("filecontent") { json in
-            return try AMPFileContent(json: json)
+            return try IONFileContent(json: json)
         }
         self.registerContentType("flagcontent") { json in
-            return try AMPFlagContent(json: json)
+            return try IONFlagContent(json: json)
         }
         self.registerContentType("imagecontent") { json in
-            return try AMPImageContent(json: json)
+            return try IONImageContent(json: json)
         }
         self.registerContentType("numbercontent") { json in
-            return try AMPNumberContent(json: json)
+            return try IONNumberContent(json: json)
         }
         self.registerContentType("mediacontent") { json in
-            return try AMPMediaContent(json: json)
+            return try IONMediaContent(json: json)
         }
         self.registerContentType("optioncontent") { json in
-            return try AMPOptionContent(json: json)
+            return try IONOptionContent(json: json)
         }
         self.registerContentType("textcontent") { json in
-            return try AMPTextContent(json: json)
+            return try IONTextContent(json: json)
         }
         
         self.registerUpdateBlock("fts") { collectionIdentifier in
-            if AMP.config.isFTSEnabled(collectionIdentifier) {
-                AMP.downloadFTSDB(collectionIdentifier)
+            if ION.config.isFTSEnabled(collectionIdentifier) {
+                ION.downloadFTSDB(collectionIdentifier)
             }
         }
     }
@@ -176,8 +176,8 @@ public struct AMPConfig {
     /// - parameter collection: collection identifier
     public mutating func enableFTS(collection: String) {
         self.ftsEnabled[collection] = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(AMP.searchIndex(collection)) {
-            AMP.downloadFTSDB(collection)
+        if !NSFileManager.defaultManager().fileExistsAtPath(ION.searchIndex(collection)) {
+            ION.downloadFTSDB(collection)
         }
     }
     
@@ -202,9 +202,9 @@ public struct AMPConfig {
     
     /// Register a custom content type
     ///
-    /// Example:
+    /// Exionle:
     ///
-    /// AMP.config.registerContentType("customcontent") { json in
+    /// ION.config.registerContentType("customcontent") { json in
     ///     return try MyContent(json: json)
     /// }
     ///
@@ -224,8 +224,8 @@ public struct AMPConfig {
     /// Reset the error handler to the default logging handler
     public mutating func resetErrorHandler() {
         self.errorHandler = { (collection, error) in
-            if AMP.config.loggingEnabled {
-                print("AMP unhandled error in collection '\(collection)': \(error)")
+            if ION.config.loggingEnabled {
+                print("ION unhandled error in collection '\(collection)': \(error)")
             }
         }
     }
@@ -242,7 +242,7 @@ public struct AMPConfig {
         self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
     }
     
-    internal func cacheBehaviour(requestedBehaviour: AMPCacheBehaviour) -> AMPCacheBehaviour {
+    internal func cacheBehaviour(requestedBehaviour: IONCacheBehaviour) -> IONCacheBehaviour {
         if self.offlineMode {
             return .Force
         }

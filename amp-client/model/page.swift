@@ -1,9 +1,9 @@
 //
 //  page.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -15,7 +15,7 @@ import DEjson
 
 
 /// Page class, contains functionality to fetch outlet content
-public class AMPPage {
+public class IONPage {
     
     /// page identifier
     public var identifier:String
@@ -24,7 +24,7 @@ public class AMPPage {
     public var parent:String?
     
     /// collection of this page
-    public var collection:AMPCollection
+    public var collection: IONCollection
     
     /// last update date of this page
     public var lastUpdate:NSDate!
@@ -39,13 +39,13 @@ public class AMPPage {
     public var layout:String
     
     /// content list
-    public var content = [AMPContent]()
+    public var content = [IONContent]()
 
     /// page position
     public var position: Int = 0
     
     /// set to true to avoid fetching from cache
-    private var useCache = AMPCacheBehaviour.Prefer
+    private var useCache = IONCacheBehaviour.Prefer
     
     /// page has loaded
     internal var isReady = false
@@ -69,14 +69,14 @@ public class AMPPage {
     
     /// Initialize page for collection (initializes real object)
     ///
-    /// Use the `page` function from `AMPCollection`
+    /// Use the `page` function from `IONCollection`
     ///
     /// - parameter collection: the collection this page belongs to
     /// - parameter identifier: the page identifier
     /// - parameter layout: the page layout
     /// - parameter useCache: set to false to force a page refresh
     /// - parameter callback: the block to call when initialization finished
-    init(collection: AMPCollection, identifier: String, layout: String?, useCache: AMPCacheBehaviour, parent: String?, callback:(Result<AMPPage, AMPError> -> Void)?) {
+    init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback:(Result<IONPage, IONError> -> Void)?) {
         // Full async initializer, self will be populated async
         self.identifier = identifier
         if let layout = layout {
@@ -89,7 +89,7 @@ public class AMPPage {
         self.parent = parent
         self.locale = self.collection.locale
         
-        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.ion.page.\(identifier)", DISPATCH_QUEUE_SERIAL)
 
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
@@ -103,7 +103,7 @@ public class AMPPage {
                     
                 } else {
                     if self.content.count > 0 {
-                        if case let container as AMPContainerContent = self.content.first! {
+                        if case let container as IONContainerContent = self.content.first! {
                             self.layout = container.outlet
                         }
                     }
@@ -125,14 +125,14 @@ public class AMPPage {
     /// Fork the work queue, the returning page has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
-    public func cancelable() -> CancelableAMPPage {
-        return CancelableAMPPage(page: self)
+    public func cancelable() -> CancelableIONPage {
+        return CancelableIONPage(page: self)
     }
     
     /// Callback when page fully loaded
     ///
     /// - parameter callback: callback to call
-    public func waitUntilReady(callback: (AMPPage -> Void)) -> AMPPage {
+    public func waitUntilReady(callback: (IONPage -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -150,7 +150,7 @@ public class AMPPage {
     ///
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: ((page: AMPPage, completed: Bool) -> Void)) -> AMPPage {
+    public func onCompletion(callback: ((page: IONPage, completed: Bool) -> Void)) -> IONPage {
         dispatch_barrier_async(self.workQueue) {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
         }
@@ -164,7 +164,7 @@ public class AMPPage {
     /// - parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
     /// - returns: self to be able to chain another call
-    public func outlet(name: String, position: Int = 0, callback: (Result<AMPContent, AMPError> -> Void)) -> AMPPage {
+    public func outlet(name: String, position: Int = 0, callback: (Result<IONContent, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -189,7 +189,7 @@ public class AMPPage {
     /// - parameter name: outlet name to fetch
     /// - parameter position: (optional) position in the array
     /// - returns: content object if page was loaded and outlet exists
-    public func outlet(name: String, position: Int = 0) -> Result<AMPContent, AMPError> {
+    public func outlet(name: String, position: Int = 0) -> Result<IONContent, IONError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
             return .Failure(.DidFail)
@@ -213,7 +213,7 @@ public class AMPPage {
     /// - parameter position: (optional) position in the array
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func outletExists(name: String, position: Int = 0, callback: (Bool -> Void)) -> AMPPage {
+    public func outletExists(name: String, position: Int = 0, callback: (Bool -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -260,7 +260,7 @@ public class AMPPage {
     /// - parameter callback: callback with object count
     ///
     /// - returns: self for chaining
-    public func numberOfContentsForOutlet(name: String, callback: (Int -> Void)) -> AMPPage {
+    public func numberOfContentsForOutlet(name: String, callback: (Int -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -291,13 +291,13 @@ public class AMPPage {
     
     // MARK: Private
     
-    private init(forkedWorkQueueWithCollection collection: AMPCollection, identifier: String, locale: String) {
+    private init(forkedWorkQueueWithCollection collection: IONCollection, identifier: String, locale: String) {
         self.locale = locale
         self.useCache = .Prefer
         self.collection = collection
         self.identifier = identifier
         self.layout = ""
-        self.workQueue = dispatch_queue_create("com.anfema.amp.page.\(identifier).fork.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = dispatch_queue_create("com.anfema.ion.page.\(identifier).fork.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
         
         // FIXME: How to remove this from the collection cache again?
         self.collection.pageCache[self.forkedIdentifier] = self
@@ -307,8 +307,8 @@ public class AMPPage {
     ///
     /// - parameter identifier: page identifier to get
     /// - parameter callback: block to call when the fetch finished
-    private func fetch(identifier: String, callback:(AMPError? -> Void)) {
-        AMPRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: [ "variation" : AMP.config.variation ], cached: AMP.config.cacheBehaviour(self.useCache)) { result in
+    private func fetch(identifier: String, callback:(IONError? -> Void)) {
+        IONRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation" : ION.config.variation ], cached: ION.config.cacheBehaviour(self.useCache)) { result in
             if case .Failure(let error) = result {
                 if case .NotAuthorized = error {
                     callback(error)
@@ -358,12 +358,12 @@ public class AMPPage {
                 // parse and append content to this page
                 for c in contents {
                     do {
-                        let obj = try AMPContent.factory(c)
+                        let obj = try IONContent.factory(c)
                         self.appendContent(obj)
                     } catch {
                         // Content could not be deserialized, do not add to page
-                        if AMP.config.loggingEnabled {
-                            print("AMP: Deserialization failed")
+                        if ION.config.loggingEnabled {
+                            print("ION: Deserialization failed")
                         }
                     }
                 }
@@ -381,11 +381,11 @@ public class AMPPage {
     /// Recursively append all content
     /// 
     /// - parameter obj: the content object to append including it's children
-    private func appendContent(obj:AMPContent) {
+    private func appendContent(obj: IONContent) {
         self.content.append(obj)
 
         // append all toplevel content
-        if case let container as AMPContainerContent = obj {
+        if case let container as IONContainerContent = obj {
             if let children = container.children {
                 for child in children {
                     // container's children are appended on base level to be able to find them quicker
@@ -396,9 +396,9 @@ public class AMPPage {
     }
 }
 
-public class CancelableAMPPage: AMPPage {
+public class CancelableIONPage: IONPage {
 
-    init(page: AMPPage) {
+    init(page: IONPage) {
         super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
         
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete

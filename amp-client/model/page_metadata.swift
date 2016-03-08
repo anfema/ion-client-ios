@@ -1,9 +1,9 @@
 //
 //  page_metadata.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -13,8 +13,8 @@ import Foundation
 import Alamofire
 import DEjson
 
-/// Page metadata, used if only small samples of a page have to be used instead of downloading the whole thing
-public class AMPPageMeta: CanLoadImage {
+/// Page metadata, used if only small sionles of a page have to be used instead of downloading the whole thing
+public class IONPageMeta: CanLoadImage {
     /// flag if the date formatter has already been instantiated
     static var formatterInstantiated = false
     
@@ -34,13 +34,13 @@ public class AMPPageMeta: CanLoadImage {
     public var position: Int!
     
     /// collection of this meta item
-    public weak var collection: AMPCollection?
+    public weak var collection: IONCollection?
     
     /// meta data attached to page
     private var metaData = [String:Array<String>]()
     
     /// children
-    public var children:[AMPPageMeta]? {
+    public var children:[IONPageMeta]? {
         guard let collection = self.collection else {
             return nil
         }
@@ -53,11 +53,11 @@ public class AMPPageMeta: CanLoadImage {
     /// Init metadata from JSON object
     ///
     /// - parameter json: serialized JSON object of page metadata
-    /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON
-    internal init(json: JSONObject, position: Int, collection: AMPCollection) throws {
+    /// - Throws: IONError.Code.JSONObjectExpected, IONError.Code.InvalidJSON
+    internal init(json: JSONObject, position: Int, collection: IONCollection) throws {
         self.collection = collection
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawLastChanged = dict["last_changed"], rawParent = dict["parent"],
@@ -65,7 +65,7 @@ public class AMPPageMeta: CanLoadImage {
             case .JSONString(let lastChanged) = rawLastChanged,
             case .JSONString(let layout) = rawLayout,
             case .JSONString(let identifier)  = rawIdentifier else {
-                throw AMPError.InvalidJSON(json)
+                throw IONError.InvalidJSON(json)
         }
         
         self.lastChanged = NSDate(isoDateString: lastChanged)
@@ -99,11 +99,11 @@ public class AMPPageMeta: CanLoadImage {
         case .JSONString(let parent):
             self.parent = parent
         default:
-            throw AMPError.InvalidJSON(json)
+            throw IONError.InvalidJSON(json)
         }
     }
     
-    /// AMPPageMeta can be subscripted by string to fetch metadata items
+    /// IONPageMeta can be subscripted by string to fetch metadata items
     ///
     /// - parameter index: key to return value for
     /// - returns: value or nil
@@ -114,7 +114,7 @@ public class AMPPageMeta: CanLoadImage {
         return nil
     }
 
-    /// AMPPageMeta can be subscripted by string + position to fetch metadata items
+    /// IONPageMeta can be subscripted by string + position to fetch metadata items
     ///
     /// - parameter index: key to return value for
     /// - parameter position: array position to return

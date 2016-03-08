@@ -1,9 +1,9 @@
 //
 //  response_serializer.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -28,7 +28,7 @@ extension Request {
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - returns: A `JSONObject` response serializer
-    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, AMPError> {
+    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
         return ResponseSerializer { _, response, data, error in
             guard let validData = data where response != nil else {
                 return .Failure(.ServerUnreachable)
@@ -65,7 +65,7 @@ extension Request {
     ///                                creating the JSON object.
     /// - returns: The request.
     public func responseDEJSON(
-        completionHandler: Response<JSONResponse, AMPError> -> Void)
+        completionHandler: Response<JSONResponse, IONError> -> Void)
         -> Self
     {
         return response(

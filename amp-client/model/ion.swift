@@ -1,9 +1,9 @@
 //
-//  amp.swift
-//  amp-client
+//  ion.swift
+//  ion-client
 //
 //  Created by Johannes Schriewer on 08.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -14,13 +14,13 @@ import Alamofire
 import Markdown
 
 
-/// AMP base class, use all AMP functionality by using this object's class methods
-public class AMP {
-    /// AMP configuration, be sure to set up before using any AMP calls or risk a crash!
-    static public var config = AMPConfig()
+/// ION base class, use all ION functionality by using this object's class methods
+public class ION {
+    /// ION configuration, be sure to set up before using any ION calls or risk a crash!
+    static public var config = IONConfig()
 
     /// Internal cache for collections
-    static internal var collectionCache = [String:AMPCollection]()
+    static internal var collectionCache = [String: IONCollection]()
 
     /// Pending downloads
     static internal var pendingDownloads = [String:(totalBytes: Int64, downloadedBytes: Int64)]()
@@ -31,7 +31,7 @@ public class AMP {
     /// - parameter password: the password to send
     /// - parameter callback: block to call when login request finished (Bool parameter is success flag)
     public class func login(username: String, password: String, callback: (Bool -> Void)) {
-        AMPRequest.postJSON("login", queryParameters: nil, body: [
+        IONRequest.postJSON("login", queryParameters: nil, body: [
             "login": [
                 "username": username,
                 "password": password
@@ -63,7 +63,7 @@ public class AMP {
     ///
     /// - parameter identifier: the identifier of the collection
     /// - returns: collection object from cache or empty collection object
-    public class func collection(identifier: String) -> AMPCollection {
+    public class func collection(identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out
@@ -77,10 +77,10 @@ public class AMP {
         }
         
         // try an online update
-        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
-        let newCollection = AMPCollection(
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let newCollection = IONCollection(
             identifier: identifier,
-            locale: AMP.config.locale,
+            locale: ION.config.locale,
             useCache: cache
         ) { result in
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed,
@@ -104,7 +104,7 @@ public class AMP {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    public class func collection(identifier: String, callback: (Result<AMPCollection, AMPError> -> Void)) -> AMPCollection {
+    public class func collection(identifier: String, callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
         
         // return memcache if not timed out
@@ -125,8 +125,8 @@ public class AMP {
         }
         
         // try an online update
-        let cache = AMP.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
-        let newCollection = AMPCollection(identifier: identifier, locale: AMP.config.locale, useCache: cache) { result in
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
             guard case .Success(let collection) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error!))
                 return
@@ -153,9 +153,9 @@ public class AMP {
     ///
     /// - parameter identifier: the collection identifier that caused the error
     /// - parameter error: An error object
-    class func callError(identifier: String, error: AMPError) {
-        dispatch_async(AMP.config.responseQueue) {
-            AMP.config.errorHandler(identifier, error)
+    class func callError(identifier: String, error: IONError) {
+        dispatch_async(ION.config.responseQueue) {
+            ION.config.errorHandler(identifier, error)
         }
     }
 
@@ -176,9 +176,9 @@ public class AMP {
         }
 
         // call progress handler
-        if let progressHandler = AMP.config.progressHandler {
+        if let progressHandler = ION.config.progressHandler {
             let count = self.pendingDownloads.count
-            dispatch_async(AMP.config.responseQueue) {
+            dispatch_async(ION.config.responseQueue) {
                 progressHandler(totalBytes: totalBytes, downloadedBytes: downloadedBytes, numberOfPendingDownloads: count)
             }
         }
@@ -186,8 +186,8 @@ public class AMP {
         // remove from pending when total == downloaded
         if bytesReceived == bytesExpected {
             self.pendingDownloads.removeValueForKey(urlString)
-            if let progressHandler = AMP.config.progressHandler where self.pendingDownloads.count == 0 {
-                dispatch_async(AMP.config.responseQueue) {
+            if let progressHandler = ION.config.progressHandler where self.pendingDownloads.count == 0 {
+                dispatch_async(ION.config.responseQueue) {
                     progressHandler(totalBytes: 0, downloadedBytes: 0, numberOfPendingDownloads: 0)
                 }
             }
@@ -200,8 +200,8 @@ public class AMP {
     ///
     /// - parameter collectionIdentifier: collection id to send to update block
     private class func callUpdateBlocks(collectionIdentifier: String) {
-        for block in AMP.config.updateBlocks.values {
-            dispatch_async(AMP.config.responseQueue) {
+        for block in ION.config.updateBlocks.values {
+            dispatch_async(ION.config.responseQueue) {
                 block(collectionIdentifier)
             }
         }
@@ -211,7 +211,7 @@ public class AMP {
     ///
     /// - parameter collection1: first collection
     /// - parameter collection2: second collection
-    private class func notifyForUpdates(collection1: AMPCollection, collection2: AMPCollection) {
+    private class func notifyForUpdates(collection1: IONCollection, collection2: IONCollection) {
         var collectionChanged = false
         
         // compare metadata count
@@ -230,7 +230,7 @@ public class AMP {
         }
         if collectionChanged {
             // call change blocks
-            AMP.callUpdateBlocks(collection1.identifier)
+            ION.callUpdateBlocks(collection1.identifier)
         }
     }
     

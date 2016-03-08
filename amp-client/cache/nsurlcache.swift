@@ -1,9 +1,9 @@
 //
 //  nsurlcache.swift
-//  amp-tests
+//  ion-client
 //
 //  Created by Johannes Schriewer on 01/12/15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -12,12 +12,12 @@
 import Foundation
 
 
-public class AMPCacheAvoidance: NSURLProtocol {
+public class IONCacheAvoidance: NSURLProtocol {
     var session:NSURLSession?
     var dataTask:NSURLSessionDataTask?
     
     public override class func canInitWithRequest(request: NSURLRequest) -> Bool {
-        if request.URLString.hasPrefix(AMP.config.serverURL.URLString) {
+        if request.URLString.hasPrefix(ION.config.serverURL.URLString) {
             return true
         }
         return false
@@ -50,7 +50,7 @@ public class AMPCacheAvoidance: NSURLProtocol {
     }
 }
 
-extension AMPCacheAvoidance: NSURLSessionDataDelegate {
+extension IONCacheAvoidance: NSURLSessionDataDelegate {
     
     public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         self.client?.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
@@ -62,7 +62,7 @@ extension AMPCacheAvoidance: NSURLSessionDataDelegate {
     }
 }
 
-extension AMPCacheAvoidance: NSURLSessionDelegate {
+extension IONCacheAvoidance: NSURLSessionDelegate {
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         if let error = error {
             self.client?.URLProtocol(self, didFailWithError: error)

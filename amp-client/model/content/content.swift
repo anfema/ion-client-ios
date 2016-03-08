@@ -1,9 +1,9 @@
 //
 //  content.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 07.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -12,8 +12,8 @@
 import Foundation
 import DEjson
 
-/// AMPContent base class, carries common values
-public class AMPContent {
+/// IONContent base class, carries common values
+public class IONContent {
     
     /// variation name
     public var variation:String!
@@ -34,13 +34,13 @@ public class AMPContent {
     /// - parameter json: `JSONObject` that contains serialized content content object
 	public init(json:JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
-			throw AMPError.JSONObjectExpected(json)
+			throw IONError.JSONObjectExpected(json)
 		}
 		
 		guard let rawVariation = dict["variation"], rawOutlet = dict["outlet"],
               case .JSONString(let variation) = rawVariation,
               case .JSONString(let outlet)    = rawOutlet else {
-			throw AMPError.InvalidJSON(json)
+			throw IONError.InvalidJSON(json)
 		}
 		
 		self.variation = variation
@@ -67,27 +67,27 @@ public class AMPContent {
     /// to instantiate from the name of the key of that JSON object
     ///
     /// - parameter json: the JSON object to parse
-    /// - Throws: AMPError.Code.JSONObjectExpected, AMPError.Code.InvalidJSON, AMPError.Code.UnknownContentType
-    public class func factory(json:JSONObject) throws -> AMPContent {
+    /// - Throws: IONError.Code.JSONObjectExpected, IONError.Code.InvalidJSON, IONError.Code.UnknownContentType
+    public class func factory(json:JSONObject) throws -> IONContent {
         guard case .JSONDictionary(let dict) = json else {
-            throw AMPError.JSONObjectExpected(json)
+            throw IONError.JSONObjectExpected(json)
         }
         
         guard let rawType = dict["type"],
             case .JSONString(let contentType) = rawType else {
-                throw AMPError.JSONObjectExpected(json)
+                throw IONError.JSONObjectExpected(json)
         }
         
         // dispatcher
         if contentType == "containercontent" {
-            return try AMPContainerContent(json: json)
+            return try IONContainerContent(json: json)
         } else {
-            for (type, lambda) in AMP.config.registeredContentTypes {
+            for (type, lambda) in ION.config.registeredContentTypes {
                 if contentType == type {
                     return try lambda(json)
                 }
             }
-            throw AMPError.UnknownContentType(contentType)
+            throw IONError.UnknownContentType(contentType)
         }
     }
 }

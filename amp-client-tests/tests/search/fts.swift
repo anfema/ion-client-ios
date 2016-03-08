@@ -16,7 +16,7 @@ class ftsTests: LoggedInXCTestCase {
     
     override func setUp() {
         super.setUp()
-        AMP.config.enableFTS("test")
+        ION.config.enableFTS("test")
     }
     
     override func tearDown() {
@@ -26,7 +26,7 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionSearch() {
         let expectation = self.expectationWithDescription("testCollectionSearch")
         
-        AMP.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { search in
             let items = search.search("ullamcorper")
             XCTAssert(items.count == 4)
             expectation.fulfill()
@@ -38,7 +38,7 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionSearchExclusion() {
         let expectation = self.expectationWithDescription("testCollectionSearchExclusion")
         
-        AMP.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { search in
             let items = search.search("ullamcorper -nulla")
             XCTAssert(items.count == 1)
             expectation.fulfill()
@@ -50,7 +50,7 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionStatement() {
         let expectation = self.expectationWithDescription("testCollectionStatement")
         
-        AMP.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { search in
             let items = search.search("donec duis")
             XCTAssert(items.count == 3)
             expectation.fulfill()
@@ -62,7 +62,7 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionPhrase() {
         let expectation = self.expectationWithDescription("testCollectionPhrase")
         
-        AMP.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { search in
             let items = search.search("\"donec duis\"")
             XCTAssert(items.count == 0)
             expectation.fulfill()

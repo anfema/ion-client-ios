@@ -1,9 +1,9 @@
 //
 //  request.swift
-//  amp-client
+//  ion-client
 //
 //  Created by Johannes Schriewer on 22.09.15.
-//  Copyright © 2015 anfema. All rights reserved.
+//  Copyright © 2015 anfema GmbH. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted under the conditions of the 3-clause
@@ -15,11 +15,11 @@ import HashExtensions
 import Alamofire
 import DEjson
 
-/// Caching extension for AMPRequest
-extension AMPRequest {
+/// Caching extension for IONRequest
+extension IONRequest {
     // MARK: - external API
  
-    /// Reset complete AMP cache for a specific language and all hosts
+    /// Reset complete ION cache for a specific language and all hosts
     ///
     /// - parameter locale: locale to clear cache for
     public class func resetCache(locale locale: String) {
@@ -31,7 +31,7 @@ extension AMPRequest {
             // non-fatal, could not remove item at path, so probably path did not exist
         }
 
-        if locale == AMP.config.locale {
+        if locale == ION.config.locale {
             // remove all entries for this locale from cache db
             self.cacheDB = []
             self.saveCacheDB()
@@ -45,15 +45,15 @@ extension AMPRequest {
     /// - parameter url: the URL to find in the cache
     /// - returns: Path to the cache file (may not exist)
     internal class func cacheName(url: NSURL) -> String {
-        var fileURL = self.cacheBaseDir(url.host!, locale: AMP.config.locale)
+        var fileURL = self.cacheBaseDir(url.host!, locale: ION.config.locale)
         
         // try to create the path if it does not exist
         if !NSFileManager.defaultManager().fileExistsAtPath(fileURL.path!) {
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(fileURL.path!, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                if AMP.config.loggingEnabled {
-                    print("AMP: Could not create cache dir!")
+                if ION.config.loggingEnabled {
+                    print("ION: Could not create cache dir!")
                 }
             }
         }
@@ -92,7 +92,7 @@ extension AMPRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONResponse, AMPError>) {
+    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONResponse, IONError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
@@ -125,12 +125,12 @@ extension AMPRequest {
             self.loadCacheDB()
         }
         
-        // fetch current timestamp truncated to maximum resolution of 1 ms
-        var timestamp: Double = 0.0
+        // fetch current timestion truncated to maximum resolution of 1 ms
+        var timestion: Double = 0.0
         if let last_updated = last_updated {
-            timestamp = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
+            timestion = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
         } else {
-            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+            timestion = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
         }
         
         // pop current cache DB entry
@@ -141,7 +141,7 @@ extension AMPRequest {
         let hash = url.cryptoHash(.MD5)
         
         
-        var filename = self.cacheBaseDir(parsedURL.host!, locale: AMP.config.locale)
+        var filename = self.cacheBaseDir(parsedURL.host!, locale: ION.config.locale)
         
         guard let path = filename.path else
         {
@@ -163,7 +163,7 @@ extension AMPRequest {
         obj["url"]             = .JSONString(url)
         obj["host"]            = .JSONString(parsedURL.host!)
         obj["filename"]        = .JSONString(hash.hexString())
-        obj["last_updated"]    = .JSONNumber(timestamp)
+        obj["last_updated"]    = .JSONNumber(timestion)
 
         if let checksum = checksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
@@ -188,12 +188,12 @@ extension AMPRequest {
             self.loadCacheDB()
         }
         
-        // fetch current timestamp truncated to maximum resolution of 1 ms
-        var timestamp: Double = 0.0
+        // fetch current timestion truncated to maximum resolution of 1 ms
+        var timestion: Double = 0.0
         if let lastUpdate = lastUpdate {
-            timestamp = trunc(lastUpdate.timeIntervalSince1970 * 1000.0) / 1000.0
+            timestion = trunc(lastUpdate.timeIntervalSince1970 * 1000.0) / 1000.0
         } else {
-            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+            timestion = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
         }
         
         // pop current cache DB entry
@@ -208,7 +208,7 @@ extension AMPRequest {
         obj["url"]             = .JSONString(request.URLString)
         obj["host"]            = .JSONString(requestHost)
         obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5).hexString())
-        obj["last_updated"]    = .JSONNumber(timestamp)
+        obj["last_updated"]    = .JSONNumber(timestion)
         obj["checksum_method"] = .JSONString(checksumMethod)
         obj["checksum"]        = .JSONString(checksum)
         
@@ -220,7 +220,7 @@ extension AMPRequest {
     // MARK: - Private API
     
     /// Private function to load cache DB from disk
-    private class func loadCacheDB(locale: String = AMP.config.locale) {
+    private class func loadCacheDB(locale: String = ION.config.locale) {
         let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
         do {
             // try loading from disk
@@ -237,8 +237,8 @@ extension AMPRequest {
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
-                if AMP.config.loggingEnabled {
-                    print("AMP: Could not load cache DB index, corrupt file")
+                if ION.config.loggingEnabled {
+                    print("ION: Could not load cache DB index, corrupt file")
                 }
                 self.cacheDB = []
             }
@@ -249,7 +249,7 @@ extension AMPRequest {
     }
     
     /// Private function to save the cache DB to disk
-    internal class func saveCacheDB(locale: String = AMP.config.locale) {
+    internal class func saveCacheDB(locale: String = ION.config.locale) {
         // can not save nothing
         guard let cacheDB = self.cacheDB else {
             return
@@ -276,8 +276,8 @@ extension AMPRequest {
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
-                if AMP.config.loggingEnabled {
-                    print("AMP: Could not save cache DB index")
+                if ION.config.loggingEnabled {
+                    print("ION: Could not save cache DB index")
                 }
             }
         }
@@ -301,26 +301,26 @@ extension AMPRequest {
         })
     }
     
-    /// Internal function to return the base directory for the AMP cache
+    /// Internal function to return the base directory for the ION cache
     ///
     /// - parameter host: the API host to fetch the cache dir for
     /// - parameter locale: the locale of the language that should be used
     /// - returns: File URL to the cache dir
     internal class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(host)")
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(host)")
         return fileURL
     }
 
     private class func cacheBaseDir(locale locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)")
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }
 
     private class func cacheFile(filename: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.amp/\(locale)/\(filename)")
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }
 
