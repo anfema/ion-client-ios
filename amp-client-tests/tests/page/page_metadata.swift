@@ -122,7 +122,12 @@ class pageMetadataTests: LoggedInXCTestCase {
                 return
             }
 
-            metadata.image { image in
+            metadata.image { result in
+                guard case .Success(let image) = result else {
+                    XCTFail()
+                    return
+                }
+                
                 XCTAssertNotNil(image)
                 let size = CGSize(width: 600, height: 400)
                 XCTAssertEqual(size, image.size)

@@ -73,7 +73,12 @@ class fileContentTests: LoggedInXCTestCase {
                 return
             }
             if img.mimeType.hasPrefix("image/") {
-                img.image() { image in
+                img.image() { result in
+                    guard case .Success(let image) = result else {
+                        XCTFail()
+                        return
+                    }
+                    
                     XCTAssertNotNil(image)
                     XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
                     expectation.fulfill()

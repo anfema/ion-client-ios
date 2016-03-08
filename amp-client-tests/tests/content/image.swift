@@ -26,7 +26,12 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
         
-        AMP.collection("test").page("page_001").image("image") { image in
+        AMP.collection("test").page("page_001").image("image") { result in
+            guard case .Success(let image) = result else {
+                XCTFail()
+                return
+            }
+            
             XCTAssertNotNil(image)
             XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
             expectation.fulfill()
@@ -37,7 +42,12 @@ class imageContentTests: LoggedInXCTestCase {
     func testImageOutletFetchAsyncOriginalCGImage() {
         let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
         
-        AMP.collection("test").page("page_001").originalImage("image") { image in
+        AMP.collection("test").page("page_001").originalImage("image") { result in
+            guard case .Success(let image) = result else {
+                XCTFail()
+                return
+            }
+            
             XCTAssertNotNil(image)
             XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
             expectation.fulfill()

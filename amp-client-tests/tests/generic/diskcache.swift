@@ -206,7 +206,7 @@ class diskcacheTests: LoggedInXCTestCase {
         AMP.resetMemCache()
         AMP.resetDiskCache()
         AMP.collection("test").page("page_001").image("image") { result in
-            XCTAssertNotNil(image)
+            XCTAssertNotNil(result)
             
             AMP.collection("test").page("page_001") { result in
                 guard case .Success(let page) = result else {
