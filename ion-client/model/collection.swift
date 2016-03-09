@@ -39,8 +39,7 @@ public class IONCollection {
     /// memory cache for pages
     internal var pageCache = [String: IONPage]()
 
-    // FIXME: errorhandler was removed - is this still needed?
-    /// internal lock for errorhandler
+    /// internal lock
     internal var parentLock = NSLock()
 
     /// work queue
