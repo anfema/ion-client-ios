@@ -78,6 +78,15 @@ public enum Result<Value, Error: ErrorType> {
             self = .Failure(error)
         }
     }
+    
+    /// Returns the value of .Success or nil when there was an error.
+    public func optional() -> Value? {
+        guard case .Success(let ret) = self else {
+            return nil
+        }
+        
+        return ret
+    }
 }
 
 // MARK: - CustomStringConvertible
