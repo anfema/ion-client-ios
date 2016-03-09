@@ -10,9 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-import Alamofire
 import DEjson
-
 
 /// Page class, contains functionality to fetch outlet content
 public class IONPage {

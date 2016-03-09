@@ -10,7 +10,6 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-import Alamofire
 
 extension IONCollection {
  

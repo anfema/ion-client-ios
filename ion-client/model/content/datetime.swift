@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// DateTime content
 public class IONDateTimeContent: IONContent {

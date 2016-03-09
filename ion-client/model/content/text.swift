@@ -13,7 +13,6 @@ import Foundation
 import DEjson
 import Markdown
 import html5tokenizer
-import Alamofire
 
 /// Text content, may be rendered in different markup
 public class IONTextContent: IONContent {

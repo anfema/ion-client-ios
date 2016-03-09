@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Flag content, can be enabled or not
 public class IONFlagContent: IONContent {

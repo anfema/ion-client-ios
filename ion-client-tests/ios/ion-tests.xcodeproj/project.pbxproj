@@ -11,6 +11,7 @@
 		6A4B8FF71C469BE90024D319 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */; };
 		6AE1EED31C8F2650009F4C48 /* ion-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AE1EED21C8F2650009F4C48 /* ion-client.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7769A7F0274A01ED40DD985B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D059CE25D0784B783F89E4D /* Pods.framework */; };
+		8F0D4FCA1C905D33003E59CE /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0D4FC91C905D33003E59CE /* Result.swift */; };
 		8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DACC11C0C9A6300193E8C /* collection+download.swift */; };
 		8F114C6A1C10828900977640 /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F114C691C10828900977640 /* connection.swift */; };
 		8F114C6C1C10829B00977640 /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F114C6B1C10829B00977640 /* nsurlcache.swift */; };
@@ -118,6 +119,7 @@
 		6AE1EED11C8F264C009F4C48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ion-client/Info.plist"; sourceTree = "<group>"; };
 		6AE1EED21C8F2650009F4C48 /* ion-client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ion-client.h"; path = "ion-client/ion-client.h"; sourceTree = "<group>"; };
 		8D059CE25D0784B783F89E4D /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F0D4FC91C905D33003E59CE /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		8F0DACC11C0C9A6300193E8C /* collection+download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+download.swift"; sourceTree = "<group>"; };
 		8F114C691C10828900977640 /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F114C6B1C10829B00977640 /* nsurlcache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = nsurlcache.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 			children = (
 				8FCFADE01BFCD7980051981F /* request.swift */,
 				8FCFADE11BFCD7980051981F /* response_serializer.swift */,
+				8F0D4FC91C905D33003E59CE /* Result.swift */,
 			);
 			name = communication;
 			path = "../../ion-client/communication";
@@ -734,6 +737,7 @@
 				8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */,
 				8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */,
 				8FCFAE2B1BFCD7E40051981F /* collection+native_extensions.swift in Sources */,
+				8F0D4FCA1C905D33003E59CE /* Result.swift in Sources */,
 				8FCFAE251BFCD7E40051981F /* page.swift in Sources */,
 				8FCFAE2D1BFCD7E40051981F /* ionconfig.swift in Sources */,
 				8FCFAE2C1BFCD7E40051981F /* ion.swift in Sources */,

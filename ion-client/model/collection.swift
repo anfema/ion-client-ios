@@ -10,7 +10,6 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-import Alamofire
 import DEjson
 
 /// Collection class, contains pages, has functionality to async fetch data

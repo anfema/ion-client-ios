@@ -16,7 +16,6 @@ import Foundation
     import UIKit
 #endif
 import DEjson
-import Alamofire
 
 /// Color content
 public class IONColorContent : IONContent {

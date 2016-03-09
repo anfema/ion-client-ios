@@ -9,7 +9,6 @@
 // modification, are permitted under the conditions of the 3-clause
 // BSD license (see LICENSE.txt for full license text)
 import Foundation
-import Alamofire
 
 extension IONPage {
     

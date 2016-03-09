@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Media content, may be image, audio or video content
 public class IONMediaContent: IONContent, CanLoadImage {

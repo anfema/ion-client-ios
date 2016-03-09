@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Number content, has a float value
 public class IONNumberContent: IONContent {

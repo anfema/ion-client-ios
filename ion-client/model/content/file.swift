@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// File content
 public class IONFileContent: IONContent, CanLoadImage {

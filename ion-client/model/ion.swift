@@ -10,9 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-import Alamofire
 import Markdown
-
 
 /// ION base class, use all ION functionality by using this object's class methods
 public class ION {

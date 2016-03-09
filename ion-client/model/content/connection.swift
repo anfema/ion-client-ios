@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Connection content, carries a link to another collection/page/outlet
 public class IONConnectionContent: IONContent {

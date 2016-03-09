@@ -10,7 +10,6 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-import Alamofire
 import DEjson
 
 /// Page metadata, used if only small sionles of a page have to be used instead of downloading the whole thing

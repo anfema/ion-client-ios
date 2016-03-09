@@ -11,7 +11,6 @@
 
 import Foundation
 import HashExtensions
-import Alamofire
 
 #if os(OSX)
     import AppKit

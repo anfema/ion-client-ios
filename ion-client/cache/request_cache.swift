@@ -12,7 +12,6 @@
 import Foundation
 
 import HashExtensions
-import Alamofire
 import DEjson
 
 /// Caching extension for IONRequest

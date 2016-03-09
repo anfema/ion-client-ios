@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Option content, just carries the selected value not the options
 public class IONOptionContent: IONContent {

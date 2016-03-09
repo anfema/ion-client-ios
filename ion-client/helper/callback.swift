@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 
 /// Performs the callback in the responseQueue defined in ION.config.responseQueue
 /// 

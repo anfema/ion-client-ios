@@ -12,7 +12,6 @@
 import Foundation
 
 import HashExtensions
-import Alamofire
 import DEjson
 
 // TODO: Export interface and make generic to use cache for other requests
@@ -107,7 +106,7 @@ public class IONRequest {
             }
             
             // save response to cache
-            self.saveToCache(response.request!, response.result)
+            self.saveToCache(response.request!, ion_client.Result(result: response.result))
             
             // object can only be saved if there is a request url and the status code of the response is a 200
             var jsonObject: JSONObject? = nil
@@ -298,7 +297,7 @@ public class IONRequest {
         let request = ION.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
-            responseQueueCallback(callback, parameter: response.result)
+            responseQueueCallback(callback, parameter: ion_client.Result(result: response.result))
         }
         request.resume()
     }

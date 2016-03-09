@@ -11,7 +11,6 @@
 
 import Foundation
 import DEjson
-import Alamofire
 
 /// Container content, contains other content objects
 public class IONContainerContent: IONContent {
