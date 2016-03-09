@@ -111,11 +111,9 @@ public class ION {
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
-                    self.callError(identifier, error: .CollectionNotFound(identifier))
+                    responseQueueCallback(callback, parameter: .Failure(.CollectionNotFound(identifier)))
                 } else {
-                    dispatch_async(cachedCollection.workQueue) {
-                        responseQueueCallback(callback, parameter: .Success(cachedCollection))
-                    }
+                    responseQueueCallback(callback, parameter: .Success(cachedCollection))
                 }
                 return cachedCollection
             }
@@ -148,16 +146,6 @@ public class ION {
     }
     
     // MARK: - Internal
-
-    /// Error handler
-    ///
-    /// - parameter identifier: the collection identifier that caused the error
-    /// - parameter error: An error object
-    class func callError(identifier: String, error: IONError) {
-        dispatch_async(ION.config.responseQueue) {
-            ION.config.errorHandler(identifier, error)
-        }
-    }
 
     /// Downloader calls this function to register a progress item with the global progress toolbar
     ///

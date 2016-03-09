@@ -40,6 +40,7 @@ public class IONCollection {
     /// memory cache for pages
     internal var pageCache = [String: IONPage]()
 
+    // FIXME: errorhandler was removed - is this still needed?
     /// internal lock for errorhandler
     internal var parentLock = NSLock()
 
@@ -92,21 +93,11 @@ public class IONCollection {
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    if let cb = callback {
-                        dispatch_async(ION.config.responseQueue) {
-                            cb(.Failure(error))
-                        }
-                    }
-                    
+                    responseQueueCallback(callback, parameter: .Failure(error))
                     self.hasFailed = true
                 } else {
                     ION.collectionCache[identifier] = self
-                    
-                    if let cb = callback {
-                        dispatch_async(ION.config.responseQueue) {
-                            cb(.Success(self))
-                        }
-                    }
+                    responseQueueCallback(callback, parameter:.Success(self))
                 }
                 dispatch_semaphore_signal(semaphore)
             }

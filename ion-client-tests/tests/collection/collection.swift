@@ -25,11 +25,6 @@ class collectionTests: LoggedInXCTestCase {
     func testCollectionFetch() {
         let expectation = self.expectationWithDescription("testCollectionFetch")
         
-        ION.config.errorHandler = { collection, error in
-            XCTFail()
-            expectation.fulfill()
-        }
-        
         ION.collection("test") { result in
             guard case .Success(let collection) = result else {
                 XCTFail()
@@ -43,7 +38,6 @@ class collectionTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
-        ION.config.resetErrorHandler()
     }
     
     func testCollectionFetchError() {

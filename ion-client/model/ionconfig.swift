@@ -33,9 +33,6 @@ public struct IONConfig {
     /// response queue to run all async responses in, by default a concurrent queue, may be set to main queue
     public var responseQueue = dispatch_queue_create("com.anfema.ion.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
-    /// global error handler (catches all errors that have not been caught by a `.onError` somewhere)
-    public var errorHandler:((String, IONError) -> Void)!
-    
     /// global request progress handler (will be called periodically when progress updates)
     public var progressHandler:((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
     
@@ -116,7 +113,6 @@ public struct IONConfig {
         self.additionalHeaders["X-DeviceID"] = self.deviceID
         self.alamofire = Alamofire.Manager(configuration: configuration)
         self.alamofire.startRequestsImmediately = false
-        self.resetErrorHandler()
         
         self.registerContentType("colorcontent") { json in
             return try IONColorContent(json: json)
@@ -219,15 +215,6 @@ public struct IONConfig {
     /// - parameter typeName: type name in JSON
     public mutating func unRegisterContentType(typeName: String) {
         self.registeredContentTypes.removeValueForKey(typeName)
-    }
-    
-    /// Reset the error handler to the default logging handler
-    public mutating func resetErrorHandler() {
-        self.errorHandler = { (collection, error) in
-            if ION.config.loggingEnabled {
-                print("ION unhandled error in collection '\(collection)': \(error)")
-            }
-        }
     }
     
     /// Set the credentials for HTTP Basic Authentication.

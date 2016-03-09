@@ -50,6 +50,7 @@ public class IONPage {
     /// page has loaded
     internal var isReady = false
 
+    // FIXME: errorhandler was removed - is this still needed?
     /// internal lock for errorhandler
     internal var parentLock = NSLock()
 
