@@ -5,5 +5,8 @@
         <page name='Installation'/>
         <page name='Setup'/>
         <page name='Content'/>
+        <page name='Collection'/>
+        <page name='Page'/>
+        <page name='Outlet'/>
     </pages>
 </playground>

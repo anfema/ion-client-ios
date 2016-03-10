@@ -16,6 +16,46 @@ ION.config.setBasicAuthCredentials(user: "admin@anfe.ma", password: "test")
 //: Because we know that good and of course good looking content is very important, we want to reduce your
 //: effort to get content into your app, so you can spend more time in making your app look awesome!
 //:
+//: ---
+//: The content you will get from ION consists of three elements:  
+//: [Collections](Collection), [Pages](Page) and [Outlets](Outlet)
+//:
+//: The Collection is the basic "root" element, which typically exists only once per app.
+//: (You can have of course more if you want)
+//: The collection handles the requests made to the backend, the caching and the loading of all contained
+//: Pages and their Outlets.
+//:
+//: The Page items in the collection are used to define the structure of the app. Pages can also be nested to
+//: represent more complex hierarchies.
+//:
+//: The Outlet items are the leafes in the structure and contain the content.
+//:
+//: ---
+//: Lets have a look at the structure of our little example:
+//: One collection with the identifier "docs". Nested in that collection are three pages: "animals", "news",
+//: and "articles".
+//: * Collection (identifier: docs)
+//:     * Page (identifier: animals)
+//:         * Page (identifier: normal-cat)
+//:         * Page (identifier: fluffy-cat)
+//:     * Page (identifier: news)
+//:     * Page (identifier: articles)
+//:         * Page (identifier: sad-cat.story)
+//:             * Outlet (identifier: title)
+//:             * Outlet (identifier: date)
+//:             * Outlet (identifier: subtitle)
+//:             * Outlet (identifier: image)
+//:             * Outlet (identifier: story)
+//:         * Page (identifier: funny-cat-story)
+//:             * Outlet (identifier: title)
+//:             * Outlet (identifier: date)
+//:             * Outlet (identifier: subtitle)
+//:             * Outlet (identifier: image)
+//:             * Outlet (identifier: story)
+//: 
+
+
+
 //: # Collection
 //: 
 //: The basic element for getting content is the *collection*.  
@@ -23,9 +63,9 @@ ION.config.setBasicAuthCredentials(user: "admin@anfe.ma", password: "test")
 //: Usually you only have one collection per app.
 //: But of course you can use multiple collections at once.
 
-//: Obtaining a collection is very easy. Just type ION.collection and add the collection identifier
-//: as the parameter of the function:
-let collection = ION.collection("collection") { result in
+//: Obtaining a collection is very easy. Just call the class function `collection` on `ION` and add the collection
+//: identifier as parameter:
+ION.collection("collection") { result in
     guard case .Success(let collection) = result else {
         print("Oh no! An error occurred! \(result.error!)")
         return
@@ -36,7 +76,7 @@ let collection = ION.collection("collection") { result in
 //: Hmmm. It seems that an error occurred, saying `CollectionNotFound`.  
 //: I guess it's my fault - because I used the wrong collection identifier.  
 //: Let's try again with `docs` as collection identifier:
-let docsCollection = ION.collection("docs") { result in
+ION.collection("docs") { result in
     guard case .Success(let collection) = result else {
         print("Oh no! An error occurred! \(result.error!)")
         return
@@ -52,10 +92,28 @@ let docsCollection = ION.collection("docs") { result in
 //: when they know what is going on.
 
 //: # Page
-//: 
-//: Previously said, collections are containers only. Usually one container for one app.
-//: Pages are nested inside of collections and are used to specify the content for a specific layout.
-//: In iOS language:
+ION.collection("docs").page("animals") { result in
+    guard case .Success(let animals) = result else {
+        print("no animals found! \(result.error!)")
+        return
+    }
+    
+    animals.children({ result in
+        guard case .Success(let animal) = result else {
+            return
+        }
+        
+        let type = animal.text("type").optional() ?? "unknown animal"
+        let isFluffy = animal.isSet("is-fluffy").optional() ?? false
+        
+        if isFluffy {
+            print("\(type) is fluffy!")
+        } else {
+            print("\(type) is not fluffy!")
+        }
+    })
+}
+
 
 //:
 //: [Next (Outlets)](@next)
