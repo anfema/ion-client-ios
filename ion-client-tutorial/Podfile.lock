@@ -1,0 +1,38 @@
+PODS:
+  - Alamofire (3.2.1)
+  - DEjson (1.0.1)
+  - HashExtensions (2.0.0)
+  - html5tokenizer (1.0.0)
+  - ion-client (2.0.0):
+    - Alamofire (~> 3.0)
+    - DEjson (~> 1.0)
+    - HashExtensions (~> 2.0)
+    - html5tokenizer (~> 1.0)
+    - Markdown (~> 1.0)
+    - Tarpit (~> 1.0)
+  - Markdown (1.0.8)
+  - Tarpit (1.0.3)
+
+DEPENDENCIES:
+  - ion-client (from `git@github.com:anfema/amp-ios-client.git`, branch `feature/new_error_handling`)
+
+EXTERNAL SOURCES:
+  ion-client:
+    :branch: feature/new_error_handling
+    :git: git@github.com:anfema/amp-ios-client.git
+
+CHECKOUT OPTIONS:
+  ion-client:
+    :commit: 9e3e1eed0ff746c0ef8dd0ea6bfac8d260e03d7d
+    :git: git@github.com:anfema/amp-ios-client.git
+
+SPEC CHECKSUMS:
+  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
+  DEjson: 9630f0cb6973e5243c220ae275cc61d93d3e153f
+  HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
+  html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
+  ion-client: 37e82ab11f8fddc5f9d32c7d2dbb8048d2ab7599
+  Markdown: 242704fdcaa5c62a8380d9f89381b61f69ab6cee
+  Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
+
+COCOAPODS: 0.39.0
