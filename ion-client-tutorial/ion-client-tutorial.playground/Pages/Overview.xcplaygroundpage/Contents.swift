@@ -5,8 +5,7 @@
 //: If you want to know about a specific topic choose here:
 //: * [Installation](@Installation)
 //: * [Basic setup](@Setup)
-//: * [Collections](@Collections)
-//: * [Pages](@Pages)
+//: * [Loading content](@Content)
 //: * [Outlets](@Outlets)
 //: * [Authentification](@Authentification)
 //: * [Variations](@Variations)

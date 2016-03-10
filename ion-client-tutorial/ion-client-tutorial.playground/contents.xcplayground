@@ -4,5 +4,6 @@
         <page name='Overview'/>
         <page name='Installation'/>
         <page name='Setup'/>
+        <page name='Content'/>
     </pages>
 </playground>
