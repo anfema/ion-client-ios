@@ -35,7 +35,7 @@ let collection = ION.collection("collection") { result in
 }
 //: Hmmm. It seems that an error occurred, saying `CollectionNotFound`.  
 //: I guess it's my fault - because I used the wrong collection identifier.  
-//: Let's try again with `docs`:
+//: Let's try again with `docs` as collection identifier:
 let docsCollection = ION.collection("docs") { result in
     guard case .Success(let collection) = result else {
         print("Oh no! An error occurred! \(result.error!)")

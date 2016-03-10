@@ -14,7 +14,7 @@ import ion_client
 //: > You can find the server urls of your accounts from [https://ionurl.com/developer](https://ionurl.com/developer).  
 //: > But for now we can stick with this demo server:
 ION.config.serverURL = NSURL(string: "https://ampdev2.anfema.com/client/v1/")
-//: # Optional:
+//: ## Optional:
 //: Adjust the response queue that should be used for the callbacks.  
 //: Usually using `dispatch_get_main_queue()` is the best choice, because interface updates
 //: happen in the main queue. (default)  
