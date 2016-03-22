@@ -1,0 +1,8 @@
+{
+  "login": {
+    "token": "ez6144lke4bt9062jnd6obtg1rn1m67f",
+    "user": 1,
+    "api_url": "http://127.0.0.1:8000/client/v1/",
+    "version": "0.14.7"
+  }
+}

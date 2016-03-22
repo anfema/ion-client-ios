@@ -1,0 +1,84 @@
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/test",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-en_US-@2x.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/test",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-en_US-@3x.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/test",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-en_US-default.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/test",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-de_DE-@2x.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/test",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-de_DE-@3x.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/test",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 200,
+      "file": "collections/test-de_DE-default.json",
+      "mime_type": "application/json"
+    }
+  },

@@ -1,0 +1,166 @@
+  {
+    "request": {
+      "method": "POST",
+      "url": "://127.0.0.1:8000/client/v1/login"
+    },
+    "response" : {
+      "code": 200,
+      "file": "misc/login.json",
+      "mime_type": "application/json"
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/gnarf",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/gnarf",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/gnarf",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/gnarf",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/gnarf",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/gnarf",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 404
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/notallowed",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/notallowed",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/en_US/notallowed",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/notallowed",
+      "parameters": {
+        "variation": "@3x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/notallowed",
+      "parameters": {
+        "variation": "@2x"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "://127.0.0.1:8000/client/v1/de_DE/notallowed",
+      "parameters": {
+        "variation": "default"
+      }
+    },
+    "response" : {
+      "code": 403
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "://127.0.0.1:8000/client/v1/tokenize"
+    },
+    "response" : {
+      "code": 200,
+      "file": "misc/tokenize.json",
+      "mime_type": "application/json"
+    }
+  },

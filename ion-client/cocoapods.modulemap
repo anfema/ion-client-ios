@@ -1,0 +1,8 @@
+module sqlite {
+    header "/usr/include/sqlite3.h"
+    export *
+}
+
+framework module ion_client {
+    export *
+}

@@ -1,8 +1,0 @@
-module sqlite {
-    header "/usr/include/sqlite3.h"
-    export *
-}
-
-framework module amp_client {
-    export *
-}
