@@ -124,7 +124,6 @@
 		8F0DB0651C0F15B600193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F0DB0671C0F177900193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F114C6D1C15F44100977640 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundles; path = ../../bundles; sourceTree = "<group>"; };
-		8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8F5872761C89A567005567E1 /* notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
 		8F78B2BB1BF36216009D4B67 /* ion-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ion-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -343,7 +342,6 @@
 			children = (
 				8F78B2F21BF363AA009D4B67 /* imageloader.swift */,
 				8FCFAECE1C08B5D30051981F /* htmlparser.swift */,
-				8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */,
 				6AD50C481C8ED0CC00A05C20 /* callback.swift */,
 			);
 			name = helper;
