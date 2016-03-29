@@ -41,7 +41,7 @@ class NSDate_ISODate: XCTestCase {
         if let newDate3 = NSDate(ISODateString: invalidIsoString) {
             XCTFail("initializer 'isoDateString:' of NSDate did not return \(newDate3) - but should fail")
         } else {
-            // failed as intendet
+            // failed as intended
         }
     }
 }

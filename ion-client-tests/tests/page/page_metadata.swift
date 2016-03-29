@@ -69,7 +69,7 @@ class pageMetadataTests: LoggedInXCTestCase {
         var count = 0
         ION.collection("test").enumerateMetadata(nil) { metadata in
             XCTAssertNil(metadata.parent)
-            count++
+            count += 1
             if count == 2 {
                 expectation.fulfill()
             }

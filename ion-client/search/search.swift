@@ -113,7 +113,7 @@ public class IONSearchHandle {
         self.collection = collection
         
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateFTSDB:", name: IONFTSDBDidUpdateNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: IONFTSDBDidUpdateNotification, object: nil)
         
         guard setupSqliteConnection() else
         {
