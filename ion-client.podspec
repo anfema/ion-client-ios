@@ -34,4 +34,5 @@ Pod::Spec.new do |s|
   s.dependency "HashExtensions", "~> 2.0"
   s.dependency "html5tokenizer", "~> 1.0"
   s.dependency "Tarpit", "~> 1.0"
+  s.dependency "iso-rfc822-date", "~> 1.0"
 end

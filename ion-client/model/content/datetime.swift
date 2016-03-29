@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import iso_rfc822_date
 
 /// DateTime content
 public class IONDateTimeContent: IONContent {
@@ -32,7 +33,7 @@ public class IONDateTimeContent: IONContent {
         }
         
         if case .JSONString(let datetime) = rawDateTime {
-            self.date = NSDate(isoDateString: datetime)
+            self.date = NSDate(ISODateString: datetime)
         }
     }
 }

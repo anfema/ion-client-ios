@@ -6,6 +6,7 @@ PODS:
   - DEjson (1.0.1)
   - HashExtensions (2.0.0)
   - html5tokenizer (1.0.0)
+  - iso-rfc822-date (1.0.0)
   - Markdown (1.0.8)
   - Tarpit (1.0.3)
 
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - DEjson (~> 1.0)
   - HashExtensions (~> 2.0)
   - html5tokenizer (~> 1.0)
+  - iso-rfc822-date (~> 1.0)
   - Markdown (~> 1.0)
   - Tarpit (~> 1.0)
 
@@ -24,6 +26,7 @@ SPEC CHECKSUMS:
   DEjson: 9630f0cb6973e5243c220ae275cc61d93d3e153f
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
+  iso-rfc822-date: 174a08b1df3171d17fbdfd58c556cd448a4e6786
   Markdown: 242704fdcaa5c62a8380d9f89381b61f69ab6cee
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 

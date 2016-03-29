@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import iso_rfc822_date
 
 /// Page class, contains functionality to fetch outlet content
 public class IONPage {
@@ -351,7 +352,7 @@ public class IONPage {
                 }
                 self.identifier = id
                 self.locale = locale
-                self.lastUpdate = NSDate(isoDateString: last_changed)
+                self.lastUpdate = NSDate(ISODateString: last_changed)
                 
                 // parse and append content to this page
                 for c in contents {

@@ -13,6 +13,8 @@ import Foundation
 
 import HashExtensions
 import DEjson
+import iso_rfc822_date
+
 
 // TODO: Export interface and make generic to use cache for other requests
 
@@ -91,7 +93,7 @@ public class IONRequest {
             if let rawLastUpdated = index["last_updated"],
                case .JSONNumber(let timestion) = rawLastUpdated {
                 let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestion))
-                headers["If-Modified-Since"] = lastUpdated.rfc822DateString
+                headers["If-Modified-Since"] = lastUpdated.rfc822DateString()
             }
         }
         

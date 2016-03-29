@@ -419,7 +419,7 @@ public class IONCollection {
                 self.lastChanged = self.lastUpdate
                 if let rawLastChanged = dict["last_changed"] {
                     if case .JSONString(let lastChanged) = rawLastChanged {
-                        self.lastChanged = NSDate(isoDateString: lastChanged)
+                        self.lastChanged = NSDate(ISODateString: lastChanged)
                         self.lastUpdate = self.lastChanged
                     }
                 }

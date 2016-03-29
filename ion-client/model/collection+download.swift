@@ -12,6 +12,7 @@
 import Foundation
 import Tarpit
 import DEjson
+import iso_rfc822_date
 
 
 extension IONCollection {
@@ -68,7 +69,7 @@ extension IONCollection {
                 if self.archiveURL.containsString("?") {
                     url += "&lastUpdated=\(dt.isoDateString)"
                 } else {
-                    q["lastUpdated"] = dt.isoDateString
+                    q["lastUpdated"] = dt.isoDateString()
                 }
             }
             
