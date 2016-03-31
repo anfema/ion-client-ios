@@ -124,12 +124,12 @@ extension IONRequest {
             self.loadCacheDB()
         }
         
-        // fetch current timestion truncated to maximum resolution of 1 ms
-        var timestion: Double = 0.0
+        // fetch current timestamp truncated to maximum resolution of 1 ms
+        var timestamp: Double = 0.0
         if let last_updated = last_updated {
-            timestion = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
+            timestamp = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
         } else {
-            timestion = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
         }
         
         // pop current cache DB entry
@@ -162,7 +162,7 @@ extension IONRequest {
         obj["url"]             = .JSONString(url)
         obj["host"]            = .JSONString(parsedURL.host!)
         obj["filename"]        = .JSONString(hash.hexString())
-        obj["last_updated"]    = .JSONNumber(timestion)
+        obj["last_updated"]    = .JSONNumber(timestamp)
 
         if let checksum = checksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
@@ -187,12 +187,12 @@ extension IONRequest {
             self.loadCacheDB()
         }
         
-        // fetch current timestion truncated to maximum resolution of 1 ms
-        var timestion: Double = 0.0
+        // fetch current timestamp truncated to maximum resolution of 1 ms
+        var timestamp: Double = 0.0
         if let lastUpdate = lastUpdate {
-            timestion = trunc(lastUpdate.timeIntervalSince1970 * 1000.0) / 1000.0
+            timestamp = trunc(lastUpdate.timeIntervalSince1970 * 1000.0) / 1000.0
         } else {
-            timestion = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
+            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
         }
         
         // pop current cache DB entry
@@ -207,7 +207,7 @@ extension IONRequest {
         obj["url"]             = .JSONString(request.URLString)
         obj["host"]            = .JSONString(requestHost)
         obj["filename"]        = .JSONString(request.URLString.cryptoHash(.MD5).hexString())
-        obj["last_updated"]    = .JSONNumber(timestion)
+        obj["last_updated"]    = .JSONNumber(timestamp)
         obj["checksum_method"] = .JSONString(checksumMethod)
         obj["checksum"]        = .JSONString(checksum)
         

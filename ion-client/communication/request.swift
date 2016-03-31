@@ -91,8 +91,8 @@ public class IONRequest {
         headers["Accept"] = "application/json"
         if let index = self.getCacheDBEntry(urlString) {
             if let rawLastUpdated = index["last_updated"],
-               case .JSONNumber(let timestion) = rawLastUpdated {
-                let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestion))
+               case .JSONNumber(let timestamp) = rawLastUpdated {
+                let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestamp))
                 headers["If-Modified-Since"] = lastUpdated.rfc822DateString()
             }
         }
@@ -348,7 +348,7 @@ public class IONRequest {
     /// - parameter urlString: the request URL (used to find the last update date in cache DB)
     /// - returns: new JSON object with added `last_updated` field if input was a dictionary, does not change arrays
     private class func augmentJSONWithChangeDate(json: JSONObject, urlString: String) -> JSONObject {
-        // augment json with timestion for last update
+        // augment json with timestamp for last update
         guard case .JSONDictionary(var dict) = json,
               let cacheDBEntry = self.getCacheDBEntry(urlString) where cacheDBEntry["last_updated"] != nil,
               case .JSONNumber = cacheDBEntry["last_updated"]! else {

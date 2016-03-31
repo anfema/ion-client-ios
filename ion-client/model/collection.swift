@@ -387,11 +387,11 @@ public class IONCollection {
             // furthermore we need a collection and a last_updated element
             guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
                   case .JSONArray(let array)      = rawCollection,
-                  case .JSONNumber(let timestion) = rawLastUpdated else {
+                  case .JSONNumber(let timestamp) = rawLastUpdated else {
                     callback(IONError.JSONObjectExpected(result.value!))
                     return nil
             }
-            self.lastUpdate = NSDate(timeIntervalSince1970: timestion)
+            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
 
             // if we have a nonzero result
             if case .JSONDictionary(let dict) = array[0] {
