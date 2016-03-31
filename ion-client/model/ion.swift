@@ -198,23 +198,7 @@ public class ION {
     /// - parameter collection1: first collection
     /// - parameter collection2: second collection
     private class func notifyForUpdates(collection1: IONCollection, collection2: IONCollection) {
-        var collectionChanged = false
-        
-        // compare metadata count
-        if (collection1.pageMeta.count != collection2.pageMeta.count) || (collection1.lastChanged != collection2.lastChanged) {
-            collectionChanged = true
-        } else {
-            // compare old collection and new collection page change dates and identifiers
-            for i in 0..<collection1.pageMeta.count {
-                let c1 = collection1.pageMeta[i]
-                let c2 = collection2.pageMeta[i]
-                if c1.identifier != c2.identifier || c1.lastChanged.compare(c2.lastChanged) != .OrderedSame {
-                    collectionChanged = true
-                    break
-                }
-            }
-        }
-        if collectionChanged {
+        if collection1.equals(collection2) == false {
             // call change blocks
             ION.callUpdateBlocks(collection1.identifier)
         }

@@ -465,6 +465,35 @@ public class IONCollection {
 }
 
 
+extension IONCollection {
+    
+    /// Checks if the collection and 'otherCollection' have the same content.
+    ///
+    /// -parameter otherCollection: The collection you want to check for equal content.
+    /// -returns: true if both collections have the same content - false if they have different content.
+    public func equals(otherCollection: IONCollection) -> Bool {
+        var collectionChanged = false
+        
+        // compare metadata count
+        if (self.pageMeta.count != otherCollection.pageMeta.count) || (self.lastChanged != otherCollection.lastChanged) {
+            collectionChanged = true
+        } else {
+            // compare old collection and new collection page change dates and identifiers
+            for i in 0..<self.pageMeta.count {
+                let c1 = self.pageMeta[i]
+                let c2 = otherCollection.pageMeta[i]
+                if c1.identifier != c2.identifier || c1.lastChanged.compare(c2.lastChanged) != .OrderedSame {
+                    collectionChanged = true
+                    break
+                }
+            }
+        }
+        
+        return collectionChanged == false
+    }
+}
+
+
 public class CancelableIONCollection: IONCollection {
     
     init(collection: IONCollection) {
