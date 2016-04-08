@@ -113,7 +113,7 @@ public class AMPSearchHandle {
         self.collection = collection
         
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateFTSDB:", name: AMPFTSDBDidUpdateNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AMPSearchHandle.didUpdateFTSDB(_:)), name: AMPFTSDBDidUpdateNotification, object: nil)
         
         guard setupSqliteConnection() else
         {
