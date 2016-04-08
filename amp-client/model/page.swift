@@ -12,7 +12,7 @@
 import Foundation
 import Alamofire
 import DEjson
-
+import iso_rfc822_date
 
 /// Page class, contains functionality to fetch outlet content
 public class AMPPage {
@@ -377,7 +377,7 @@ public class AMPPage {
                 }
                 self.identifier = id
                 self.locale = locale
-                self.lastUpdate = NSDate(isoDateString: last_changed)
+                self.lastUpdate = NSDate(ISODateString: last_changed)
                 
                 // parse and append content to this page
                 for c in contents {

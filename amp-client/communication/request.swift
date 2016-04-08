@@ -14,6 +14,7 @@ import Foundation
 import HashExtensions
 import Alamofire
 import DEjson
+import iso_rfc822_date
 
 // TODO: Export interface and make generic to use cache for other requests
 
@@ -96,7 +97,7 @@ public class AMPRequest {
             if let rawLastUpdated = index["last_updated"],
                case .JSONNumber(let timestamp) = rawLastUpdated {
                 let lastUpdated = NSDate(timeIntervalSince1970: NSTimeInterval(timestamp))
-                headers["If-Modified-Since"] = lastUpdated.rfc822DateString
+                headers["If-Modified-Since"] = lastUpdated.rfc822DateString()
             }
         }
         

@@ -11,6 +11,7 @@
 
 import Foundation
 import DEjson
+import iso_rfc822_date
 
 /// DateTime content
 public class AMPDateTimeContent : AMPContent {
@@ -32,7 +33,7 @@ public class AMPDateTimeContent : AMPContent {
         }
         
         if case .JSONString(let datetime) = rawDateTime {
-            self.date = NSDate(isoDateString: datetime)
+            self.date = NSDate(ISODateString: datetime)
         }
     }
 }

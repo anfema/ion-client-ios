@@ -11,7 +11,6 @@
 		8F0DB0661C0F15B600193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0651C0F15B600193E8C /* connection.swift */; };
 		8F0DB0681C0F177900193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0671C0F177900193E8C /* connection.swift */; };
 		8F114C6E1C15F44100977640 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 8F114C6D1C15F44100977640 /* bundles */; };
-		8F114C701C1AE3F400977640 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */; };
 		8F5872771C89A567005567E1 /* notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5872761C89A567005567E1 /* notifications.swift */; };
 		8F78B2BF1BF36216009D4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */; };
 		8F78B2C11BF36216009D4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F78B2C01BF36216009D4B67 /* Assets.xcassets */; };
@@ -121,7 +120,6 @@
 		8F0DB0651C0F15B600193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F0DB0671C0F177900193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F114C6D1C15F44100977640 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundles; path = ../../bundles; sourceTree = "<group>"; };
-		8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8F5872761C89A567005567E1 /* notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
 		8F78B2BB1BF36216009D4B67 /* amp-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "amp-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -343,7 +341,6 @@
 			children = (
 				8F78B2F21BF363AA009D4B67 /* imageloader.swift */,
 				8FCFAECE1C08B5D30051981F /* htmlparser.swift */,
-				8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */,
 			);
 			name = helper;
 			path = "../../amp-client/helper";
@@ -746,7 +743,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F114C701C1AE3F400977640 /* NSDate+ISODate.swift in Sources */,
 				8F78B3141BF363AA009D4B67 /* number.swift in Sources */,
 				8FF9DB791BF9E5CC00935748 /* page+children.swift in Sources */,
 				8F78B30E1BF363AA009D4B67 /* datetime.swift in Sources */,
