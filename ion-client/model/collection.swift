@@ -20,7 +20,7 @@ public class IONCollection {
     
     /// locale code
     public var locale:String!
-
+    
     /// default locale for this collection
     public var defaultLocale:String?
     
@@ -29,22 +29,22 @@ public class IONCollection {
     
     /// last change date on server
     public var lastChanged:NSDate?
-
+    
     /// this instance produced an error while fetching from net
     public var hasFailed: Bool = false
-
+    
     /// page metadata
     internal var pageMeta = [IONPageMeta]()
-
+    
     /// memory cache for pages
     internal var pageCache = [String: IONPage]()
-
+    
     /// internal lock
     internal var parentLock = NSLock()
-
+    
     /// work queue
     internal var workQueue: dispatch_queue_t
-
+    
     /// set to false to avoid using the cache (refreshes, etc.)
     private var useCache = IONCacheBehaviour.Prefer
     
@@ -56,7 +56,7 @@ public class IONCollection {
     
     /// FTS download url
     internal var ftsDownloadURL:String?
-
+    
     /// internal id
     internal var uuid = NSUUID().UUIDString
     
@@ -103,7 +103,7 @@ public class IONCollection {
             self.parentLock.unlock()
         }
     }
-   
+    
     // MARK: - API
     
     /// Fetch a page from this collection
@@ -117,43 +117,10 @@ public class IONCollection {
                 return
             }
             if let page = self.pageCache[identifier] {
-                func update() {
-                    // fetch page update
-                    guard let meta = self.getPageMetaForPage(identifier) else {
-                        return
-                    }
-                    self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
-                        guard case .Success(let page) = result else {
-                            // FIXME: what happens in the error case?
-                            return
-                        }
-                        page.position = meta.position
-                        responseQueueCallback(callback, parameter: .Success(page))
-                        page.onCompletion { _,_ in
-                            self.checkCompleted()
-                        }
-                    }
-                }
-                
-                func checkNeedsUpdate() -> Bool {
-                    // ready, check if we need to update
-                    if page.hasFailed {
-                        return true
-                    } else {
-                        if let meta = self.getPageMetaForPage(page.identifier) {
-                            if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
-                                // page out of date, force update
-                                return true
-                            }
-                        }
-                    }
-                    return false
-                    
-                }
                 
                 if page.isReady {
-                    if checkNeedsUpdate() {
-                        update()
+                    if self.checkNeedsUpdate(page) {
+                        self.update(page, callback: callback)
                     } else {
                         dispatch_async(ION.config.responseQueue) {
                             callback(.Success(page))
@@ -167,8 +134,8 @@ public class IONCollection {
                         guard !self.hasFailed else {
                             return
                         }
-                        if checkNeedsUpdate() {
-                            update()
+                        if self.checkNeedsUpdate(page) {
+                            self.update(page, callback: callback)
                         } else {
                             dispatch_async(ION.config.responseQueue) {
                                 callback(.Success(page))
@@ -202,7 +169,7 @@ public class IONCollection {
         // allow further chaining
         return self
     }
-
+    
     /// Fetch a page from this collection
     ///
     /// As there is no callback, this returns a page that resolves async once the page becomes available
@@ -211,38 +178,37 @@ public class IONCollection {
     /// - parameter identifier: page identifier
     /// - returns: a page that resolves automatically if the underlying page becomes available, nil if page unknown
     public func page(identifier: String) -> IONPage {
-        // fetch page and resume processing when ready
-        var fetch = true
         
         if let page = self.pageCache[identifier] {
             // well page is cached, just return cached version
             if page.isReady {
-                fetch = false
-                return page
+                if self.checkNeedsUpdate(page) {
+                    return self.update(page, callback: nil) ?? page
+                } else {
+                    return page
+                }
             }
         }
         
-        if fetch {
-            // search metadata
-            var layout: String? = nil
-            var parent: String? = nil
-            var position: Int = 0
-            if let meta = self.getPageMetaForPage(identifier) {
-                layout = meta.layout
-                parent = meta.parent
-                position = meta.position
-            }
-            
-            // not cached, fetch from web and add it to the cache
-            let page = IONPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
-                dispatch_barrier_async(self.workQueue) {
-                    self.checkCompleted()
-                }
-            }
-            page.position = position
-            self.pageCache[identifier] = page
-            return page
+        // search metadata
+        var layout: String? = nil
+        var parent: String? = nil
+        var position: Int = 0
+        if let meta = self.getPageMetaForPage(identifier) {
+            layout = meta.layout
+            parent = meta.parent
+            position = meta.position
         }
+        
+        // not cached, fetch from web and add it to the cache
+        let page = IONPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
+            dispatch_barrier_async(self.workQueue) {
+                self.checkCompleted()
+            }
+        }
+        page.position = position
+        self.pageCache[identifier] = page
+        return page
     }
     
     
@@ -268,7 +234,7 @@ public class IONCollection {
         return page(pages[index].identifier)
     }
     
-  
+    
     /// Enumerate pages
     ///
     /// - parameter callback: block to call for each page
@@ -287,14 +253,14 @@ public class IONCollection {
         
         return self
     }
-
+    
     /// Fork the work queue, the returning collection has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
     public func cancelable() -> CancelableIONCollection {
         return CancelableIONCollection(collection: self)
     }
-
+    
     // MARK: - Internal
     
     
@@ -314,7 +280,7 @@ public class IONCollection {
         
         return self
     }
-
+    
     /// Callback when collection work queue is empty
     ///
     /// Attention: This blocks all queries that follow this call until the callback
@@ -332,6 +298,42 @@ public class IONCollection {
     }
     
     // MARK: - Private
+    
+    private func checkNeedsUpdate(page: IONPage) -> Bool {
+        // ready, check if we need to update
+        if page.hasFailed {
+            return true
+        } else {
+            if let meta = self.getPageMetaForPage(page.identifier) {
+                if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
+                    // page out of date, force update
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    private func update(page: IONPage, callback:(Result<IONPage, IONError> -> Void)?) -> IONPage? {
+        // fetch page update
+        guard let meta = self.getPageMetaForPage(page.identifier) else {
+            return nil
+        }
+        self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
+            guard case .Success(let page) = result else {
+                // FIXME: what happens in the error case?
+                return
+            }
+            page.position = meta.position
+            if let callback = callback {
+                responseQueueCallback(callback, parameter: .Success(page))
+            }
+            page.onCompletion { _,_ in
+                self.checkCompleted()
+            }
+        }
+        return self.pageCache[identifier]
+    }
     
     private func checkCompleted() {
         dispatch_barrier_async(self.workQueue) {
@@ -361,7 +363,7 @@ public class IONCollection {
         // FIXME: How to remove this from the collection cache again?
         ION.collectionCache[self.forkedIdentifier] = self
     }
-
+    
     /// Fetch collection from cache or web
     ///
     /// - parameter identifier: collection identifier to get
@@ -386,27 +388,27 @@ public class IONCollection {
             
             // furthermore we need a collection and a last_updated element
             guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
-                  case .JSONArray(let array)      = rawCollection,
-                  case .JSONNumber(let timestamp) = rawLastUpdated else {
+                case .JSONArray(let array)      = rawCollection,
+                case .JSONNumber(let timestamp) = rawLastUpdated else {
                     callback(IONError.JSONObjectExpected(result.value!))
                     return nil
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
-
+            
             // if we have a nonzero result
             if case .JSONDictionary(let dict) = array[0] {
                 
                 // make sure everything is there
                 guard let rawIdentifier = dict["identifier"], rawPages = dict["pages"], rawDefaultLocale = dict["default_locale"],
                     rawArchive = dict["archive"], rawFTSdb = dict["fts_db"],
-                      case .JSONString(let id)             = rawIdentifier,
-                      case .JSONString(let defaultLocale)  = rawDefaultLocale,
-                      case .JSONString(let archiveURL)     = rawArchive,
-                      case .JSONArray(let pages)           = rawPages else {
+                    case .JSONString(let id)             = rawIdentifier,
+                    case .JSONString(let defaultLocale)  = rawDefaultLocale,
+                    case .JSONString(let archiveURL)     = rawArchive,
+                    case .JSONArray(let pages)           = rawPages else {
                         callback(IONError.InvalidJSON(result.value!))
                         return nil
                 }
-            
+                
                 // initialize self
                 self.identifier = id
                 self.defaultLocale = defaultLocale
@@ -423,12 +425,12 @@ public class IONCollection {
                         self.lastUpdate = self.lastChanged
                     }
                 }
-                            
+                
                 // initialize page metadata objects from the collection's page array
                 for page in pages {
                     do {
                         let obj = try IONPageMeta(json: page, position: 0, collection: self)
-
+                        
                         // find max position for current parent
                         var position = -1
                         for page in self.pageMeta {
@@ -437,7 +439,7 @@ public class IONCollection {
                             }
                         }
                         obj.position = position + 1
-
+                        
                         self.pageMeta.append(obj)
                     } catch {
                         if let json = JSONEncoder(page).prettyJSONString {
@@ -525,7 +527,7 @@ public class CancelableIONCollection: IONCollection {
             }
             // set ourselves to failed to cancel all queued items
             self.hasFailed = true
-        
+            
             // remove self from cache
             self.finish()
         }

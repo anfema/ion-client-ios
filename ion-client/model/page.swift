@@ -33,13 +33,13 @@ public class IONPage {
     
     /// locale code for the page
     public var locale:String
-
+    
     /// layout identifier (name of the toplevel container outlet)
     public var layout:String
     
     /// content list
     public var content = [IONContent]()
-
+    
     /// page position
     public var position: Int = 0
     
@@ -48,13 +48,13 @@ public class IONPage {
     
     /// page has loaded
     internal var isReady = false
-
+    
     /// internal lock
     internal var parentLock = NSLock()
-
+    
     /// work queue
     internal var workQueue: dispatch_queue_t
-
+    
     /// internal uuid
     internal var uuid = NSUUID().UUIDString
     
@@ -89,7 +89,7 @@ public class IONPage {
         self.locale = self.collection.locale
         
         self.workQueue = dispatch_queue_create("com.anfema.ion.page.\(identifier)", DISPATCH_QUEUE_SERIAL)
-
+        
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
         dispatch_barrier_async(self.workQueue) {
             self.parentLock.lock()
@@ -99,6 +99,7 @@ public class IONPage {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     self.hasFailed = true
                     responseQueueCallback(callback, parameter: .Failure(error))
+                    dispatch_semaphore_signal(semaphore)
                     
                 } else {
                     if self.content.count > 0 {
@@ -106,11 +107,32 @@ public class IONPage {
                             self.layout = container.outlet
                         }
                     }
-
-                    self.isReady = true
-                    responseQueueCallback(callback, parameter: .Success(self))
+                    
+                    if self.lastUpdate.compare(self.collection.getPageMetaForPage(identifier)!.lastChanged) != .OrderedSame {
+                        self.useCache = .Ignore
+                        self.content.removeAll()
+                        self.fetch(identifier) { error in
+                            if let error = error {
+                                self.hasFailed = true
+                                responseQueueCallback(callback, parameter: .Failure(error))
+                                dispatch_semaphore_signal(semaphore)
+                            } else {
+                                if self.content.count > 0 {
+                                    if case let container as IONContainerContent = self.content.first! {
+                                        self.layout = container.outlet
+                                    }
+                                }
+                                self.isReady = true
+                                responseQueueCallback(callback, parameter: .Success(self))
+                                dispatch_semaphore_signal(semaphore)
+                            }
+                        }
+                    } else {
+                        self.isReady = true
+                        responseQueueCallback(callback, parameter: .Success(self))
+                        dispatch_semaphore_signal(semaphore)
+                    }
                 }
-                dispatch_semaphore_signal(semaphore)
             }
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             self.parentLock.unlock()
@@ -118,9 +140,9 @@ public class IONPage {
         
         self.collection.pageCache[identifier] = self
     }
-
+    
     // MARK: - API
-
+    
     /// Fork the work queue, the returning page has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
@@ -168,12 +190,12 @@ public class IONPage {
             guard !self.hasFailed else {
                 return
             }
-
+            
             // search content
             let cObj = self.content.filter({ obj -> Bool in
                 return obj.outlet == name && obj.position == position
             }).first
-
+            
             if let c = cObj {
                 responseQueueCallback(callback, parameter: .Success(c))
             } else {
@@ -182,7 +204,7 @@ public class IONPage {
         }
         return self
     }
-   
+    
     /// Fetch an outlet by name (from loaded page)
     ///
     /// - parameter name: outlet name to fetch
@@ -205,7 +227,7 @@ public class IONPage {
             }
         }
     }
-
+    
     /// Check if an Outlet exists
     ///
     /// - parameter name: outlet to check
@@ -217,7 +239,7 @@ public class IONPage {
             guard !self.hasFailed else {
                 return
             }
-       
+            
             // search content
             var found = false
             for content in self.content where content.outlet == name {
@@ -231,7 +253,7 @@ public class IONPage {
         }
         return self
     }
-
+    
     
     /// Check if an Outlet exists
     ///
@@ -272,7 +294,7 @@ public class IONPage {
         }
         return self
     }
-
+    
     /// Number of contents for an outlet (if outlet is an array)
     ///
     /// - parameter name: outlet to check
@@ -301,7 +323,7 @@ public class IONPage {
         // FIXME: How to remove this from the collection cache again?
         self.collection.pageCache[self.forkedIdentifier] = self
     }
-
+    
     /// Fetch page from cache or web
     ///
     /// - parameter identifier: page identifier to get
@@ -316,7 +338,7 @@ public class IONPage {
                 }
                 return nil
             }
-
+            
             // we need a result value and need it to be a dictionary
             guard result.value != nil,
                 case .JSONDictionary(let dict) = result.value! else {
@@ -326,21 +348,21 @@ public class IONPage {
             
             // furthermore we need a page and a last_updated element
             guard let rawPage = dict["page"] where dict["last_updated"] != nil,
-                  case .JSONArray(let array) = rawPage else {
+                case .JSONArray(let array) = rawPage else {
                     callback(.JSONObjectExpected(dict["page"]))
                     return nil
             }
-
+            
             // if we have a nonzero result
             if case .JSONDictionary(let dict) = array[0] {
-
+                
                 // make sure everything is there
                 guard let rawIdentifier = dict["identifier"], rawContents = dict["contents"],
-                      rawLastChanged = dict["last_changed"], parent = dict["parent"], rawLocale = dict["locale"],
-                      case .JSONString(let id) = rawIdentifier,
-                      case .JSONArray(let contents) = rawContents,
-                      case .JSONString(let last_changed) = rawLastChanged,
-                      case .JSONString(let locale) = rawLocale else {
+                    rawLastChanged = dict["last_changed"], parent = dict["parent"], rawLocale = dict["locale"],
+                    case .JSONString(let id) = rawIdentifier,
+                    case .JSONArray(let contents) = rawContents,
+                    case .JSONString(let last_changed) = rawLastChanged,
+                    case .JSONString(let locale) = rawLocale else {
                         callback(.InvalidJSON(result.value))
                         return nil
                 }
@@ -378,11 +400,11 @@ public class IONPage {
     }
     
     /// Recursively append all content
-    /// 
+    ///
     /// - parameter obj: the content object to append including it's children
     private func appendContent(obj: IONContent) {
         self.content.append(obj)
-
+        
         // append all toplevel content
         if case let container as IONContainerContent = obj {
             if let children = container.children {
@@ -396,7 +418,7 @@ public class IONPage {
 }
 
 public class CancelableIONPage: IONPage {
-
+    
     init(page: IONPage) {
         super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
         
@@ -415,7 +437,7 @@ public class CancelableIONPage: IONPage {
             page.parentLock.unlock()
         }
     }
-
+    
     public func cancel() {
         dispatch_barrier_async(self.workQueue) {
             self.hasFailed = true
