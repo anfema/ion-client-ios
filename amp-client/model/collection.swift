@@ -433,6 +433,7 @@ public class AMPCollection {
                 if let rawLastChanged = dict["last_changed"] {
                     if case .JSONString(let lastChanged) = rawLastChanged {
                         self.lastChanged = NSDate(ISODateString: lastChanged)
+                        self.lastUpdate = self.lastChanged
                     }
                 }
                             

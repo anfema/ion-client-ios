@@ -212,6 +212,26 @@ extension AMPRequest {
         self.saveCacheDB()
     }
 
+    internal class func updateCacheDB(urlString: String, lastUpdated: String) {
+        // load cache DB if not loaded yet
+        if self.cacheDB == nil {
+            self.loadCacheDB()
+        }
+        
+        if let timestamp = NSDate(ISODateString: lastUpdated) {
+            // pop current cache DB entry
+            var obj:[String:JSONObject] = self.getCacheDBEntry(urlString) ?? [:]
+            self.removeCacheDBEntries(withURL: urlString)
+            
+            // populate object with current data
+            obj["last_updated"]    = .JSONNumber(timestamp.timeIntervalSince1970)
+            
+            // append to cache DB and save
+            self.cacheDB!.append(JSONObject.JSONDictionary(obj))
+            self.saveCacheDB()
+        }
+    }
+    
     // MARK: - Private API
     
     /// Private function to load cache DB from disk

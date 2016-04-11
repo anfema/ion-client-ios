@@ -135,6 +135,13 @@ public class AMPRequest {
                 // call callback in correct queue
                 dispatch_async(AMP.config.responseQueue) {
                     callback(patchedResult)
+                    
+                    guard case .Success(let result) = patchedResult,
+                        case .JSONDictionary(var dict) = result where dict["last_updated"] != nil,
+                        case .JSONString(let dateString) = dict["last_updated"]! else {
+                            return
+                    }
+                    self.updateCacheDB(urlString, lastUpdated: dateString)
                 }
             } else {
                 dispatch_async(AMP.config.responseQueue) {
