@@ -130,10 +130,12 @@ extension IONCollection {
     /// - parameter pageIdentifier: the page identifier to calculate the path for
     /// - parameter callback: callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
     /// - returns: self for chaining
-    public func metaPath(pageIdentifier: String, callback: ([IONPageMeta] -> Void)) -> IONCollection {
+    public func metaPath(pageIdentifier: String, callback: (Result<[IONPageMeta], IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             if let result = self.metaPath(pageIdentifier) {
-                responseQueueCallback(callback, parameter: result)
+                responseQueueCallback(callback, parameter: .Success(result))
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(IONError.PageNotFound(pageIdentifier)))
             }
         }
         return self
