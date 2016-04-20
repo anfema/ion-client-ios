@@ -34,7 +34,7 @@ class connectionContentTests: LoggedInXCTestCase {
             }
             
             if case .Success(let link) = page.link("connection") {
-                XCTAssertEqual(link, NSURL(string: "ion://testconnection124"))
+                XCTAssertEqual(link, NSURL(string: "ion://test/page_001#number"))
             } else {
                 XCTFail("connection content 'Connection' returned nil")
             }
@@ -42,6 +42,7 @@ class connectionContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
     
     func testConnectionOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testConnectionOutletFetchAsync")
@@ -53,10 +54,35 @@ class connectionContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssertEqual(link, NSURL(string: "ion://testconnection124"))
+            XCTAssertEqual(link, NSURL(string: "ion://test/page_001#number"))
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
+    
+    func testOutletFetch() {
+        let expectation = self.expectationWithDescription("testOutletFetch")
+        
+        ION.collection("test").page("page_001").link("connection") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            ION.resolvePage(url, callback: { result in
+                guard  case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertNotNil(page)
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
