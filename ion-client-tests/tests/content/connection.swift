@@ -71,7 +71,7 @@ class connectionContentTests: LoggedInXCTestCase {
                 return
             }
             
-            ION.resolvePage(url, callback: { result in
+            ION.resolve(url, callback: { (result: Result<IONPage, IONError>) in
                 guard  case .Success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
