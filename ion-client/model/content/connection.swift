@@ -12,18 +12,19 @@
 import Foundation
 import DEjson
 
-/// Connection content, carries a link to another collection/page/outlet
+/// Connection content, carries a link to another collection, page or outlet
 public class IONConnectionContent: IONContent {
     
-    /// value for the selected option
-    public var link:String!
+    /// value of the connection link
+    public var link: String!
     
     /// url convenience
     public var url: NSURL? {
-        return NSURL(string: "ion://\(self.link)")
+        return NSURL(string: "ion:\(self.link)")
     }
+
     
-    /// Initialize option content object from JSON
+    /// Initialize connection content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains serialized option content object
     override init(json:JSONObject) throws {
@@ -42,10 +43,11 @@ public class IONConnectionContent: IONContent {
     }
 }
 
-/// Option extensions to IONPage
+
+/// Connection extensions to IONPage
 extension IONPage {
     
-    /// Fetch selected option for named outlet
+    /// Fetch selected connection for named outlet
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
@@ -67,11 +69,11 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Fetch selected option for named outlet async
+    /// Fetch selected connection for named outlet async
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
+    /// - parameter callback: block to call when the connection becomes available, will not be called if the outlet
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
