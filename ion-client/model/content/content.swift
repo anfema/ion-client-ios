@@ -75,7 +75,7 @@ public class IONContent {
         
         guard let rawType = dict["type"],
             case .JSONString(let contentType) = rawType else {
-                throw IONError.JSONObjectExpected(json)
+                throw IONError.InvalidJSON(json)
         }
         
         // dispatcher
