@@ -103,12 +103,19 @@ public class IONPage {
                     
                 } else {
                     if self.content.count > 0 {
-                        if case let container as IONContainerContent = self.content.first! {
+                        if case let container as IONContainerContent = self.content.first {
                             self.layout = container.outlet
                         }
                     }
                     
-                    if self.lastUpdate.compare(self.collection.getPageMetaForPage(identifier)!.lastChanged) != .OrderedSame {
+                    guard let pageMeta = self.collection.getPageMetaForPage(identifier) else {
+                        self.hasFailed = true
+                        responseQueueCallback(callback, parameter: .Failure(IONError.PageNotFound(identifier)))
+                        dispatch_semaphore_signal(semaphore)
+                        return
+                    }
+                    
+                    if self.lastUpdate.compare(pageMeta.lastChanged) != .OrderedSame {
                         self.useCache = .Ignore
                         self.content.removeAll()
                         self.fetch(identifier) { error in
@@ -118,7 +125,7 @@ public class IONPage {
                                 dispatch_semaphore_signal(semaphore)
                             } else {
                                 if self.content.count > 0 {
-                                    if case let container as IONContainerContent = self.content.first! {
+                                    if case let container as IONContainerContent = self.content.first {
                                         self.layout = container.outlet
                                     }
                                 }
