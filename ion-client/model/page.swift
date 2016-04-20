@@ -160,14 +160,16 @@ public class IONPage {
     /// Callback when page fully loaded
     ///
     /// - parameter callback: callback to call
-    public func waitUntilReady(callback: (IONPage -> Void)) -> IONPage {
+    public func waitUntilReady(callback: (Result<IONPage, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
             
-            responseQueueCallback(callback, parameter: self)
+            responseQueueCallback(callback, parameter: .Success(self))
         }
+        
         return self
     }
     
@@ -182,6 +184,7 @@ public class IONPage {
         dispatch_barrier_async(self.workQueue) {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
         }
+        
         return self
     }
     
@@ -195,6 +198,7 @@ public class IONPage {
     public func outlet(name: String, position: Int = 0, callback: (Result<IONContent, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
             
@@ -209,6 +213,7 @@ public class IONPage {
                 responseQueueCallback(callback, parameter: .Failure(.OutletNotFound(name)))
             }
         }
+        
         return self
     }
     
@@ -241,9 +246,10 @@ public class IONPage {
     /// - parameter position: (optional) position in the array
     /// - parameter callback: callback to call
     /// - returns: self for chaining
-    public func outletExists(name: String, position: Int = 0, callback: (Bool -> Void)) -> IONPage {
+    public func outletExists(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
             
@@ -256,8 +262,9 @@ public class IONPage {
                 }
             }
             
-            responseQueueCallback(callback, parameter: found)
+            responseQueueCallback(callback, parameter: .Success(found))
         }
+        
         return self
     }
     
@@ -267,18 +274,19 @@ public class IONPage {
     /// - parameter name: outlet to check
     /// - parameter position: (optional) position in the array
     /// - returns: true if outlet exists else false, nil if page not loaded
-    public func outletExists(name: String, position: Int = 0) -> Bool? {
+    public func outletExists(name: String, position: Int = 0) -> Result<Bool, IONError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
-            return nil
+            return .Failure(.DidFail)
         } else {
             // search content
             for content in self.content where content.outlet == name {
                 if content.position == position {
-                    return true
+                    return .Success(true)
                 }
             }
-            return false
+            
+            return .Success(false)
         }
     }
     
@@ -288,17 +296,19 @@ public class IONPage {
     /// - parameter callback: callback with object count
     ///
     /// - returns: self for chaining
-    public func numberOfContentsForOutlet(name: String, callback: (Int -> Void)) -> IONPage {
+    public func numberOfContentsForOutlet(name: String, callback: (Result<Int, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
             
             // search content
             let count = self.content.filter({ $0.outlet == name }).count
             
-            responseQueueCallback(callback, parameter: count)
+            responseQueueCallback(callback, parameter: .Success(count))
         }
+        
         return self
     }
     
@@ -307,13 +317,13 @@ public class IONPage {
     /// - parameter name: outlet to check
     ///
     /// - returns: count if page was ready, nil if page is not loaded
-    public func numberOfContentsForOutlet(name: String) -> Int? {
+    public func numberOfContentsForOutlet(name: String) -> Result<Int, IONError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
-            return nil
+            return .Failure(.DidFail)
         } else {
             // search content
-            return self.content.filter({ $0.outlet == name }).count
+            return .Success(self.content.filter({ $0.outlet == name }).count)
         }
     }
     

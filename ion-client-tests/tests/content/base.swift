@@ -80,7 +80,13 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayCount() {
         let expectation = self.expectationWithDescription("testOutletArrayCount")
         
-        ION.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { count in
+        ION.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { result in
+            guard case .Success(let count) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             XCTAssertEqual(count, 32)
             expectation.fulfill()
         }

@@ -109,9 +109,16 @@ class textContentTests: LoggedInXCTestCase {
                 return
             }
 
-            ION.collection("test").page("page_001").waitUntilReady { page in
+            ION.collection("test").page("page_001").waitUntilReady { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
                 guard case .Success(let text) = page.html(outletName, position: 0) else {
                     XCTFail()
+                    expectation.fulfill()
                     return
                 }
                 
@@ -175,9 +182,16 @@ class textContentTests: LoggedInXCTestCase {
                 return
             }
 
-            ION.collection("test").page("page_001").waitUntilReady { page in
+            ION.collection("test").page("page_001").waitUntilReady { result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
                 guard case .Success(let text) = page.attributedString(outletName, position: 0) else {
                     XCTFail()
+                    expectation.fulfill()
                     return
                 }
 
