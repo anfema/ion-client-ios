@@ -318,8 +318,8 @@ class pageTests: LoggedInXCTestCase {
                 expectation.fulfill()
                 return
             }
-            XCTAssert(page.outletExists("text") == true)
-            XCTAssert(page.outletExists("Unknown_Outlet") == false)
+            XCTAssert(page.outletExists("text").value == true)
+            XCTAssert(page.outletExists("Unknown_Outlet").value == false)
             expectation.fulfill()
         }
         
@@ -329,7 +329,13 @@ class pageTests: LoggedInXCTestCase {
     func testOutletExistsAsync() {
         let expectation = self.expectationWithDescription("testOutletExistsAsync")
         
-        ION.collection("test").page("page_001").outletExists("text") { exists in
+        ION.collection("test").page("page_001").outletExists("text") { result in
+            guard case .Success(let exists) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             XCTAssertTrue(exists)
             expectation.fulfill()
         }
@@ -340,7 +346,13 @@ class pageTests: LoggedInXCTestCase {
     func testOutletDoesNotExistAsync() {
         let expectation = self.expectationWithDescription("testOutletDoesNotExistAsync")
         
-        ION.collection("test").page("page_001").outletExists("Unknown_Outlet") { exists in
+        ION.collection("test").page("page_001").outletExists("Unknown_Outlet") { result in
+            guard case .Success(let exists) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             XCTAssertFalse(exists)
             expectation.fulfill()
         }
@@ -429,7 +441,7 @@ class pageTests: LoggedInXCTestCase {
             }
 
             XCTAssertNotNil(page)
-            XCTAssertEqual(page.numberOfContentsForOutlet("text"), 1)
+            XCTAssertEqual(page.numberOfContentsForOutlet("text").value, 1)
             
             expectation.fulfill()
         }
@@ -441,7 +453,13 @@ class pageTests: LoggedInXCTestCase {
     func testNumberOfContentsForOutletAsync() {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletAsync")
         
-        ION.collection("test").page("page_001").numberOfContentsForOutlet("text") { count in
+        ION.collection("test").page("page_001").numberOfContentsForOutlet("text") { result in
+            guard case .Success(let count) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             XCTAssertNotNil(count)
             XCTAssertEqual(count, 1)
             

@@ -364,7 +364,13 @@ class collectionTests: LoggedInXCTestCase {
                 return
             }
             
-            page.waitUntilReady() { loadedPage in
+            page.waitUntilReady() { result in
+                guard case .Success(let loadedPage) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
                 XCTAssertEqual(loadedPage.identifier, "page_002")
                 expectation.fulfill()
             }
