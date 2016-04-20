@@ -96,7 +96,13 @@ class collectionTests: LoggedInXCTestCase {
                 return
             }
             
-            collection.metaPath("subpage_001") { path in
+            collection.metaPath("subpage_001") { result in
+                guard case .Success(let path) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
                 if path.count == 2 {
                     XCTAssert(path[0].identifier == "page_002")
                     XCTAssert(path[1].identifier == "subpage_001")
