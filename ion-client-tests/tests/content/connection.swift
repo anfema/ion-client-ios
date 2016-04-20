@@ -59,10 +59,36 @@ class connectionContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
-
     
-    func testOutletFetch() {
-        let expectation = self.expectationWithDescription("testOutletFetch")
+    
+    func testCollectionFetch() {
+        let expectation = self.expectationWithDescription("testCollectionFetch")
+        
+        ION.collection("test").page("page_001").link("connection") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            ION.resolve(url, callback: { (result: Result<IONCollection, IONError>) in
+                guard  case .Success(let collection) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertNotNil(collection)
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testPageFetch() {
+        let expectation = self.expectationWithDescription("testPageFetch")
         
         ION.collection("test").page("page_001").link("connection") { result in
             guard case .Success(let url) = result else {
@@ -79,6 +105,32 @@ class connectionContentTests: LoggedInXCTestCase {
                 }
                 
                 XCTAssertNotNil(page)
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+
+    
+    func testOutletFetch() {
+        let expectation = self.expectationWithDescription("testOutletFetch")
+        
+        ION.collection("test").page("page_001").link("connection") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            ION.resolve(url, callback: { (result: Result<IONContent, IONError>) in
+                guard  case .Success(let outlet) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertNotNil(outlet)
                 expectation.fulfill()
             })
         }
