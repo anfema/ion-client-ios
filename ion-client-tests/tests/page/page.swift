@@ -468,4 +468,27 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    
+    func testFailOnInvalidPageIdentifier() {
+        let expectation = self.expectationWithDescription("testFailOnInvalidPageIdentifier")
+        
+        ION.collection("test").page("invalidpageidentifier").outlet("text") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .DidFail = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }
