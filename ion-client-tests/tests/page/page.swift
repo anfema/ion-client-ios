@@ -486,6 +486,8 @@ class pageTests: LoggedInXCTestCase {
                 return
             }
             
+            XCTAssertEqual(error.errorDomain, "com.anfema.ion")
+            
             expectation.fulfill()
         }
         
