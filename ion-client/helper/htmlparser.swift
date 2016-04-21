@@ -32,6 +32,11 @@ public class HTMLParser {
         self.formatStack.append(FormatStackItem(tagName: "root", styleDict: style.paragraph.makeAttributeDict()))
         
         for token in self.tokens {
+            // there is always at least one FormatStackItem (root) in formatStack.
+            guard let lastStackItem = self.formatStack.last else {
+                continue
+            }
+            
             switch token {
             case .StartTag(let name, let selfClosing, let attributes):
                 guard let name = name else {
@@ -39,24 +44,24 @@ public class HTMLParser {
                 }
                 if selfClosing {
                     if name == "br" {
-                        result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: formatStack.last!.styleDict))
+                        result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
                     } else {
                         continue
                     }
                 }
                 
-                if name == "p" && self.formatStack.last!.tagName == "blockquote" {
+                if name == "p" && lastStackItem.tagName == "blockquote" {
                     self.pushFormat(style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
                 } else {
                     self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
                 }
                 
                 if self.isBlock(name) {
-                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
+                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                 }
                 if name == "p" || name == "pre" {
                     if !result.string.hasSuffix("\n\n") {
-                        result.appendAttributedString(NSAttributedString(string: "\n", attributes: formatStack.last!.styleDict))
+                        result.appendAttributedString(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                     }
                 }
 
@@ -76,7 +81,7 @@ public class HTMLParser {
                     depth += 1
                     counters.append(1)
                 case "br":
-                    result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: formatStack.last!.styleDict))
+                    result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
                 default:
                     break
                 }
@@ -98,7 +103,7 @@ public class HTMLParser {
                 }
                 
                 if !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
-                    let a = (oldFormat != nil) ? oldFormat!.styleDict : formatStack.last!.styleDict
+                    let a = (oldFormat ?? lastStackItem).styleDict
                     result.appendAttributedString(NSAttributedString(string: " ", attributes: a))
                 }
                 
@@ -106,9 +111,9 @@ public class HTMLParser {
                 guard let data = data else {
                     continue
                 }
-                let attribs = formatStack.last!.styleDict
+                let attribs = lastStackItem.styleDict
                 var stripped = data
-                if formatStack.last!.tagName != "pre" {
+                if lastStackItem.tagName != "pre" {
                     stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
                     stripped = stripped.stringByReplacingOccurrencesOfString("\u{2028}", withString: " ")
@@ -160,6 +165,11 @@ public class HTMLParser {
         var listContext = ["none"]
         
         for token in self.tokens {
+            // there is always at least one item ("none") in listContext.
+            guard let lastListContextItem = listContext.last else {
+                continue
+            }
+            
             switch token {
             case .StartTag(let name, let selfClosing, _):
                 guard let name = name else {
@@ -177,14 +187,14 @@ public class HTMLParser {
                 
                 switch name {
                 case "li":
-                    if listContext.last! == "ul" {
+                    if lastListContextItem == "ul" {
                         result.appendContentsOf("\n")
                         for _ in 0..<depth {
                             result.appendContentsOf("    ")
                         }
                         result.appendContentsOf("- ")
                     }
-                    if listContext.last! == "ol"  {
+                    if lastListContextItem == "ol"  {
                         let counter = counters.popLast()!
                         result.appendContentsOf("\n")
                         for _ in 0..<depth {
@@ -294,8 +304,8 @@ public class HTMLParser {
         case "code":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.inlineCode.makeAttributeDict(nestingDepth: nestingDepth)))
         case "a":
-            guard attributes != nil,
-                  let href = attributes!["href"] else {
+            guard let attributes = attributes,
+                  let href = attributes["href"] else {
                 break
             }
             var linkStyle = style.link.makeAttributeDict(nestingDepth: nestingDepth)
@@ -307,11 +317,15 @@ public class HTMLParser {
     }
     
     private func popFormat(tagName: String) -> FormatStackItem? {
-        if self.formatStack.last!.tagName == tagName {
+        guard let lastStackItem = self.formatStack.last else {
+            return nil
+        }
+        
+        if lastStackItem.tagName == tagName {
             return self.formatStack.popLast()
         } else {
             let tagIsBlock = self.isBlock(tagName)
-            let lastTagIsBlock = self.isBlock(self.formatStack.last!.tagName)
+            let lastTagIsBlock = self.isBlock(lastStackItem.tagName)
 
             if tagIsBlock {
                 // search upwards in stack
