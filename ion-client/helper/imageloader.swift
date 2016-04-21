@@ -165,7 +165,10 @@ extension CanLoadImage {
                 return
             }
             
-            let uiImage = UIImage(CGImage: img, scale: ION.config.variationScaleFactors[self.variation]!, orientation: .Up)
+            // use the scale factor of the variation or 1.0 if none was found
+            let scale = ION.config.variationScaleFactors[self.variation] ?? 1.0
+            
+            let uiImage = UIImage(CGImage: img, scale: scale, orientation: .Up)
             responseQueueCallback(callback, parameter: .Success(uiImage))
         }
     }

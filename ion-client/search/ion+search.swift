@@ -60,8 +60,8 @@ internal extension ION {
                 // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
                 NSNotificationCenter.defaultCenter().postNotificationName(IONFTSDBDidUpdateNotification, object: collection)
                 
-                if callback != nil {
-                    callback!()
+                if let callback = callback {
+                    callback()
                 }
             }
         }

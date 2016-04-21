@@ -271,7 +271,7 @@ public class IONCollection {
     public func waitUntilReady(callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
-                responseQueueCallback(callback, parameter: .Failure(IONError.DidFail))
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
             
@@ -370,27 +370,28 @@ public class IONCollection {
     /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(IONError? -> Void)) {
         IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation" : ION.config.variation ], cached:self.useCache) { result in
-            if case .Failure(let error) = result {
-                if case .NotAuthorized = error {
+            
+            guard case .Success(let resultValue) = result else {
+                if let error = result.error, case .NotAuthorized = error {
                     callback(error)
                 } else {
-                    callback(IONError.CollectionNotFound(identifier))
+                    callback(.CollectionNotFound(identifier))
                 }
+                
                 return nil
             }
             
             // we need a result value and need it to be a dictionary
-            guard result.value != nil,
-                case .JSONDictionary(let dict) = result.value! else {
-                    callback(IONError.JSONObjectExpected(result.value!))
-                    return nil
+            guard case .JSONDictionary(let dict) = resultValue else {
+                callback(.JSONObjectExpected(resultValue))
+                return nil
             }
             
             // furthermore we need a collection and a last_updated element
             guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
                 case .JSONArray(let array)      = rawCollection,
                 case .JSONNumber(let timestamp) = rawLastUpdated else {
-                    callback(IONError.JSONObjectExpected(result.value!))
+                    callback(.JSONObjectExpected(resultValue))
                     return nil
             }
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
@@ -405,7 +406,7 @@ public class IONCollection {
                     case .JSONString(let defaultLocale)  = rawDefaultLocale,
                     case .JSONString(let archiveURL)     = rawArchive,
                     case .JSONArray(let pages)           = rawPages else {
-                        callback(IONError.InvalidJSON(result.value!))
+                        callback(.InvalidJSON(resultValue))
                         return nil
                 }
                 

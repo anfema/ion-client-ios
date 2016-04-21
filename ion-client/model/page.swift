@@ -347,20 +347,21 @@ public class IONPage {
     /// - parameter callback: block to call when the fetch finished
     private func fetch(identifier: String, callback:(IONError? -> Void)) {
         IONRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation" : ION.config.variation ], cached: ION.config.cacheBehaviour(self.useCache)) { result in
-            if case .Failure(let error) = result {
-                if case .NotAuthorized = error {
+            
+            guard case .Success(let resultValue) = result else {
+                if let error = result.error, case .NotAuthorized = error {
                     callback(error)
                 } else {
                     callback(.PageNotFound(identifier))
                 }
+
                 return nil
             }
             
             // we need a result value and need it to be a dictionary
-            guard result.value != nil,
-                case .JSONDictionary(let dict) = result.value! else {
-                    callback(.JSONObjectExpected(result.value!))
-                    return nil
+            guard case .JSONDictionary(let dict) = resultValue else {
+                callback(.JSONObjectExpected(resultValue))
+                return nil
             }
             
             // furthermore we need a page and a last_updated element
@@ -380,7 +381,7 @@ public class IONPage {
                     case .JSONArray(let contents) = rawContents,
                     case .JSONString(let last_changed) = rawLastChanged,
                     case .JSONString(let locale) = rawLocale else {
-                        callback(.InvalidJSON(result.value))
+                        callback(.InvalidJSON(resultValue))
                         return nil
                 }
                 

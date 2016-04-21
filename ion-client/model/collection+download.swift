@@ -149,8 +149,9 @@ extension IONCollection {
                             break
                         }
                     }
-                    if found != nil {
-                        index.removeAtIndex(found!)
+                    
+                    if let found = found {
+                        index.removeAtIndex(found)
                     }
                 }
             }

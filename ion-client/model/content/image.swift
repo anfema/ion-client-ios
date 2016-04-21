@@ -145,11 +145,15 @@ public class IONImageContent: IONContent, CanLoadImage {
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
                 case .JSONDictionary(let dict) = json where dict["url"] != nil,
-                case .JSONString(let url) = dict["url"]! else {
+                case .JSONString(let urlString) = dict["url"]! else {
                     return
             }
             
-            responseQueueCallback(callback, parameter: NSURL(string: url)!)
+            guard let url = NSURL(string: urlString) else {
+                return
+            }
+            
+            responseQueueCallback(callback, parameter: url)
         }
     }
 

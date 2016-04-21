@@ -79,7 +79,12 @@ public class IONFileContent: IONContent, CanLoadImage {
         guard self.isValid else {
             return
         }
-        IONRequest.fetchBinary(self.url!.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
+        
+        guard let url = self.url else {
+            return
+        }
+        
+        IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
@@ -106,11 +111,15 @@ public class IONFileContent: IONContent, CanLoadImage {
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
                 case .JSONDictionary(let dict) = json where dict["url"] != nil,
-                case .JSONString(let url) = dict["url"]! else {
+                case .JSONString(let urlString) = dict["url"]! else {
                     return
             }
             
-            responseQueueCallback(callback, parameter: NSURL(string: url)!)
+            guard let url = NSURL(string: urlString) else {
+                return
+            }
+            
+            responseQueueCallback(callback, parameter: url)
         }
     }
     
