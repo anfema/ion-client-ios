@@ -22,7 +22,7 @@ import DEjson
 public class IONImageContent: IONContent, CanLoadImage {
     
     /// mime type of the image
-    public var mimeType:String!
+    public var mimeType:String
     
     /// dimensions of the image
     public var size:CGSize				= CGSizeZero
@@ -34,7 +34,7 @@ public class IONImageContent: IONContent, CanLoadImage {
     public var url:NSURL?
     
     /// original image mime type
-    public var originalMimeType:String!
+    public var originalMimeType:String
     
     /// original image dimensions
     public var originalSize:CGSize		= CGSizeZero
@@ -70,8 +70,6 @@ public class IONImageContent: IONContent, CanLoadImage {
     ///
     /// - parameter json: `JSONObject` that contains serialized image content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -130,6 +128,8 @@ public class IONImageContent: IONContent, CanLoadImage {
                 self.originalChecksum = originalChecksumParts[1]
             }
         }
+        
+        try super.init(json: json)
     }
     
     /// Get a temporary valid url for this image file

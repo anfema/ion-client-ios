@@ -155,7 +155,8 @@ extension IONCollection {
         var parentID = pagemeta.parent
         
         while parentID != nil {
-            guard let meta = self.getPageMetaForPage(parentID!) else {
+            guard let p = parentID,
+                  let meta = self.getPageMetaForPage(p) else {
                 break
             }
             result.insert(meta, atIndex: 0)

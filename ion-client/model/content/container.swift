@@ -15,7 +15,7 @@ import DEjson
 /// Container content, contains other content objects
 public class IONContainerContent: IONContent {
     /// children to this container
-    public var children:[IONContent]!
+    public var children:[IONContent]
     
     /// Initialize container content object from JSON
     ///
@@ -23,8 +23,6 @@ public class IONContainerContent: IONContent {
     ///
     /// Container content children can be accessed by subscripting the container content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -44,11 +42,13 @@ public class IONContainerContent: IONContent {
                 }
             }
         }
+
+        try super.init(json: json)
     }
     
     /// Container content has a subscript for it's children
     subscript(index: Int) -> IONContent? {
-        guard self.children != nil && index < self.children.count else {
+        guard index < self.children.count else {
             return nil
         }
         return self.children[index]
@@ -89,9 +89,7 @@ extension IONPage {
                 return
             }
             if case let content as IONContainerContent = content {
-                if let c = content.children {
-                    responseQueueCallback(callback, parameter: .Success(c))
-                }
+                responseQueueCallback(callback, parameter: .Success(content.children))
             }
         }
         return self

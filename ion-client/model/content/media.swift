@@ -16,10 +16,10 @@ import DEjson
 public class IONMediaContent: IONContent, CanLoadImage {
     
     // original file name
-    public var filename:String!
+    public var filename:String
     
     /// mime type of media file
-    public var mimeType:String!
+    public var mimeType:String
     
     /// dimensions of the media file if applicable
     public var size = CGSizeZero
@@ -37,10 +37,10 @@ public class IONMediaContent: IONContent, CanLoadImage {
     public var length = Float(0.0)
     
     /// url to the media file
-    public var url:NSURL!
+    public var url:NSURL?
     
     /// original media file mime type
-    public var originalMimeType:String!
+    public var originalMimeType:String
     
     /// dimensions of the original media file if applicable
     public var originalSize = CGSizeZero
@@ -58,7 +58,7 @@ public class IONMediaContent: IONContent, CanLoadImage {
     public var originalLength = Float(0.0)
 
     /// url to the original file
-    public var originalURL:NSURL!
+    public var originalURL:NSURL?
     
     /// is this a valid media content object
     public var isValid = false
@@ -67,7 +67,6 @@ public class IONMediaContent: IONContent, CanLoadImage {
     ///
     /// - parameter json: `JSONObject` that contains serialized media content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -125,6 +124,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
             }
         }
         self.originalLength   = Float(oLength)
+
+        try super.init(json: json)
     }
     
     /// Load the file binary data and return memory mapped `NSData`
@@ -132,7 +133,11 @@ public class IONMediaContent: IONContent, CanLoadImage {
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (Result<NSData, IONError> -> Void)) {
-        self.cachedURL { url in
+        self.cachedURL { result in
+            guard case .Success(let url) = result else {
+                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                return
+            }
             do {
                 let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 responseQueueCallback(callback, parameter: .Success(data))
@@ -145,14 +150,18 @@ public class IONMediaContent: IONContent, CanLoadImage {
     /// Download the file and give back the URL
     ///
     /// - parameter callback: block to call when the download has finished, will not be called if there was an error
-    public func cachedURL(callback: (NSURL -> Void)) {
-        IONRequest.fetchBinary(self.url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
+    public func cachedURL(callback: (Result<NSURL, IONError> -> Void)) {
+        guard let url = self.url else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            return
+        }
+        IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 return
             }
                 
-            responseQueueCallback(callback, parameter: NSURL(fileURLWithPath: filename))
+            responseQueueCallback(callback, parameter: .Success(NSURL(fileURLWithPath: filename)))
         }
     }
     
@@ -160,17 +169,23 @@ public class IONMediaContent: IONContent, CanLoadImage {
     ///
     /// - parameter callback: block to call with the temporary URL, will not be called if there was an error while
     ///                       fetching the URL from the server
-    public func temporaryURL(callback: (NSURL -> Void)) {
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : self.url.absoluteString ]) { result in
+    public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
+        guard let url = self.url else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            return
+        }
+
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : url.absoluteString ]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
                 case .JSONDictionary(let dict) = json where dict["url"] != nil,
-                case .JSONString(let url) = dict["url"]! else {
+                case .JSONString(let urlString) = dict["url"]!,
+                let url = NSURL(string: urlString) else {
                     return
             }
 
-            responseQueueCallback(callback, parameter: NSURL(string: url)!)
+            responseQueueCallback(callback, parameter: .Success(url))
         }
     }
     
@@ -202,14 +217,14 @@ extension IONPage {
     public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
         if case .Success(let content) = result {
-            if case let content as IONMediaContent = content {
-                return .Success(content.url)
+            if case let content as IONMediaContent = content,
+               let url = content.url {
+                return .Success(url)
             }
 
-            if case let content as IONFileContent = content {
-                if let url = content.url {
-                    return .Success(url)
-                }
+            if case let content as IONFileContent = content,
+               let url = content.url {
+                return .Success(url)
             }
             
             return .Failure(.OutletIncompatible)
@@ -266,7 +281,12 @@ extension IONPage {
             }
 
             if case let content as IONMediaContent = content {
-                content.cachedURL { url in
+                content.cachedURL { result in
+                    guard case .Success(let url) = result else {
+                        responseQueueCallback(callback, parameter: .Failure(result.error!))
+                        return
+                    }
+
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else {
@@ -291,7 +311,11 @@ extension IONPage {
             }
             
             if case let content as IONMediaContent = content {
-                content.temporaryURL { url in
+                content.temporaryURL { result in
+                    guard case .Success(let url) = result else {
+                        responseQueueCallback(callback, parameter: .Failure(result.error!))
+                        return
+                    }
                     responseQueueCallback(callback, parameter: .Success(url))
                 }
             } else if case let content as IONFileContent = content {

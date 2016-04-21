@@ -16,10 +16,10 @@ import DEjson
 public class IONCollection {
     
     /// identifier
-    public var identifier:String!
+    public var identifier:String
     
     /// locale code
-    public var locale:String!
+    public var locale:String
     
     /// default locale for this collection
     public var defaultLocale:String?
@@ -52,7 +52,7 @@ public class IONCollection {
     private var completionBlock: ((collection: Result<IONCollection, IONError>, completed: Bool) -> Void)?
     
     /// archive download url
-    internal var archiveURL:String!
+    internal var archiveURL:String?
     
     /// FTS download url
     internal var ftsDownloadURL:String?
@@ -305,7 +305,7 @@ public class IONCollection {
             return true
         } else {
             if let meta = self.getPageMetaForPage(page.identifier) {
-                if page.lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
+                if let lastUpdate = page.lastUpdate where lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
                     // page out of date, force update
                     return true
                 }

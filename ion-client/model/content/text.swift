@@ -23,14 +23,12 @@ public class IONTextContent: IONContent {
     public var multiLine:Bool  = false
 
     /// text, private because of conversion functions
-    private var text:String!
+    private var text:String
     
     /// Initialize text content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains serialized text content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -45,6 +43,8 @@ public class IONTextContent: IONContent {
         self.mimeType = mimeType
         self.multiLine = multiLine
         self.text = text
+    
+        try super.init(json: json)
     }
     
     /// Fetch HTML Representation of the text

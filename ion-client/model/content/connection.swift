@@ -16,7 +16,7 @@ import DEjson
 public class IONConnectionContent: IONContent {
     
     /// value of the connection link
-    public var link: String!
+    public var link: String
     
     /// url convenience
     public var url: NSURL? {
@@ -28,8 +28,6 @@ public class IONConnectionContent: IONContent {
     ///
     /// - parameter json: `JSONObject` that contains serialized option content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -40,6 +38,8 @@ public class IONConnectionContent: IONContent {
         }
         
         self.link = value
+
+        try super.init(json: json)
     }
 }
 

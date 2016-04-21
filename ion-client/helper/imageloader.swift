@@ -22,16 +22,16 @@ import ImageIO
 /// Implement this protocol to gain `dataProvider`, `cgImage` and `image` functionality for a image URL
 public protocol CanLoadImage {
     /// checksumming method used
-    var checksumMethod:String! { get }
+    var checksumMethod:String { get }
     
     /// checksumming method used for original file
-    var originalChecksumMethod:String! { get }
+    var originalChecksumMethod:String { get }
     
     /// checksum for the image
-    var checksum:String! { get }
+    var checksum:String { get }
     
     /// checksum for original file
-    var originalChecksum:String! { get }
+    var originalChecksum:String { get }
     
     /// url of the image
     var imageURL:NSURL? { get }
@@ -40,14 +40,14 @@ public protocol CanLoadImage {
     var originalImageURL:NSURL? { get }
     
     /// variation of this outlet (used for determining scale factor)
-    var variation:String! { get }
+    var variation:String { get }
 }
 
 /// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
 extension CanLoadImage {
     
     /// default implementation for checksum method (returns "null" if url not cached)
-    public var checksumMethod:String! {
+    public var checksumMethod:String {
         guard let thumbnail = self.imageURL,
             let _ = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "null"
@@ -56,7 +56,7 @@ extension CanLoadImage {
     }
     
     /// default implementation for checksum (returns "invalid" if url not cached)
-    public var checksum:String! {
+    public var checksum:String {
         guard let thumbnail = self.imageURL,
             let data = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "invalid"
@@ -66,7 +66,7 @@ extension CanLoadImage {
     }
 
     /// default implementation for checksum method (returns "null" if url not cached)
-    public var originalChecksumMethod:String! {
+    public var originalChecksumMethod:String {
         guard let image = self.originalImageURL,
             let _ = IONRequest.cachedFile(image.URLString) else {
                 return "null"
@@ -75,7 +75,7 @@ extension CanLoadImage {
     }
     
     /// default implementation for checksum (returns "invalid" if url not cached)
-    public var originalChecksum:String! {
+    public var originalChecksum:String {
         guard let image = self.originalImageURL,
             let data = IONRequest.cachedFile(image.URLString) else {
                 return "invalid"

@@ -43,17 +43,17 @@ extension IONCollection {
     
     public func download(callback: (Bool -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
-            guard self.archiveURL != nil else {
+            guard let archiveURL = self.archiveURL else {
                 responseQueueCallback(callback, parameter: false)
                 return
             }
 
             var q = [String:String]()
-            var url: String = self.archiveURL
+            var url: String = archiveURL
             
             // workaround for bug in Alamofire which does not append queryparameters to an URL that already has some
             if let dt = self.lastCompleteUpdate {
-                if self.archiveURL.containsString("?") {
+                if archiveURL.containsString("?") {
                     url += "&lastUpdated=\(dt.isoDateString)"
                 } else {
                     q["lastUpdated"] = dt.isoDateString()

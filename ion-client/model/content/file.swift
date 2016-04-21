@@ -15,10 +15,10 @@ import DEjson
 /// File content
 public class IONFileContent: IONContent, CanLoadImage {
     /// mime type of file
-    public var mimeType:String!
+    public var mimeType:String
     
     /// file name
-    public var fileName:String!
+    public var fileName:String
     
     /// file size in bytes
     public var size:Int = 0
@@ -39,8 +39,6 @@ public class IONFileContent: IONContent, CanLoadImage {
     ///
     /// - parameter json: `JSONObject` that contains serialized file content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -69,6 +67,8 @@ public class IONFileContent: IONContent, CanLoadImage {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
+        
+        try super.init(json: json)
     }
     
     /// Load the file binary data and return memory mapped `NSData`

@@ -26,7 +26,7 @@ public class IONPage {
     public var collection: IONCollection
     
     /// last update date of this page
-    public var lastUpdate:NSDate!
+    public var lastUpdate:NSDate?
     
     /// this instance produced an error while fetching from net
     public var hasFailed = false
@@ -115,7 +115,7 @@ public class IONPage {
                         return
                     }
                     
-                    if self.lastUpdate.compare(pageMeta.lastChanged) != .OrderedSame {
+                    if let lastUpdate = self.lastUpdate where lastUpdate.compare(pageMeta.lastChanged) != .OrderedSame {
                         self.useCache = .Ignore
                         self.content.removeAll()
                         self.fetch(identifier) { error in
@@ -425,11 +425,9 @@ public class IONPage {
         
         // append all toplevel content
         if case let container as IONContainerContent = obj {
-            if let children = container.children {
-                for child in children {
-                    // container's children are appended on base level to be able to find them quicker
-                    self.content.append(child)
-                }
+            for child in container.children {
+                // container's children are appended on base level to be able to find them quicker
+                self.content.append(child)
             }
         }
     }

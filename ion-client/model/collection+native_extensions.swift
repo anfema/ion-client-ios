@@ -14,7 +14,7 @@ import Foundation
 extension IONCollection: CustomStringConvertible {
     /// Textual description of the collection (only use for debugging purposes)
     public var description: String {
-        return "IONCollection: \(identifier!), \(pageMeta.count) pages"
+        return "IONCollection: \(identifier), \(pageMeta.count) pages"
     }
 }
 

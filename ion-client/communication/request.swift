@@ -53,11 +53,12 @@ public class IONRequest {
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
     public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, callback: (Result<JSONObject, IONError> -> NSDate?)) {
-        let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
-        guard let url = NSURL(string: urlString),
-              let cacheName = self.cacheName(url) else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
-                return
+        guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
+              let url = NSURL(string: urlString),
+              let cacheName = self.cacheName(url),
+              let alamofire = ION.config.alamofire else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            return
         }
 
         let fromCache:(String -> Result<JSONObject, IONError>) = { cacheName in
@@ -101,7 +102,7 @@ public class IONRequest {
             }
         }
         
-        let request = ION.config.alamofire.request(.GET, urlString, headers:headers)
+        let request = alamofire.request(.GET, urlString, headers:headers)
         
         request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
@@ -162,7 +163,8 @@ public class IONRequest {
     public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, IONError> -> Void)) {
         let headers = self.headers()
         guard let url = NSURL(string: urlString),
-              let cacheName = self.cacheName(url) else {
+              let cacheName = self.cacheName(url),
+              let alamofire = ION.config.alamofire else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
         }
@@ -184,7 +186,7 @@ public class IONRequest {
         }
 
         // Start download task
-        let downloadTask = ION.config.alamofire.download(
+        let downloadTask = alamofire.download(
             .GET, urlString,
             parameters: queryParameters,
             encoding: .URLEncodedInURL,
@@ -314,12 +316,16 @@ public class IONRequest {
     /// - parameter body: dictionary with parameters (will be JSON encoded)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
     public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONResponse, IONError> -> Void)) {
-        let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
+        guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
+              let alamofire = ION.config.alamofire else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            return
+        }
         var headers = self.headers()
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
         
-        let request = ION.config.alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
+        let request = alamofire.request(.POST, urlString, parameters: body, encoding: .JSON, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
             responseQueueCallback(callback, parameter: ion_client.Result(result: response.result))
@@ -334,9 +340,12 @@ public class IONRequest {
     /// - parameter endpoint: the API endpoint
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - returns: complete valid URL string for query based on `ION.config`
-    private class func buildURL(endpoint: String, queryParameters: [String:String]?) -> String {
+    private class func buildURL(endpoint: String, queryParameters: [String:String]?) -> String? {
+        guard let serverURL = ION.config.serverURL else {
+            return nil
+        }
         // append endpoint to base url
-        let url = ION.config.serverURL.URLByAppendingPathComponent(endpoint)
+        let url = serverURL.URLByAppendingPathComponent(endpoint)
         
         // add query parameters
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!

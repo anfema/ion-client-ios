@@ -16,13 +16,12 @@ import DEjson
 public class IONOptionContent: IONContent {
     
     /// value for the selected option
-    public var value:String!
+    public var value:String
     
     /// Initialize option content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains serialized option content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
         
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -34,6 +33,8 @@ public class IONOptionContent: IONContent {
         }
         
         self.value = value
+
+        try super.init(json: json)
     }
 }
 
@@ -73,11 +74,7 @@ extension IONPage {
             }
             
             if case let content as IONOptionContent = content {
-                if let value = content.value {
-                    responseQueueCallback(callback, parameter: .Success(value))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
+                responseQueueCallback(callback, parameter: .Success(content.value))
             } else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }

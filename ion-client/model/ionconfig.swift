@@ -16,7 +16,7 @@ import DEjson
 /// access with `ION.config`
 public struct IONConfig {
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
-    public var serverURL:NSURL!
+    public var serverURL:NSURL?
     
     /// locale-code to work on, defined by server config
     public var locale:String = "en_EN"
@@ -70,7 +70,7 @@ public struct IONConfig {
     public typealias ContentTypeLambda = (JSONObject throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    var alamofire: Alamofire.Manager! = nil
+    var alamofire: Alamofire.Manager? = nil
     
     /// update detected blocks
     var updateBlocks: [String:(String -> Void)]
@@ -112,8 +112,10 @@ public struct IONConfig {
         }
         self.additionalHeaders["X-DeviceID"] = self.deviceID
         self.alamofire = Alamofire.Manager(configuration: configuration)
-        self.alamofire.startRequestsImmediately = false
-        
+        if let alamofire = self.alamofire {
+            alamofire.startRequestsImmediately = false
+        }
+
         self.registerContentType("colorcontent") { json in
             return try IONColorContent(json: json)
         }
@@ -171,8 +173,11 @@ public struct IONConfig {
     ///
     /// - parameter collection: collection identifier
     public mutating func enableFTS(collection: String) {
+        guard let searchIndex = ION.searchIndex(collection) else {
+            return
+        }
         self.ftsEnabled[collection] = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(ION.searchIndex(collection)) {
+        if !NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
             ION.downloadFTSDB(collection)
         }
     }

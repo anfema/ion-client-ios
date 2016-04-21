@@ -17,10 +17,10 @@ public extension IONCollection {
     ///
     /// - parameter callback: callback to be called if the search handle is ready
     public func getSearchHandle(callback: (IONSearchHandle -> Void)) {
-        guard ION.config.isFTSEnabled(self.identifier) else {
+        guard let searchIndex = ION.searchIndex(self.identifier) where ION.config.isFTSEnabled(self.identifier) else {
             return
         }
-        if !NSFileManager.defaultManager().fileExistsAtPath(ION.searchIndex(self.identifier)) {
+        if !NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
             ION.downloadFTSDB(self.identifier) {
                 dispatch_async(self.workQueue) {
                     if let handle = IONSearchHandle(collection: self) {

@@ -15,14 +15,12 @@ import DEjson
 /// Flag content, can be enabled or not
 public class IONFlagContent: IONContent {
     /// status of the flag
-    public var enabled:Bool!
+    public var enabled:Bool
     
     /// Initialize flag content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains serialized flag content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -33,6 +31,8 @@ public class IONFlagContent: IONContent {
         }
         
         self.enabled = enabled
+
+        try super.init(json: json)
     }
 }
 

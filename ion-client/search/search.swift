@@ -141,7 +141,7 @@ public class IONSearchHandle {
     
     
     internal func setupSqliteConnection() -> Bool {
-        guard sqlite3_open_v2(ION.searchIndex(self.collection.identifier), &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard let searchIndex = ION.searchIndex(self.collection.identifier) where sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return false
         }
         

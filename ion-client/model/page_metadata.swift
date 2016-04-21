@@ -18,19 +18,19 @@ public class IONPageMeta: CanLoadImage {
     static var formatterInstantiated = false
     
     /// page identifier
-    public var identifier:String!
+    public var identifier:String
     
     /// parent identifier, nil == top level
     public var parent:String?
     
     /// last change date
-    public var lastChanged:NSDate!
+    public var lastChanged:NSDate
     
     /// page layout
-    public var layout:String!
+    public var layout:String
     
     /// page position
-    public var position: Int!
+    public var position: Int
     
     /// collection of this meta item
     public weak var collection: IONCollection?
@@ -67,7 +67,11 @@ public class IONPageMeta: CanLoadImage {
                 throw IONError.InvalidJSON(json)
         }
         
-        self.lastChanged = NSDate(ISODateString: lastChanged)
+        if let date = NSDate(ISODateString: lastChanged) {
+            self.lastChanged = date
+        } else {
+            self.lastChanged = NSDate.distantPast()
+        }
         self.identifier  = identifier
         self.layout = layout
         self.position = position
@@ -153,7 +157,7 @@ public class IONPageMeta: CanLoadImage {
     }
     
     /// variation for `CanLoadImage`, returns `default` because the thumbnails are all the same for all variations
-    public var variation: String! {
+    public var variation: String {
         return "default"
     }
 }

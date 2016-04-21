@@ -16,16 +16,16 @@ import DEjson
 public class IONContent {
     
     /// variation name
-    public var variation:String!
+    public var variation:String
     
     /// outlet name
-    public var outlet:String!
+    public var outlet:String
     
     /// searchable?
 	public var isSearchable = false
     
     /// Array position
-    public var position: Int!
+    public var position: Int
    
     /// Initialize content content object from JSON
     ///
@@ -55,6 +55,8 @@ public class IONContent {
         if let positionObj = dict["position"] {
             if case .JSONNumber(let pos) = positionObj {
                 self.position = Int(pos)
+            } else {
+                self.position = 0
             }
         } else {
             self.position = 0

@@ -20,22 +20,21 @@ import DEjson
 /// Color content
 public class IONColorContent : IONContent {
     /// red component (0-255)
-    public var r:Int!
+    public var r:Int
     
     /// green component (0-255)
-    public var g:Int!
+    public var g:Int
 
     /// blue component (0-255)
-    public var b:Int!
+    public var b:Int
 
     /// alpha component (0-255), zero is fully transparent
-    public var alpha:Int!
+    public var alpha:Int
     
     /// Initialize color content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains serialized color content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
         
         // make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
@@ -56,6 +55,8 @@ public class IONColorContent : IONContent {
         self.g = Int(g)
         self.b = Int(b)
         self.alpha = Int(a)
+
+        try super.init(json: json)
     }
     
     #if os(iOS)
