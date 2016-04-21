@@ -48,16 +48,15 @@ extension IONRequest {
     ///
     /// - parameter url: the URL to find in the cache
     /// - returns: Path to the cache file (may not exist)
-    internal class func cacheName(url: NSURL) -> String {
-        // TODO: Better return optional String or throw error?
+    internal class func cacheName(url: NSURL) -> String? {
         guard let host = url.host else {
-            return String()
+            return nil
         }
         
-        var fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
+        let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
         
         guard let path = fileURL.path else {
-            return String()
+            return nil
         }
         
         // try to create the path if it does not exist
@@ -72,10 +71,7 @@ extension IONRequest {
         }
         
         // generate cache path
-        
-        // The stringByReplacing... is needed because of a Bug in iOS 8.4 which inserts spaces, nobody knows why.
-        fileURL = fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString())
-        return fileURL.path!
+        return fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString()).path
     }
 
     /// Internal function to fetch a cache DB entry
@@ -124,11 +120,12 @@ extension IONRequest {
 
             do {
                 // save object to disk
-                let cacheName = self.cacheName(requestURL)
-                try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
-                
-                // save object to cache DB
-                self.saveToCache(request, checksumMethod: "null", checksum: "")
+                if let cacheName = self.cacheName(requestURL) {
+                    try json.writeToFile(cacheName, atomically: true, encoding: NSUTF8StringEncoding)
+
+                    // save object to cache DB
+                    self.saveToCache(request, checksumMethod: "null", checksum: "")
+                }
             } catch {
                 // do nothing, could not be saved to cache -> nonfatal
             }

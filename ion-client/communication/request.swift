@@ -54,7 +54,11 @@ public class IONRequest {
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
     public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, callback: (Result<JSONObject, IONError> -> NSDate?)) {
         let urlString = self.buildURL(endpoint, queryParameters: queryParameters)
-        let cacheName = self.cacheName(NSURL(string: urlString)!)
+        guard let url = NSURL(string: urlString),
+              let cacheName = self.cacheName(url) else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                return
+        }
 
         let fromCache:(String -> Result<JSONObject, IONError>) = { cacheName in
             // Check disk cache before running HTTP request
@@ -157,7 +161,11 @@ public class IONRequest {
     ///                       Payload of response is the filename of the downloaded file on disk
     public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, IONError> -> Void)) {
         let headers = self.headers()
-        let url = NSURL(string: urlString)!
+        guard let url = NSURL(string: urlString),
+              let cacheName = self.cacheName(url) else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                return
+        }
         
         if cached == .Force || cached == .Prefer {
             let cacheResult = self.fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
@@ -172,7 +180,7 @@ public class IONRequest {
         
         // destination block for Alamofire request
         let destination = { (file_url: NSURL, response: NSHTTPURLResponse) -> NSURL in
-            return NSURL(fileURLWithPath: self.cacheName(url) + ".tmp")
+            return NSURL(fileURLWithPath: cacheName + ".tmp")
         }
 
         // Start download task
@@ -201,7 +209,7 @@ public class IONRequest {
                 
                 // remove temp file
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url) + ".tmp")
+                    try NSFileManager.defaultManager().removeItemAtPath(cacheName + ".tmp")
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
@@ -236,12 +244,12 @@ public class IONRequest {
             } else {
                 // move temp file
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(self.cacheName(url))
+                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
                 do {
-                    try NSFileManager.defaultManager().moveItemAtPath(self.cacheName(url) + ".tmp", toPath: self.cacheName(url))
+                    try NSFileManager.defaultManager().moveItemAtPath(cacheName + ".tmp", toPath: cacheName)
                 } catch {
                     // ok moving failed
                     responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
@@ -271,7 +279,7 @@ public class IONRequest {
                 self.saveToCache(request, checksumMethod: ckSumMethod, checksum: ckSum)
                 
                 // call callback in correct queue
-                responseQueueCallback(callback, parameter: .Success(self.cacheName(url)))
+                responseQueueCallback(callback, parameter: .Success(cacheName))
             }
         }
         
@@ -283,8 +291,10 @@ public class IONRequest {
     /// - parameter urlString: url of the file to fetch from cache
     /// - returns: NSData with memory mapped file or nil if not in cache
     public class func cachedFile(urlString:String) -> NSData? {
-        let url = NSURL(string: urlString)!
-        let cacheName = self.cacheName(url)
+        guard let url = NSURL(string: urlString),
+              let cacheName = self.cacheName(url) else {
+            return nil
+        }
 
         var data:NSData? = nil
         if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
