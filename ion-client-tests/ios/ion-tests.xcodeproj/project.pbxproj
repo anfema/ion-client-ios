@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A0EC1311CC7C86D000038EB /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1301CC7C86D000038EB /* connection.swift */; };
 		6A0EC1331CC7CA66000038EB /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1321CC7CA66000038EB /* ion+connection.swift */; };
+		6A0EC1371CC8F49E000038EB /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1351CC8F497000038EB /* fts.swift */; };
 		6A3E67411C8F0A6600DE99B4 /* callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD50C4C1C8ED95C00A05C20 /* callback.swift */; };
 		6A4B8FF71C469BE90024D319 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */; };
 		6AE1EED31C8F2650009F4C48 /* ion-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AE1EED21C8F2650009F4C48 /* ion-client.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -117,6 +118,7 @@
 /* Begin PBXFileReference section */
 		6A0EC1301CC7C86D000038EB /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		6A0EC1321CC7CA66000038EB /* ion+connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
+		6A0EC1351CC8F497000038EB /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
 		6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		6AD50C4C1C8ED95C00A05C20 /* callback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = callback.swift; sourceTree = "<group>"; };
 		6AE1EED11C8F264C009F4C48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ion-client/Info.plist"; sourceTree = "<group>"; };
@@ -240,6 +242,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		6A0EC1341CC8F497000038EB /* search */ = {
+			isa = PBXGroup;
+			children = (
+				6A0EC1351CC8F497000038EB /* fts.swift */,
+			);
+			path = search;
+			sourceTree = "<group>";
+		};
 		6A4B8FF51C469BC70024D319 /* helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +314,7 @@
 				8FB149AB1C45154900441F82 /* bundles */,
 				8F78B21C1BF35945009D4B67 /* Info.plist */,
 				6A4B8FF51C469BC70024D319 /* helper */,
+				6A0EC1341CC8F497000038EB /* search */,
 				8F78B2221BF35998009D4B67 /* collection */,
 				8F78B2241BF35998009D4B67 /* config.swift */,
 				8F78B2251BF35998009D4B67 /* content */,
@@ -725,6 +736,7 @@
 				8F78B23E1BF35998009D4B67 /* base.swift in Sources */,
 				8F78B2431BF35998009D4B67 /* flag.swift in Sources */,
 				8F78B2441BF35998009D4B67 /* image.swift in Sources */,
+				6A0EC1371CC8F49E000038EB /* fts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
