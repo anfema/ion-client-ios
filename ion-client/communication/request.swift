@@ -72,7 +72,7 @@ public class IONRequest {
                     // do nothing, fallthrough to HTTP request
                 }
             }
-            return .Failure(IONError.NoData(nil))
+            return .Failure(.NoData(nil))
         }
         
         if cached == .Prefer || cached == .Force {
@@ -82,7 +82,7 @@ public class IONRequest {
                 responseQueueCallback(callback, parameter: .Success(json))
                 return
             } else if cached == .Force {
-                responseQueueCallback(callback, parameter: .Failure(IONError.ServerUnreachable))
+                responseQueueCallback(callback, parameter: .Failure(.ServerUnreachable))
                 return
             }
         }
@@ -103,12 +103,20 @@ public class IONRequest {
             if case .Failure(let error) = response.result {
                 if case .NotAuthorized = error {
                     responseQueueCallback(callback, parameter: .Failure(error))
-                    return
+                } else {
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 }
+                
+                return
+            }
+            
+            guard let request = response.request else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                return
             }
             
             // save response to cache
-            self.saveToCache(response.request!, ion_client.Result(result: response.result))
+            self.saveToCache(request, ion_client.Result(result: response.result))
             
             // object can only be saved if there is a request url and the status code of the response is a 200
             var jsonObject: JSONObject? = nil
@@ -129,11 +137,11 @@ public class IONRequest {
                 // call callback in correct queue
                 dispatch_async(ION.config.responseQueue) {
                     if let date = callback(patchedResult) {
-                        self.saveToCache(response.request!, checksumMethod: "null", checksum: "", lastUpdate: date)
+                        self.saveToCache(request, checksumMethod: "null", checksum: "", lastUpdate: date)
                     }
                 }
             } else {
-                responseQueueCallback(callback, parameter: .Failure(IONError.NoData(nil)))
+                responseQueueCallback(callback, parameter: .Failure(.NoData(nil)))
             }
         }
         
@@ -157,7 +165,7 @@ public class IONRequest {
                 responseQueueCallback(callback, parameter: cacheResult)
                 return
             } else if cached == .Force {
-                responseQueueCallback(callback, parameter: .Failure(IONError.ServerUnreachable))
+                responseQueueCallback(callback, parameter: .Failure(.ServerUnreachable))
                 return
             }
         }
@@ -236,7 +244,12 @@ public class IONRequest {
                     try NSFileManager.defaultManager().moveItemAtPath(self.cacheName(url) + ".tmp", toPath: self.cacheName(url))
                 } catch {
                     // ok moving failed
-                    responseQueueCallback(callback, parameter: Result.Failure(IONError.NoData(error)))
+                    responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
+                    return
+                }
+                
+                guard let request = request else {
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
                 }
                 
@@ -255,10 +268,10 @@ public class IONRequest {
                     ION.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
                 }
 
-                self.saveToCache(request!, checksumMethod: ckSumMethod, checksum: ckSum)
+                self.saveToCache(request, checksumMethod: ckSumMethod, checksum: ckSum)
                 
                 // call callback in correct queue
-                responseQueueCallback(callback, parameter: Result.Success(self.cacheName(url)))
+                responseQueueCallback(callback, parameter: .Success(self.cacheName(url)))
             }
         }
         
@@ -317,12 +330,15 @@ public class IONRequest {
         
         // add query parameters
         let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
-        components.queryItems = []
+        var queryItems: [NSURLQueryItem] = []
+        
         if let parameters = queryParameters {
             for (key, value) in parameters {
-                components.queryItems!.append(NSURLQueryItem(name: key, value: value))
+                queryItems.append(NSURLQueryItem(name: key, value: value))
             }
         }
+        
+        components.queryItems = queryItems
         
         // return canonical url
         let urlString = components.URLString
@@ -367,11 +383,14 @@ public class IONRequest {
     /// - parameter checksum: checksum to compare to
     /// - returns: Success with cached file name or Failure
     internal class func fetchFromCache(urlString: String, checksumMethod: String, checksum: String) -> Result<String, IONError> {
-        let url = NSURL(string: urlString)!
+        
+        guard let url = NSURL(string: urlString), host = url.host else {
+            return .Failure(.DidFail)
+        }
 
         // validate checksum
         guard let cacheDBEntry = self.getCacheDBEntry(urlString) else {
-            return .Failure(IONError.InvalidJSON(nil))
+            return .Failure(.InvalidJSON(nil))
         }
         
         guard let rawFileName = cacheDBEntry["filename"],
@@ -380,11 +399,14 @@ public class IONRequest {
             case .JSONString(let filename)             = rawFileName,
             case .JSONString(let cachedChecksumMethod) = rawChecksumMethod,
             case .JSONString(let cachedChecksum)       = rawChecksum else {
-                return .Failure(IONError.InvalidJSON(nil))
+                return .Failure(.InvalidJSON(nil))
         }
         
-        let fileURL = self.cacheBaseDir(url.host!, locale: ION.config.locale)
-        let cacheName = fileURL.URLByAppendingPathComponent(filename).path!
+        let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
+        
+        guard let cacheName = fileURL.URLByAppendingPathComponent(filename).path else {
+            return .Failure(.DidFail)
+        }
         
         // ios 8.4 inserts spaces into our checksums, so remove them again
         if (cachedChecksumMethod != checksumMethod) || (cachedChecksum.stringByReplacingOccurrencesOfString(" ", withString: "") != checksum.stringByReplacingOccurrencesOfString(" ", withString: "")) {
@@ -395,7 +417,7 @@ public class IONRequest {
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-                return .Failure(IONError.NoData(nil))
+                return .Failure(.NoData(nil))
             }
         }
         
@@ -403,7 +425,7 @@ public class IONRequest {
         if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
             return .Success(cacheName)
         } else {
-            return .Failure(IONError.NoData(nil))
+            return .Failure(.NoData(nil))
         }
     }
 

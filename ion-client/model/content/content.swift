@@ -29,7 +29,7 @@ public class IONContent {
    
     /// Initialize content content object from JSON
     ///
-    /// This is the conten base class, it should never be instantiated by itself, only through it's subclasses!
+    /// This is the content base class, it should never be instantiated by itself, only through it's subclasses!
     ///
     /// - parameter json: `JSONObject` that contains serialized content content object
 	public init(json:JSONObject) throws {

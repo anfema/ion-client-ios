@@ -30,19 +30,19 @@ extension Request {
     /// - returns: A `JSONObject` response serializer
     public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
         return ResponseSerializer { _, response, data, error in
-            guard let validData = data where response != nil else {
+            guard let validData = data, response = response else {
                 return .Failure(.ServerUnreachable)
             }
             
-            if response!.statusCode == 401 || response!.statusCode == 403 {
+            if response.statusCode == 401 || response.statusCode == 403 {
                 return .Failure(.NotAuthorized)
             }
             
-            if response!.statusCode == 304 {
+            if response.statusCode == 304 {
                 return .Success(JSONResponse(json: nil, statusCode: 304))
             }
             
-            if response!.statusCode != 200 {
+            if response.statusCode != 200 {
                 return .Failure(.NoData(error))
             }
             
