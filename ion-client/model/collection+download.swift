@@ -23,34 +23,21 @@ extension IONCollection {
     public var lastCompleteUpdate: NSDate? {
         get {
             let prefs = NSUserDefaults.standardUserDefaults()
-            if let dict = prefs.objectForKey(self.lastUpdatedIdentifier) as? NSDictionary {
-                for item in dict.allKeys {
-                    guard let key = item as? NSString else {
-                        continue
-                    }
-                    if key == self.identifier {
-                        if let dt = dict[key] as? NSDate {
-                            return dt
-                        }
-                    }
-                }
+            
+            guard let dict = prefs.objectForKey(self.lastUpdatedIdentifier) as? [String: NSDate] else {
+                return nil
             }
-            return nil
+            
+            return dict[self.identifier]
         }
         
         set (newValue) {
             let prefs = NSUserDefaults.standardUserDefaults()
-            if let dict = prefs.objectForKey(self.lastUpdatedIdentifier) as? NSDictionary {
-                var mutableCopy:[String:NSDate] = dict as! [String : NSDate]
-                mutableCopy[self.identifier] = newValue
-                prefs.setObject(mutableCopy, forKey: self.lastUpdatedIdentifier)
-                prefs.synchronize()
-            } else {
-                var dict = [String:NSDate]()
-                dict[self.identifier] = newValue
-                prefs.setObject(dict, forKey: self.lastUpdatedIdentifier)
-                prefs.synchronize()
-            }
+            var dict: [String:NSDate] = (prefs.objectForKey(self.lastUpdatedIdentifier) as? [String: NSDate]) ?? [:]
+            
+            dict[self.identifier] = newValue
+            prefs.setObject(dict, forKey: self.lastUpdatedIdentifier)
+            prefs.synchronize()
         }
     }
     
