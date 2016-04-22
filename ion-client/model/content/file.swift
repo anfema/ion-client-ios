@@ -76,17 +76,15 @@ public class IONFileContent: IONContent, CanLoadImage {
     /// - parameter callback: block to call when file data gets available, will not be called if there was an error
     ///                       while downloading or fetching the file data from the cache
     public func data(callback: (Result<NSData, IONError> -> Void)) {
-        guard self.isValid else {
-            return
-        }
-        
-        guard let url = self.url else {
+        guard let url = self.url where self.isValid else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
         
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             do {
@@ -155,8 +153,11 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
+            
             if case let content as IONFileContent = content {
                 content.data(callback)
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         return self
