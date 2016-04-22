@@ -7,7 +7,7 @@ PODS:
   - HashExtensions (2.0.0)
   - html5tokenizer (1.0.0)
   - iso-rfc822-date (1.0.1)
-  - Markdown (1.0.8)
+  - Markdown (1.0.9)
   - Tarpit (1.0.3)
 
 DEPENDENCIES:
@@ -27,7 +27,7 @@ SPEC CHECKSUMS:
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 242704fdcaa5c62a8380d9f89381b61f69ab6cee
+  Markdown: 5ae72b28dce669f316d0e7258f2e672f29447beb
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 
 COCOAPODS: 0.39.0
