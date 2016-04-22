@@ -86,8 +86,7 @@ class ViewController: UIViewController {
             "<br>" +
             "<code>code</code>" +
             "<p>Lorem <strong>strong</strong> ipsum dolor <a href=\"https://anfe.ma\">anfe.ma</a> sit <b>bold</b> amet, consetetur <br>" +
-            "<del>deleted</del>" + // FIXME: render error when included
-            "<em>emphasized</em> sadipscing elitr, <i>italic</i> sed diam nonumy eirmod tem lore <code>code</code> magna aliquyam</p>"
+            "<del>deleted</del> r sadipscing <em>emphasized</em> sadipscing elitr, <i>italic</i> sed lore <code>code</code> magna aliquyam</p>"
         )
         
         self.textView.attributedText = parser.renderAttributedString(style)
