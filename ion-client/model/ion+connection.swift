@@ -29,7 +29,7 @@ extension ION {
     /// - parameter callback: Result object either containing the IONPage in succes case or an IONError
     ///                       when the page could not be resolved.
     public class func resolve(url: NSURL, callback: (Result<IONPage, IONError> -> Void)) {
-        guard let identifier = url.pathComponents?.last else {
+        guard let identifier = url.lastPathComponent where identifier != "/" else {
             callback(.Failure(.DidFail))
             return
         }

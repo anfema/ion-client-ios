@@ -137,4 +137,196 @@ class connectionContentTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testMissingCollection() {
+        let expectation = self.expectationWithDescription("testMissingCollection")
+        
+        let url = NSURL(string: "ion://")!
+        ION.resolve(url) { (result: Result<IONCollection, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .DidFail = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testWrongCollection() {
+        let expectation = self.expectationWithDescription("testWrongCollection")
+        
+        let url = NSURL(string: "ion://wrong")!
+        ION.resolve(url) { (result: Result<IONCollection, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .CollectionNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testMissingPage() {
+        let expectation = self.expectationWithDescription("testMissingPage")
+        
+        let url = NSURL(string: "ion://test/")!
+        ION.resolve(url) { (result: Result<IONPage, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .DidFail = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testWrongPage() {
+        let expectation = self.expectationWithDescription("testWrongPage")
+        
+        let url = NSURL(string: "ion://test/wrong")!
+        ION.resolve(url) { (result: Result<IONPage, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .PageNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testMissingOutlet() {
+        let expectation = self.expectationWithDescription("testMissingOutlet")
+        
+        let url = NSURL(string: "ion://test/page_001/")!
+        ION.resolve(url) { (result: Result<IONContent, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .DidFail = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testWrongOutlet() {
+        let expectation = self.expectationWithDescription("testWrongOutlet")
+        
+        let url = NSURL(string: "ion://test/page_001/#wrong")!
+        ION.resolve(url) { (result: Result<IONContent, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testWrongCollection2() {
+        let expectation = self.expectationWithDescription("testWrongCollection2")
+        
+        let url = NSURL(string: "ion://wrong/page_001/#number")!
+        ION.resolve(url) { (result: Result<IONContent, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .CollectionNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testWrongPage2() {
+        let expectation = self.expectationWithDescription("testWrongPage2")
+        
+        let url = NSURL(string: "ion://test/wrong/#number")!
+        ION.resolve(url) { (result: Result<IONContent, IONError>) in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .PageNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
