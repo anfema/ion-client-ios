@@ -71,5 +71,19 @@ class ftsTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
+    
+    func testDownloadFTS()
+    {
+        // TODO: Test somehow that IONFTSDBDidUpdateNotification was sent.
+        
+        let expectation = self.expectationWithDescription("testDownloadFTS")
+        
+        ION.downloadFTSDB("test") {
+            // TODO: Test if download was successful
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }
 
