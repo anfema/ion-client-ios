@@ -16,24 +16,29 @@ public extension IONCollection {
     /// Get a fulltext search handle
     ///
     /// - parameter callback: callback to be called if the search handle is ready
-    public func getSearchHandle(callback: (IONSearchHandle -> Void)) {
+    public func getSearchHandle(callback: (Result<IONSearchHandle, IONError> -> Void)) {
         guard let searchIndex = ION.searchIndex(self.identifier) where ION.config.isFTSEnabled(self.identifier) else {
+            callback(.Failure(.DidFail))
             return
         }
+        
+        func performCallback() {
+            dispatch_async(self.workQueue) {
+                guard let handle = IONSearchHandle(collection: self) else {
+                    callback(.Failure(.DidFail))
+                    return
+                }
+                
+                callback(.Success(handle))
+            }
+        }
+        
         if !NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
             ION.downloadFTSDB(self.identifier) {
-                dispatch_async(self.workQueue) {
-                    if let handle = IONSearchHandle(collection: self) {
-                        callback(handle)
-                    }
-                }
+                performCallback()
             }
         } else {
-            dispatch_async(self.workQueue) {
-                if let handle = IONSearchHandle(collection: self) {
-                    callback(handle)
-                }
-            }
+            performCallback()
         }
     }
 }

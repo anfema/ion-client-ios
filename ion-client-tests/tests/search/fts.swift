@@ -26,7 +26,13 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionSearch() {
         let expectation = self.expectationWithDescription("testCollectionSearch")
         
-        ION.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { result in
+            guard case .Success(let search) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             let items = search.search("ullamcorper")
             XCTAssert(items.count == 4)
             expectation.fulfill()
@@ -38,7 +44,13 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionSearchExclusion() {
         let expectation = self.expectationWithDescription("testCollectionSearchExclusion")
         
-        ION.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { result in
+            guard case .Success(let search) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             let items = search.search("ullamcorper -nulla")
             XCTAssert(items.count == 1)
             expectation.fulfill()
@@ -50,7 +62,13 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionStatement() {
         let expectation = self.expectationWithDescription("testCollectionStatement")
         
-        ION.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { result in
+            guard case .Success(let search) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             let items = search.search("donec duis")
             XCTAssert(items.count == 3)
             expectation.fulfill()
@@ -62,7 +80,13 @@ class ftsTests: LoggedInXCTestCase {
     func testCollectionPhrase() {
         let expectation = self.expectationWithDescription("testCollectionPhrase")
         
-        ION.collection("test").getSearchHandle { search in
+        ION.collection("test").getSearchHandle { result in
+            guard case .Success(let search) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             let items = search.search("\"donec duis\"")
             XCTAssert(items.count == 0)
             expectation.fulfill()
@@ -78,8 +102,48 @@ class ftsTests: LoggedInXCTestCase {
         
         let expectation = self.expectationWithDescription("testDownloadFTS")
         
+        ION.config.enableFTS("test")
+        XCTAssertTrue(ION.config.isFTSEnabled("test"))
+        
         ION.downloadFTSDB("test") {
             // TODO: Test if download was successful
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testEnableDisableSearchHandle()
+    {
+        ION.config.enableFTS("test")
+        XCTAssertTrue(ION.config.isFTSEnabled("test"))
+        
+        ION.config.disableFTS("test")
+        XCTAssertFalse(ION.config.isFTSEnabled("test"))
+    }
+    
+    
+    func testGetSearchHandle()
+    {
+        let expectation = self.expectationWithDescription("testGetSearchHandle")
+        
+        ION.config.disableFTS("test")
+        XCTAssertFalse(ION.config.isFTSEnabled("test"))
+        
+        ION.collection("test").getSearchHandle { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .DidFail = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             expectation.fulfill()
         }
         
