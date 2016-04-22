@@ -269,15 +269,15 @@ public class HTMLParser {
     private func pushFormat(style: AttributedStringStyling, tagName: String, attributes: [String:String]?, nestingDepth: Int) {
         switch tagName {
         case "h1":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[1].makeAttributeDict(nestingDepth: nestingDepth)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[0].makeAttributeDict(nestingDepth: nestingDepth)))
         case "h2":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[2].makeAttributeDict(nestingDepth: nestingDepth)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[1].makeAttributeDict(nestingDepth: nestingDepth)))
         case "h3":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[3].makeAttributeDict(nestingDepth: nestingDepth)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[2].makeAttributeDict(nestingDepth: nestingDepth)))
         case "h4":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[4].makeAttributeDict(nestingDepth: nestingDepth)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[3].makeAttributeDict(nestingDepth: nestingDepth)))
         case "h5":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[5].makeAttributeDict(nestingDepth: nestingDepth)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[4].makeAttributeDict(nestingDepth: nestingDepth)))
         case "ul":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont)))
         case "ol":
