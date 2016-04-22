@@ -152,7 +152,10 @@ extension IONRequest {
         var obj:[String:JSONObject] = self.getCacheDBEntry(url) ?? [:]
         self.removeCacheDBEntries(withURL: url)
         
-        let parsedURL = NSURL(string: url)!
+        guard let parsedURL = NSURL(string: url) else {
+            return
+        }
+        
         let hash = url.cryptoHash(.MD5)
         
         guard let host = parsedURL.host else {
@@ -330,8 +333,9 @@ extension IONRequest {
         }
         
         self.cacheDB = cacheDB.filter({ entry -> Bool in
-            guard case .JSONDictionary(let dict) = entry where dict[key] != nil,
-                case .JSONString(let entryValue) = dict[key]! where entryValue == value else {
+            guard case .JSONDictionary(let dict) = entry,
+                let valueString = dict[key],
+                case .JSONString(let entryValue) = valueString where entryValue == value else {
                     return true
             }
             return false

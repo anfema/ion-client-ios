@@ -268,13 +268,18 @@ public class IONRequest {
                 var ckSum = checksum
                 if ckSumMethod == "null" {
                     // update checksum if method was "null"
-                    ckSumMethod = "sha256"
-                    ckSum = self.cachedFile(urlString)!.cryptoHash(.SHA256).hexString()
+                    if let cachedFileData = self.cachedFile(urlString) {
+                        ckSumMethod = "sha256"
+                        ckSum = cachedFileData.cryptoHash(.SHA256).hexString()
+                    } else {
+                        // TODO: return error or do nothing when checksum could not be updated?
+                    }
                 }
                 
                 // finish up progress reporting
-                if let unwrapped = response where unwrapped.allHeaderFields["Content-Length"] == nil {
-                    let bytes: Int64 = Int64(self.cachedFile(urlString)!.length)
+                if let unwrapped = response where unwrapped.allHeaderFields["Content-Length"] == nil,
+                   let cachedFileData = self.cachedFile(urlString) {
+                    let bytes: Int64 = Int64(cachedFileData.length)
                     ION.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
                 }
 
@@ -344,11 +349,15 @@ public class IONRequest {
         guard let serverURL = ION.config.serverURL else {
             return nil
         }
+        
         // append endpoint to base url
         let url = serverURL.URLByAppendingPathComponent(endpoint)
         
         // add query parameters
-        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)!
+        guard let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        
         var queryItems: [NSURLQueryItem] = []
         
         if let parameters = queryParameters {
@@ -385,8 +394,9 @@ public class IONRequest {
     private class func augmentJSONWithChangeDate(json: JSONObject, urlString: String) -> JSONObject {
         // augment json with timestamp for last update
         guard case .JSONDictionary(var dict) = json,
-              let cacheDBEntry = self.getCacheDBEntry(urlString) where cacheDBEntry["last_updated"] != nil,
-              case .JSONNumber = cacheDBEntry["last_updated"]! else {
+              let cacheDBEntry = self.getCacheDBEntry(urlString),
+              let rawLastUpdated = cacheDBEntry["last_updated"],
+              case .JSONNumber = rawLastUpdated else {
                 // return unchanged input if it neither was not a dictionary or there is no entry in cache DB
                 return json
         }

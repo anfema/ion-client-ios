@@ -72,7 +72,10 @@ public class HTMLParser {
                         result.appendAttributedString(NSAttributedString(string: "•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                     }
                     if self.getListContext() == "ol"  {
-                        let counter = counters.popLast()!
+                        guard let counter = counters.popLast() else {
+                            continue
+                        }
+                        
                         result.appendAttributedString(NSAttributedString(string: "\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                         counters.append(counter + 1)
                     }
@@ -195,7 +198,10 @@ public class HTMLParser {
                         result.appendContentsOf("- ")
                     }
                     if lastListContextItem == "ol"  {
-                        let counter = counters.popLast()!
+                        guard let counter = counters.popLast() else {
+                            continue
+                        }
+                        
                         result.appendContentsOf("\n")
                         for _ in 0..<depth {
                             result.appendContentsOf("    ")

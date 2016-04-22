@@ -110,8 +110,9 @@ public class IONFileContent: IONContent, CanLoadImage {
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
-                case .JSONDictionary(let dict) = json where dict["url"] != nil,
-                case .JSONString(let urlString) = dict["url"]! else {
+                case .JSONDictionary(let dict) = json,
+                let rawURL = dict["url"],
+                case .JSONString(let urlString) = rawURL else {
                     return
             }
             

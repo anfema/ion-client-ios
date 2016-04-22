@@ -229,7 +229,10 @@ public struct IONConfig {
     /// - parameter password: The password
     public mutating func setBasicAuthCredentials(user user: String, password: String) {
         let auth = "\(user):\(password)" as NSString
-        let authData = auth.dataUsingEncoding(NSUTF8StringEncoding)!
+        
+        guard let authData = auth.dataUsingEncoding(NSUTF8StringEncoding) else {
+            return
+        }
         
         self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
     }

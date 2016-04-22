@@ -38,9 +38,11 @@ public class ION {
             guard result.isSuccess,
                   let jsonResponse = result.value,
                   let json = jsonResponse.json,
-                  case .JSONDictionary(let dict) = json where dict["login"] != nil,
-                  case .JSONDictionary(let loginDict) = dict["login"]! where loginDict["token"] != nil,
-                  case .JSONString(let token) = loginDict["token"]! else {
+                  case .JSONDictionary(let dict) = json,
+                  let rawLogin = dict["login"],
+                  case .JSONDictionary(let loginDict) = rawLogin,
+                  let rawToken = loginDict["token"],
+                  case .JSONString(let token) = rawToken else {
 
                 self.config.sessionToken = nil
                 responseQueueCallback(callback, parameter: false)
