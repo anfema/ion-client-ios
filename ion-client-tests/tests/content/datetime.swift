@@ -120,8 +120,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         let json: JSONObject = .JSONString("datetime")
         
         do {
-            let image = try IONDateTimeContent(json: json)
-            XCTFail("should have failed. returned \(image) instead")
+            let _ = try IONDateTimeContent(json: json)
         }
             
         catch let e as IONError
