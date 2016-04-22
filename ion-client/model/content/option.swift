@@ -49,7 +49,7 @@ extension IONPage {
     public func selectedOption(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
         
         if case let content as IONOptionContent = content {
@@ -69,7 +69,7 @@ extension IONPage {
     public func selectedOption(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             

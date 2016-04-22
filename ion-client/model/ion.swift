@@ -124,7 +124,7 @@ public class ION {
         let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
         let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
             guard case .Success(let collection) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             

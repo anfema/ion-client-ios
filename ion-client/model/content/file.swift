@@ -151,7 +151,7 @@ extension IONPage {
     public func fileData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             if case let content as IONFileContent = content {

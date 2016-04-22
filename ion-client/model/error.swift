@@ -57,6 +57,9 @@ public enum IONError: ErrorType {
     case ServerUnreachable
     
     /// TODO: this is just a temp error for now
+    case UnknownError
+    
+    /// TODO: this is just a temp error for now
     case DidFail
     
     /// Error domain for conversion into NSError

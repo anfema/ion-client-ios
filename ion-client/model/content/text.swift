@@ -136,7 +136,7 @@ extension IONPage {
     public func text(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
         if case let content as IONTextContent = content {
             if let text = content.plainText() {
@@ -158,7 +158,7 @@ extension IONPage {
     public func text(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
 
@@ -183,7 +183,7 @@ extension IONPage {
     public func html(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
         
         if case let content as IONTextContent = content {
@@ -207,7 +207,7 @@ extension IONPage {
     public func html(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
 
@@ -232,7 +232,7 @@ extension IONPage {
     public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
 
         if case let content as IONTextContent = content {
@@ -256,7 +256,7 @@ extension IONPage {
     public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
 

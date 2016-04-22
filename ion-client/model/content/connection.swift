@@ -56,7 +56,7 @@ extension IONPage {
         let result = self.outlet(name, position: position)
         
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
 
         if case let content as IONConnectionContent = content {
@@ -79,7 +79,7 @@ extension IONPage {
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             

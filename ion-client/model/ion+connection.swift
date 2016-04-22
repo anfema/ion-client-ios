@@ -36,7 +36,7 @@ extension ION {
         
         resolve(url) { (result: Result<IONCollection, IONError>) in
             guard case .Success(let collection) = result else {
-                callback(.Failure(result.error!))
+                callback(.Failure(result.error ?? .UnknownError))
                 return
             }
             
@@ -57,7 +57,7 @@ extension ION {
         
         resolve(url) { (result: Result<IONPage, IONError>) in
             guard case .Success(let page) = result else {
-                callback(.Failure(result.error!))
+                callback(.Failure(result.error ?? .UnknownError))
                 return
             }
             

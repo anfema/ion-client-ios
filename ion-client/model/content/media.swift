@@ -135,7 +135,7 @@ public class IONMediaContent: IONContent, CanLoadImage {
     public func data(callback: (Result<NSData, IONError> -> Void)) {
         self.cachedURL { result in
             guard case .Success(let url) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             do {
@@ -242,7 +242,7 @@ extension IONPage {
     public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             
@@ -276,14 +276,14 @@ extension IONPage {
         // TODO: Test this
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
 
             if case let content as IONMediaContent = content {
                 content.cachedURL { result in
                     guard case .Success(let url) = result else {
-                        responseQueueCallback(callback, parameter: .Failure(result.error!))
+                        responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                         return
                     }
 
@@ -306,14 +306,14 @@ extension IONPage {
     public func temporaryURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             
             if case let content as IONMediaContent = content {
                 content.temporaryURL { result in
                     guard case .Success(let url) = result else {
-                        responseQueueCallback(callback, parameter: .Failure(result.error!))
+                        responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                         return
                     }
                     responseQueueCallback(callback, parameter: .Success(url))
@@ -343,7 +343,7 @@ extension IONPage {
     public func mediaData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
 

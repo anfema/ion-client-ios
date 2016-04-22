@@ -161,7 +161,7 @@ extension CanLoadImage {
     public func image(original original: Bool = false, callback: (Result<UIImage, IONError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             
@@ -188,7 +188,7 @@ extension CanLoadImage {
     public func image(original original: Bool = false, callback: (Result<NSImage, IONError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
     
