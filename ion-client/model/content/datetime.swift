@@ -22,8 +22,6 @@ public class IONDateTimeContent: IONContent {
     ///
     /// - parameter json: `JSONObject` that contains serialized datetime content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -35,6 +33,8 @@ public class IONDateTimeContent: IONContent {
         if case .JSONString(let datetime) = rawDateTime {
             self.date = NSDate(ISODateString: datetime)
         }
+        
+        try super.init(json: json)
     }
 }
 
