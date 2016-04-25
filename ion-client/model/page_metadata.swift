@@ -67,11 +67,7 @@ public class IONPageMeta: CanLoadImage {
                 throw IONError.InvalidJSON(json)
         }
         
-        if let date = NSDate(ISODateString: lastChanged) {
-            self.lastChanged = date
-        } else {
-            self.lastChanged = NSDate.distantPast()
-        }
+        self.lastChanged = NSDate(ISODateString: lastChanged) ?? NSDate.distantPast()
         self.identifier  = identifier
         self.layout = layout
         self.position = position
@@ -135,6 +131,7 @@ public class IONPageMeta: CanLoadImage {
     public var imageURL:NSURL? {
         let taintedURL: String? = self["thumbnail"] ?? self["icon"]
  
+        //TODO: Do we still need this? Shouldn't the backend return valid urls?
         if let url = taintedURL
         {
             guard let escapedURL = url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) else
