@@ -29,7 +29,7 @@ public class IONContainerContent: IONContent {
         
         guard let rawChildren = dict["children"],
             case .JSONArray(let children) = rawChildren else {
-                throw IONError.JSONArrayExpected(json)
+                throw IONError.JSONArrayExpected(json) // TODO: return InvalidJSON so all IONContents behave the same way?
         }
         
         self.children = []
@@ -69,10 +69,12 @@ extension IONPage {
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
+        
         if case let content as IONContainerContent = content {
             return .Success(content.children)
         }
-        return .Failure(.OutletNotFound(name))
+        
+        return .Failure(.OutletIncompatible)
     }
     
     /// Fetch `IONContent`-Array from named outlet async
@@ -88,10 +90,14 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
+            
             if case let content as IONContainerContent = content {
                 responseQueueCallback(callback, parameter: .Success(content.children))
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
+        
         return self
     }
 }

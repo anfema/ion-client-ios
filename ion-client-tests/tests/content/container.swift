@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import DEjson
 @testable import ion_client
 
 class containerContentTests: LoggedInXCTestCase {
@@ -21,6 +22,7 @@ class containerContentTests: LoggedInXCTestCase {
     override func tearDown() {
         super.tearDown()
     }
+    
     
     func testContainerOutletFetchSync() {
         let expectation = self.expectationWithDescription("testContainerOutletFetchSync")
@@ -42,6 +44,7 @@ class containerContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
+    
     func testContainerOutletFetchAsync() {
         let expectation = self.expectationWithDescription("testContainerOutletFetchAsync")
         
@@ -57,6 +60,7 @@ class containerContentTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
     
     func testContainerOutletSubscripting() {
         let expectation = self.expectationWithDescription("fetch outlet")
@@ -78,5 +82,175 @@ class containerContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testOutletIncompatible() {
+        let expectation = self.expectationWithDescription("testOutletIncompatible")
+        
+        ION.collection("test").page("page_001").children("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testOutletIncompatibleSync() {
+        let expectation = self.expectationWithDescription("testOutletIncompatibleSync")
+        
+        ION.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .Failure(let error) = page.children("number") else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testInvalidOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidOutlet")
+        
+        ION.collection("test").page("page_001").children("wrong") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testInvalidOutletSync() {
+        let expectation = self.expectationWithDescription("testInvalidOutletSync")
+        
+        ION.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .Failure(let error) = page.children("wrong") else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testInvalidJSON() {
+        // invalid value for correct key
+        let json1: JSONObject = .JSONDictionary(["children": .JSONString("wrong")])
+        
+        do {
+            let _ = try IONContainerContent(json: json1)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONArrayExpected(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
+        
+        
+        // no "children" key
+        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        
+        do {
+            let _ = try IONContainerContent(json: json2)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONArrayExpected(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
+    }
+    
+    
+    func testJSONObjectExpected() {
+        let json: JSONObject = .JSONString("children")
+        
+        do {
+            let _ = try IONContainerContent(json: json)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONObjectExpected(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
     }
 }
