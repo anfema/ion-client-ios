@@ -53,6 +53,16 @@ class ftsTests: LoggedInXCTestCase {
             
             let items = search.search("ullamcorper -nulla")
             XCTAssert(items.count == 1)
+            
+            guard let item = items.first else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertEqual(item.html(), "<p>Donec <strong>ullamcorper</strong></p>")
+            XCTAssertEqual(item.attributedString().string, "Donec ullamcorper\n\n")
+            
             expectation.fulfill()
         }
         
