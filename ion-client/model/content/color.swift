@@ -12,10 +12,11 @@
 import Foundation
 #if os(OSX)
     import AppKit
-    #elseif os(iOS)
+#elseif os(iOS)
     import UIKit
 #endif
 import DEjson
+
 
 /// Color content
 public class IONColorContent : IONContent {
@@ -78,6 +79,7 @@ public class IONColorContent : IONContent {
     #endif
 }
 
+
 /// Color extension to IONPage
 extension IONPage {
     
@@ -86,7 +88,7 @@ extension IONPage {
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
-    /// - returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
+    /// - returns: `NSColor` in .Success case and `IONError` in .Failure case.
     public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, IONError> {
         let result = self.outlet(name, position: position)
     
@@ -109,9 +111,8 @@ extension IONPage {
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
-    ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter callback: Block to call when the color object becomes available.
+    ///                       Returns `NSColor` in .Success case and `IONError` in .Failure case.
     public func color(name: String, position: Int = 0, callback: (Result<NSColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
@@ -126,7 +127,7 @@ extension IONPage {
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
-    /// - returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
+    /// - returns: `UIColor` in .Success case and `IONError` in .Failure case.
     public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
         
@@ -149,9 +150,8 @@ extension IONPage {
     ///
     /// - parameter name: the name of the outlet
     /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the color object becomes available, will not be called if the outlet
-    ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter callback: Block to call when the color object becomes available.
+    ///                       Returns `UIColor` in .Success case and `IONError` in .Failure case.
     public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
@@ -160,5 +160,4 @@ extension IONPage {
         return self
     }
     #endif
-
 }
