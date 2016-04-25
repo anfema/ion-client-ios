@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A15DFC11C8F20A800932077 /* ion_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A15DFC01C8F207700932077 /* ion_client.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6A8626C41CC7AC7C00B9F8DD /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */; };
+		6AAA551F1CCE004900738B4B /* result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA551E1CCE004900738B4B /* result.swift */; };
 		6AD50C4B1C8ED0CC00A05C20 /* callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD50C481C8ED0CC00A05C20 /* callback.swift */; };
 		8F0D4FC81C905D12003E59CE /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0D4FC71C905D12003E59CE /* Result.swift */; };
 		8F0DB0641C0DFBE900193E8C /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0631C0DFBE900193E8C /* nsurlcache.swift */; };
@@ -119,6 +120,7 @@
 		6A15DFBF1C8F207700932077 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ion-client/Info.plist"; sourceTree = "<group>"; };
 		6A15DFC01C8F207700932077 /* ion_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ion_client.h; path = "ion-client/ion_client.h"; sourceTree = "<group>"; };
 		6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
+		6AAA551E1CCE004900738B4B /* result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = result.swift; sourceTree = "<group>"; };
 		6AD50C481C8ED0CC00A05C20 /* callback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = callback.swift; sourceTree = "<group>"; };
 		84C5F81A940CAE21C579A116 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0D4FC71C905D12003E59CE /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				8F78B3571BF36411009D4B67 /* number.swift */,
 				8F78B3581BF36411009D4B67 /* option.swift */,
 				8F78B3591BF36411009D4B67 /* text.swift */,
+				6AAA551E1CCE004900738B4B /* result.swift */,
 			);
 			name = content;
 			path = ../../tests/content;
@@ -724,6 +727,7 @@
 				8F78B3731BF36411009D4B67 /* auto_cache_invalidation.swift in Sources */,
 				8F78B3781BF36411009D4B67 /* page.swift in Sources */,
 				8F78B3701BF36411009D4B67 /* option.swift in Sources */,
+				6AAA551F1CCE004900738B4B /* result.swift in Sources */,
 				8FB149B11C493DE400441F82 /* NSDate+ISODate.swift in Sources */,
 				8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */,
 				8F78B3771BF36411009D4B67 /* memcache.swift in Sources */,
