@@ -460,7 +460,5 @@ public class IONRequest {
 
     
     // Make init private to avoid instanciating as all functions are class functions
-    private init() {
-        
-    }
+    private init() {}
 }
