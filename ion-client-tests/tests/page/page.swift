@@ -21,6 +21,26 @@ class pageTests: LoggedInXCTestCase {
     override func tearDown() {
         super.tearDown()
     }
+    
+    
+    func testPageHashValue() {
+        let expectation = self.expectationWithDescription("testPageHashValue")
+        
+        ION.collection("test").page("page_001") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertNotNil(page.collection)
+            XCTAssertEqual(page.hashValue, page.collection.hashValue + page.identifier.hashValue)
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
 
     func testPageFetchSync() {
         let expectation = self.expectationWithDescription("testPageFetchSync")
