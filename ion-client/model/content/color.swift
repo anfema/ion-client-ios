@@ -89,6 +89,7 @@ extension IONPage {
     /// - returns: `NSColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, IONError> {
         let result = self.outlet(name, position: position)
+    
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -112,22 +113,10 @@ extension IONPage {
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func color(name: String, position: Int = 0, callback: (Result<NSColor, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            
-            if case let content as IONColorContent = content {
-                if let c = content.color() {
-                    responseQueueCallback(callback, parameter: .Success(c))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
+    
         return self
     }
     #endif
@@ -140,6 +129,7 @@ extension IONPage {
     /// - returns: `UIColor` object if the outlet was a color outlet and the page was already cached, else nil
     public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
+        
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -163,22 +153,10 @@ extension IONPage {
     ///                       is not a color outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            
-            if case let content as IONColorContent = content {
-                if let c = content.color() {
-                    responseQueueCallback(callback, parameter: .Success(c))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
+        
         return self
     }
     #endif

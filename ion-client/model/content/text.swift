@@ -156,22 +156,10 @@ extension IONPage {
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func text(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-
-            if case let content as IONTextContent = content {
-                if let text = content.plainText() {
-                    responseQueueCallback(callback, parameter: .Success(text))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.text(name, position: position))
         }
+        
         return self
     }
     
@@ -205,22 +193,10 @@ extension IONPage {
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func html(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-
-            if case let content as IONTextContent = content {
-                if let text = content.htmlText() {
-                    responseQueueCallback(callback, parameter: .Success(text))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.html(name, position: position))
         }
+        
         return self
     }
 
@@ -254,22 +230,10 @@ extension IONPage {
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-
-            if case let content as IONTextContent = content {
-                if let text = content.attributedString() {
-                    responseQueueCallback(callback, parameter: .Success(text))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.attributedString(name, position: position))
         }
+        
         return self
     }
 }

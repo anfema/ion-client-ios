@@ -85,17 +85,8 @@ extension IONPage {
     ///                       is not a container outlet or non-existant or fetching the outlet was canceled because
     ///                       of a communication error
     public func children(name: String, position: Int = 0, callback: (Result<[IONContent], IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            
-            if case let content as IONContainerContent = content {
-                responseQueueCallback(callback, parameter: .Success(content.children))
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.children(name, position: position))
         }
         
         return self

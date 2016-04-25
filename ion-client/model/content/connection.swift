@@ -77,22 +77,10 @@ extension IONPage {
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            
-            if case let content as IONConnectionContent = content {
-                if let url = content.url {
-                    responseQueueCallback(callback, parameter: .Success(url))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.link(name, position: position))
         }
+        
         return self
     }
 }

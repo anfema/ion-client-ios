@@ -158,6 +158,7 @@ public class IONMediaContent: IONContent, CanLoadImage {
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
                 
@@ -183,6 +184,7 @@ public class IONMediaContent: IONContent, CanLoadImage {
                 let rawURL = dict["url"],
                 case .JSONString(let urlString) = rawURL,
                 let url = NSURL(string: urlString) else {
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
             }
 
@@ -230,6 +232,7 @@ extension IONPage {
             
             return .Failure(.OutletIncompatible)
         }
+        
         return .Failure(.OutletNotFound(name))
     }
 
@@ -263,6 +266,7 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
+        
         return self
     }
 

@@ -64,17 +64,10 @@ extension IONPage {
     ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func number(name: String, position: Int = 0, callback: (Result<Double, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            if case let content as IONNumberContent = content {
-                responseQueueCallback(callback, parameter: .Success(content.value))
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.number(name, position: position))
         }
+        
         return self
     }
 }

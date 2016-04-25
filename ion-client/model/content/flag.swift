@@ -65,17 +65,9 @@ extension IONPage {
     ///                       is not a flag outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func isSet(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            if case let content as IONFlagContent = content {
-                responseQueueCallback(callback, parameter: .Success(content.enabled))
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.isSet(name, position: position))
         }
-        return self
-    }
+        
+        return self    }
 }
