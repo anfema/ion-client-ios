@@ -21,8 +21,6 @@ public class IONNumberContent: IONContent {
     ///
     /// - parameter json: `JSONObject` that contains serialized number content object
     override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -33,6 +31,8 @@ public class IONNumberContent: IONContent {
         }
         
         self.value = value
+        
+        try super.init(json: json)
     }
 }
 
