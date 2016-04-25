@@ -312,4 +312,29 @@ class fileContentTests: LoggedInXCTestCase {
             XCTFail("wrong error thrown")
         }
     }
+    
+    
+    func testFileOutletAsync() {
+        let expectation = self.expectationWithDescription("testFileOutletAsync")
+        
+        ION.collection("test").page("page_001").outlet("file") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case let img as IONFileContent = outlet else {
+                XCTFail("File outlet not found or of wrong type \(outlet)")
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertNil(img.originalImageURL)
+            XCTAssertNil(img.imageURL)
+            
+            expectation.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
 }

@@ -72,6 +72,44 @@ class imageContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
     
+    func testImageOutletAsync() {
+        let expectation = self.expectationWithDescription("testImageOutletAsync")
+        
+        ION.collection("test").page("page_001").outlet("image") { result in
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let imageOutlet = outlet as? IONImageContent else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertNotNil(imageOutlet.originalURL)
+            XCTAssertNotNil(imageOutlet.originalImageURL)
+            
+            XCTAssert(imageOutlet.originalChecksumMethod == "sha256")
+            XCTAssert(imageOutlet.originalChecksum == "d8b358afb51ed64c2a9abdaf874b1cd0ab35dd20744b84d502ba3172b49ddc56")
+            
+            imageOutlet.originalCGImage({ result in
+                guard case .Success(let cgImage) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertNotNil(cgImage)
+            })
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
     func testImageInitializerFail1() {
         let json: JSONObject = .JSONString("invalid")
         
@@ -84,8 +122,7 @@ class imageContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else
-            {
+            guard case .JSONObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -108,8 +145,7 @@ class imageContentTests: LoggedInXCTestCase {
             XCTFail("should have failed. returned \(image) instead")
         }
             
-        catch let e as IONError
-        {
+        catch let e as IONError {
             XCTAssertNotNil(e)
     
             guard case .InvalidJSON(let obj) = e else
@@ -121,9 +157,100 @@ class imageContentTests: LoggedInXCTestCase {
             XCTAssertNotNil(obj)
         }
             
-        catch
-        {
+        catch {
             XCTFail("wrong error thrown")
         }
+    }
+    
+    
+    func testInvalidMediaURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaURLOutlet")
+        
+        ION.collection("test").page("page_001").mediaURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidCachedMediaURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidCachedMediaURLOutlet")
+        
+        ION.collection("test").page("page_001").cachedMediaURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidTemporaryURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidTemporaryURLOutlet")
+        
+        ION.collection("test").page("page_001").temporaryURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidMediaDataOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        
+        ION.collection("test").page("page_001").mediaData("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 }
