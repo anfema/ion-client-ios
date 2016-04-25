@@ -107,7 +107,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
                 self.checksum = checksumParts[1]
             }
         }
-        self.length   = Float(length)
+        
+        self.length = Float(length)
         
         self.originalMimeType = oMimeType
         self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
@@ -123,7 +124,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
                 self.originalChecksum = originalChecksumParts[1]
             }
         }
-        self.originalLength   = Float(oLength)
+        
+        self.originalLength = Float(oLength)
 
         try super.init(json: json)
     }
@@ -219,21 +221,28 @@ extension IONPage {
     /// - returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
     public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
-        if case .Success(let content) = result {
-            if case let content as IONMediaContent = content,
-               let url = content.url {
-                return .Success(url)
-            }
-
-            if case let content as IONFileContent = content,
-               let url = content.url {
-                return .Success(url)
-            }
-            
-            return .Failure(.OutletIncompatible)
+        
+        guard case .Success(let content) = result else {
+            return .Failure(result.error ?? .UnknownError)
         }
         
-        return .Failure(.OutletNotFound(name))
+        if case let content as IONMediaContent = content {
+            if let url = content.url {
+                return .Success(url)
+            } else {
+                return .Failure(.OutletEmpty)
+            }
+        }
+        
+        if case let content as IONFileContent = content {
+            if let url = content.url {
+                return .Success(url)
+            } else {
+                return .Failure(.OutletEmpty)
+            }
+        }
+        
+        return .Failure(.OutletIncompatible)
     }
 
     /// Fetch URL from named outlet async
@@ -244,27 +253,8 @@ extension IONPage {
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
-                return
-            }
-            
-            if case let content as IONMediaContent = content {
-                if let url = content.url {
-                    responseQueueCallback(callback, parameter: .Success(url))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else if case let content as IONFileContent = content {
-                if let url = content.url {
-                    responseQueueCallback(callback, parameter: .Success(url))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) { 
+            responseQueueCallback(callback, parameter: self.mediaURL(name, position: position))
         }
         
         return self
@@ -278,7 +268,6 @@ extension IONPage {
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
     public func cachedMediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        // TODO: Test this
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))

@@ -20,13 +20,7 @@ extension IONPage {
     public func child(identifier: String, callback: (Result<IONPage, IONError> -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
             guard case .Success(let page) = result else {
-                if case .Failure(let error) = result
-                {
-                    responseQueueCallback(callback, parameter: .Failure(error))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(IONError.DidFail))
-                }
-                
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .DidFail))
                 return
             }
             

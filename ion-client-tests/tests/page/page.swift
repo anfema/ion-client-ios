@@ -226,6 +226,7 @@ class pageTests: LoggedInXCTestCase {
                 expectation.fulfill()
                 return
             }
+            
             XCTAssert(child.identifier == "subpage_001")
             XCTAssert(child.parent == "page_002")
             print(child.layout)
@@ -235,6 +236,36 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+    
+    
+    func testPageInvalidChild() {
+        let expectation = self.expectationWithDescription("testPageInvalidChild")
+        
+        ION.collection("test").page("page_002") { result in
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            guard case .Failure(let error) = page.child("invalid_page") else {
+                XCTFail("Child found")
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .InvalidPageHierarchy = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
 
     func testPageChildAsync() {
         let expectation = self.expectationWithDescription("testPageChildAsync")

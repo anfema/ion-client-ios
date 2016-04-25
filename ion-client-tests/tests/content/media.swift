@@ -10,6 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import XCTest
+import DEjson
 import HashExtensions
 @testable import ion_client
 
@@ -68,7 +69,26 @@ class mediaContentTests: LoggedInXCTestCase {
                 expectation.fulfill()
                 return
             }
+            
             XCTAssert(mediaOutlet.mimeType == "image/jpeg")
+            XCTAssertNotNil(mediaOutlet.imageURL)
+            XCTAssertNotNil(mediaOutlet.originalImageURL)
+            
+            mediaOutlet.cachedURL({ result in
+                guard case .Success(let url) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                guard let path = url.path else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(path))
+            })
             
             mediaOutlet.image { result in
                 guard case .Success(let image) = result else {
@@ -116,6 +136,8 @@ class mediaContentTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
+    
+    
     func testMediaOutletTempURL() {
         let expectation = self.expectationWithDescription("testMediaOutletTempURL")
         
@@ -126,11 +148,192 @@ class mediaContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssert(url.absoluteString.containsString("token="))
+            XCTAssertTrue(url.absoluteString.containsString("token="))
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidTempURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidTempURLOutlet")
+        
+        ION.collection("test").page("page_001").temporaryURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testCachedMediaURLOutlet() {
+        let expectation = self.expectationWithDescription("testCachedMediaURLOutlet")
+        
+        ION.collection("test").page("page_001").cachedMediaURL("media") { result in
+            guard case .Success(let url) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let path = url.path else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(path))
             expectation.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
+    
+    func testInvalidCachedMediaURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidCachedMediaURLOutlet")
+        
+        ION.collection("test").page("page_001").cachedMediaURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidMediaDataOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        
+        ION.collection("test").page("page_001").mediaData("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidMediaURLOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaURLOutlet")
+        
+        ION.collection("test").page("page_001").mediaURL("number") { result in
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testInvalidJSON() {
+        // invalid value for correct key
+        let json1: JSONObject = .JSONDictionary(["name": .JSONNumber(0)])
+        
+        do {
+            let _ = try IONMediaContent(json: json1)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .InvalidJSON(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
+        
+        
+        // no "is_enabled" key
+        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        
+        do {
+            let _ = try IONMediaContent(json: json2)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .InvalidJSON(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
+    }
+    
+    
+    func testJSONObjectExpected() {
+        let json: JSONObject = .JSONString("name")
+        
+        do {
+            let _ = try IONMediaContent(json: json)
+        }
+            
+        catch let e as IONError {
+            XCTAssertNotNil(e)
+            
+            guard case .JSONObjectExpected(let obj) = e else {
+                XCTFail("wrong error thrown")
+                return
+            }
+            
+            XCTAssertNotNil(obj)
+        } catch {
+            XCTFail("wrong error thrown")
+        }
+    }
 }
