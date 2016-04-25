@@ -445,21 +445,16 @@ class connectionContentTests: LoggedInXCTestCase {
             let _ = try IONConnectionContent(json: json1)
         }
             
-        catch let e as IONError
-        {
+        catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
-            {
+            guard case .InvalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
             
             XCTAssertNotNil(obj)
-        }
-            
-        catch
-        {
+        } catch {
             XCTFail("wrong error thrown")
         }
         
@@ -471,21 +466,16 @@ class connectionContentTests: LoggedInXCTestCase {
             let _ = try IONConnectionContent(json: json2)
         }
             
-        catch let e as IONError
-        {
+        catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
-            {
+            guard case .InvalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
             
             XCTAssertNotNil(obj)
-        }
-            
-        catch
-        {
+        } catch {
             XCTFail("wrong error thrown")
         }
     }
@@ -498,21 +488,16 @@ class connectionContentTests: LoggedInXCTestCase {
             let _ = try IONConnectionContent(json: json)
         }
             
-        catch let e as IONError
-        {
+        catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else
-            {
+            guard case .JSONObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
             
             XCTAssertNotNil(obj)
-        }
-            
-        catch
-        {
+        } catch {
             XCTFail("wrong error thrown")
         }
     }
