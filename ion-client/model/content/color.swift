@@ -19,23 +19,23 @@ import DEjson
 
 
 /// Color content
-public class IONColorContent : IONContent {
+public class IONColorContent: IONContent {
     /// Red component (0-255)
-    public var r:Int
+    public var r: Int
     
     /// Green component (0-255)
-    public var g:Int
+    public var g: Int
 
     /// Blue component (0-255)
-    public var b:Int
+    public var b: Int
 
     /// Alpha component (0-255), zero is fully transparent
-    public var alpha:Int
+    public var alpha: Int
     
     /// Initialize color content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized color content object
-    override init(json:JSONObject) throws {
+    override init(json: JSONObject) throws {
         
         // Make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
@@ -108,7 +108,7 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Fetch `NSColor` object from named outlet async
+    /// Fetch `NSColor` object from named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -149,7 +149,7 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Fetch `UIColor` object from named outlet async
+    /// Fetch `UIColor` object from named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)

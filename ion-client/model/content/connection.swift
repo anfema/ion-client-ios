@@ -28,7 +28,7 @@ public class IONConnectionContent: IONContent {
     /// Initialize connection content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized connection content object
-    override init(json:JSONObject) throws {
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -71,7 +71,7 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Fetch selected connection for named outlet async
+    /// Fetch selected connection for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
