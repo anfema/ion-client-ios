@@ -27,6 +27,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageHashValue")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -47,6 +51,10 @@ class pageTests: LoggedInXCTestCase {
         ION.resetMemCache()
         
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -67,6 +75,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation2 = self.expectationWithDescription("testPagePositionSync 2")
         
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation1.fulfill()
@@ -81,6 +93,10 @@ class pageTests: LoggedInXCTestCase {
         }
 
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation2.fulfill()
@@ -101,6 +117,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageFetchAsync")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -120,6 +140,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation2 = self.expectationWithDescription("testPagePositionAync 2")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation1.fulfill()
@@ -132,6 +156,10 @@ class pageTests: LoggedInXCTestCase {
         }
         
         ION.collection("test").page("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation2.fulfill()
@@ -150,6 +178,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageFetchFail")
         
         ION.collection("test").page("unknown_page") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 if case .PageNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "unknown_page")
@@ -170,6 +202,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageParentAsync")
         
         ION.collection("test").page("subpage_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -187,9 +223,18 @@ class pageTests: LoggedInXCTestCase {
 
     func testPageCount() {
         ION.collection("test").pageCount(nil) { count in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(count == 2)
         }
+        
         ION.collection("test").pageCount("page_002") { count in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(count == 1)
         }
     }
@@ -197,6 +242,10 @@ class pageTests: LoggedInXCTestCase {
     func testPageParent() {
         let expectation = self.expectationWithDescription("testPageParent")
         ION.collection("test").page("subpage_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -208,6 +257,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -215,6 +265,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageChild")
         
         ION.collection("test").page("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -242,6 +296,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageInvalidChild")
         
         ION.collection("test").page("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -271,6 +329,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageChildAsync")
         
         ION.collection("test").page("page_002").child("subpage_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -291,6 +353,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testPageChildFail")
 
         ION.collection("test").page("page_002").child("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 if case .InvalidPageHierarchy(let parent, let child) = result.error! {
                     XCTAssert(parent == "page_002")
@@ -333,6 +399,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubPageEnumeration")
         
         ION.collection("test").page("page_002").children { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -350,6 +420,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubPageList")
         
         ION.collection("test").page("page_002").childrenList { list in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(list.count == 1)
             if list.count == 1 {
                 XCTAssert(list[0].identifier == "subpage_001")
@@ -364,6 +438,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletExists")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -381,6 +459,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletExistsAsync")
         
         ION.collection("test").page("page_001").outletExists("text") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let exists) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -398,6 +480,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletDoesNotExistAsync")
         
         ION.collection("test").page("page_001").outletExists("Unknown_Outlet") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let exists) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -418,6 +504,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCancelableCollection")
         
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -429,6 +519,10 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(collection.pageCache.count == 0)
             
             collection.page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -452,6 +546,10 @@ class pageTests: LoggedInXCTestCase {
                 
                 // on completion will now be called after cancelling
                 p.onCompletion() { page, completed in
+                    
+                    // Test if the correct response queue is used
+                    XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                    
                     XCTAssert(completed == false)
                     // cancel/finish has happened here already so only the original page should be in the cache
                     dispatch_async(p.workQueue) {
@@ -473,6 +571,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testWaitUntilReady")
 
         ION.collection("test").page("page_001").waitUntilReady{ page in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssertNotNil(page)
             expectation.fulfill()
         }
@@ -485,6 +587,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletSync")
         
         ION.collection("test").page("page_001"){ result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -505,6 +611,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testNumberOfContentsForOutletAsync")
         
         ION.collection("test").page("page_001").numberOfContentsForOutlet("text") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let count) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -525,6 +635,10 @@ class pageTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testFailOnInvalidPageIdentifier")
         
         ION.collection("test").page("invalidpageidentifier").outlet("text") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()

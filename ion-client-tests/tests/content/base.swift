@@ -27,6 +27,10 @@ class contentBaseTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletFetchSync")
         
         ION.collection("test").page("page_001"){ result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -40,6 +44,7 @@ class contentBaseTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -47,6 +52,10 @@ class contentBaseTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletFetchAsync")
         
         ION.collection("test").page("page_001").outlet("text") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -54,6 +63,7 @@ class contentBaseTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -61,6 +71,10 @@ class contentBaseTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletFetchFail")
         
         ION.collection("test").page("page_001").outlet("UnknownOutlet") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 if case .OutletNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "UnknownOutlet")
@@ -74,6 +88,7 @@ class contentBaseTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 
@@ -81,6 +96,10 @@ class contentBaseTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletArrayCount")
         
         ION.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let count) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -90,6 +109,7 @@ class contentBaseTests: LoggedInXCTestCase {
             XCTAssertEqual(count, 32)
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
     
@@ -97,6 +117,10 @@ class contentBaseTests: LoggedInXCTestCase {
         for i in 0..<32 {
             let expectation = self.expectationWithDescription("testOutletArrayValues")
             ION.collection("test").page("page_002").color("colorarray", position: i) { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let color) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -115,6 +139,7 @@ class contentBaseTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
+        
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
 

@@ -24,6 +24,10 @@ class resultTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSuccess")
         
         ION.collection("test").page("page_001").outlet("text") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -48,6 +52,10 @@ class resultTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testFailure")
         
         ION.collection("test").page("page_001").outlet("UnknownOutlet") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 if case .OutletNotFound(let name) = result.error! {
                     XCTAssertTrue(result.debugDescription.hasPrefix("FAILURE: "))

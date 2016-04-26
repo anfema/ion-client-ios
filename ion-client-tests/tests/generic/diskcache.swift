@@ -27,6 +27,10 @@ class diskcacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionDiskCache")
         ION.resetMemCache()
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -36,6 +40,10 @@ class diskcacheTests: LoggedInXCTestCase {
             XCTAssertNotNil(collection.lastUpdate)
             ION.resetMemCache()
             ION.collection("test") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -54,6 +62,10 @@ class diskcacheTests: LoggedInXCTestCase {
     func testCollectionDiskCacheClean() {
         let expectation = self.expectationWithDescription("testCollectionDiskCacheClean")
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -64,6 +76,10 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.resetMemCache()
             ION.resetDiskCache()
             ION.collection("test") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -83,6 +99,10 @@ class diskcacheTests: LoggedInXCTestCase {
     func testPageDiskCache() {
         let expectation = self.expectationWithDescription("testPageDiskCache")
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -92,6 +112,10 @@ class diskcacheTests: LoggedInXCTestCase {
             XCTAssertNotNil(page.lastUpdate)
             ION.resetMemCache()
             ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -111,6 +135,10 @@ class diskcacheTests: LoggedInXCTestCase {
     func testPageDiskCacheClean() {
         let expectation = self.expectationWithDescription("testPageDiskCacheClean")
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -121,6 +149,10 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.resetMemCache()
             ION.resetDiskCache()
             ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -140,6 +172,10 @@ class diskcacheTests: LoggedInXCTestCase {
     func testPageDiskCacheLocaleClean() {
         let expectation = self.expectationWithDescription("testPageDiskCacheLocaleClean")
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -150,6 +186,10 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.resetMemCache()
             ION.resetDiskCache(locale: page.locale)
             ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -171,6 +211,10 @@ class diskcacheTests: LoggedInXCTestCase {
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -206,9 +250,17 @@ class diskcacheTests: LoggedInXCTestCase {
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001").image("image") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssertNotNil(result)
             
             ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -244,6 +296,10 @@ class diskcacheTests: LoggedInXCTestCase {
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()

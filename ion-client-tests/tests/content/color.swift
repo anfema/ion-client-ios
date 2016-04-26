@@ -27,6 +27,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testColorOutletFetchSync")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -48,6 +52,7 @@ class colorContentTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
     
@@ -56,6 +61,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testColorOutletFetchSyncFail")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -77,6 +86,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsync")
         
         ION.collection("test").page("page_001").color("color") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let value) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -103,6 +116,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testColorOutletFetchAsyncFail")
         
         ION.collection("test").page("page_001").color("missing_color") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success = result else {
                 if case .OutletNotFound = result.error! {
                     // ok
@@ -239,6 +256,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletIncompatible")
         
         ION.collection("test").page("page_001").color("number") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -262,6 +283,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOutletIncompatibleSync")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -291,6 +316,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testInvalidOutlet")
         
         ION.collection("test").page("page_001").color("wrong") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -314,6 +343,10 @@ class colorContentTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testInvalidOutletSync")
         
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()

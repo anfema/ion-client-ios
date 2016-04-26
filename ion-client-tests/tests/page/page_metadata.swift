@@ -27,6 +27,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         ION.resetMemCache()
         
         ION.collection("test").metadata("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -39,6 +43,7 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertNotNil(metadata["text"])
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -47,6 +52,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         ION.resetMemCache()
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -60,6 +69,7 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssert(metadata["title"] == "Donec ullamcorper")
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -68,6 +78,10 @@ class pageMetadataTests: LoggedInXCTestCase {
        
         var count = 0
         ION.collection("test").enumerateMetadata(nil) { metadata in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssertNil(metadata.parent)
             count += 1
             if count == 2 {
@@ -82,6 +96,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataEnumerateAsync2")
         
         ION.collection("test").enumerateMetadata("page_002") { metadata in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(metadata.parent == "page_002")
             expectation.fulfill()
         }
@@ -92,6 +110,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataListAsync")
         
         ION.collection("test").metadataList(nil) { list in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             if list.count == 2 {
                 XCTAssert(list[0].position == 0)
                 XCTAssert(list[0].identifier == "page_001")
@@ -109,6 +131,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataListAsync2")
         
         ION.collection("test").metadataList("page_002") { list in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(list.count == 1)
             expectation.fulfill()
         }
@@ -119,6 +145,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -144,6 +174,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testMetaChildren")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -164,6 +198,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testOriginalImage")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -181,6 +219,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubscriptSuccess1")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -198,6 +240,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubscriptSuccess2")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -221,6 +267,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubscriptFail1")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -237,6 +287,10 @@ class pageMetadataTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testSubscriptFail2")
         
         ION.collection("test").metadata("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()

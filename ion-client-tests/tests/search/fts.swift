@@ -27,6 +27,10 @@ class ftsTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionSearch")
         
         ION.collection("test").getSearchHandle { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -45,6 +49,10 @@ class ftsTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionSearchExclusion")
         
         ION.collection("test").getSearchHandle { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -73,6 +81,10 @@ class ftsTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionStatement")
         
         ION.collection("test").getSearchHandle { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -91,6 +103,10 @@ class ftsTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionPhrase")
         
         ION.collection("test").getSearchHandle { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -116,6 +132,10 @@ class ftsTests: LoggedInXCTestCase {
         XCTAssertTrue(ION.config.isFTSEnabled("test"))
         
         ION.downloadFTSDB("test") {
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             // TODO: Test if download was successful
             expectation.fulfill()
         }
@@ -142,6 +162,10 @@ class ftsTests: LoggedInXCTestCase {
         XCTAssertFalse(ION.config.isFTSEnabled("test"))
         
         ION.collection("test").getSearchHandle { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
