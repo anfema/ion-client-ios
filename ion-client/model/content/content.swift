@@ -12,27 +12,29 @@
 import Foundation
 import DEjson
 
+
 /// IONContent base class, carries common values
 public class IONContent {
     
-    /// variation name
-    public var variation:String
+    /// Variation name
+    public var variation: String
     
-    /// outlet name
-    public var outlet:String
+    /// Outlet name
+    public var outlet: String
     
-    /// searchable?
+    /// If the outlet is searchable or not
 	public var isSearchable = false
     
     /// Array position
     public var position: Int
-   
-    /// Initialize content content object from JSON
+    
+    
+    /// Initialize content object from JSON
     ///
     /// This is the content base class, it should never be instantiated by itself, only through it's subclasses!
     ///
-    /// - parameter json: `JSONObject` that contains serialized content content object
-	public init(json:JSONObject) throws {
+    /// - parameter json: `JSONObject` that contains the serialized content object
+	public init(json: JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
 			throw IONError.JSONObjectExpected(json)
 		}
@@ -51,26 +53,28 @@ public class IONContent {
                 self.isSearchable = searchable
             }
         }
-
-        if let positionObj = dict["position"] {
-            if case .JSONNumber(let pos) = positionObj {
-                self.position = Int(pos)
-            } else {
-                self.position = 0
-            }
+        
+        if let p = dict["position"], case .JSONNumber(let pos) = p {
+            self.position = Int(pos)
         } else {
             self.position = 0
         }
 	}
+    
     
     /// Initialize a content object from JSON
     ///
     /// This essentially removes the top JSON object casing and determines which object
     /// to instantiate from the name of the key of that JSON object
     ///
-    /// - parameter json: the JSON object to parse
-    /// - Throws: IONError.Code.JSONObjectExpected, IONError.Code.InvalidJSON, IONError.Code.UnknownContentType
-    public class func factory(json:JSONObject) throws -> IONContent {
+    /// - parameter json: The JSON object to parse
+    /// - returns: Subclass of `IONContent` depending on the type provided in the JSON.
+    /// - throws: IONError.Code.JSONObjectExpected: The provided JSONObject is no JSONDictionary.
+    ///           IONError.Code.InvalidJSON: Missing keys in the provided JSONDictionary or wrong
+    ///                                      value types.
+    ///           IONError.Code.UnknownContentType: The provied JSONObject can not be initialized
+    ///                                             with any of the registered content types.
+    public class func factory(json: JSONObject) throws -> IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -89,6 +93,7 @@ public class IONContent {
                     return try lambda(json)
                 }
             }
+            
             throw IONError.UnknownContentType(contentType)
         }
     }

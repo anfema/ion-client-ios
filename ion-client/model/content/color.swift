@@ -20,6 +20,7 @@ import DEjson
 
 /// Color content
 public class IONColorContent: IONContent {
+    
     /// Red component (0-255)
     public var r: Int
     
@@ -31,6 +32,7 @@ public class IONColorContent: IONContent {
 
     /// Alpha component (0-255), zero is fully transparent
     public var alpha: Int
+    
     
     /// Initialize color content object from JSON
     ///
@@ -60,6 +62,7 @@ public class IONColorContent: IONContent {
         try super.init(json: json)
     }
     
+    
     #if os(iOS)
     /// Create an `UIColor` instance from the color object
     /// 
@@ -68,6 +71,7 @@ public class IONColorContent: IONContent {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
     #endif
+    
     
     #if os(OSX)
     /// Create an `NSColor` instance from the color object
@@ -108,6 +112,7 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
+    
     /// Fetch `NSColor` object from named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -123,6 +128,7 @@ extension IONPage {
         return self
     }
     #endif
+    
     
     #if os(iOS)
     /// Fetch `UIColor` object from named outlet
@@ -148,6 +154,7 @@ extension IONPage {
     
         return .Failure(.OutletIncompatible)
     }
+    
     
     /// Fetch `UIColor` object from named outlet asynchronously
     ///

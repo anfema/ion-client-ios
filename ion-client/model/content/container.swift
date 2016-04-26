@@ -49,6 +49,7 @@ public class IONContainerContent: IONContent {
         try super.init(json: json)
     }
     
+    
     /// Container content has a subscript for it's children
     subscript(index: Int) -> IONContent? {
         guard index > -1 && index < self.children.count else {
@@ -58,6 +59,7 @@ public class IONContainerContent: IONContent {
         return self.children[index]
     }
 }
+
 
 /// Container extension to IONPage
 extension IONPage {
@@ -81,6 +83,7 @@ extension IONPage {
         
         return .Failure(.OutletIncompatible)
     }
+    
     
     /// Fetch `IONContent`-Array from named outlet asynchronously
     ///

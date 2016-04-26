@@ -71,6 +71,7 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
+    
     /// Fetch selected connection for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
