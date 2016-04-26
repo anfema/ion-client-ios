@@ -12,7 +12,7 @@
 import Foundation
 import DEjson
 
-/// Collection class, contains pages, has functionality to async fetch data
+/// Collection class, contains pages, has functionality to asynchronously fetch data
 public class IONCollection {
     
     /// identifier
@@ -172,7 +172,7 @@ public class IONCollection {
     
     /// Fetch a page from this collection
     ///
-    /// As there is no callback, this returns a page that resolves async once the page becomes available
+    /// As there is no callback, this returns a page that resolves asynchronously once the page becomes available
     /// all actions chained to the page will be queued until the data is available
     ///
     /// - parameter identifier: page identifier
@@ -214,7 +214,7 @@ public class IONCollection {
     
     /// Fetch a page from this collection
     ///
-    /// As there is no callback, this returns a page that resolves async once the page becomes available
+    /// As there is no callback, this returns a page that resolves asynchronously once the page becomes available
     /// all actions chained to the page will be queued until the data is available
     ///
     /// - parameter index: position of the page in the collection

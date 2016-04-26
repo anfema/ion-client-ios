@@ -76,7 +76,7 @@ public class IONPage {
     /// - parameter useCache: set to false to force a page refresh
     /// - parameter callback: the block to call when initialization finished
     init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback:(Result<IONPage, IONError> -> Void)?) {
-        // Full async initializer, self will be populated async
+        // Full asynchronous initializer, self will be populated asynchronously
         self.identifier = identifier
         if let layout = layout {
             self.layout = layout
@@ -224,7 +224,7 @@ public class IONPage {
     /// - returns: content object if page was loaded and outlet exists
     public func outlet(name: String, position: Int = 0) -> Result<IONContent, IONError> {
         if !self.isReady || self.hasFailed {
-            // cannot return outlet synchronously from a async loading page
+            // cannot return outlet synchronously from a page loading asynchronously
             return .Failure(.DidFail)
         } else {
             // search content
@@ -276,7 +276,7 @@ public class IONPage {
     /// - returns: true if outlet exists else false, nil if page not loaded
     public func outletExists(name: String, position: Int = 0) -> Result<Bool, IONError> {
         if !self.isReady || self.hasFailed {
-            // cannot return outlet synchronously from a async loading page
+            // cannot return outlet synchronously from a page loading asynchronously
             return .Failure(.DidFail)
         } else {
             // search content
@@ -319,7 +319,7 @@ public class IONPage {
     /// - returns: count if page was ready, nil if page is not loaded
     public func numberOfContentsForOutlet(name: String) -> Result<Int, IONError> {
         if !self.isReady || self.hasFailed {
-            // cannot return outlet synchronously from a async loading page
+            // cannot return outlet synchronously from a page loading asynchronously
             return .Failure(.DidFail)
         } else {
             // search content

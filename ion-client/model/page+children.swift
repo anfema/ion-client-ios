@@ -37,7 +37,7 @@ extension IONPage {
     /// fetch page children
     ///
     /// - parameter identifier: identifier of child page
-    /// - returns: page object that resolves async or nil if page not child of self
+    /// - returns: page object that resolves asynchronously or nil if the page is no child of self
     public func child(identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
         
