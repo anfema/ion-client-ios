@@ -70,11 +70,11 @@ public class IONContent {
     ///
     /// - parameter json: The JSON object to parse
     /// - returns: Subclass of `IONContent` depending on the type provided in the JSON.
-    /// - throws: IONError.Code.JSONObjectExpected: The provided JSONObject is no JSONDictionary.
-    ///           IONError.Code.InvalidJSON: Missing keys in the provided JSONDictionary or wrong
-    ///                                      value types.
-    ///           IONError.Code.UnknownContentType: The provied JSONObject can not be initialized
-    ///                                             with any of the registered content types.
+    /// - throws: IONError.JSONObjectExpected: The provided JSONObject is no JSONDictionary.
+    ///           IONError.InvalidJSON: Missing keys in the provided JSONDictionary or wrong
+    ///                                 value types.
+    ///           IONError.UnknownContentType: The provied JSONObject can not be initialized
+    ///                                        with any of the registered content types.
     public class func factory(json: JSONObject) throws -> IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)

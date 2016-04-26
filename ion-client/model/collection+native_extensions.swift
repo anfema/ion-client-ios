@@ -18,10 +18,12 @@ extension IONCollection: CustomStringConvertible {
     }
 }
 
+
 /// Two collections are the same if the identifier matches
 public func ==(lhs: IONCollection, rhs: IONCollection) -> Bool {
     return (lhs.identifier == rhs.identifier)
 }
+
 
 extension IONCollection: Hashable {
     /// As we use the identifier for equality checks we just reuse it's hash-value for the Hashable protocol

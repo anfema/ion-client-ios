@@ -33,13 +33,15 @@ extension IONCollection {
         
         set (newValue) {
             let prefs = NSUserDefaults.standardUserDefaults()
-            var dict: [String:NSDate] = (prefs.objectForKey(self.lastUpdatedIdentifier) as? [String: NSDate]) ?? [:]
+            var dict: [String: NSDate] = (prefs.objectForKey(self.lastUpdatedIdentifier) as? [String: NSDate]) ?? [:]
             
             dict[self.identifier] = newValue
+            
             prefs.setObject(dict, forKey: self.lastUpdatedIdentifier)
             prefs.synchronize()
         }
     }
+    
     
     public func download(callback: (Bool -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
@@ -48,10 +50,10 @@ extension IONCollection {
                 return
             }
 
-            var q = [String:String]()
+            var q = [String: String]()
             var url: String = archiveURL
             
-            // workaround for bug in Alamofire which does not append queryparameters to an URL that already has some
+            // Workaround for bug in Alamofire which does not append queryparameters to an URL that already has some
             if let dt = self.lastCompleteUpdate {
                 if archiveURL.containsString("?") {
                     url += "&lastUpdated=\(dt.isoDateString)"
@@ -60,33 +62,34 @@ extension IONCollection {
                 }
             }
             
-            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.Ignore),
-                checksumMethod:"null", checksum: "") { result in
-                    guard case .Success(let filename) = result else {
-                        responseQueueCallback(callback, parameter: false)
-                        return
-                    }
-                    
-                    if filename.isEmpty {
-                        responseQueueCallback(callback, parameter: true)
-                        return
-                    }
+            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.Ignore), checksumMethod:"null", checksum: "") { result in
+                guard case .Success(let filename) = result else {
+                    responseQueueCallback(callback, parameter: false)
+                    return
+                }
+                
+                if filename.isEmpty {
+                    responseQueueCallback(callback, parameter: true)
+                    return
+                }
 
-                    dispatch_async(self.workQueue) {
-                        let result = self.unpackToCache(filename)
-                        dispatch_async(ION.config.responseQueue){
-                            if result == true {
-                                self.lastCompleteUpdate = NSDate()
-                                ION.resetMemCache()
-                                for (_, collection) in ION.collectionCache where collection.identifier == self.identifier {
-                                    ION.config.lastOnlineUpdate[collection.identifier] = self.lastCompleteUpdate
-                                }
+                dispatch_async(self.workQueue) {
+                    let result = self.unpackToCache(filename)
+                    dispatch_async(ION.config.responseQueue){
+                        if result == true {
+                            self.lastCompleteUpdate = NSDate()
+                            ION.resetMemCache()
+                            
+                            for (_, collection) in ION.collectionCache where collection.identifier == self.identifier {
+                                ION.config.lastOnlineUpdate[collection.identifier] = self.lastCompleteUpdate
                             }
-                            callback(result)
                         }
+                        callback(result)
                     }
+                }
             }
         }
+        
         return self
     }
     
@@ -100,18 +103,23 @@ extension IONCollection {
         
         do {
             let tar = try TarFile(fileName: filename)
+            
             while let file = try tar.extractFile() {
                 if file.filename == "index.json" {
                     guard let jsonString = NSString(data: file.data, encoding: NSUTF8StringEncoding) else {
                         return false
                     }
+                    
                     let indexDB = JSONDecoder(jsonString as String).jsonObject
+                    
                     guard case .JSONArray(let i) = indexDB else {
-                            return false
+                        return false
                     }
+                    
                     index = i
                 } else {
                     var found: Int? = nil
+                    
                     for (idx, item) in index.enumerate() {
                         guard case .JSONDictionary(let dict) = item else {
                             return false
@@ -124,6 +132,7 @@ extension IONCollection {
                         }
                         
                         var checksum: String? = nil
+                        
                         if let dictChecksum = dict["checksum"] {
                             if case .JSONString(let ck) = dictChecksum {
                                 checksum = ck
@@ -148,6 +157,7 @@ extension IONCollection {
         } catch {
             return false
         }
+        
         return true
     }
 }
