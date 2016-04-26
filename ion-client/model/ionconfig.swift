@@ -15,6 +15,10 @@ import DEjson
 ///
 /// access with `ION.config`
 public struct IONConfig {
+    
+    /// The scheme used to create the URLs provided by IONConnectionContent outlets
+    public var connectionScheme = "ion"
+    
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
     public var serverURL:NSURL?
     
