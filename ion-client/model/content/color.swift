@@ -20,29 +20,29 @@ import DEjson
 
 /// Color content
 public class IONColorContent : IONContent {
-    /// red component (0-255)
+    /// Red component (0-255)
     public var r:Int
     
-    /// green component (0-255)
+    /// Green component (0-255)
     public var g:Int
 
-    /// blue component (0-255)
+    /// Blue component (0-255)
     public var b:Int
 
-    /// alpha component (0-255), zero is fully transparent
+    /// Alpha component (0-255), zero is fully transparent
     public var alpha:Int
     
     /// Initialize color content object from JSON
     ///
-    /// - parameter json: `JSONObject` that contains serialized color content object
+    /// - parameter json: `JSONObject` that contains the serialized color content object
     override init(json:JSONObject) throws {
         
-        // make sure we're dealing with a dict
+        // Make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
         
-        // make sure all data is there
+        // Make sure all data is there
         guard let rawR = dict["r"], rawG = dict["g"], rawB = dict["b"], rawA = dict["a"],
             case .JSONNumber(let r) = rawR,
             case .JSONNumber(let g) = rawG,
@@ -51,7 +51,7 @@ public class IONColorContent : IONContent {
                 throw IONError.InvalidJSON(json)
         }
         
-        // init from deserialized data
+        // Init from deserialized data
         self.r = Int(r)
         self.g = Int(g)
         self.b = Int(b)
@@ -86,9 +86,10 @@ extension IONPage {
     #if os(OSX)
     /// Fetch `NSColor` object from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - returns: `NSColor` in .Success case and `IONError` in .Failure case.
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - returns: Result.Success containing an `NSColor` if the outlet is a color outlet
+    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
     public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, IONError> {
         let result = self.outlet(name, position: position)
     
@@ -109,10 +110,11 @@ extension IONPage {
     
     /// Fetch `NSColor` object from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - parameter callback: Block to call when the color object becomes available.
-    ///                       Returns `NSColor` in .Success case and `IONError` in .Failure case.
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the color outlet becomes available.
+    ///                       Provides Result.Success containing an `NSColor` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     public func color(name: String, position: Int = 0, callback: (Result<NSColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
@@ -125,9 +127,10 @@ extension IONPage {
     #if os(iOS)
     /// Fetch `UIColor` object from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - returns: `UIColor` in .Success case and `IONError` in .Failure case.
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - returns: Result.Success containing a `UIColor` if the outlet is a color outlet
+    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
     public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
         
@@ -148,10 +151,11 @@ extension IONPage {
     
     /// Fetch `UIColor` object from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - parameter callback: Block to call when the color object becomes available.
-    ///                       Returns `UIColor` in .Success case and `IONError` in .Failure case.
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the color outlet becomes available.
+    ///                       Provides Result.Success containing a `UIColor` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
