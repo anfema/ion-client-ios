@@ -216,8 +216,8 @@ extension IONPage {
     
     /// Fetch URL from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: `NSURL` object if the outlet was a media outlet and the page was already cached, else nil
     public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
@@ -247,8 +247,8 @@ extension IONPage {
 
     /// Fetch URL from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
@@ -262,8 +262,8 @@ extension IONPage {
 
     /// Fetch locally cached URL from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
@@ -292,8 +292,8 @@ extension IONPage {
 
     /// Fetch temporary valid URL from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the media object becomes available, will not be called if the outlet
     ///                       is not a media outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
@@ -330,7 +330,7 @@ extension IONPage {
    
     /// Fetch data for media file async
     ///
-    /// - parameter name: the name of the outlet
+    /// - parameter name: The name of the outlet
     /// - parameter callback: block to call when the data becomes available, will not be called if the outlet
     ///                       is not a file outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error

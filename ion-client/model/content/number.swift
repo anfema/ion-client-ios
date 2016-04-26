@@ -41,8 +41,8 @@ extension IONPage {
     
     /// Return value for named number outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: value if the outlet was a number outlet and the page was already cached, else nil
     public func number(name: String, position: Int = 0) -> Result<Double, IONError> {
         let result = self.outlet(name, position: position)
@@ -58,8 +58,8 @@ extension IONPage {
     
     /// Return value for named number outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the number becomes available, will not be called if the outlet
     ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error

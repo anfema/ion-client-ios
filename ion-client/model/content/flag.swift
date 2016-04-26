@@ -12,15 +12,18 @@
 import Foundation
 import DEjson
 
+
 /// Flag content, can be enabled or not
 public class IONFlagContent: IONContent {
-    /// status of the flag
-    public var enabled:Bool
+    
+    /// Status of the flag
+    public var enabled: Bool
+    
     
     /// Initialize flag content object from JSON
     ///
-    /// - parameter json: `JSONObject` that contains serialized flag content object
-    override init(json:JSONObject) throws {
+    /// - parameter json: `JSONObject` that contains the serialized flag content object
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -36,16 +39,19 @@ public class IONFlagContent: IONContent {
     }
 }
 
+
 /// Flag extension to IONPage
 extension IONPage {
 
     /// Check if flag is set for named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - returns: true or false if the outlet was a flag outlet and the page was already cached, else nil
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - returns: Result.Success containing an `Bool` if the outlet is a flag outlet
+    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
     public func isSet(name: String, position: Int = 0) -> Result<Bool, IONError> {
         let result = self.outlet(name, position: position)
+        
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -57,17 +63,19 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Check if flag is set for named outlet async
+    
+    /// Check if flag is set for named outlet asynchronously
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the flag becomes available, will not be called if the outlet
-    ///                       is not a flag outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the flag outlet becomes available.
+    ///                       Provides Result.Success containing an `Bool` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     public func isSet(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.isSet(name, position: position))
         }
         
-        return self    }
+        return self
+    }
 }

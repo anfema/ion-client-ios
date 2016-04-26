@@ -43,8 +43,8 @@ extension IONPage {
     
     /// Fetch selected option for named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: string if the outlet was an option outlet and the page was already cached, else nil
     public func selectedOption(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
@@ -61,8 +61,8 @@ extension IONPage {
     
     /// Fetch selected option for named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
     ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error

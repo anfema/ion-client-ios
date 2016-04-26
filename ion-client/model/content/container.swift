@@ -66,7 +66,7 @@ extension IONPage {
     
     /// Fetch `IONContent`-Array from named outlet
     ///
-    /// - parameter name: Tthe name of the outlet
+    /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - returns: Result.Success containing an array of `IONContent` objects if the outlet is a container outlet
     ///            and the page was already cached, else an Result.Failure containing an `IONError`.

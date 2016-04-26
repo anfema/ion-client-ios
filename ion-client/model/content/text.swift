@@ -130,8 +130,8 @@ extension IONPage {
     
     /// Fetch plaintext string from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: plaintext string if the outlet was a text outlet and the page was already cached, else nil
     public func text(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
@@ -150,8 +150,8 @@ extension IONPage {
     
     /// Fetch plaintext string from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
@@ -165,8 +165,8 @@ extension IONPage {
     
     /// Fetch html string from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: html string if the outlet was a text outlet and the page was already cached, else nil
     public func html(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
@@ -187,8 +187,8 @@ extension IONPage {
     
     /// Fetch html string from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error
@@ -202,8 +202,8 @@ extension IONPage {
 
     /// Fetch attributed string from named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - returns: attribiuted string if the outlet was a text outlet and the page was already cached, else nil
     public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
@@ -224,8 +224,8 @@ extension IONPage {
     
     /// Fetch attributed string from named outlet async
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to call when the text object becomes available, will not be called if the outlet
     ///                       is not a text outlet or non-existant or fetching the outlet was canceled because of a
     ///                       communication error

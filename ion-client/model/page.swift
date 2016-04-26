@@ -191,7 +191,7 @@ public class IONPage {
     /// Fetch an outlet by name (probably deferred by page loading)
     ///
     /// - parameter name: outlet name to fetch
-    /// - parameter position: (optional) position in the array
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
     /// - returns: self to be able to chain another call
@@ -220,7 +220,7 @@ public class IONPage {
     /// Fetch an outlet by name (from loaded page)
     ///
     /// - parameter name: outlet name to fetch
-    /// - parameter position: (optional) position in the array
+    /// - parameter position: Position in the array (optional)
     /// - returns: content object if page was loaded and outlet exists
     public func outlet(name: String, position: Int = 0) -> Result<IONContent, IONError> {
         if !self.isReady || self.hasFailed {
@@ -243,7 +243,7 @@ public class IONPage {
     /// Check if an Outlet exists
     ///
     /// - parameter name: outlet to check
-    /// - parameter position: (optional) position in the array
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: callback to call
     /// - returns: self for chaining
     public func outletExists(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
@@ -272,7 +272,7 @@ public class IONPage {
     /// Check if an Outlet exists
     ///
     /// - parameter name: outlet to check
-    /// - parameter position: (optional) position in the array
+    /// - parameter position: Position in the array (optional)
     /// - returns: true if outlet exists else false, nil if page not loaded
     public func outletExists(name: String, position: Int = 0) -> Result<Bool, IONError> {
         if !self.isReady || self.hasFailed {

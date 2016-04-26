@@ -45,7 +45,10 @@ public class IONColorContent: IONContent {
         }
         
         // Make sure all data is there
-        guard let rawR = dict["r"], rawG = dict["g"], rawB = dict["b"], rawA = dict["a"],
+        guard let rawR = dict["r"],
+            let rawG = dict["g"],
+            let rawB = dict["b"],
+            let rawA = dict["a"],
             case .JSONNumber(let r) = rawR,
             case .JSONNumber(let g) = rawG,
             case .JSONNumber(let b) = rawB,

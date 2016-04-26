@@ -39,10 +39,11 @@ public class IONContent {
 			throw IONError.JSONObjectExpected(json)
 		}
 		
-		guard let rawVariation = dict["variation"], rawOutlet = dict["outlet"],
-              case .JSONString(let variation) = rawVariation,
-              case .JSONString(let outlet)    = rawOutlet else {
-			throw IONError.InvalidJSON(json)
+		guard let rawVariation = dict["variation"],
+            let rawOutlet      = dict["outlet"],
+            case .JSONString(let variation) = rawVariation,
+            case .JSONString(let outlet)    = rawOutlet else {
+                throw IONError.InvalidJSON(json)
 		}
 		
 		self.variation = variation
