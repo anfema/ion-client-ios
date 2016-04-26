@@ -15,21 +15,22 @@ public extension IONCollection {
     
     /// Get a fulltext search handle
     ///
-    /// - parameter callback: callback to be called if the search handle is ready
+    /// - parameter callback: Callback to be called when the search handle is ready
     public func getSearchHandle(callback: (Result<IONSearchHandle, IONError> -> Void)) {
         guard let searchIndex = ION.searchIndex(self.identifier) where ION.config.isFTSEnabled(self.identifier) else {
-            callback(.Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
         
+        // Anonymous function for calling callbacks
         func performCallback() {
             dispatch_async(self.workQueue) {
                 guard let handle = IONSearchHandle(collection: self) else {
-                    callback(.Failure(.DidFail))
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
                 }
                 
-                callback(.Success(handle))
+                responseQueueCallback(callback, parameter: .Success(handle))
             }
         }
         

@@ -33,10 +33,12 @@ internal extension ION {
                     defer {
                         dispatch_semaphore_signal(sema)
                     }
+                    
                     guard let searchIndex = ION.searchIndex(collection),
                           case .Success(let filename) = result else {
                         return
                     }
+                    
                     if NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
                         do {
                             try NSFileManager.defaultManager().removeItemAtPath(searchIndex)
@@ -46,6 +48,7 @@ internal extension ION {
                             }
                         }
                     }
+                    
                     do {
                         try NSFileManager.defaultManager().moveItemAtPath(filename, toPath: searchIndex)
                     } catch {
@@ -61,7 +64,9 @@ internal extension ION {
                 NSNotificationCenter.defaultCenter().postNotificationName(IONFTSDBDidUpdateNotification, object: collection)
                 
                 if let callback = callback {
-                    callback()
+                    dispatch_async(ION.config.responseQueue) {
+                        callback()
+                    }
                 }
             }
         }
