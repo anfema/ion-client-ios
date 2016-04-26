@@ -64,7 +64,7 @@ public class IONContainerContent: IONContent {
 /// Container extension to IONPage
 extension IONPage {
     
-    /// Fetch `IONContent`-Array from named outlet
+    /// Fetch `IONContent`-Array for named outlet
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -85,7 +85,7 @@ extension IONPage {
     }
     
     
-    /// Fetch `IONContent`-Array from named outlet asynchronously
+    /// Fetch `IONContent`-Array for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)

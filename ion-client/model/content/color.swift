@@ -91,7 +91,7 @@ public class IONColorContent: IONContent {
 extension IONPage {
     
     #if os(OSX)
-    /// Fetch `NSColor` object from named outlet
+    /// Fetch `NSColor` object for named outlet
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -116,7 +116,7 @@ extension IONPage {
     }
     
     
-    /// Fetch `NSColor` object from named outlet asynchronously
+    /// Fetch `NSColor` object for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -134,7 +134,7 @@ extension IONPage {
     
     
     #if os(iOS)
-    /// Fetch `UIColor` object from named outlet
+    /// Fetch `UIColor` object for named outlet
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -159,7 +159,7 @@ extension IONPage {
     }
     
     
-    /// Fetch `UIColor` object from named outlet asynchronously
+    /// Fetch `UIColor` object for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)

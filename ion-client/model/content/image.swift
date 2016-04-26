@@ -196,7 +196,7 @@ public class IONImageContent: IONContent, CanLoadImage {
 extension IONPage {
     
     #if os(iOS)
-    /// Allocate `UIImage` for named outlet async
+    /// Allocate `UIImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -244,7 +244,7 @@ extension IONPage {
 
     
     #if os(OSX)
-    /// Allocate `NSImage` for named outlet async
+    /// Allocate `NSImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter callback: Block to call when the original images was loaded.
@@ -266,7 +266,7 @@ extension IONPage {
     }
     
     
-    /// Allocate `NSImage` for named outlet async
+    /// Allocate `NSImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter callback: Block to call when the original images was loaded.

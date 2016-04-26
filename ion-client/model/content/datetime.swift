@@ -45,7 +45,7 @@ public class IONDateTimeContent: IONContent {
 /// Date extension to IONPage
 extension IONPage {
     
-    /// Fetch `NSDate` object from named outlet
+    /// Fetch `NSDate` object for named outlet
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
@@ -70,7 +70,7 @@ extension IONPage {
     }
     
     
-    /// Fetch `NSDate` object from named outlet async
+    /// Fetch `NSDate` object for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)

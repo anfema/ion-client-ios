@@ -12,15 +12,18 @@
 import Foundation
 import DEjson
 
+
 /// Number content, has a float value
 public class IONNumberContent: IONContent {
-    /// value
-    public var value:Double = 0.0
+    
+    /// Value
+    public var value: Double = 0.0
+    
     
     /// Initialize number content object from JSON
     ///
-    /// - parameter json: `JSONObject` that contains serialized number content object
-    override init(json:JSONObject) throws {
+    /// - parameter json: `JSONObject` that contains the serialized number content object
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -36,6 +39,7 @@ public class IONNumberContent: IONContent {
     }
 }
 
+
 /// Number extension to IONPage
 extension IONPage {
     
@@ -43,9 +47,11 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - returns: value if the outlet was a number outlet and the page was already cached, else nil
+    /// - returns: Result.Success containing an `Double` if the outlet is a number outlet
+    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
     public func number(name: String, position: Int = 0) -> Result<Double, IONError> {
         let result = self.outlet(name, position: position)
+        
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -53,16 +59,18 @@ extension IONPage {
         if case let content as IONNumberContent = content {
             return .Success(content.value)
         }
+        
         return .Failure(.OutletIncompatible)
     }
     
-    /// Return value for named number outlet async
+    
+    /// Return value for named number outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - parameter callback: block to call when the number becomes available, will not be called if the outlet
-    ///                       is not a number outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter callback: Block to call when the number outlet becomes available.
+    ///                       Provides Result.Success containing an `Double` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     public func number(name: String, position: Int = 0, callback: (Result<Double, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.number(name, position: position))

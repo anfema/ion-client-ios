@@ -12,17 +12,18 @@
 import Foundation
 import DEjson
 
+
 /// Option content, just carries the selected value not the options
 public class IONOptionContent: IONContent {
     
-    /// value for the selected option
-    public var value:String
+    /// Value for the selected option
+    public var value: String
+    
     
     /// Initialize option content object from JSON
     ///
-    /// - parameter json: `JSONObject` that contains serialized option content object
-    override init(json:JSONObject) throws {
-        
+    /// - parameter json: `JSONObject` that contains the serialized option content object
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
@@ -38,6 +39,7 @@ public class IONOptionContent: IONContent {
     }
 }
 
+
 /// Option extensions to IONPage
 extension IONPage {
     
@@ -45,9 +47,11 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - returns: string if the outlet was an option outlet and the page was already cached, else nil
+    /// - returns: Result.Success containing a `String` if the outlet is an option outlet
+    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
     public func selectedOption(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
+        
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -59,13 +63,14 @@ extension IONPage {
         return .Failure(.OutletIncompatible)
     }
     
-    /// Fetch selected option for named outlet async
+    
+    /// Fetch selected option for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
-    ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter callback: Block to call when the option outlet becomes available.
+    ///                       Provides Result.Success containing an `String` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     public func selectedOption(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.selectedOption(name, position: position))
