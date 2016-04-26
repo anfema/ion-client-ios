@@ -152,7 +152,7 @@ public class IONPage {
     
     /// Fork the work queue, the returning page has to be finished or canceled, else you risk a memory leak
     ///
-    /// - returns: self with new work queue that is cancelable
+    /// - returns: `self` with new work queue that is cancelable
     public func cancelable() -> CancelableIONPage {
         return CancelableIONPage(page: self)
     }
@@ -179,7 +179,7 @@ public class IONPage {
     /// has completed
     ///
     /// - parameter callback: callback to call
-    /// - returns: self for chaining
+    /// - returns: `self` for chaining
     public func onCompletion(callback: ((page: IONPage, completed: Bool) -> Void)) -> IONPage {
         dispatch_barrier_async(self.workQueue) {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
@@ -194,7 +194,7 @@ public class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: block to execute when outlet was found, will not be called if no such outlet
     ///                       exists or there was any kind of communication error while fetching the page
-    /// - returns: self to be able to chain another call
+    /// - returns: `self` to be able to chain another call
     public func outlet(name: String, position: Int = 0, callback: (Result<IONContent, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -245,7 +245,7 @@ public class IONPage {
     /// - parameter name: outlet to check
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: callback to call
-    /// - returns: self for chaining
+    /// - returns: `self` for chaining
     public func outletExists(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -273,7 +273,7 @@ public class IONPage {
     ///
     /// - parameter name: outlet to check
     /// - parameter position: Position in the array (optional)
-    /// - returns: true if outlet exists else false, nil if page not loaded
+    /// - returns: `true` if outlet exists else `false`, `nil` if page not loaded
     public func outletExists(name: String, position: Int = 0) -> Result<Bool, IONError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
@@ -295,7 +295,7 @@ public class IONPage {
     /// - parameter name:     outlet to check
     /// - parameter callback: callback with object count
     ///
-    /// - returns: self for chaining
+    /// - returns: `self` for chaining
     public func numberOfContentsForOutlet(name: String, callback: (Result<Int, IONError> -> Void)) -> IONPage {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
@@ -316,7 +316,7 @@ public class IONPage {
     ///
     /// - parameter name: outlet to check
     ///
-    /// - returns: count if page was ready, nil if page is not loaded
+    /// - returns: count if page was ready, `nil` if page is not loaded
     public func numberOfContentsForOutlet(name: String) -> Result<Int, IONError> {
         if !self.isReady || self.hasFailed {
             // cannot return outlet synchronously from a async loading page
@@ -433,6 +433,7 @@ public class IONPage {
     }
 }
 
+/// Cancelable page, either finish processing with `finish()` or cancel with `cancel()`. Will leak if not done so.
 public class CancelableIONPage: IONPage {
     
     init(page: IONPage) {
@@ -454,6 +455,7 @@ public class CancelableIONPage: IONPage {
         }
     }
     
+    /// Cancel all pending requests for this page
     public func cancel() {
         dispatch_barrier_async(self.workQueue) {
             self.hasFailed = true
@@ -461,6 +463,7 @@ public class CancelableIONPage: IONPage {
         }
     }
     
+    /// Finish all requests and discard page
     public func finish() {
         dispatch_barrier_async(self.workQueue) {
             self.collection.pageCache.removeValueForKey(self.forkedIdentifier)

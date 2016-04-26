@@ -18,14 +18,21 @@ import iso_rfc822_date
 
 // TODO: Export interface and make generic to use cache for other requests
 
+/// Caching behaviour
 public enum IONCacheBehaviour {
+    
+    /// Prefer cache over request
     case Prefer
+    
+    /// Force cached content, error if not cached
     case Force
+    
+    /// Ignore cached content, force a request
     case Ignore
 }
 
-public extension NSData {
-    public func hexString() -> String {
+internal extension NSData {
+    func hexString() -> String {
         var bytes = [UInt8](count: self.length, repeatedValue: 0)
         self.getBytes(&bytes, length:self.length)
         
@@ -296,7 +303,7 @@ public class IONRequest {
     /// Fetch a file from the cache or return nil
     ///
     /// - parameter urlString: url of the file to fetch from cache
-    /// - returns: NSData with memory mapped file or nil if not in cache
+    /// - returns: `NSData` with memory mapped file or `nil` if not in cache
     public class func cachedFile(urlString:String) -> NSData? {
         guard let url = NSURL(string: urlString),
               let cacheName = self.cacheName(url) else {

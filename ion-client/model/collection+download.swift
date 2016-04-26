@@ -20,6 +20,7 @@ extension IONCollection {
         return "ION.collection.lastUpdated"
     }
     
+    /// Last download of the complete collection
     public var lastCompleteUpdate: NSDate? {
         get {
             let prefs = NSUserDefaults.standardUserDefaults()
@@ -41,6 +42,10 @@ extension IONCollection {
         }
     }
     
+    /// Download an archive of a complete collection
+    ///
+    /// - parameter callback: Callback to call when the download finished or errored (parameter is success state)
+    /// - returns: Collection for chaining
     public func download(callback: (Bool -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard let archiveURL = self.archiveURL else {

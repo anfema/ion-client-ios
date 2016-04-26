@@ -261,9 +261,6 @@ public class IONCollection {
         return CancelableIONCollection(collection: self)
     }
     
-    // MARK: - Internal
-    
-    
     /// Callback when collection fully loaded
     ///
     /// - parameter callback: callback to call
@@ -472,8 +469,8 @@ extension IONCollection {
     
     /// Checks if the collection and 'otherCollection' have the same content.
     ///
-    /// -parameter otherCollection: The collection you want to check for equal content.
-    /// -returns: true if both collections have the same content - false if they have different content.
+    /// - parameter otherCollection: The collection you want to check for equal content.
+    /// - returns: `true` if both collections have the same content - `false` if they have different content.
     public func equals(otherCollection: IONCollection) -> Bool {
         var collectionChanged = false
         
@@ -497,6 +494,7 @@ extension IONCollection {
 }
 
 
+/// Cancelable collection, remove from memory by calling either `cancel()` or `finish()`. Will leak if not done!
 public class CancelableIONCollection: IONCollection {
     
     init(collection: IONCollection) {
@@ -516,6 +514,7 @@ public class CancelableIONCollection: IONCollection {
         }
     }
     
+    /// Cancel all requests queued for a collection
     public func cancel() {
         dispatch_barrier_async(self.workQueue) {
             // cancel all page loads
@@ -534,6 +533,7 @@ public class CancelableIONCollection: IONCollection {
         }
     }
     
+    /// Finish the processing and discard the collection
     public func finish() {
         dispatch_barrier_async(self.workQueue) {
             self.pageCache.removeAll() // break cycle

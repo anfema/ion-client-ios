@@ -58,7 +58,7 @@ extension IONCollection {
     /// Fetch metadata sync
     ///
     /// - parameter identifier: page identifier to get metadata for
-    /// - returns: IONPageMeta object or nil if collection is not loaded
+    /// - returns: `IONPageMeta` object or nil if collection is not loaded
     public func metadata(identifier: String) -> Result<IONPageMeta, IONError> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .Failure(.DidFail)

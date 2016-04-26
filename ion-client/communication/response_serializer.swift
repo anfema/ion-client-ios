@@ -12,10 +12,19 @@
 import Alamofire
 import DEjson
 
+/// JSON response object, contains json and status code
 public struct JSONResponse {
-    let json:JSONObject?
-    let statusCode: Int
     
+    /// Decoded JSON object
+    public let json:JSONObject?
+    
+    /// HTTP status code of response
+    public let statusCode: Int
+    
+    /// Initializer
+    ///
+    /// - parameter json: optional, decoded `JSONObject` of the response
+    /// - parameter statusCode: HTTP status code of the response
     public init(json: JSONObject?, statusCode: Int = 200) {
         self.json = json
         self.statusCode = statusCode
@@ -28,7 +37,7 @@ extension Request {
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - returns: A `JSONObject` response serializer
-    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
+    static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
         return ResponseSerializer { _, response, data, error in
             guard let validData = data, response = response else {
                 return .Failure(.ServerUnreachable)
@@ -64,7 +73,7 @@ extension Request {
     ///                                arguments: the URL request, the URL response and the result produced while
     ///                                creating the JSON object.
     /// - returns: The request.
-    public func responseDEJSON(
+    func responseDEJSON(
         completionHandler: Response<JSONResponse, IONError> -> Void)
         -> Self
     {

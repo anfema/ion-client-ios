@@ -150,8 +150,8 @@ public class IONImageContent: IONContent, CanLoadImage {
     /// Get a temporary valid url for this image file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
         guard let myURL = self.url else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -201,8 +201,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the image was loaded.
-    ///                       Provides Result.Success containing an `UIImage` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `UIImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func image(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -224,8 +224,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the original images was loaded.
-    ///                       Provides Result.Success containing an `UIImage` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `UIImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -248,8 +248,8 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter callback: Block to call when the original images was loaded.
-    ///                       Provides Result.Success containing an `NSImage` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func image(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -270,8 +270,8 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter callback: Block to call when the original images was loaded.
-    ///                       Provides Result.Success containing an `NSImage` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {

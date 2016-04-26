@@ -10,6 +10,7 @@ import Foundation
 import html5tokenizer
 import Markdown
 
+/// Render HTML to attributed strings
 public class HTMLParser {
     private let tokens: [HTML5Token]
     private var formatStack = [FormatStackItem]()
@@ -19,10 +20,17 @@ public class HTMLParser {
         var styleDict: [String: AnyObject]
     }
 
+    /// Initialize with HTML string, instantly runs the tokenizer
+    ///
+    /// - parameter html: The HTML string to parse
     public init(html: String) {
         self.tokens = HTML5Tokenizer(htmlString: html).tokenize()
     }
     
+    /// Render attributed string
+    ///
+    /// - parameter style: Document style
+    /// - returns: `NSAttributedString` for HTML
     public func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
         let result = NSMutableAttributedString()
         var counters = [Int]()
@@ -159,7 +167,10 @@ public class HTMLParser {
         return result
     }
     
-    func renderText() -> String {
+    /// Render text only version of HTML
+    ///
+    /// - returns: Plaintext version of HTML stripped of all tags
+    public func renderText() -> String {
         var result = String()
         var counters = [Int]()
         var depth = 0

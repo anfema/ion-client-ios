@@ -1,0 +1,14 @@
+source 'git@git.assembla.com:anfema-intern.cocoapods.git'
+source 'https://github.com/CocoaPods/Specs'
+
+use_frameworks!
+
+platform :osx, '10.10'
+pod 'Alamofire', '~> 3.1'
+pod 'HashExtensions', '~> 2.0'
+pod 'DEjson', '~> 1.0'
+pod 'Markdown', '~> 1.0'
+pod 'html5tokenizer', '~> 1.0'
+pod 'Tarpit', '~> 1.0'
+pod 'anfema-mockingbird', '~> 1.0'
+pod 'iso-rfc822-date', '~> 1.0'

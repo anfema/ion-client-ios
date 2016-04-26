@@ -7,3 +7,5 @@ ion-client/docs/docs
 ion-client/build
 Pods
 .idea
+*.xcworkspacedata
+ion-client/docs/html

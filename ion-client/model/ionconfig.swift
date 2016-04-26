@@ -207,11 +207,11 @@ public struct IONConfig {
     
     /// Register a custom content type
     ///
-    /// Exionle:
+    /// Example:
     ///
-    /// ION.config.registerContentType("customcontent") { json in
-    ///     return try MyContent(json: json)
-    /// }
+    ///     ION.config.registerContentType("customcontent") { json in
+    ///         return try MyContent(json: json)
+    ///     }
     ///
     /// - parameter typeName: type name in JSON
     /// - parameter creationBlock: a block to create an instance of the content type

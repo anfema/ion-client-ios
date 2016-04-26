@@ -16,7 +16,6 @@ import DEjson
 
 /// Caching extension for IONRequest
 extension IONRequest {
-    // MARK: - external API
  
     /// Reset complete ION cache for a specific language and all hosts
     ///

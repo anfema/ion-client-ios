@@ -23,16 +23,18 @@
 import Foundation
 import Alamofire
 
-/**
-    Used to represent whether a request was successful or encountered an error.
-
-    - Success: The request and all post processing operations were successful resulting in the serialization of the 
-               provided associated value.
-    - Failure: The request encountered an error resulting in a failure. The associated values are the original data 
-               provided by the server as well as the error that caused the failure.
-*/
+/// Used to represent whether a request was successful or encountered an error.
+///
+/// - Success: The request and all post processing operations were successful resulting in the serialization of the
+///            provided associated value.
+/// - Failure: The request encountered an error resulting in a failure. The associated values are the original data
+///            provided by the server as well as the error that caused the failure.
 public enum Result<Value, Error: ErrorType> {
+
+    /// Request successful, contains result
     case Success(Value)
+    
+    /// Request failed, contains error
     case Failure(Error)
 
     /// Returns `true` if the result is a success, `false` otherwise.
@@ -70,6 +72,9 @@ public enum Result<Value, Error: ErrorType> {
         }
     }
     
+    /// Initialize from `Alamofire` result
+    ///
+    /// - parameter result: `Alamofile.Result` object
     public init(result: Alamofire.Result<Value, Error>) {
         switch result {
         case Alamofire.Result.Success(let data):

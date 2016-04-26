@@ -12,7 +12,7 @@
 import Foundation
 import DEjson
 
-/// Page metadata, used if only small sionles of a page have to be used instead of downloading the whole thing
+/// Page metadata, used if only small parts of a page have to be used instead of downloading the whole thing
 public class IONPageMeta: CanLoadImage {
     /// flag if the date formatter has already been instantiated
     static var formatterInstantiated = false
@@ -129,22 +129,9 @@ public class IONPageMeta: CanLoadImage {
     
     /// thumbnail image url for `CanLoadImage`
     public var imageURL:NSURL? {
-        let taintedURL: String? = self["thumbnail"] ?? self["icon"]
- 
-        //TODO: Do we still need this? Shouldn't the backend return valid urls?
-        if let url = taintedURL
-        {
-            guard let escapedURL = url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) else
-            {
-                return nil
-            }
-            
-            if let url = NSURL(string: escapedURL)
-            {
-                return url
-            }
+        if let urlString = self["thumbnail"] ?? self["icon"] {
+            return NSURL(string: urlString)
         }
-        
         return nil
     }
 

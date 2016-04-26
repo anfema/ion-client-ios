@@ -47,8 +47,8 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - returns: Result.Success containing a `String` if the outlet is an option outlet
-    ///            and the page was already cached, else an Result.Failure containing an `IONError`.
+    /// - returns: `Result.Success` containing a `String` if the outlet is an option outlet
+    ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func selectedOption(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
         
@@ -69,8 +69,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the option outlet becomes available.
-    ///                       Provides Result.Success containing an `String` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `String` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func selectedOption(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.selectedOption(name, position: position))

@@ -82,8 +82,8 @@ public class IONFileContent: IONContent, CanLoadImage {
     /// Load the file binary data and return memory mapped `NSData`
     ///
     /// - parameter callback: Block to call when file data gets available.
-    ///                       Provides Result.Success containing `NSData` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing `NSData` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func data(callback: (Result<NSData, IONError> -> Void)) {
         guard let url = self.url where self.isValid else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -110,8 +110,8 @@ public class IONFileContent: IONContent, CanLoadImage {
     /// Get a temporarily valid url for this file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
         guard let myURL = self.url else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -165,8 +165,8 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the file outlet becomes available and
     ///                       the file is loaded.
-    ///                       Provides Result.Success containing an `NSData` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSData` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func fileData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {

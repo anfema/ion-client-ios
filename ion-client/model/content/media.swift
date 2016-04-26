@@ -16,7 +16,7 @@ import DEjson
 /// Media content, may be image, audio or video content
 public class IONMediaContent: IONContent, CanLoadImage {
     
-    // Original file name
+    /// Original file name
     public var filename: String
     
     /// MIME type of media file
@@ -149,8 +149,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
     /// Load the file binary data and return memory mapped `NSData`
     ///
     /// - parameter callback: Block to call when the file data becomes available.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func data(callback: (Result<NSData, IONError> -> Void)) {
         self.cachedURL { result in
             guard case .Success(let url) = result else {
@@ -171,8 +171,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
     /// Download the file and give back the URL
     ///
     /// - parameter callback: Block to call when the download of the file has finished.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func cachedURL(callback: (Result<NSURL, IONError> -> Void)) {
         guard let url = self.url else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -194,8 +194,8 @@ public class IONMediaContent: IONContent, CanLoadImage {
     /// Get a temporary valid url for this media file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
         guard let url = self.url else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -248,8 +248,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the media outlet becomes available.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
         
@@ -282,8 +282,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the media outlet becomes available.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) { 
             responseQueueCallback(callback, parameter: self.mediaURL(name, position: position))
@@ -298,8 +298,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the media file was downloaded.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func cachedMediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -325,8 +325,8 @@ extension IONPage {
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
-    ///                       Provides Result.Success containing an `NSURL` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func temporaryURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -359,8 +359,8 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter callback: Block to call when the data of the media file becomes available.
-    ///                       Provides Result.Success containing an `NSData` when successful, or
-    ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///                       Provides `Result.Success` containing an `NSData` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func mediaData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
