@@ -61,6 +61,11 @@ public class HTMLParser {
                 if name == "p" && lastStackItem.tagName == "blockquote" {
                     self.pushFormat(style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
                 } else {
+                    // Do not allow any formatting inside of heading tags
+                    if lastStackItem.tagName.hasPrefix("h") && lastStackItem.tagName.characters.count == 2 {
+                        // FIXME: remove this case when the desk editor behaves correctly again
+                        continue
+                    }
                     self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
                 }
                 
