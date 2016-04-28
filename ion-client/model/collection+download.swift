@@ -60,7 +60,7 @@ extension IONCollection {
             // Workaround for bug in Alamofire which does not append queryparameters to an URL that already has some
             if let dt = self.lastCompleteUpdate {
                 if archiveURL.containsString("?") {
-                    url += "&lastUpdated=\(dt.isoDateString)"
+                    url += "&lastUpdated=\(dt.isoDateString())"
                 } else {
                     q["lastUpdated"] = dt.isoDateString()
                 }
