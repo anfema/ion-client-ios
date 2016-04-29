@@ -113,10 +113,13 @@ public class IONRequest {
         
         request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
-                if case .NotAuthorized = error {
-                    responseQueueCallback(callback, parameter: .Failure(error))
+                // Request failed with `.ServerUnreachable` and caching set to `.Ignore`.
+                // Try to load request again witch caching set to `.Prefer`
+                // to load json from the cache if already cached.
+                if case .ServerUnreachable = error where cached == .Ignore {
+                    self.fetchJSON(endpoint, queryParameters: queryParameters, cached: .Prefer, callback: callback)
                 } else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                    responseQueueCallback(callback, parameter: .Failure(error))
                 }
                 
                 return
