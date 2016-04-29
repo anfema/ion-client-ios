@@ -195,6 +195,32 @@ public class IONImageContent: IONContent, CanLoadImage {
 /// Image extension to IONPage
 extension IONPage {
     
+    /// Create thumbnail `CGImage` for named outlet asynchronously
+    ///
+    /// - parameter name: The name of the outlet
+    /// - parameter size: The desired size of the thumbnail image
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the preview image was created.
+    ///                       Provides `Result.Success` containing an `CGImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    public func thumbnail(name: String, size: CGSize, position: Int = 0, callback: (Result<CGImage, IONError> -> Void)) -> IONPage {
+        self.outlet(name, position: position) { result in
+            guard case .Success(let content) = result else {
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+                return
+            }
+            
+            if case let content as IONImageContent = content {
+                content.thumbnail(size: size, original: false, callback: callback)
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+            }
+        }
+        
+        return self
+    }
+    
+    
     #if os(iOS)
     /// Allocate `UIImage` for named outlet asynchronously
     ///
@@ -212,6 +238,8 @@ extension IONPage {
             
             if case let content as IONImageContent = content {
                 content.image(callback: callback)
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         
@@ -235,6 +263,8 @@ extension IONPage {
             
             if case let content as IONImageContent = content {
                 content.originalImage(callback)
+            } else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
         
@@ -259,6 +289,8 @@ extension IONPage {
     
             if case let content as IONImageContent = content {
                 content.image(callback: callback)
+            }  else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
     
@@ -281,6 +313,8 @@ extension IONPage {
     
             if case let content as IONImageContent = content {
                 content.originalImage(callback)
+            }  else {
+                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
             }
         }
     

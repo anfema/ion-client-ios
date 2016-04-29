@@ -287,4 +287,180 @@ class imageContentTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    
+    func testInvalidThumbnailOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        
+        ION.collection("test").page("page_001").thumbnail("number", size: CGSize(width: 100, height: 100)) { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletIncompatible = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testWrongThumbnailOutlet() {
+        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        
+        ION.collection("test").page("page_001").thumbnail("wrong", size: CGSize(width: 100, height: 100)) { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Failure(let error) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .OutletNotFound = error else {
+                XCTFail("wrong error thrown")
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+
+    
+    
+    func testThumbnail() {
+        let expectation = self.expectationWithDescription("testThumbnail")
+        
+        ION.collection("test").page("page_001").outlet("image") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let imageOutlet = outlet as? IONImageContent else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            let maxSize = 100
+            let size = CGSize(width: maxSize, height: maxSize)
+            
+            imageOutlet.thumbnail(size: size, callback: { result in
+                guard case .Success(let imgRef) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                let w = CGImageGetWidth(imgRef)
+                let h = CGImageGetHeight(imgRef)
+                
+                XCTAssertTrue(max(w, h) == maxSize)
+                
+                ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
+                    guard case .Success(let thumbnail) = result else {
+                        XCTFail()
+                        expectation.fulfill()
+                        return
+                    }
+                    
+                    let w2 = CGImageGetWidth(thumbnail)
+                    let h2 = CGImageGetHeight(thumbnail)
+                    
+                    XCTAssertEqual(w, w2)
+                    XCTAssertEqual(h, h2)
+                    
+                    XCTAssertTrue(max(w2, h2) == maxSize)
+                })
+            })
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testThumbnailTooBig() {
+        let expectation = self.expectationWithDescription("testThumbnailTooBig")
+        
+        ION.collection("test").page("page_001").outlet("image") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let imageOutlet = outlet as? IONImageContent else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            let maxSize = max(imageOutlet.originalSize.width * 2.0, imageOutlet.originalSize.height * 2.0)
+            let size = CGSize(width: maxSize, height: maxSize)
+            
+            // Desired size is bigger than original image => thumbnail should not be bigger than the original image
+            imageOutlet.thumbnail(size: size, callback: { result in
+                guard case .Success(let imgRef) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                let w = CGImageGetWidth(imgRef)
+                let h = CGImageGetHeight(imgRef)
+                
+                XCTAssertTrue(w == Int(imageOutlet.originalSize.width))
+                XCTAssertTrue(h == Int(imageOutlet.originalSize.height))
+                
+                ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
+                    guard case .Success(let thumbnail) = result else {
+                        XCTFail()
+                        expectation.fulfill()
+                        return
+                    }
+                    
+                    let w2 = CGImageGetWidth(thumbnail)
+                    let h2 = CGImageGetHeight(thumbnail)
+                    
+                    XCTAssertEqual(w, w2)
+                    XCTAssertEqual(h, h2)
+                    
+                    XCTAssertTrue(w2 == Int(imageOutlet.originalSize.width))
+                    XCTAssertTrue(h2 == Int(imageOutlet.originalSize.height))
+                })
+            })
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
 }

@@ -43,6 +43,9 @@ public protocol CanLoadImage {
     var variation:String { get }
 }
 
+/// Queue used to calculate preview images
+let serialQueue = dispatch_queue_create("com.anfema.ion.SerialImageConverterQueue", DISPATCH_QUEUE_SERIAL)
+
 /// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
 extension CanLoadImage {
     
@@ -151,6 +154,40 @@ extension CanLoadImage {
     /// - parameter callback: block to execute when the image has been allocated
     public func originalCGImage(callback: (Result<CGImageRef, IONError> -> Void)) {
         self.cgImage(original:true, callback: callback)
+    }
+    
+    
+    /// create a `CGImage` with a specific size
+    ///
+    /// - parameter size: The target size of the thumbnail image while maintaining the aspect ratio of the source image.
+    /// - parameter original: Whether to use the original or the processed data provider.
+    /// - parameter callback: Block to execute when the thumbnail image has been created.
+    public func thumbnail(size size: CGSize, original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
+        let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
+        
+        dataProviderFunc() { provider in
+            dispatch_async(serialQueue) {
+                let options: [NSString: NSObject] = [
+                    kCGImageSourceThumbnailMaxPixelSize: max(size.width, size.height),
+                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                    kCGImageSourceShouldCache: false,
+                    kCGImageSourceShouldCacheImmediately: true,
+                    kCGImageSourceCreateThumbnailWithTransform: true
+                ]
+
+                guard let src = CGImageSourceCreateWithDataProvider(provider, options) else {
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                    return
+                }
+
+                guard let img = CGImageSourceCreateThumbnailAtIndex(src, 0, options) else {
+                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                    return
+                }
+                
+                responseQueueCallback(callback, parameter: .Success(img))
+            }
+        }
     }
 
     
