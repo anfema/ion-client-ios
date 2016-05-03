@@ -120,12 +120,11 @@ class imageContentTests: LoggedInXCTestCase {
                 }
                 
                 XCTAssertNotNil(cgImage)
+                expectation.fulfill()
             })
-            
-            expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     func testImageInitializerFail1() {
@@ -459,6 +458,48 @@ class imageContentTests: LoggedInXCTestCase {
             })
             
             expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testMetadataThumbnailFail()
+    {
+        let expectation = self.expectationWithDescription("testMetadataThumbnail")
+        ION.collection("test").metadata("page_001") { result in
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let metaPage) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            let maxSize = 100
+            let size = CGSize(width: maxSize, height: maxSize)
+            
+            // Thumbnail should only work for outlets named "thumbnail" or "icon"
+            metaPage.thumbnail(size: size, callback: { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
+                guard case .Failure(let error) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                guard case .DidFail = error else {
+                    XCTFail("wrong error thrown")
+                    expectation.fulfill()
+                    return
+                }
+                
+                expectation.fulfill()
+            })
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)

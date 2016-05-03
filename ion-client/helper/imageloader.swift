@@ -90,17 +90,21 @@ extension CanLoadImage {
     /// get a `CGDataProvider` for the image
     ///
     /// - parameter callback: block to run when the provider becomes available
-    public func dataProvider(callback: (CGDataProviderRef -> Void)) {
+    public func dataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
         guard let url = self.imageURL else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
+        
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
                 guard case .Success(let filename) = result else {
+                    responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
                 }
+                
                 if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    responseQueueCallback(callback, parameter: dataProvider)
+                    responseQueueCallback(callback, parameter: .Success(dataProvider))
                 } else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
@@ -112,17 +116,21 @@ extension CanLoadImage {
     /// get a `CGDataProvider` for the original image
     ///
     /// - parameter callback: block to run when the provider becomes available
-    public func originalDataProvider(callback: (CGDataProviderRef -> Void)) {
+    public func originalDataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
         guard let url = self.originalImageURL else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
+        
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod:self.originalChecksumMethod, checksum: self.originalChecksum) { result in
                 guard case .Success(let filename) = result else {
+                    responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
                 }
+                
                 if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    responseQueueCallback(callback, parameter: dataProvider)
+                    responseQueueCallback(callback, parameter: .Success(dataProvider))
                 } else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
@@ -137,7 +145,12 @@ extension CanLoadImage {
     /// - parameter callback: block to execute when the image has been allocated
     public func cgImage(original original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
-        dataProviderFunc() { provider in
+        dataProviderFunc() { result in
+            guard case .Success(let provider) = result else {
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+                return
+            }
+            
             let options = Dictionary<String, AnyObject>()
             if let src = CGImageSourceCreateWithDataProvider(provider, options) {
                 if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
@@ -165,7 +178,12 @@ extension CanLoadImage {
     public func thumbnail(size size: CGSize, original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         
-        dataProviderFunc() { provider in
+        dataProviderFunc() { result in
+            guard case .Success(let provider) = result else {
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+                return
+            }
+            
             dispatch_async(serialQueue) {
                 let options: [NSString: NSObject] = [
                     kCGImageSourceThumbnailMaxPixelSize: max(size.width, size.height),
