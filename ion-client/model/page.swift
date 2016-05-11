@@ -294,13 +294,13 @@ public class IONPage {
     ///
     /// - returns: count if page was ready, `nil` if page is not loaded
     public func numberOfContentsForOutlet(name: String) -> Result<Int, IONError> {
-        if !self.isReady || self.hasFailed {
+        guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a async loading page
             return .Failure(.DidFail)
-        } else {
-            // search content
-            return .Success(self.content.filter({ $0.outlet == name }).count)
         }
+        
+        // search content
+        return .Success(self.content.filter({ $0.outlet == name }).count)
     }
     
     // MARK: Private

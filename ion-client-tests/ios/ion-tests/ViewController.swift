@@ -27,10 +27,10 @@ class ViewController: UIViewController {
 
         let parser = HTMLParser(html:
             "<ul>" +
-            "<li>List Element 1</li>" +
-            "<li>List Element 2</li>" +
-            "<li>List Element 3</li>" +
-            "<li>List Element 4</li>" +
+            "<li>List Element 1" +
+            "<li>List Element 2" +
+            "<li>List Element 3" +
+            "<li>List Element 4" +
             "</ul>" +
             "<ul>" +
             "<li>List Element 1<ul>" +

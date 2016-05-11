@@ -106,6 +106,7 @@ public class HTMLParser {
                 guard let name = name else {
                     continue
                 }
+                
                 let oldFormat = self.popFormat(name)
                 
                 switch name {
@@ -347,29 +348,26 @@ public class HTMLParser {
             return self.formatStack.popLast()
         } else {
             let tagIsBlock = self.isBlock(tagName)
-            let lastTagIsBlock = self.isBlock(lastStackItem.tagName)
 
-            if tagIsBlock {
-                // search upwards in stack
-                var lastFound = 0
-                for (index, item) in self.formatStack.enumerate() {
-                    if item.tagName == tagName {
-                        lastFound = index
-                    }
-                }
-                if lastFound > 0 {
-                    for _ in 0..<(self.formatStack.count - lastFound) {
-                        return self.formatStack.popLast()
-                    }
-                }
-            }
-            if lastTagIsBlock && !tagIsBlock {
+            guard tagIsBlock else {
                 return nil // ignore
             }
-            if !lastTagIsBlock && !tagIsBlock {
-                return nil // ignore
+            
+            // search upwards in stack
+            var lastFound = 0
+            for (index, item) in self.formatStack.enumerate() {
+                if item.tagName == tagName {
+                    lastFound = index
+                }
+            }
+            
+            if lastFound > 0 {
+                for _ in 0..<(self.formatStack.count - lastFound) {
+                    return self.formatStack.popLast()
+                }
             }
         }
+        
         return nil
     }
     
