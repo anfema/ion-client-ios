@@ -192,7 +192,7 @@ public class MDParser {
             if resultBlock != nil {
                 return resultBlock!
             }
-            level--
+            level -= 1
         }
         
         // Identify unordered lists
