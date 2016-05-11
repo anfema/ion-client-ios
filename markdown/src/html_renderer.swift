@@ -47,7 +47,7 @@ extension ContentNode {
         case .OrderedListItem:
             return "<li>\(content)</li>\n"
 
-        case .CodeBlock(let language):
+        case .CodeBlock(let language, _):
             return "\n<pre><code class=\"lang-\(language)\">\(content)</code></pre>\n"
             
         case .Paragraph:
