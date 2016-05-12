@@ -14,7 +14,7 @@ import DEjson
 
 
 /// Media content, may be image, audio or video content
-public class IONMediaContent: IONContent, CanLoadImage {
+public class IONMediaContent: IONContent, CanLoadImage, CanProvideURL {
     
     /// Original file name
     public var filename: String
@@ -256,23 +256,15 @@ extension IONPage {
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
-        if case let content as IONMediaContent = content {
+
+        if case let content as CanProvideURL = content {
             if let url = content.url {
                 return .Success(url)
             } else {
                 return .Failure(.OutletEmpty)
             }
         }
-        
-        if case let content as IONFileContent = content {
-            if let url = content.url {
-                return .Success(url)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
-        }
-        
+
         return .Failure(.OutletIncompatible)
     }
 

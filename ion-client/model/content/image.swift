@@ -20,7 +20,7 @@ import DEjson
 
 
 /// Image content, has OS specific image loading functionality
-public class IONImageContent: IONContent, CanLoadImage {
+public class IONImageContent: IONContent, CanLoadImage, CanProvideURL {
     
     /// MIME type of the image
     public var mimeType: String

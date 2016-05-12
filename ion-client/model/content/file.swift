@@ -14,7 +14,7 @@ import DEjson
 
 
 /// File content
-public class IONFileContent: IONContent, CanLoadImage {
+public class IONFileContent: IONContent, CanLoadImage, CanProvideURL {
     
     /// MIME type of the file
     public var mimeType: String

@@ -13,6 +13,13 @@ import Foundation
 import DEjson
 
 
+/// Implement this protocol to gain `url` functionality
+public protocol CanProvideURL {
+    /// url to the file
+    var url: NSURL? { get }
+}
+
+
 /// IONContent base class, carries common values
 public class IONContent {
     
