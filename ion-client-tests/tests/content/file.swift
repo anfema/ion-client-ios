@@ -59,6 +59,7 @@ class fileContentTests: LoggedInXCTestCase {
                 XCTAssert(ckSum == "sha256")
                 
                 XCTAssert(hashTypeFromName(ckSum) == .SHA256)
+                XCTAssert(ckSum == file.checksumMethod)
                 XCTAssert(data.cryptoHash(hashTypeFromName(ckSum)).hexString() as String == file.checksum)
                 expectation.fulfill()
             }
@@ -66,6 +67,7 @@ class fileContentTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+    
     
     func testFileOutletFetchAsyncCGImage() {
         let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")

@@ -11,6 +11,7 @@
 
 import XCTest
 import DEjson
+import HashExtensions
 @testable import ion_client
 
 class imageContentTests: LoggedInXCTestCase {
@@ -503,5 +504,103 @@ class imageContentTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+    
+    
+    func testChecksum() {
+        let expectation = self.expectationWithDescription("testChecksum")
+        
+        ION.collection("test").page("page_001").outlet("image") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let imageOutlet = outlet as? IONImageContent else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            
+            imageOutlet.dataProvider({ result in
+                guard case .Success(let dataProvider) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                guard let data: NSData = CGDataProviderCopyData(dataProvider) else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                let ckSum = imageOutlet.checksumMethod
+                XCTAssert(ckSum == "sha256")
+                
+                XCTAssert(hashTypeFromName(ckSum) == .SHA256)
+                XCTAssert(ckSum == imageOutlet.checksumMethod)
+                XCTAssert(data.cryptoHash(hashTypeFromName(ckSum)).hexString() as String == imageOutlet.checksum)
+                
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    
+    func testOriginalChecksum() {
+        let expectation = self.expectationWithDescription("testOriginalChecksum")
+        
+        ION.collection("test").page("page_001").outlet("image") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let outlet) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let imageOutlet = outlet as? IONImageContent else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            
+            imageOutlet.originalDataProvider({ result in
+                guard case .Success(let dataProvider) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                guard let data: NSData = CGDataProviderCopyData(dataProvider) else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                let ckSum = imageOutlet.originalChecksumMethod
+                XCTAssert(ckSum == "sha256")
+                
+                XCTAssert(hashTypeFromName(ckSum) == .SHA256)
+                XCTAssert(ckSum == imageOutlet.originalChecksumMethod)
+                XCTAssert(data.cryptoHash(hashTypeFromName(ckSum)).hexString() as String == imageOutlet.originalChecksum)
+                
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 }
