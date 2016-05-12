@@ -257,15 +257,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
 
-        if case let content as CanProvideURL = content {
-            if let url = content.url {
-                return .Success(url)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let urlProvider as CanProvideURL = content else {
+            return .Failure(.OutletIncompatible)
         }
 
-        return .Failure(.OutletIncompatible)
+        guard let url = urlProvider.url else {
+            return .Failure(.OutletEmpty)
+        }
+        
+        return .Success(url)
     }
 
     
