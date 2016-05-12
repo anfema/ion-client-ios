@@ -40,15 +40,7 @@ public class IONPageMeta: CanLoadImage {
     
     /// Children
     public var children: [IONPageMeta]? {
-        guard let collection = self.collection else {
-            return nil
-        }
-        
-        guard let list = collection.metadataList(self.identifier) else {
-            return nil
-        }
-        
-        return list
+        return self.collection?.metadataList(self.identifier)
     }
     
     
