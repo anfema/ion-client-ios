@@ -44,6 +44,11 @@ public class IONPage {
     /// Page position
     public var position: Int = 0
     
+    /// Metadata of the page
+    public var metadata: IONPageMeta? {
+        return self.collection.getPageMetaForPage(identifier)
+    }
+    
     /// Set to true to avoid fetching from cache
     private var useCache = IONCacheBehaviour.Prefer
     

@@ -144,6 +144,21 @@ public class IONPageMeta: CanLoadImage {
     }
     
     
+    /// Retrieve IONPage from metadata 
+    ///
+    /// - parameter callback: Block to call when the page becomes available.
+    ///                       Provides Result.Success containing an `IONPage` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
+    public func page(callback: (Result<IONPage, IONError> -> Void)) {
+        guard let collection = collection else {
+            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            return
+        }
+        
+        ION.collection(collection.identifier).page(identifier, callback: callback)
+    }
+    
+    
     /// thumbnail image url for `CanLoadImage`
     public var imageURL: NSURL? {
         if let urlString = self["thumbnail"] ?? self["icon"] {

@@ -658,4 +658,33 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
+    
+    
+    func testGetMetaPage() {
+        let expectation = self.expectationWithDescription("testGetMetaPage")
+        
+        ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let meta = page.metadata else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertEqual(meta.identifier, page.identifier)
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }

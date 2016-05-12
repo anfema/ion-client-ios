@@ -301,4 +301,36 @@ class pageMetadataTests: LoggedInXCTestCase {
         }
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testPageFromMetadata() {
+        let expectation = self.expectationWithDescription("testPageFromMetadata")
+        ION.resetMemCache()
+        
+        ION.collection("test").metadata("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            metadata.page({ result in
+                guard case .Success(let page) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                XCTAssertEqual(metadata.identifier, page.identifier)
+                
+                expectation.fulfill()
+            })
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
