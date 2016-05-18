@@ -167,7 +167,7 @@ public class IONCollection {
                 
                 self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
                     guard case .Success(let page) = result else {
-                        // FIXME: What happens in error case?
+                        responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                         return
                     }
                     
@@ -341,7 +341,7 @@ public class IONCollection {
         
         self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
             guard case .Success(let page) = result else {
-                // FIXME: what happens in the error case?
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
             
