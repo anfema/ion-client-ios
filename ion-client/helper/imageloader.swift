@@ -152,14 +152,14 @@ extension CanLoadImage {
             }
             
             let options = Dictionary<String, AnyObject>()
-            if let src = CGImageSourceCreateWithDataProvider(provider, options) {
-                if let img = CGImageSourceCreateImageAtIndex(src, 0, options) {
-                    responseQueueCallback(callback, parameter: .Success(img))
-                }
+            guard let src = CGImageSourceCreateWithDataProvider(provider, options),
+                let img = CGImageSourceCreateImageAtIndex(src, 0, options) else {
+                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                return
             }
+            
+            responseQueueCallback(callback, parameter: .Success(img))
         }
-        
-        // Fixme: add .Failure callback call
     }
 
     /// create a `CGImage` from the original image data
