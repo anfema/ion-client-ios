@@ -73,46 +73,20 @@ class pageMetadataTests: LoggedInXCTestCase {
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
-    func testMetadataEnumerateAsync() {
-        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync")
-       
-        var count = 0
-        ION.collection("test").enumerateMetadata(nil) { metadata in
-            
-            // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
-            
-            XCTAssertNil(metadata.parent)
-            count += 1
-            if count == 2 {
-                expectation.fulfill()
-            }
-        }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
-        XCTAssert(count == 2)
-    }
-
-    func testMetadataEnumerateAsync2() {
-        let expectation = self.expectationWithDescription("testMetadataEnumerateAsync2")
-        
-        ION.collection("test").enumerateMetadata("page_002") { metadata in
-            
-            // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
-            
-            XCTAssert(metadata.parent == "page_002")
-            expectation.fulfill()
-        }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
-    }
 
     func testMetadataListAsync() {
         let expectation = self.expectationWithDescription("testMetadataListAsync")
         
-        ION.collection("test").metadataList(nil) { list in
+        ION.collection("test").metadataList(nil) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let list) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             
             if list.count == 2 {
                 XCTAssert(list[0].position == 0)
@@ -130,10 +104,16 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataListAsync2() {
         let expectation = self.expectationWithDescription("testMetadataListAsync2")
         
-        ION.collection("test").metadataList("page_002") { list in
+        ION.collection("test").metadataList("page_002") { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let list) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
             
             XCTAssert(list.count == 1)
             expectation.fulfill()

@@ -146,16 +146,19 @@ class collectionTests: LoggedInXCTestCase {
                 return
             }
 
-            if let list = collection.metadataList(nil) {
-                if list.count == 2 {
-                    XCTAssert(list[0].identifier == "page_001")
-                    XCTAssert(list[1].identifier == "page_002")
-                } else {
-                    XCTFail()
-                }
+            guard case .Success(let list) = collection.metadataList(nil) else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            if list.count == 2 {
+                XCTAssert(list[0].identifier == "page_001")
+                XCTAssert(list[1].identifier == "page_002")
             } else {
                 XCTFail()
             }
+            
             expectation.fulfill()
         }
         

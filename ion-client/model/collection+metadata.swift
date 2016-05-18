@@ -77,29 +77,14 @@ extension IONCollection {
     }
     
     
-    /// Enumerate metadata
-    ///
-    /// - parameter parent: Parent to enumerate metadata for, nil == top level
-    /// - parameter callback: Callback to call with metadata
-    public func enumerateMetadata(parent: String?, callback: (IONPageMeta -> Void)) -> IONCollection {
-        self.metadataList(parent) { list in
-            for listItem in list {
-                callback(listItem)
-            }
-        }
-        
-        return self
-    }
-    
-    
     /// Fetch metadata as list
     ///
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
     /// - parameter callback: Callback to call with metadata
-    public func metadataList(parent: String?, callback: ([IONPageMeta] -> Void)) -> IONCollection {
+    public func metadataList(parent: String?, callback: (Result<[IONPageMeta], IONError> -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {
-            responseQueueCallback(callback, parameter: self.metadataList(parent) ?? [])
+            responseQueueCallback(callback, parameter: self.metadataList(parent))
         }
         
         return self
@@ -110,28 +95,17 @@ extension IONCollection {
     ///
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
     /// - returns: Metadata or nil if collection is not ready yet
-    public func metadataList(parent: String?) -> [IONPageMeta]? {
+    public func metadataList(parent: String?) -> Result<[IONPageMeta], IONError> {
         guard !self.hasFailed && self.lastUpdate != nil else {
-            return nil
+            return .Failure(.DidFail)
         }
         
         var result = self.pageMeta.filter({ $0.parent == parent })
-
-        if result.count == 0 {
-//            // TODO: Write test for empty metadata list
-//            if let parent = parent {
-//                self.callErrorHandler(.PageNotFound(parent))
-//            } else {
-//                self.callErrorHandler(.CollectionNotFound(self.identifier))
-//            }
-            return []
-        } else {
-            result.sortInPlace({ (page1, page2) -> Bool in
-                return page1.position < page2.position
-            })
-            return result
-        }
-//        return nil
+        result.sortInPlace({ (page1, page2) -> Bool in
+            return page1.position < page2.position
+        })
+        
+        return .Success(result)
     }
     
 
@@ -142,11 +116,12 @@ extension IONCollection {
     /// - returns: self for chaining
     public func metaPath(pageIdentifier: String, callback: (Result<[IONPageMeta], IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
-            if let result = self.metaPath(pageIdentifier) {
-                responseQueueCallback(callback, parameter: .Success(result))
-            } else {
+            guard let result = self.metaPath(pageIdentifier) else {
                 responseQueueCallback(callback, parameter: .Failure(IONError.PageNotFound(pageIdentifier)))
+                return
             }
+            
+            responseQueueCallback(callback, parameter: .Success(result))
         }
         
         return self
