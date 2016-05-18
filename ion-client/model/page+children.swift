@@ -27,11 +27,12 @@ extension IONPage {
                 return
             }
             
-            if page.parent == self.identifier {
-                responseQueueCallback(callback, parameter: .Success(page))
-            } else {
+            guard page.parent == self.identifier else {
                 responseQueueCallback(callback, parameter: .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
+                return
             }
+            
+            responseQueueCallback(callback, parameter: .Success(page))
         }
         
         return self
@@ -45,11 +46,11 @@ extension IONPage {
     public func child(identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
         
-        if page.parent == self.identifier {
-            return .Success(page)
+        guard page.parent == self.identifier else {
+            return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
         }
         
-        return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+        return .Success(page)
     }
     
     

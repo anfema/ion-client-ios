@@ -55,6 +55,7 @@ extension CanLoadImage {
             let _ = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "null"
         }
+        
         return "sha256"
     }
     
@@ -74,6 +75,7 @@ extension CanLoadImage {
             let _ = IONRequest.cachedFile(image.URLString) else {
                 return "null"
         }
+        
         return "sha256"
     }
     
@@ -103,13 +105,15 @@ extension CanLoadImage {
                     return
                 }
                 
-                if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    responseQueueCallback(callback, parameter: .Success(dataProvider))
-                } else {
+                guard let dataProvider = CGDataProviderCreateWithFilename(filename) else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
                     }
+                    
+                    return
                 }
+                
+                responseQueueCallback(callback, parameter: .Success(dataProvider))
         }
     }
 
@@ -129,13 +133,15 @@ extension CanLoadImage {
                     return
                 }
                 
-                if let dataProvider = CGDataProviderCreateWithFilename(filename) {
-                    responseQueueCallback(callback, parameter: .Success(dataProvider))
-                } else {
+                guard let dataProvider = CGDataProviderCreateWithFilename(filename) else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
                     }
+                    
+                    return
                 }
+                
+                responseQueueCallback(callback, parameter: .Success(dataProvider))
         }
     }
 

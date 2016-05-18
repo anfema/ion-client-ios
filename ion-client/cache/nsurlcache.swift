@@ -20,10 +20,12 @@ public class IONCacheAvoidance: NSURLProtocol {
         guard let serverURL = ION.config.serverURL else {
             return false
         }
-        if request.URLString.hasPrefix(serverURL.URLString) {
-            return true
+        
+        guard request.URLString.hasPrefix(serverURL.URLString) else {
+            return false
         }
-        return false
+        
+        return true
     }
 
     public override class func canonicalRequestForRequest(request: NSURLRequest) -> NSURLRequest {

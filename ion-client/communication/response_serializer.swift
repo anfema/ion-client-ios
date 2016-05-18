@@ -43,27 +43,28 @@ extension Request {
                 return .Failure(.ServerUnreachable)
             }
             
-            if response.statusCode == 401 || response.statusCode == 403 {
+            switch response.statusCode
+            {
+            case 401, 403:
                 return .Failure(.NotAuthorized)
-            }
-            
-            if response.statusCode == 304 {
+            case 304:
                 return .Success(JSONResponse(json: nil, statusCode: 304))
-            }
-            
-            if response.statusCode != 200 {
+            case 200:
+                break // everything is fine
+            default:
                 return .Failure(.NoData(error))
             }
             
-            if let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) {
-                let JSON = JSONDecoder(jsonString).jsonObject
-                if case .JSONInvalid = JSON {
-                    return .Failure(.InvalidJSON(nil))
-                }
-                return .Success(JSONResponse(json: JSON))
-            } else {
+            guard let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) else {
                 return .Failure(.InvalidJSON(nil))
             }
+            
+            let JSON = JSONDecoder(jsonString).jsonObject
+            if case .JSONInvalid = JSON {
+                return .Failure(.InvalidJSON(nil))
+            }
+            
+            return .Success(JSONResponse(json: JSON))
         }
     }
     

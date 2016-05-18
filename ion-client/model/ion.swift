@@ -207,6 +207,5 @@ public class ION {
     }
     
     /// Init is private because only class functions should be used
-    private init() {
-    }
+    private init() {}
 }
