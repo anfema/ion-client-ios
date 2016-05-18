@@ -56,11 +56,11 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
         
-        if case let content as IONNumberContent = content {
-            return .Success(content.value)
+        guard case let numberContent as IONNumberContent = content else {
+            return .Failure(.OutletIncompatible)
         }
         
-        return .Failure(.OutletIncompatible)
+        return .Success(numberContent.value)
     }
     
     

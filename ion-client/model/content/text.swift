@@ -151,15 +151,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
         
-        if case let content as IONTextContent = content {
-            if let text = content.plainText() {
-                return .Success(text)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let textContent as IONTextContent = content else {
+            return .Failure(.OutletIncompatible)
         }
         
-        return .Failure(.OutletIncompatible)
+        guard let text = textContent.plainText() else {
+            return .Failure(.OutletEmpty)
+        }
+        
+        return .Success(text)
     }
     
     
@@ -192,15 +192,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
         
-        if case let content as IONTextContent = content {
-            if let text = content.htmlText() {
-                return .Success(text)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let textContent as IONTextContent = content else {
+            return .Failure(.OutletIncompatible)
+        }
+        
+        guard let text = textContent.htmlText() else {
+            return .Failure(.OutletEmpty)
         }
 
-        return .Failure(.OutletIncompatible)
+        return .Success(text)
     }
     
     
@@ -234,15 +234,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
 
-        if case let content as IONTextContent = content {
-            if let text = content.attributedString() {
-                return .Success(text)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let textContent as IONTextContent = content else {
+            return .Failure(.OutletIncompatible)
         }
 
-        return .Failure(.OutletIncompatible)
+        guard let text = textContent.attributedString() else {
+            return .Failure(.OutletEmpty)
+        }
+        
+        return .Success(text)
     }
     
     

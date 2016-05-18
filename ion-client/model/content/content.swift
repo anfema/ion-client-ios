@@ -14,9 +14,15 @@ import DEjson
 
 
 /// Implement this protocol to gain `url` functionality
-public protocol CanProvideURL {
+public protocol URLProvider {
     /// url to the file
     var url: NSURL? { get }
+}
+
+
+/// Implement this protocol to gain `temporaryURL` functionality
+public protocol TemporaryURLProvider {
+    func temporaryURL(callback: (Result<NSURL, IONError> -> Void))
 }
 
 

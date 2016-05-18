@@ -61,15 +61,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
 
-        if case let content as IONConnectionContent = content {
-            if let url = content.url {
-                return .Success(url)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let connectionContent as IONConnectionContent = content else {
+            return .Failure(.OutletIncompatible)
         }
         
-        return .Failure(.OutletIncompatible)
+        guard let url = connectionContent.url else {
+            return .Failure(.OutletEmpty)
+        }
+        
+        return .Success(url)
     }
     
     

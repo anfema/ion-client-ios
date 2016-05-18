@@ -14,7 +14,7 @@ import DEjson
 
 
 /// Media content, may be image, audio or video content
-public class IONMediaContent: IONContent, CanLoadImage, CanProvideURL {
+public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
     
     /// Original file name
     public var filename: String
@@ -257,7 +257,7 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
 
-        guard case let urlProvider as CanProvideURL = content else {
+        guard case let urlProvider as URLProvider = content else {
             return .Failure(.OutletIncompatible)
         }
 
@@ -299,12 +299,13 @@ extension IONPage {
                 return
             }
 
-            if case let content as IONMediaContent = content {
-                content.cachedURL { result in
-                    responseQueueCallback(callback, parameter: result)
-                }
-            } else {
+            guard case let mediaContent as IONMediaContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
+            }
+            
+            mediaContent.cachedURL { result in
+                responseQueueCallback(callback, parameter: result)
             }
         }
         
@@ -326,20 +327,13 @@ extension IONPage {
                 return
             }
             
-            if case let content as IONMediaContent = content {
-                content.temporaryURL { result in
-                    responseQueueCallback(callback, parameter: result)
-                }
-            } else if case let content as IONFileContent = content {
-                content.temporaryURL { result in
-                    responseQueueCallback(callback, parameter: result)
-                }
-            } else if case let content as IONImageContent = content {
-                content.temporaryURL { result in
-                    responseQueueCallback(callback, parameter: result)
-                }
-            } else {
+            guard case let urlProvider as TemporaryURLProvider = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
+            }
+            
+            urlProvider.temporaryURL { result in
+                responseQueueCallback(callback, parameter: result)
             }
         }
         
@@ -360,11 +354,12 @@ extension IONPage {
                 return
             }
 
-            if case let content as IONMediaContent = content {
-                content.data(callback)
-            } else {
+            guard case let mediaContent as IONMediaContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+            
+            mediaContent.data(callback)
         }
         
         return self

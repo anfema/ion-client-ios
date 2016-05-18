@@ -20,7 +20,7 @@ import DEjson
 
 
 /// Image content, has OS specific image loading functionality
-public class IONImageContent: IONContent, CanLoadImage, CanProvideURL {
+public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
     
     /// MIME type of the image
     public var mimeType: String
@@ -210,11 +210,12 @@ extension IONPage {
                 return
             }
             
-            if case let content as IONImageContent = content {
-                content.thumbnail(size: size, original: false, callback: callback)
-            } else {
+            guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+            
+            imageContent.thumbnail(size: size, original: false, callback: callback)
         }
         
         return self
@@ -236,11 +237,12 @@ extension IONPage {
                 return
             }
             
-            if case let content as IONImageContent = content {
-                content.image(callback: callback)
-            } else {
+            guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+            
+            imageContent.image(callback: callback)
         }
         
         return self
@@ -261,11 +263,12 @@ extension IONPage {
                 return
             }
             
-            if case let content as IONImageContent = content {
-                content.originalImage(callback)
-            } else {
+            guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+            
+            imageContent.originalImage(callback)
         }
         
         return self
@@ -287,11 +290,12 @@ extension IONPage {
                 return
             }
     
-            if case let content as IONImageContent = content {
-                content.image(callback: callback)
-            }  else {
+            guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+    
+            imageContent.image(callback: callback)
         }
     
         return self
@@ -311,11 +315,12 @@ extension IONPage {
                 return
             }
     
-            if case let content as IONImageContent = content {
-                content.originalImage(callback)
-            }  else {
+            guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+    
+            imageContent.originalImage(callback)
         }
     
         return self

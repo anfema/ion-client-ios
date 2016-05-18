@@ -58,15 +58,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
 
-        if case let content as IONDateTimeContent = content {
-            if let date = content.date {
-                return .Success(date)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let timeContent as IONDateTimeContent = content else {
+            return .Failure(.OutletIncompatible)
         }
         
-        return .Failure(.OutletIncompatible)
+        guard let date = timeContent.date else {
+            return .Failure(.OutletEmpty)
+        }
+        
+        return .Success(date)
     }
     
     

@@ -104,15 +104,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
         
-        if case let content as IONColorContent = content {
-            if let color = content.color() {
-                return .Success(color)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let colorContent as IONColorContent = content else {
+            return .Failure(.OutletIncompatible)
         }
-        
-        return .Failure(.OutletIncompatible)
+    
+        guard let color = colorContent.color() else {
+            return .Failure(.OutletEmpty)
+        }
+    
+        return .Success(color)
     }
     
     
@@ -147,15 +147,15 @@ extension IONPage {
             return .Failure(result.error ?? .UnknownError)
         }
     
-        if case let content as IONColorContent = content {
-            if let color = content.color() {
-                return .Success(color)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let colorContent as IONColorContent = content else {
+            return .Failure(.OutletIncompatible)
+        }
+        
+        guard let color = colorContent.color() else {
+            return .Failure(.OutletEmpty)
         }
     
-        return .Failure(.OutletIncompatible)
+        return .Success(color)
     }
     
     

@@ -32,7 +32,7 @@ public class IONContainerContent: IONContent {
         
         guard let rawChildren = dict["children"],
             case .JSONArray(let children) = rawChildren else {
-                throw IONError.JSONArrayExpected(json) // TODO: return InvalidJSON so all IONContents behave the same way?
+                throw IONError.JSONArrayExpected(json)
         }
         
         self.children = []

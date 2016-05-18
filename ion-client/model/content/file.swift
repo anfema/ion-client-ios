@@ -14,7 +14,7 @@ import DEjson
 
 
 /// File content
-public class IONFileContent: IONContent, CanLoadImage, CanProvideURL {
+public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
     
     /// MIME type of the file
     public var mimeType: String
@@ -174,11 +174,12 @@ extension IONPage {
                 return
             }
             
-            if case let content as IONFileContent = content {
-                content.data(callback)
-            } else {
+            guard case let fileContent as IONFileContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                return
             }
+            
+            fileContent.data(callback)
         }
         
         return self
