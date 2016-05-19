@@ -18,6 +18,7 @@ extension IONCollection {
     ///
     /// - parameter parent: Parent to get page count for, nil == top level
     /// - parameter callback: Block to call for page count return value
+    /// - returns: self for chaining
     public func pageCount(parent: String?, callback: (Int -> Void)) -> IONCollection {
         // append page count to work queue
         dispatch_async(self.workQueue) {
@@ -47,6 +48,7 @@ extension IONCollection {
     ///
     /// - parameter identifier: Page identifier to get metadata for
     /// - parameter callback: Callback to call with metadata
+    /// - returns: self for chaining
     public func metadata(identifier: String, callback: (Result<IONPageMeta, IONError> -> Void)) -> IONCollection {
         // this block fetches the page count after the collection is ready
         dispatch_async(self.workQueue) {
@@ -81,6 +83,7 @@ extension IONCollection {
     ///
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
     /// - parameter callback: Callback to call with metadata
+    /// - returns: self for chaining
     public func metadataList(parent: String?, callback: (Result<[IONPageMeta], IONError> -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         dispatch_async(self.workQueue) {

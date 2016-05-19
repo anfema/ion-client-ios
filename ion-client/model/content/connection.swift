@@ -28,6 +28,10 @@ public class IONConnectionContent: IONContent {
     /// Initialize connection content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized connection content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -80,6 +84,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the connection outlet becomes available.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.link(name, position: position))

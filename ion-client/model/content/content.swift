@@ -22,6 +22,12 @@ public protocol URLProvider {
 
 /// Implement this protocol to gain `temporaryURL` functionality
 public protocol TemporaryURLProvider {
+    /// Fetch temporary `NSURL` asynchronously
+    ///
+    /// - parameter callback: Block to call when the temporary url becomes available.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    ///
     func temporaryURL(callback: (Result<NSURL, IONError> -> Void))
 }
 
@@ -43,10 +49,13 @@ public class IONContent {
 
 
     /// Initialize content object from JSON
-    ///
     /// This is the content base class, it should never be instantiated by itself, only through it's subclasses!
     ///
     /// - parameter json: `JSONObject` that contains the serialized content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
 	public init(json: JSONObject) throws {
 		guard case .JSONDictionary(let dict) = json else {
 			throw IONError.JSONObjectExpected(json)

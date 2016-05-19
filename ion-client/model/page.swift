@@ -83,9 +83,11 @@ public class IONPage {
     /// - parameter useCache: `.Prefer`: Loads the page from cache if no update is available.
     ///                       `.Force`:  Loads the page from cache.
     ///                       `.Ignore`: Loads the page from server.
+    /// - parameter parent: The parent of the page (optional)
     /// - parameter callback: Block to call when the page becomes available.
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
+    ///
     init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback: (Result<IONPage, IONError> -> Void)?) {
         // Full asynchronous initializer, self will be populated asynchronously
         self.identifier = identifier
@@ -172,6 +174,7 @@ public class IONPage {
     /// Callback when page fully loaded
     ///
     /// - parameter callback: Callback to call
+    /// - returns: self for chaining
     public func waitUntilReady(callback: (Result<IONPage, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             guard !self.hasFailed else {

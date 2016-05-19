@@ -21,10 +21,13 @@ public class IONContainerContent: IONContent {
 
 
     /// Initialize container content object from JSON
+    /// Container content children can be accessed by subscripting the container content object
     ///
     /// - parameter json: `JSONObject` that contains the serialized container content object
     ///
-    /// Container content children can be accessed by subscripting the container content object
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.JSONArrayExpected` when `json["children"]` is no `JSONArray`
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -92,6 +95,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the container outlet becomes available.
     ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func children(name: String, position: Int = 0, callback: (Result<[IONContent], IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.children(name, position: position))

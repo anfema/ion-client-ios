@@ -71,6 +71,10 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     /// Initialize image content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized image content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -203,6 +207,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the preview image was created.
     ///                       Provides `Result.Success` containing an `CGImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func thumbnail(name: String, size: CGSize, position: Int = 0, callback: (Result<CGImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -230,6 +235,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the image was loaded.
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func image(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -256,6 +262,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the original images was loaded.
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -280,9 +287,11 @@ extension IONPage {
     /// Allocate `NSImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the original images was loaded.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func image(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {
@@ -305,9 +314,11 @@ extension IONPage {
     /// Allocate `NSImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
     /// - parameter callback: Block to call when the original images was loaded.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {

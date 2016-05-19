@@ -23,6 +23,10 @@ public class IONOptionContent: IONContent {
     /// Initialize option content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized option content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -71,6 +75,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the option outlet becomes available.
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func selectedOption(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.selectedOption(name, position: position))

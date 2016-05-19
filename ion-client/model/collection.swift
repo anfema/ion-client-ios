@@ -256,6 +256,7 @@ public class IONCollection {
     /// Enumerate pages
     ///
     /// - parameter callback: Block to call for each page
+    /// - returns: self for chaining
     public func pages(callback: (Result<IONPage, IONError> -> Void)) -> IONCollection {
         // append page listing to work queue
         dispatch_async(self.workQueue) {

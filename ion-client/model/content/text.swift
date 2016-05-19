@@ -31,6 +31,10 @@ public class IONTextContent: IONContent {
     /// Initialize text content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized text content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -170,6 +174,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the text outlet becomes available.
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func text(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.text(name, position: position))
@@ -211,6 +216,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the text outlet becomes available.
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func html(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.html(name, position: position))
@@ -224,9 +230,8 @@ extension IONPage {
     ///
     /// - parameter name: The name of the outlet
     /// - parameter position: Position in the array (optional)
-    /// - parameter callback: Block to call when the text outlet becomes available.
-    ///                       Provides `Result.Success` containing an `NSAttributedString` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: `Result.Success` containing a `NSAttributedString` if the outlet is a text outlet
+    ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
 
@@ -253,6 +258,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the text outlet becomes available.
     ///                       Provides `Result.Success` containing an `NSAttributedString` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.attributedString(name, position: position))

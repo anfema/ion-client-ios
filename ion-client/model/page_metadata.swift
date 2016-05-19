@@ -47,9 +47,13 @@ public class IONPageMeta: CanLoadImage {
     /// Init metadata from JSON object
     ///
     /// - parameter json: Serialized JSON object of page metadata
+    /// - parameter position: Position in the array
+    /// - parameter collection: The `IONCollection` the page belongs to
+    ///
     /// - throws: IONError.JSONObjectExpected: The provided JSONObject is no JSONDictionary.
     ///           IONError.InvalidJSON: Missing keys in the provided JSONDictionary or wrong
     ///                                 value types.
+    ///
     internal init(json: JSONObject, position: Int, collection: IONCollection) throws {
         self.collection = collection
 

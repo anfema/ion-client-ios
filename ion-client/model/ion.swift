@@ -149,8 +149,10 @@ public class ION {
 
     /// Downloader calls this function to register a progress item with the global progress toolbar
     ///
-    /// - parameter progressObject: NSProgress of the download
-    /// - parameter urlString: URL of the download for management purposes
+    /// - parameter bytesReceived: Number of received bytes
+    /// - parameter bytesExpected: Number of total expected bytes
+    /// - parameter urlString: The URL of the file the progress should be reported
+    ///
     class func registerProgress(bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
         self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
 

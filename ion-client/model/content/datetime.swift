@@ -24,6 +24,10 @@ public class IONDateTimeContent: IONContent {
     /// Initialize datetime content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized datetime content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -77,6 +81,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the datetime outlet becomes available.
     ///                       Provides `Result.Success` containing an `NSDate` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func date(name: String, position: Int = 0, callback: (Result<NSDate, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.date(name, position: position))

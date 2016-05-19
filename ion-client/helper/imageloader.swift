@@ -91,7 +91,9 @@ extension CanLoadImage {
 
     /// get a `CGDataProvider` for the image
     ///
-    /// - parameter callback: block to run when the provider becomes available
+    /// - parameter callback: Block to call when the data provider becomes available.
+    ///                       Provides `Result.Success` containing an `CGDataProviderRef` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func dataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
         guard let url = self.imageURL else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -119,7 +121,9 @@ extension CanLoadImage {
 
     /// get a `CGDataProvider` for the original image
     ///
-    /// - parameter callback: block to run when the provider becomes available
+    /// - parameter callback: Block to call when the data provider becomes available.
+    ///                       Provides `Result.Success` containing an `CGDataProviderRef` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalDataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
         guard let url = self.originalImageURL else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -148,7 +152,10 @@ extension CanLoadImage {
 
     /// create a `CGImage` from the image data
     ///
-    /// - parameter callback: block to execute when the image has been allocated
+    /// - parameter original: Whether to use the original or the processed data provider.
+    /// - parameter callback: Block to call when the image has been allocated.
+    ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func cgImage(original original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         dataProviderFunc() { result in
@@ -180,7 +187,9 @@ extension CanLoadImage {
     ///
     /// - parameter size: The target size of the thumbnail image while maintaining the aspect ratio of the source image.
     /// - parameter original: Whether to use the original or the processed data provider.
-    /// - parameter callback: Block to execute when the thumbnail image has been created.
+    /// - parameter callback: Block to call when the thumbnail image has been created.
+    ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func thumbnail(size size: CGSize, original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
 
@@ -218,7 +227,10 @@ extension CanLoadImage {
     #if os(iOS)
     /// create `UIImage` from the image data
     ///
-    /// - parameter callback: block to execute when the image has been allocated
+    /// - parameter original: Whether to use the original or the processed data provider.
+    /// - parameter callback: Block to call when the image has been allocated.
+    ///                       Provides `Result.Success` containing an `UIImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func image(original original: Bool = false, callback: (Result<UIImage, IONError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
@@ -236,7 +248,9 @@ extension CanLoadImage {
 
     /// create `UIImage` from the original image data
     ///
-    /// - parameter callback: block to execute when the image has been allocated
+    /// - parameter callback: Block to call when the image has been allocated.
+    ///                       Provides `Result.Success` containing an `UIImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(callback: (Result<UIImage, IONError> -> Void)) {
         self.image(original: true, callback: callback)
     }
@@ -245,7 +259,10 @@ extension CanLoadImage {
     #if os(OSX)
     /// create `NSImage` from the image data
     ///
-    /// - parameter callback: block to execute when the image has been allocated
+    /// - parameter original: Whether to use the original or the processed data provider.
+    /// - parameter callback: Block to call when the image has been allocated.
+    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func image(original original: Bool = false, callback: (Result<NSImage, IONError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
@@ -260,7 +277,9 @@ extension CanLoadImage {
 
     /// create `NSImage` from the original image data
     ///
-    /// - parameter callback: block to execute when the image has been allocated
+    /// - parameter callback: Block to call when the image has been allocated.
+    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(callback: (Result<NSImage, IONError> -> Void)) {
         self.image(original: true, callback: callback)
     }

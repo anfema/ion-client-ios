@@ -37,6 +37,10 @@ public class IONColorContent: IONContent {
     /// Initialize color content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized color content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
 
         // Make sure we're dealing with a dict
@@ -123,6 +127,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the color outlet becomes available.
     ///                       Provides `Result.Success` containing an `NSColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func color(name: String, position: Int = 0, callback: (Result<NSColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
@@ -166,6 +171,7 @@ extension IONPage {
     /// - parameter callback: Block to call when the color outlet becomes available.
     ///                       Provides `Result.Success` containing a `UIColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))

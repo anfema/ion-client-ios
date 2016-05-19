@@ -41,6 +41,10 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
     /// Initialize file content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized file content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
     override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
@@ -167,6 +171,7 @@ extension IONPage {
     ///                       the file is loaded.
     ///                       Provides `Result.Success` containing an `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func fileData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .Success(let content) = result else {

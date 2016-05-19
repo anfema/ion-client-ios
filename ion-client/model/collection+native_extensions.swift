@@ -20,6 +20,12 @@ extension IONCollection: CustomStringConvertible {
 
 
 /// Two collections are the same if the identifier matches
+///
+/// - parameter lhs: IONCollection on the left hand side of `==`
+/// - parameter rhs: IONCollection on the right hand side of `==`
+/// - returns: `true` if the collections have the same identifiers
+///            `false` if not.
+///
 public func == (lhs: IONCollection, rhs: IONCollection) -> Bool {
     return (lhs.identifier == rhs.identifier)
 }
