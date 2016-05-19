@@ -33,7 +33,7 @@ public enum Result<Value, Error: ErrorType> {
 
     /// Request successful, contains result
     case Success(Value)
-    
+
     /// Request failed, contains error
     case Failure(Error)
 
@@ -71,7 +71,7 @@ public enum Result<Value, Error: ErrorType> {
             return error
         }
     }
-    
+
     /// Initialize from `Alamofire` result
     ///
     /// - parameter result: `Alamofile.Result` object
@@ -83,13 +83,13 @@ public enum Result<Value, Error: ErrorType> {
             self = .Failure(error)
         }
     }
-    
+
     /// Returns the value of .Success or nil when there was an error.
     public func optional() -> Value? {
         guard case .Success(let ret) = self else {
             return nil
         }
-        
+
         return ret
     }
 }
@@ -97,7 +97,7 @@ public enum Result<Value, Error: ErrorType> {
 // MARK: - CustomStringConvertible
 
 extension Result: CustomStringConvertible {
-    /// The textual representation used when written to an output stream, which includes whether the result was a 
+    /// The textual representation used when written to an output stream, which includes whether the result was a
     /// success or failure.
     public var description: String {
         switch self {

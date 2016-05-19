@@ -20,10 +20,10 @@ import DEjson
 
 /// Color content
 public class IONColorContent: IONContent {
-    
+
     /// Red component (0-255)
     public var r: Int
-    
+
     /// Green component (0-255)
     public var g: Int
 
@@ -32,18 +32,18 @@ public class IONColorContent: IONContent {
 
     /// Alpha component (0-255), zero is fully transparent
     public var alpha: Int
-    
-    
+
+
     /// Initialize color content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized color content object
     override init(json: JSONObject) throws {
-        
+
         // Make sure we're dealing with a dict
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         // Make sure all data is there
         guard let rawR = dict["r"],
             let rawG = dict["g"],
@@ -55,7 +55,7 @@ public class IONColorContent: IONContent {
             case .JSONNumber(let a) = rawA else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         // Init from deserialized data
         self.r = Int(r)
         self.g = Int(g)
@@ -64,18 +64,18 @@ public class IONColorContent: IONContent {
 
         try super.init(json: json)
     }
-    
-    
+
+
     #if os(iOS)
     /// Create an `UIColor` instance from the color object
-    /// 
+    ///
     /// - returns: `UIColor` instance with values from color object
     public func color() -> UIColor? {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
     #endif
-    
-    
+
+
     #if os(OSX)
     /// Create an `NSColor` instance from the color object
     ///
@@ -89,7 +89,7 @@ public class IONColorContent: IONContent {
 
 /// Color extension to IONPage
 extension IONPage {
-    
+
     #if os(OSX)
     /// Fetch `NSColor` object for named outlet
     ///
@@ -99,23 +99,23 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func cachedColor(name: String, position: Int = 0) -> Result<NSColor, IONError> {
         let result = self.outlet(name, position: position)
-    
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         guard case let colorContent as IONColorContent = content else {
             return .Failure(.OutletIncompatible)
         }
-    
+
         guard let color = colorContent.color() else {
             return .Failure(.OutletEmpty)
         }
-    
+
         return .Success(color)
     }
-    
-    
+
+
     /// Fetch `NSColor` object for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -127,12 +127,12 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
-    
+
         return self
     }
     #endif
-    
-    
+
+
     #if os(iOS)
     /// Fetch `UIColor` object for named outlet
     ///
@@ -142,23 +142,23 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-    
+
         guard case let colorContent as IONColorContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         guard let color = colorContent.color() else {
             return .Failure(.OutletEmpty)
         }
-    
+
         return .Success(color)
     }
-    
-    
+
+
     /// Fetch `UIColor` object for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -170,7 +170,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
-        
+
         return self
     }
     #endif

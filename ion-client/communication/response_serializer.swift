@@ -14,13 +14,13 @@ import DEjson
 
 /// JSON response object, contains json and status code
 public struct JSONResponse {
-    
+
     /// Decoded JSON object
     public let json: JSONObject?
-    
+
     /// HTTP status code of response
     public let statusCode: Int
-    
+
     /// Initializer
     ///
     /// - parameter json: optional, decoded `JSONObject` of the response
@@ -33,7 +33,7 @@ public struct JSONResponse {
 
 /// Extend Alamofire Request with JSON response serializer of own JSON parser
 extension Request {
-    
+
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - returns: A `JSONObject` response serializer
@@ -42,7 +42,7 @@ extension Request {
             guard let validData = data, response = response else {
                 return .Failure(.ServerUnreachable)
             }
-            
+
             switch response.statusCode {
             case 401, 403:
                 return .Failure(.NotAuthorized)
@@ -53,20 +53,20 @@ extension Request {
             default:
                 return .Failure(.NoData(error))
             }
-            
+
             guard let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) else {
                 return .Failure(.InvalidJSON(nil))
             }
-            
+
             let JSON = JSONDecoder(jsonString).jsonObject
             if case .JSONInvalid = JSON {
                 return .Failure(.InvalidJSON(nil))
             }
-            
+
             return .Success(JSONResponse(json: JSON))
         }
     }
-    
+
     /// Adds a handler to be called once the request has finished.
     ///
     /// - parameter completionHandler: A closure to be executed once the request has finished. The closure takes 3

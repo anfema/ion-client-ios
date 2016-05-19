@@ -21,53 +21,53 @@ import DEjson
 
 /// Image content, has OS specific image loading functionality
 public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
-    
+
     /// MIME type of the image
     public var mimeType: String
-    
+
     /// Dimensions of the image
     public var size: CGSize = CGSize.zero
-    
+
     /// File size in bytes
     public var fileSize: Int = 0
-    
+
     /// URL of the image
     public var url: NSURL?
-    
+
     /// Original image mime type
     public var originalMimeType: String
-    
+
     /// Original image dimensions
     public var originalSize: CGSize = CGSize.zero
-    
+
     /// Original image file size
     public var originalFileSize: Int = 0
-    
+
     /// Original image URL
     public var originalURL: NSURL?
-    
+
     /// Image translation before cropping to final size
     public var translation: CGPoint = CGPoint.zero
-    
+
     /// Image scale factor before cropping
     public var scale: Float = 1.0
-    
+
     /// Method used for checksum calculation
     public var checksumMethod: String = "null"
-    
+
     /// Checksum as hexadecimal encoded string
     public var checksum: String = ""
 
     /// Original method used for checksum calculation
     public var originalChecksumMethod: String = "null"
-    
+
     /// Original checksum as hexadecimal encoded string
     public var originalChecksum: String = ""
-    
+
     /// If the image file is valid or not
     public var isValid = false
 
-    
+
     /// Initialize image content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized image content object
@@ -75,7 +75,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawMimeType           = dict["mime_type"],
             let rawOriginalMimeType     = dict["original_mime_type"],
             let rawImage                = dict["image"],
@@ -104,19 +104,19 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             case .JSONNumber(let transY)    = rawTranslationY else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.mimeType = mimeType
         self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
-        
+
         if case .JSONString(let fileUrl) = rawImage {
             self.url = NSURL(string: fileUrl)
             self.isValid = true
         }
-        
+
         self.translation = CGPoint(x: CGFloat(transX), y: CGFloat(transY))
         self.scale       = Float(scale)
-        
+
         self.originalMimeType = oMimeType
         self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
@@ -124,29 +124,29 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         if case .JSONString(let oFileUrl) = rawOriginalImage {
             self.originalURL = NSURL(string: oFileUrl)
         }
-        
+
         if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            
+
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
                 self.checksum = checksumParts[1]
             }
         }
-        
+
         if case .JSONString(let oChecksum) = rawOriginalChecksum {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-            
+
             if originalChecksumParts.count > 1 {
                 self.originalChecksumMethod = originalChecksumParts[0]
                 self.originalChecksum = originalChecksumParts[1]
             }
         }
-        
+
         try super.init(json: json)
     }
-    
-    
+
+
     /// Get a temporary valid url for this image file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
@@ -157,7 +157,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : myURL.absoluteString]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
@@ -168,23 +168,23 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
                     responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
             }
-            
+
             guard let url = NSURL(string: urlString) else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(url))
         }
     }
 
-    
+
     /// Image url for `CanLoadImage` protocol
     public var imageURL: NSURL? {
         return self.url
     }
-    
-    
+
+
     /// Original image url for `CanLoadImage` protocol
     public var originalImageURL: NSURL? {
         return self.originalURL
@@ -194,7 +194,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
 
 /// Image extension to IONPage
 extension IONPage {
-    
+
     /// Create thumbnail `CGImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -209,19 +209,19 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             imageContent.thumbnail(size: size, original: false, callback: callback)
         }
-        
+
         return self
     }
-    
-    
+
+
     #if os(iOS)
     /// Allocate `UIImage` for named outlet asynchronously
     ///
@@ -236,19 +236,19 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             imageContent.image(callback: callback)
         }
-        
+
         return self
     }
-    
-    
+
+
     /// Allocate `UIImage` for named outlet (original unmodified image) async
     ///
     /// - parameter name: The name of the outlet
@@ -262,20 +262,20 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             imageContent.originalImage(callback)
         }
-        
+
         return self
     }
     #endif
 
-    
+
     #if os(OSX)
     /// Allocate `NSImage` for named outlet asynchronously
     ///
@@ -289,19 +289,19 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-    
+
             guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-    
+
             imageContent.image(callback: callback)
         }
-    
+
         return self
     }
-    
-    
+
+
     /// Allocate `NSImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -314,15 +314,15 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-    
+
             guard case let imageContent as IONImageContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-    
+
             imageContent.originalImage(callback)
         }
-    
+
         return self
     }
     #endif

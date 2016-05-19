@@ -15,11 +15,11 @@ import DEjson
 
 /// Option content, just carries the selected value not the options
 public class IONOptionContent: IONContent {
-    
+
     /// Value for the selected option
     public var value: String
-    
-    
+
+
     /// Initialize option content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized option content object
@@ -27,12 +27,12 @@ public class IONOptionContent: IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawValue = dict["value"],
             case .JSONString(let value) = rawValue else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.value = value
 
         try super.init(json: json)
@@ -42,7 +42,7 @@ public class IONOptionContent: IONContent {
 
 /// Option extensions to IONPage
 extension IONPage {
-    
+
     /// Fetch selected option for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -51,19 +51,19 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func selectedOption(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         guard case let outletContent as IONOptionContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         return .Success(outletContent.value)
     }
-    
-    
+
+
     /// Fetch selected option for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -75,7 +75,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.selectedOption(name, position: position))
         }
-        
+
         return self
     }
 }

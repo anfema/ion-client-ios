@@ -12,7 +12,7 @@
 import Foundation
 
 public extension IONCollection {
-    
+
     /// Get a fulltext search handle
     ///
     /// - parameter callback: Callback to be called when the search handle is ready
@@ -21,7 +21,7 @@ public extension IONCollection {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         // Anonymous function for calling callbacks
         func performCallback() {
             dispatch_async(self.workQueue) {
@@ -29,11 +29,11 @@ public extension IONCollection {
                     responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
                 }
-                
+
                 responseQueueCallback(callback, parameter: .Success(handle))
             }
         }
-        
+
         if !NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
             ION.downloadFTSDB(self.identifier) {
                 performCallback()

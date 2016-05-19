@@ -15,16 +15,16 @@ import DEjson
 
 /// Connection content, carries a link to another collection, page or outlet
 public class IONConnectionContent: IONContent {
-    
+
     /// Value of the connection link
     public var link: String
-    
+
     /// URL to the connected collection, page or outlet
     public var url: NSURL? {
         return NSURL(string: "\(ION.config.connectionScheme):\(self.link)")
     }
 
-    
+
     /// Initialize connection content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized connection content object
@@ -32,12 +32,12 @@ public class IONConnectionContent: IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let connectionString = dict["connection_string"],
             case .JSONString(let value) = connectionString else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.link = value
 
         try super.init(json: json)
@@ -47,7 +47,7 @@ public class IONConnectionContent: IONContent {
 
 /// Connection extensions to IONPage
 extension IONPage {
-    
+
     /// Fetch selected connection for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -56,7 +56,7 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func link(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -64,15 +64,15 @@ extension IONPage {
         guard case let connectionContent as IONConnectionContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         guard let url = connectionContent.url else {
             return .Failure(.OutletEmpty)
         }
-        
+
         return .Success(url)
     }
-    
-    
+
+
     /// Fetch selected connection for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -84,7 +84,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.link(name, position: position))
         }
-        
+
         return self
     }
 }

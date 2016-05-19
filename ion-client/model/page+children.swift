@@ -12,7 +12,7 @@ import Foundation
 
 
 extension IONPage {
-    
+
     /// Fetch page children
     ///
     /// - parameter identifier: Identifier of child page
@@ -26,34 +26,34 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .DidFail))
                 return
             }
-            
+
             guard page.parent == self.identifier else {
                 responseQueueCallback(callback, parameter: .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(page))
         }
-        
+
         return self
     }
-    
-    
+
+
     /// Fetch page children
     ///
     /// - parameter identifier: Identifier of child page
     /// - returns: Page object that resolves asynchronously or nil if the page is no child of self
     public func child(identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
-        
+
         guard page.parent == self.identifier else {
             return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
         }
-        
+
         return .Success(page)
     }
-    
-    
+
+
     /// Enumerate page children
     ///
     /// - parameter callback: The callback to call for each child
@@ -64,20 +64,20 @@ extension IONPage {
             }
         }
     }
-    
-    
+
+
     /// List page children, Attention: those pages returned are not fully loaded!
     ///
     /// - parameter callback: The callback to call for children list
     public func childrenList(callback: ([IONPage] -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             var result = [IONPage]()
-            
+
             for child in children {
                 let page = self.collection.page(child)
                 result.append(page)
             }
-            
+
             responseQueueCallback(callback, parameter: result)
         }
     }

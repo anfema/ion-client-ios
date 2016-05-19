@@ -17,17 +17,17 @@ import html5tokenizer
 
 /// Text content, may be rendered in different markup
 public class IONTextContent: IONContent {
-    
+
     /// MIME type of the contained text (usually one of: text/plain, text/html, text/markdown)
     public var mimeType: String = "text/plain"
-    
+
     /// Multi line hint
     public var multiLine: Bool = false
 
     /// Text, private because of conversion functions
     private var text: String
-    
-    
+
+
     /// Initialize text content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized text content object
@@ -35,7 +35,7 @@ public class IONTextContent: IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawMimeType   = dict["mime_type"],
             let rawIsMultiline  = dict["is_multiline"],
             let rawText         = dict["text"],
@@ -44,15 +44,15 @@ public class IONTextContent: IONContent {
             case .JSONString(let text)          = rawText else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.mimeType = mimeType
         self.multiLine = multiLine
         self.text = text
-    
+
         try super.init(json: json)
     }
-    
-    
+
+
     /// Fetch HTML Representation of the text
     ///
     /// All HTML gets wrapped in a `div` tag with 2 css classes applied:
@@ -80,11 +80,11 @@ public class IONTextContent: IONContent {
         default:
             return nil
         }
-        
+
         return "<div class=\"ioncontent ioncontent__\(self.outlet)\">\(text)</div>"
     }
-    
-    
+
+
     /// Fetch NSAttributed String version of the text
     ///
     /// Available converters:
@@ -107,8 +107,8 @@ public class IONTextContent: IONContent {
             return nil
         }
     }
-    
-    
+
+
     /// Fetch plaintext version of the text
     ///
     /// Available converters:
@@ -137,7 +137,7 @@ public class IONTextContent: IONContent {
 
 /// Text rendering extensions for IONPage
 extension IONPage {
-    
+
     /// Fetch plaintext string for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -146,23 +146,23 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func text(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         guard case let textContent as IONTextContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         guard let text = textContent.plainText() else {
             return .Failure(.OutletEmpty)
         }
-        
+
         return .Success(text)
     }
-    
-    
+
+
     /// Fetch plaintext string for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -174,11 +174,11 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.text(name, position: position))
         }
-        
+
         return self
     }
-    
-    
+
+
     /// Fetch html string for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -187,23 +187,23 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func html(name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         guard case let textContent as IONTextContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         guard let text = textContent.htmlText() else {
             return .Failure(.OutletEmpty)
         }
 
         return .Success(text)
     }
-    
-    
+
+
     /// Fetch html string for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -215,10 +215,10 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.html(name, position: position))
         }
-        
+
         return self
     }
-    
+
 
     /// Fetch attributed string for named outlet
     ///
@@ -229,7 +229,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -241,11 +241,11 @@ extension IONPage {
         guard let text = textContent.attributedString() else {
             return .Failure(.OutletEmpty)
         }
-        
+
         return .Success(text)
     }
-    
-    
+
+
     /// Fetch attributed string for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -257,7 +257,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.attributedString(name, position: position))
         }
-        
+
         return self
     }
 }

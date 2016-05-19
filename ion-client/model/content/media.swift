@@ -15,16 +15,16 @@ import DEjson
 
 /// Media content, may be image, audio or video content
 public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
-    
+
     /// Original file name
     public var filename: String
-    
+
     /// MIME type of media file
     public var mimeType: String
-    
+
     /// Dimensions of the media file if applicable
     public var size = CGSize.zero
-    
+
     /// File size in bytes
     public var fileSize = 0
 
@@ -33,38 +33,38 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
 
     /// Checksum as hexadecimal encoded string
     public var checksum: String = ""
-    
+
     /// Length in seconds of the media file if applicable
     public var length: Float = 0.0
-    
+
     /// URL to the media file
     public var url: NSURL?
-    
+
     /// Original media file mime type
     public var originalMimeType: String
-    
+
     /// Dimensions of the original media file if applicable
     public var originalSize = CGSize.zero
 
     /// Original media file size in bytes
     public var originalFileSize = 0
-    
+
     /// Original method used for checksum calculation
     public var originalChecksumMethod: String = "null"
-    
+
     /// Original checksum as hexadecimal encoded string
     public var originalChecksum: String = ""
-    
+
     /// Length in seconds of the original media file if applicable
     public var originalLength: Float = 0.0
 
     /// URL to the original file
     public var originalURL: NSURL?
-    
+
     /// If the media file is valid or not
     public var isValid = false
-    
-    
+
+
     /// Initialize media content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized media content object
@@ -72,7 +72,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawName           = dict["name"],
             let rawMimeType         = dict["mime_type"],
             let rawOriginalMimeType = dict["original_mime_type"],
@@ -101,51 +101,51 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             case .JSONNumber(let oLength)   = rawOriginalLength else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.filename = name
         self.mimeType = mimeType
         self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
-        
+
         if case .JSONString(let fileUrl) = rawFile {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
-        
+
         if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            
+
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
                 self.checksum = checksumParts[1]
             }
         }
-        
+
         self.length = Float(length)
-        
+
         self.originalMimeType = oMimeType
         self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
-        
+
         if case .JSONString(let oFileUrl) = rawOriginalFile {
             self.originalURL = NSURL(string: oFileUrl)
         }
-        
+
         if case .JSONString(let oChecksum) = rawOriginalChecksum {
             let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
-            
+
             if originalChecksumParts.count > 1 {
                 self.originalChecksumMethod = originalChecksumParts[0]
                 self.originalChecksum = originalChecksumParts[1]
             }
         }
-        
+
         self.originalLength = Float(oLength)
 
         try super.init(json: json)
     }
-    
-    
+
+
     /// Load the file binary data and return memory mapped `NSData`
     ///
     /// - parameter callback: Block to call when the file data becomes available.
@@ -157,7 +157,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             do {
                 let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 responseQueueCallback(callback, parameter: .Success(data))
@@ -166,8 +166,8 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             }
         }
     }
-    
-    
+
+
     /// Download the file and give back the URL
     ///
     /// - parameter callback: Block to call when the download of the file has finished.
@@ -178,19 +178,19 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
-                
+
             responseQueueCallback(callback, parameter: .Success(NSURL(fileURLWithPath: filename)))
         }
     }
-    
-    
+
+
     /// Get a temporary valid url for this media file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
@@ -217,24 +217,24 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             responseQueueCallback(callback, parameter: .Success(url))
         }
     }
-    
-    
+
+
     /// Image url for `CanLoadImage` protocol
     public var imageURL: NSURL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
         }
-        
+
         return nil
     }
-    
-    
+
+
     /// Original image url for `CanLoadImage` protocol
     public var originalImageURL: NSURL? {
         if self.originalMimeType.hasPrefix("image/") {
             return self.originalURL
         }
-        
+
         return nil
     }
 }
@@ -242,7 +242,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
 
 /// Media content extensions to IONPage
 extension IONPage {
-    
+
     /// Fetch URL for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -252,7 +252,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func mediaURL(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
@@ -264,11 +264,11 @@ extension IONPage {
         guard let url = urlProvider.url else {
             return .Failure(.OutletEmpty)
         }
-        
+
         return .Success(url)
     }
 
-    
+
     /// Fetch URL for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -277,13 +277,13 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func mediaURL(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) { 
+        dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.mediaURL(name, position: position))
         }
-        
+
         return self
     }
-    
+
 
     /// Fetch locally cached URL for named outlet asynchronously
     ///
@@ -303,15 +303,15 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             mediaContent.cachedURL { result in
                 responseQueueCallback(callback, parameter: result)
             }
         }
-        
+
         return self
     }
-    
+
 
     /// Fetch temporary valid URL for named outlet asynchronously
     ///
@@ -326,21 +326,21 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             guard case let urlProvider as TemporaryURLProvider = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             urlProvider.temporaryURL { result in
                 responseQueueCallback(callback, parameter: result)
             }
         }
-        
+
         return self
     }
-    
-   
+
+
     /// Fetch data for media file async
     ///
     /// - parameter name: The name of the outlet
@@ -358,10 +358,10 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             mediaContent.data(callback)
         }
-        
+
         return self
     }
 }

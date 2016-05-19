@@ -14,7 +14,7 @@ import Markdown
 public class HTMLParser {
     private let tokens: [HTML5Token]
     private var formatStack = [FormatStackItem]()
-    
+
     private struct FormatStackItem {
         var tagName: String
         var styleDict: [String: AnyObject]
@@ -26,7 +26,7 @@ public class HTMLParser {
     public init(html: String) {
         self.tokens = HTML5Tokenizer(htmlString: html).tokenize()
     }
-    
+
     /// Render attributed string
     ///
     /// - parameter style: Document style
@@ -35,16 +35,16 @@ public class HTMLParser {
         let result = NSMutableAttributedString()
         var counters = [Int]()
         var depth = 0
-        
+
         self.formatStack.removeAll()
         self.formatStack.append(FormatStackItem(tagName: "root", styleDict: style.paragraph.makeAttributeDict()))
-        
+
         for token in self.tokens {
             // there is always at least one FormatStackItem (root) in formatStack.
             guard let lastStackItem = self.formatStack.last else {
                 continue
             }
-            
+
             switch token {
             case .StartTag(let name, let selfClosing, let attributes):
                 guard let name = name else {
@@ -57,7 +57,7 @@ public class HTMLParser {
                         continue
                     }
                 }
-                
+
                 if name == "p" && lastStackItem.tagName == "blockquote" {
                     self.pushFormat(style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
                 } else {
@@ -68,7 +68,7 @@ public class HTMLParser {
                     }
                     self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
                 }
-                
+
                 if self.isBlock(name) {
                     result.appendAttributedString(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                 }
@@ -78,7 +78,7 @@ public class HTMLParser {
                     }
                 }
 
-                
+
                 switch name {
                 case "li":
                     if self.getListContext() == "ul" {
@@ -88,7 +88,7 @@ public class HTMLParser {
                         guard let counter = counters.popLast() else {
                             continue
                         }
-                        
+
                         result.appendAttributedString(NSAttributedString(string: "\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                         counters.append(counter + 1)
                     }
@@ -101,14 +101,14 @@ public class HTMLParser {
                 default:
                     break
                 }
-                
+
             case .EndTag(let name):
                 guard let name = name else {
                     continue
                 }
-                
+
                 let oldFormat = self.popFormat(name)
-                
+
                 switch name {
                 case "ol", "ul":
                     depth -= 1
@@ -118,12 +118,12 @@ public class HTMLParser {
                 default:
                     break
                 }
-                
+
                 if !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
                     let a = (oldFormat ?? lastStackItem).styleDict
                     result.appendAttributedString(NSAttributedString(string: " ", attributes: a))
                 }
-                
+
             case .Text(let data):
                 guard let data = data else {
                     continue
@@ -149,7 +149,7 @@ public class HTMLParser {
                 continue
             }
         }
-        
+
         while true {
             if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: .BackwardsSearch) where rng.endIndex == result.string.endIndex {
                 let len = rng.startIndex.distanceTo(rng.endIndex)
@@ -174,7 +174,7 @@ public class HTMLParser {
 
         return result
     }
-    
+
     /// Render text only version of HTML
     ///
     /// - returns: Plaintext version of HTML stripped of all tags
@@ -185,13 +185,13 @@ public class HTMLParser {
 
         var lastTagName = "root"
         var listContext = ["none"]
-        
+
         for token in self.tokens {
             // there is always at least one item ("none") in listContext.
             guard let lastListContextItem = listContext.last else {
                 continue
             }
-            
+
             switch token {
             case .StartTag(let name, let selfClosing, _):
                 guard let name = name else {
@@ -204,9 +204,9 @@ public class HTMLParser {
                         continue
                     }
                 }
-                
+
                 lastTagName = name
-                
+
                 switch name {
                 case "li":
                     if lastListContextItem == "ul" {
@@ -220,7 +220,7 @@ public class HTMLParser {
                         guard let counter = counters.popLast() else {
                             continue
                         }
-                        
+
                         result.appendContentsOf("\n")
                         for _ in 0..<depth {
                             result.appendContentsOf("    ")
@@ -239,12 +239,12 @@ public class HTMLParser {
                 if result.characters.isEmpty == false && self.isBlock(name) {
                     result.appendContentsOf("\n")
                 }
-                
+
             case .EndTag(let name):
                 guard let name = name else {
                     continue
                 }
-                
+
                 switch name {
                 case "ol", "ul":
                     listContext.popLast()
@@ -257,12 +257,12 @@ public class HTMLParser {
                 default:
                     break
                 }
-                
+
                 if !result.hasSuffix(" ") {
                     result.appendContentsOf(" ")
                 }
-                
-                
+
+
             case .Text(let data):
                 guard let data = data else {
                     continue
@@ -276,15 +276,15 @@ public class HTMLParser {
                     result.appendContentsOf(" ")
                 }
                 result.appendContentsOf(stripped)
-                
+
             default:
                 continue
             }
         }
-        
+
         return result
     }
-    
+
     private func pushFormat(style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
         switch tagName {
         case "h1":
@@ -315,7 +315,7 @@ public class HTMLParser {
         case "blockquote":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.quoteBlock.makeAttributeDict(nestingDepth: nestingDepth)))
 
-        
+
         case "strong":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.strongText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .FontOnly)))
         case "b":
@@ -340,12 +340,12 @@ public class HTMLParser {
             break
         }
     }
-    
+
     private func popFormat(tagName: String) -> FormatStackItem? {
         guard let lastStackItem = self.formatStack.last else {
             return nil
         }
-        
+
         if lastStackItem.tagName == tagName {
             return self.formatStack.popLast()
         } else {
@@ -354,7 +354,7 @@ public class HTMLParser {
             guard tagIsBlock else {
                 return nil // ignore
             }
-            
+
             // search upwards in stack
             var lastFound = 0
             for (index, item) in self.formatStack.enumerate() {
@@ -362,17 +362,17 @@ public class HTMLParser {
                     lastFound = index
                 }
             }
-            
+
             if lastFound > 0 {
                 for _ in 0..<(self.formatStack.count - lastFound) {
                     return self.formatStack.popLast()
                 }
             }
         }
-        
+
         return nil
     }
-    
+
     private func isBlock(tagName: String) -> Bool {
         switch tagName {
         case "h1", "h2", "h3", "h4", "h5", "ul", "ol", "li", "pre", "p", "blockquote":
@@ -383,7 +383,7 @@ public class HTMLParser {
             return false
         }
     }
-    
+
     private func getListContext() -> String {
         let stack = self.formatStack.reverse()
         for item in stack {

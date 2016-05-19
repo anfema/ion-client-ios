@@ -13,7 +13,7 @@ import Foundation
 
 
 extension IONCollection {
- 
+
     /// Fetch page count
     ///
     /// - parameter parent: Parent to get page count for, nil == top level
@@ -25,10 +25,10 @@ extension IONCollection {
                 responseQueueCallback(callback, parameter: result)
             }
         }
-        
+
         return self
     }
-    
+
 
     /// Fetch page count sync
     ///
@@ -38,11 +38,11 @@ extension IONCollection {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return nil
         }
-        
+
         return self.pageMeta.filter({ $0.parent == parent }).count
     }
 
-    
+
     /// Fetch metadata
     ///
     /// - parameter identifier: Page identifier to get metadata for
@@ -53,11 +53,11 @@ extension IONCollection {
             let result = self.metadata(identifier)
             responseQueueCallback(callback, parameter: result)
         }
-        
+
         return self
     }
-    
-    
+
+
     /// Fetch metadata sync
     ///
     /// - parameter identifier: Page identifier to get metadata for
@@ -66,17 +66,17 @@ extension IONCollection {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .Failure(.DidFail)
         }
-        
+
         for meta in self.pageMeta {
             if meta.identifier == identifier {
                 return .Success(meta)
             }
         }
-        
+
         return .Failure(.PageNotFound(identifier))
     }
-    
-    
+
+
     /// Fetch metadata as list
     ///
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
@@ -86,11 +86,11 @@ extension IONCollection {
         dispatch_async(self.workQueue) {
             responseQueueCallback(callback, parameter: self.metadataList(parent))
         }
-        
+
         return self
     }
 
-    
+
     /// Fetch metadata as list sync
     ///
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
@@ -99,15 +99,15 @@ extension IONCollection {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .Failure(.DidFail)
         }
-        
+
         var result = self.pageMeta.filter({ $0.parent == parent })
         result.sortInPlace({ (page1, page2) -> Bool in
             return page1.position < page2.position
         })
-        
+
         return .Success(result)
     }
-    
+
 
     /// Fetch a parent->child path
     ///
@@ -120,14 +120,14 @@ extension IONCollection {
                 responseQueueCallback(callback, parameter: .Failure(IONError.PageNotFound(pageIdentifier)))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(result))
         }
-        
+
         return self
     }
 
-    
+
     /// Fetch a parent->child path sync
     ///
     /// - parameter pageIdentifier: The page identifier to calculate the path for
@@ -137,24 +137,24 @@ extension IONCollection {
             let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
                 return nil
         }
-        
+
         var result = [pagemeta]
         var parentID = pagemeta.parent
-        
+
         while parentID != nil {
             guard let p = parentID,
                   let meta = self.getPageMetaForPage(p) else {
                 break
             }
-            
+
             result.insert(meta, atIndex: 0)
             parentID = meta.parent
         }
-        
+
         return result
     }
 
-    
+
     /// Fetch page tree leaves from parent (walks down the page tree and returns all leaves at the end)
     ///
     /// - parameter parent: Parent from where to start the leave search (nil for toplevel)
@@ -163,12 +163,12 @@ extension IONCollection {
         dispatch_async(self.workQueue) {
             let metaItems = self.metaLeaves(parent)
             let result: [IONPage] = metaItems.map({ self.page($0.identifier) })
-            
+
             responseQueueCallback(callback, parameter: result)
         }
     }
-    
-    
+
+
     /// Fetch page tree metadata leaves from parent (walks down the page tree and returns all leaves at the end)
     ///
     /// - parameter parent: Parent from where to start the leave search (nil for toplevel)
@@ -176,63 +176,63 @@ extension IONCollection {
     public func metaLeaves(parent: String?) -> [IONPageMeta] {
         let toplevel = self.pageMeta.filter({ $0.parent == parent })
         let result = self.leaveRecursive(toplevel)
-        
+
         return result
     }
-    
+
 
     // MARK: - Internal
-    
+
     internal func getChildIdentifiersForPage(parent: String, callback: ([String] -> Void)) {
         dispatch_async(self.workQueue) {
             var temp: [IONPageMeta] = self.pageMeta.filter({ $0.parent == parent })
-            
+
             temp.sortInPlace({ (page1, page2) -> Bool in
                 return page1.position < page2.position
             })
-            
+
             let result: [String] = temp.flatMap({ $0.identifier })
-            
+
             responseQueueCallback(callback, parameter: result)
         }
     }
-    
-    
+
+
     internal func getPageMetaForPage(identifier: String) -> IONPageMeta? {
         for meta in self.pageMeta {
             if meta.identifier == identifier {
                 return meta
             }
         }
-        
+
         return nil
     }
 
-    
+
     // MARK: - Private
     private func leaveRecursive(pages: [IONPageMeta]) -> [IONPageMeta] {
         var result = [IONPageMeta]()
         var check = [IONPageMeta]()
-        
+
         for page in pages {
             var is_leaf = true
-            
+
             for meta in self.pageMeta {
                 if meta.parent == page.identifier {
                     is_leaf = false
                     check.append(meta)
                 }
             }
-            
+
             if is_leaf {
                 result.append(page)
             }
         }
-        
+
         if check.isEmpty == false {
             result.appendContentsOf(self.leaveRecursive(check))
         }
-        
+
         return result
     }
 }

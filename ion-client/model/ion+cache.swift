@@ -43,7 +43,7 @@ extension ION {
         }
         IONRequest.resetCache(locale: self.config.locale)
     }
-    
+
     /// Clear disk cache for specific locale and all hosts
     ///
     /// Removes all cached requests and files for the specified locale and all servers, does not affect memory cache so be careful
@@ -55,7 +55,7 @@ extension ION {
         prefs.synchronize()
         IONRequest.resetCache(locale: locale)
     }
-    
+
     /// Determine if collection cache has timed out
     ///
     /// - returns: true if cache is old

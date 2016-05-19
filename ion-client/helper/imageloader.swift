@@ -23,22 +23,22 @@ import ImageIO
 public protocol CanLoadImage {
     /// checksumming method used
     var checksumMethod: String { get }
-    
+
     /// checksumming method used for original file
     var originalChecksumMethod: String { get }
-    
+
     /// checksum for the image
     var checksum: String { get }
-    
+
     /// checksum for original file
     var originalChecksum: String { get }
-    
+
     /// url of the image
     var imageURL: NSURL? { get }
-    
+
     /// url of the original image
     var originalImageURL: NSURL? { get }
-    
+
     /// variation of this outlet (used for determining scale factor)
     var variation: String { get }
 }
@@ -48,24 +48,24 @@ let serialQueue = dispatch_queue_create("com.anfema.ion.SerialImageConverterQueu
 
 /// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
 extension CanLoadImage {
-    
+
     /// default implementation for checksum method (returns "null" if url not cached)
     public var checksumMethod: String {
         guard let thumbnail = self.imageURL,
             let _ = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "null"
         }
-        
+
         return "sha256"
     }
-    
+
     /// default implementation for checksum (returns "invalid" if url not cached)
     public var checksum: String {
         guard let thumbnail = self.imageURL,
             let data = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "invalid"
         }
-        
+
         return data.cryptoHash(.SHA256).hexString()
     }
 
@@ -75,17 +75,17 @@ extension CanLoadImage {
             let _ = IONRequest.cachedFile(image.URLString) else {
                 return "null"
         }
-        
+
         return "sha256"
     }
-    
+
     /// default implementation for checksum (returns "invalid" if url not cached)
     public var originalChecksum: String {
         guard let image = self.originalImageURL,
             let data = IONRequest.cachedFile(image.URLString) else {
                 return "invalid"
         }
-        
+
         return data.cryptoHash(.SHA256).hexString()
     }
 
@@ -97,22 +97,22 @@ extension CanLoadImage {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
                 guard case .Success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
                 }
-                
+
                 guard let dataProvider = CGDataProviderCreateWithFilename(filename) else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
                     }
-                    
+
                     return
                 }
-                
+
                 responseQueueCallback(callback, parameter: .Success(dataProvider))
         }
     }
@@ -125,27 +125,27 @@ extension CanLoadImage {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod: self.originalChecksumMethod, checksum: self.originalChecksum) { result in
                 guard case .Success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
                 }
-                
+
                 guard let dataProvider = CGDataProviderCreateWithFilename(filename) else {
                     if ION.config.loggingEnabled {
                         print("ION: Could not create dataprovider from file \(filename)")
                     }
-                    
+
                     return
                 }
-                
+
                 responseQueueCallback(callback, parameter: .Success(dataProvider))
         }
     }
 
-    
+
     /// create a `CGImage` from the image data
     ///
     /// - parameter callback: block to execute when the image has been allocated
@@ -156,14 +156,14 @@ extension CanLoadImage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             let options = Dictionary<String, AnyObject>()
             guard let src = CGImageSourceCreateWithDataProvider(provider, options),
                 let img = CGImageSourceCreateImageAtIndex(src, 0, options) else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(img))
         }
     }
@@ -174,8 +174,8 @@ extension CanLoadImage {
     public func originalCGImage(callback: (Result<CGImageRef, IONError> -> Void)) {
         self.cgImage(original: true, callback: callback)
     }
-    
-    
+
+
     /// create a `CGImage` with a specific size
     ///
     /// - parameter size: The target size of the thumbnail image while maintaining the aspect ratio of the source image.
@@ -183,13 +183,13 @@ extension CanLoadImage {
     /// - parameter callback: Block to execute when the thumbnail image has been created.
     public func thumbnail(size size: CGSize, original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
-        
+
         dataProviderFunc() { result in
             guard case .Success(let provider) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             dispatch_async(serialQueue) {
                 let options: [NSString: NSObject] = [
                     kCGImageSourceThumbnailMaxPixelSize: max(size.width, size.height),
@@ -208,13 +208,13 @@ extension CanLoadImage {
                     responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
                 }
-                
+
                 responseQueueCallback(callback, parameter: .Success(img))
             }
         }
     }
 
-    
+
     #if os(iOS)
     /// create `UIImage` from the image data
     ///
@@ -225,10 +225,10 @@ extension CanLoadImage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             // use the scale factor of the variation or 1.0 if none was found
             let scale = ION.config.variationScaleFactors[self.variation] ?? 1.0
-            
+
             let uiImage = UIImage(CGImage: img, scale: scale, orientation: .Up)
             responseQueueCallback(callback, parameter: .Success(uiImage))
         }
@@ -241,7 +241,7 @@ extension CanLoadImage {
         self.image(original: true, callback: callback)
     }
     #endif
-    
+
     #if os(OSX)
     /// create `NSImage` from the image data
     ///
@@ -252,7 +252,7 @@ extension CanLoadImage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-    
+
             let nsImage = NSImage(CGImage: img, size: CGSize(width: CGFloat(CGImageGetWidth(img)), height: CGFloat(CGImageGetHeight(img))))
             responseQueueCallback(callback, parameter: .Success(nsImage))
         }

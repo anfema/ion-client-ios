@@ -28,20 +28,20 @@ public protocol TemporaryURLProvider {
 
 /// IONContent base class, carries common values
 public class IONContent {
-    
+
     /// Variation name
     public var variation: String
-    
+
     /// Outlet name
     public var outlet: String
-    
+
     /// If the outlet is searchable or not
 	public var isSearchable = false
-    
+
     /// Array position
     public var position: Int
-    
-    
+
+
     /// Initialize content object from JSON
     ///
     /// This is the content base class, it should never be instantiated by itself, only through it's subclasses!
@@ -51,31 +51,31 @@ public class IONContent {
 		guard case .JSONDictionary(let dict) = json else {
 			throw IONError.JSONObjectExpected(json)
 		}
-		
+
 		guard let rawVariation = dict["variation"],
             let rawOutlet      = dict["outlet"],
             case .JSONString(let variation) = rawVariation,
             case .JSONString(let outlet)    = rawOutlet else {
                 throw IONError.InvalidJSON(json)
 		}
-		
+
 		self.variation = variation
 		self.outlet = outlet
-        
+
         if let searchableObj = dict["is_searchable"] {
             if case .JSONBoolean(let searchable) = searchableObj {
                 self.isSearchable = searchable
             }
         }
-        
+
         if let p = dict["position"], case .JSONNumber(let pos) = p {
             self.position = Int(pos)
         } else {
             self.position = 0
         }
 	}
-    
-    
+
+
     /// Initialize a content object from JSON
     ///
     /// This essentially removes the top JSON object casing and determines which object
@@ -92,12 +92,12 @@ public class IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawType = dict["type"],
             case .JSONString(let contentType) = rawType else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         // dispatcher
         if contentType == "containercontent" {
             return try IONContainerContent(json: json)
@@ -107,7 +107,7 @@ public class IONContent {
                     return try lambda(json)
                 }
             }
-            
+
             throw IONError.UnknownContentType(contentType)
         }
     }

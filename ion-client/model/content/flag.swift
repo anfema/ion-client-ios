@@ -15,11 +15,11 @@ import DEjson
 
 /// Flag content, can be enabled or not
 public class IONFlagContent: IONContent {
-    
+
     /// Status of the flag
     public var enabled: Bool
-    
-    
+
+
     /// Initialize flag content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized flag content object
@@ -27,12 +27,12 @@ public class IONFlagContent: IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawIsEnabled = dict["is_enabled"],
             case .JSONBoolean(let enabled) = rawIsEnabled else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.enabled = enabled
 
         try super.init(json: json)
@@ -51,19 +51,19 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func isSet(name: String, position: Int = 0) -> Result<Bool, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         guard case let flagContent as IONFlagContent = content else {
             return .Failure(.OutletIncompatible)
         }
-        
+
         return .Success(flagContent.enabled)
     }
-    
-    
+
+
     /// Check if flag is set for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -75,7 +75,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.isSet(name, position: position))
         }
-        
+
         return self
     }
 }

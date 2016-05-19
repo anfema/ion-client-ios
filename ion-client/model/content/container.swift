@@ -15,11 +15,11 @@ import DEjson
 
 /// Container content, contains other content objects
 public class IONContainerContent: IONContent {
-    
+
     /// Children of this container
     public var children: [IONContent]
-    
-    
+
+
     /// Initialize container content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized container content object
@@ -29,12 +29,12 @@ public class IONContainerContent: IONContent {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawChildren = dict["children"],
             case .JSONArray(let children) = rawChildren else {
                 throw IONError.JSONArrayExpected(json)
         }
-        
+
         self.children = []
         for child in children {
             do {
@@ -48,14 +48,14 @@ public class IONContainerContent: IONContent {
 
         try super.init(json: json)
     }
-    
-    
+
+
     /// Container content has a subscript for it's children
     subscript(index: Int) -> IONContent? {
         guard index > -1 && index < self.children.count else {
             return nil
         }
-        
+
         return self.children[index]
     }
 }
@@ -63,7 +63,7 @@ public class IONContainerContent: IONContent {
 
 /// Container extension to IONPage
 extension IONPage {
-    
+
     /// Fetch `IONContent`-Array for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -72,19 +72,19 @@ extension IONPage {
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func children(name: String, position: Int = 0) -> Result<[IONContent], IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
             return .Failure(result.error ?? .UnknownError)
         }
-        
+
         if case let content as IONContainerContent = content {
             return .Success(content.children)
         }
-        
+
         return .Failure(.OutletIncompatible)
     }
-    
-    
+
+
     /// Fetch `IONContent`-Array for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -96,7 +96,7 @@ extension IONPage {
         dispatch_async(workQueue) {
             responseQueueCallback(callback, parameter: self.children(name, position: position))
         }
-        
+
         return self
     }
 }

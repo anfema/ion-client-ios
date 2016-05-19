@@ -14,9 +14,9 @@ disabled_rules: # rule identifiers to exclude from running
 # - return_arrow_whitespace
 # - statement_position
 - todo
-#- trailing_newline
+# - trailing_newline
 # - trailing_semicolon
-- trailing_whitespace
+# - trailing_whitespace
 - type_body_length
 # - type_name
 - variable_name_max_length
@@ -25,7 +25,7 @@ disabled_rules: # rule identifiers to exclude from running
 - conditional_binding_cascade
 - cyclomatic_complexity
 - function_parameter_count
-#- valid_docs
+# - valid_docs
 opt_in_rules: # some rules are only opt-in
 - empty_count
 - missing_docs

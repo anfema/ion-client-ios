@@ -20,11 +20,11 @@ extension ION {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         collection(identifier, callback: callback)
     }
-    
-    
+
+
     /// Tries to fetch the associated page
     ///
     /// - parameter      url: The URL the page identifier should be extracted from to request the page.
@@ -35,18 +35,18 @@ extension ION {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         resolve(url) { (result: Result<IONCollection, IONError>) in
             guard case .Success(let collection) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             collection.page(identifier, callback: callback)
         }
     }
-    
-    
+
+
     /// Tries to fetch the associated outlet
     ///
     /// - parameter      url: The URL the outlet name should be extracted from to request the outlet.
@@ -57,13 +57,13 @@ extension ION {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         resolve(url) { (result: Result<IONPage, IONError>) in
             guard case .Success(let page) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             page.outlet(name, callback: callback)
         }
     }

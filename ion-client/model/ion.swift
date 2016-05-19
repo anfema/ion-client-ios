@@ -22,7 +22,7 @@ public class ION {
 
     /// Pending downloads
     static internal var pendingDownloads = [String: (totalBytes: Int64, downloadedBytes: Int64)]()
-    
+
     /// Login user
     ///
     /// - parameter username: the username to log in
@@ -46,15 +46,15 @@ public class ION {
 
                 self.config.sessionToken = nil
                 responseQueueCallback(callback, parameter: false)
-                
+
                 return
             }
-            
+
             self.config.sessionToken = token
             responseQueueCallback(callback, parameter: true)
         }
     }
-    
+
     /// Fetch a collection sync
     ///
     /// If the collection is not in any cache initialization of values may
@@ -75,7 +75,7 @@ public class ION {
             // remove from mem cache if expired
             self.collectionCache.removeValueForKey(identifier)
         }
-        
+
         // try an online update
         let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
         let newCollection = IONCollection(
@@ -88,17 +88,17 @@ public class ION {
                     // FIXME: What happens in error case?
                 return
             }
-            
+
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
-    
+
         if self.hasCacheTimedOut(identifier) {
             self.config.lastOnlineUpdate[identifier] = NSDate()
         }
-        
+
         return newCollection
     }
-    
+
     /// Fetch a collection and call block on finish
     ///
     /// - parameter identifier: the identifier of the collection
@@ -106,7 +106,7 @@ public class ION {
     /// - returns: fetched collection to be able to chain calls
     public class func collection(identifier: String, callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
-        
+
         // return memcache if not timed out
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
@@ -121,7 +121,7 @@ public class ION {
             // remove from mem cache if expired
             self.collectionCache.removeValueForKey(identifier)
         }
-        
+
         // try an online update
         let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
         let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
@@ -129,22 +129,22 @@ public class ION {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(collection))
-            
+
             guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
                 return
             }
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
-        
+
         if self.hasCacheTimedOut(identifier) {
             self.config.lastOnlineUpdate[identifier] = NSDate()
         }
-        
+
         return newCollection
     }
-    
+
     // MARK: - Internal
 
     /// Downloader calls this function to register a progress item with the global progress toolbar
@@ -153,11 +153,11 @@ public class ION {
     /// - parameter urlString: URL of the download for management purposes
     class func registerProgress(bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
         self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
-        
+
         // sum up all pending downloads
         var totalBytes: Int64 = 0
         var downloadedBytes: Int64 = 0
-        
+
         for (total, downloaded) in self.pendingDownloads.values {
             totalBytes += total
             downloadedBytes += downloaded
@@ -170,7 +170,7 @@ public class ION {
                 progressHandler(totalBytes: totalBytes, downloadedBytes: downloadedBytes, numberOfPendingDownloads: count)
             }
         }
-        
+
         // remove from pending when total == downloaded
         if bytesReceived == bytesExpected {
             self.pendingDownloads.removeValueForKey(urlString)
@@ -181,9 +181,9 @@ public class ION {
             }
         }
     }
-    
+
     // MARK: - Private
-    
+
     /// Call all update notification blocks
     ///
     /// - parameter collectionIdentifier: collection id to send to update block
@@ -194,7 +194,7 @@ public class ION {
             }
         }
     }
-    
+
     /// Check if collection changed and send change notifications
     ///
     /// - parameter collection1: first collection
@@ -205,7 +205,7 @@ public class ION {
             ION.callUpdateBlocks(collection1.identifier)
         }
     }
-    
+
     /// Init is private because only class functions should be used
     private init() {}
 }

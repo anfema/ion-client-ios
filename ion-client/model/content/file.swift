@@ -15,29 +15,29 @@ import DEjson
 
 /// File content
 public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
-    
+
     /// MIME type of the file
     public var mimeType: String
-    
+
     /// File name
     public var fileName: String
-    
+
     /// File size in bytes
     public var size: Int = 0
-    
+
     /// Method used for checksum calculation
     public var checksumMethod: String = "null"
 
     /// Checksum as hexadecimal encoded string
     public var checksum: String = ""
-    
+
     /// URL to the file
     public var url: NSURL?
-    
+
     /// If the file is valid or not
     public var isValid = false
-    
-    
+
+
     /// Initialize file content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized file content object
@@ -45,7 +45,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawMimeType   = dict["mime_type"],
             let rawName         = dict["name"],
             let rawFileSize     = dict["file_size"],
@@ -56,29 +56,29 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             case .JSONNumber(let size)     = rawFileSize else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.mimeType = mimeType
         self.fileName = fileName
         self.size     = Int(size)
-        
+
         if case .JSONString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
-            
+
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
                 self.checksum = checksumParts[1]
             }
         }
-        
+
         if case .JSONString(let fileUrl) = rawFile {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
-        
+
         try super.init(json: json)
     }
-    
-    
+
+
     /// Load the file binary data and return memory mapped `NSData`
     ///
     /// - parameter callback: Block to call when file data gets available.
@@ -89,14 +89,14 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             do {
                 let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 responseQueueCallback(callback, parameter: .Success(data))
@@ -105,8 +105,8 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             }
         }
     }
-    
-    
+
+
     /// Get a temporarily valid url for this file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
@@ -117,7 +117,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
-        
+
         IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : myURL.absoluteString]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
@@ -128,27 +128,27 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
                     responseQueueCallback(callback, parameter: .Failure(.DidFail))
                     return
             }
-            
+
             guard let url = NSURL(string: urlString) else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
             }
-            
+
             responseQueueCallback(callback, parameter: .Success(url))
         }
     }
-    
-    
+
+
     /// Image url for `CanLoadImage` protocol
     public var imageURL: NSURL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
         }
-        
+
         return nil
     }
-    
-    
+
+
     /// Original image url for `CanLoadImage` protocol, always nil
     public var originalImageURL: NSURL? {
         return nil
@@ -158,7 +158,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
 
 /// File data extension to IONPage
 extension IONPage {
-    
+
     /// Fetch data for file async
     ///
     /// - parameter name: The name of the outlet
@@ -173,15 +173,15 @@ extension IONPage {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
             }
-            
+
             guard case let fileContent as IONFileContent = content else {
                 responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
                 return
             }
-            
+
             fileContent.data(callback)
         }
-        
+
         return self
     }
 }
