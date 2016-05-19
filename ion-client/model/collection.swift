@@ -245,7 +245,7 @@ public class IONCollection {
         
         let pages = self.pageMeta.filter({ $0.parent == nil }).sort({ $0.0.position < $0.1.position })
         
-        guard pages.count > 0 && index < pages.count else {
+        guard pages.isEmpty == false && index < pages.count else {
             return nil
         }
         

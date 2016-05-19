@@ -174,7 +174,7 @@ public class ION {
         // remove from pending when total == downloaded
         if bytesReceived == bytesExpected {
             self.pendingDownloads.removeValueForKey(urlString)
-            if let progressHandler = ION.config.progressHandler where self.pendingDownloads.count == 0 {
+            if let progressHandler = ION.config.progressHandler where self.pendingDownloads.isEmpty {
                 dispatch_async(ION.config.responseQueue) {
                     progressHandler(totalBytes: 0, downloadedBytes: 0, numberOfPendingDownloads: 0)
                 }

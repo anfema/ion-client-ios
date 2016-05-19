@@ -229,7 +229,7 @@ extension IONCollection {
             }
         }
         
-        if check.count > 0 {
+        if check.isEmpty == false {
             result.appendContentsOf(self.leaveRecursive(check))
         }
         

@@ -136,10 +136,10 @@ public class HTMLParser {
                     stripped = stripped.stringByReplacingOccurrencesOfString("\u{2028}", withString: " ")
                     stripped = stripped.stringByReplacingOccurrencesOfString("\u{2029}", withString: " ")
                 }
-                if stripped.characters.count == 0 {
+                if stripped.characters.isEmpty {
                     continue
                 }
-                if result.string.characters.count > 0 && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
+                if result.string.characters.isEmpty == false && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
@@ -236,7 +236,7 @@ public class HTMLParser {
                 default:
                     break
                 }
-                if result.characters.count > 0 && self.isBlock(name) {
+                if result.characters.isEmpty == false && self.isBlock(name) {
                     result.appendContentsOf("\n")
                 }
                 
@@ -272,7 +272,7 @@ public class HTMLParser {
                     stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
                 }
-                if result.characters.count > 0 && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
+                if result.characters.isEmpty == false && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
                     result.appendContentsOf(" ")
                 }
                 result.appendContentsOf(stripped)

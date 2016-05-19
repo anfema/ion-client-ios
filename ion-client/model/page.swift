@@ -109,7 +109,7 @@ public class IONPage {
                     dispatch_semaphore_signal(semaphore)
                     
                 } else {
-                    if self.content.count > 0 {
+                    if self.content.isEmpty == false {
                         if case let container as IONContainerContent = self.content.first {
                             self.layout = container.outlet
                         }
@@ -132,7 +132,7 @@ public class IONPage {
                                 responseQueueCallback(callback, parameter: .Failure(error))
                                 dispatch_semaphore_signal(semaphore)
                             } else {
-                                if self.content.count > 0 {
+                                if self.content.isEmpty == false {
                                     if case let container as IONContainerContent = self.content.first {
                                         self.layout = container.outlet
                                     }
