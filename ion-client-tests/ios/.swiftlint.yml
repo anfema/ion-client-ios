@@ -24,6 +24,8 @@ disabled_rules: # rule identifiers to exclude from running
 - variable_name
 - conditional_binding_cascade
 - cyclomatic_complexity
+- function_parameter_count
+#- valid_docs
 opt_in_rules: # some rules are only opt-in
   # - empty_count
   # - missing_docs

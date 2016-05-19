@@ -201,6 +201,7 @@ extension IONRequest {
     /// - parameter request: request (used to extract URL)
     /// - parameter checksumMethod: the name of the used method used to create the `checksum`
     /// - parameter checksum: the checksum calculated by the `checksumMethod`
+    /// - parameter lastUpdate: the date when the last update was performed or nil
     internal class func saveToCache(request: NSURLRequest, checksumMethod: String, checksum: String, lastUpdate: NSDate? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {

@@ -154,7 +154,8 @@ public class HTMLParser {
             if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: .BackwardsSearch) where rng.endIndex == result.string.endIndex {
                 let len = rng.startIndex.distanceTo(rng.endIndex)
                 let stringLength = (result.string as NSString).length
-                result.replaceCharactersInRange(NSMakeRange(stringLength - len, len), withAttributedString: NSAttributedString())
+                let range = NSRange(location: stringLength - len, length: len)
+                result.replaceCharactersInRange(range, withAttributedString: NSAttributedString())
             } else {
                 break
             }
@@ -164,7 +165,8 @@ public class HTMLParser {
             if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: NSStringCompareOptions()) where rng.startIndex == result.string.startIndex {
                 let start = result.string.startIndex.distanceTo(rng.startIndex)
                 let len = rng.startIndex.distanceTo(rng.endIndex)
-                result.replaceCharactersInRange(NSMakeRange(start, len), withAttributedString: NSAttributedString())
+                let range = NSRange(location: start, length: len)
+                result.replaceCharactersInRange(range, withAttributedString: NSAttributedString())
             } else {
                 break
             }

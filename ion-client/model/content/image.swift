@@ -106,7 +106,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         }
         
         self.mimeType = mimeType
-        self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
+        self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
         
         if case .JSONString(let fileUrl) = rawImage {
@@ -114,11 +114,11 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             self.isValid = true
         }
         
-        self.translation = CGPointMake(CGFloat(transX), CGFloat(transY))
+        self.translation = CGPoint(x: CGFloat(transX), y: CGFloat(transY))
         self.scale       = Float(scale)
         
         self.originalMimeType = oMimeType
-        self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
+        self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
 
         if case .JSONString(let oFileUrl) = rawOriginalImage {

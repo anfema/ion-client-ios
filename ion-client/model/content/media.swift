@@ -104,7 +104,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         
         self.filename = name
         self.mimeType = mimeType
-        self.size     = CGSizeMake(CGFloat(width), CGFloat(height))
+        self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
         
         if case .JSONString(let fileUrl) = rawFile {
@@ -124,7 +124,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         self.length = Float(length)
         
         self.originalMimeType = oMimeType
-        self.originalSize     = CGSizeMake(CGFloat(oWidth), CGFloat(oHeight))
+        self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
         
         if case .JSONString(let oFileUrl) = rawOriginalFile {

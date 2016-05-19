@@ -253,7 +253,7 @@ extension CanLoadImage {
                 return
             }
     
-            let nsImage = NSImage(CGImage: img, size: CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
+            let nsImage = NSImage(CGImage: img, size: CGSize(width: CGFloat(CGImageGetWidth(img)), height: CGFloat(CGImageGetHeight(img))))
             responseQueueCallback(callback, parameter: .Success(nsImage))
         }
     }
