@@ -18,7 +18,7 @@ internal extension ION {
         return directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
     }
     
-    internal class func downloadFTSDB(collection: String, callback:(Void -> Void)? = nil) {
+    internal class func downloadFTSDB(collection: String, callback: (Void -> Void)? = nil) {
         ION.collection(collection) { result in
             guard case .Success(let c) = result,
                   let ftsURL = c.ftsDownloadURL else {
@@ -29,7 +29,7 @@ internal extension ION {
             dispatch_barrier_async(c.workQueue) {
                 let sema = dispatch_semaphore_create(0)
                 
-                IONRequest.fetchBinary(ftsURL, queryParameters: nil, cached: ION.config.cacheBehaviour(.Ignore), checksumMethod:"null", checksum: "") { result in
+                IONRequest.fetchBinary(ftsURL, queryParameters: nil, cached: ION.config.cacheBehaviour(.Ignore), checksumMethod: "null", checksum: "") { result in
                     defer {
                         dispatch_semaphore_signal(sema)
                     }

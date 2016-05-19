@@ -16,7 +16,7 @@ public class HTMLParser {
     private var formatStack = [FormatStackItem]()
     
     private struct FormatStackItem {
-        var tagName:String
+        var tagName: String
         var styleDict: [String: AnyObject]
     }
 
@@ -283,7 +283,7 @@ public class HTMLParser {
         return result
     }
     
-    private func pushFormat(style: AttributedStringStyling, tagName: String, attributes: [String:String]?, nestingDepth: Int) {
+    private func pushFormat(style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
         switch tagName {
         case "h1":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[0].makeAttributeDict(nestingDepth: nestingDepth)))

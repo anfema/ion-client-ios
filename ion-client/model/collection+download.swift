@@ -66,7 +66,7 @@ extension IONCollection {
                 }
             }
             
-            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.Ignore), checksumMethod:"null", checksum: "") { result in
+            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.Ignore), checksumMethod: "null", checksum: "") { result in
                 guard case .Success(let filename) = result else {
                     responseQueueCallback(callback, parameter: false)
                     return

@@ -162,7 +162,7 @@ extension IONCollection {
     public func leaves(parent: String?, callback: ([IONPage] -> Void)) {
         dispatch_async(self.workQueue) {
             let metaItems = self.metaLeaves(parent)
-            let result:[IONPage] = metaItems.map({ self.page($0.identifier) })
+            let result: [IONPage] = metaItems.map({ self.page($0.identifier) })
             
             responseQueueCallback(callback, parameter: result)
         }
@@ -185,7 +185,7 @@ extension IONCollection {
     
     internal func getChildIdentifiersForPage(parent: String, callback: ([String] -> Void)) {
         dispatch_async(self.workQueue) {
-            var temp:[IONPageMeta] = self.pageMeta.filter({ $0.parent == parent })
+            var temp: [IONPageMeta] = self.pageMeta.filter({ $0.parent == parent })
             
             temp.sortInPlace({ (page1, page2) -> Bool in
                 return page1.position < page2.position

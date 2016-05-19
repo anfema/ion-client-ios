@@ -22,25 +22,25 @@ import ImageIO
 /// Implement this protocol to gain `dataProvider`, `cgImage` and `image` functionality for a image URL
 public protocol CanLoadImage {
     /// checksumming method used
-    var checksumMethod:String { get }
+    var checksumMethod: String { get }
     
     /// checksumming method used for original file
-    var originalChecksumMethod:String { get }
+    var originalChecksumMethod: String { get }
     
     /// checksum for the image
-    var checksum:String { get }
+    var checksum: String { get }
     
     /// checksum for original file
-    var originalChecksum:String { get }
+    var originalChecksum: String { get }
     
     /// url of the image
-    var imageURL:NSURL? { get }
+    var imageURL: NSURL? { get }
     
     /// url of the original image
-    var originalImageURL:NSURL? { get }
+    var originalImageURL: NSURL? { get }
     
     /// variation of this outlet (used for determining scale factor)
-    var variation:String { get }
+    var variation: String { get }
 }
 
 /// Queue used to calculate preview images
@@ -50,7 +50,7 @@ let serialQueue = dispatch_queue_create("com.anfema.ion.SerialImageConverterQueu
 extension CanLoadImage {
     
     /// default implementation for checksum method (returns "null" if url not cached)
-    public var checksumMethod:String {
+    public var checksumMethod: String {
         guard let thumbnail = self.imageURL,
             let _ = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "null"
@@ -60,7 +60,7 @@ extension CanLoadImage {
     }
     
     /// default implementation for checksum (returns "invalid" if url not cached)
-    public var checksum:String {
+    public var checksum: String {
         guard let thumbnail = self.imageURL,
             let data = IONRequest.cachedFile(thumbnail.URLString) else {
                 return "invalid"
@@ -70,7 +70,7 @@ extension CanLoadImage {
     }
 
     /// default implementation for checksum method (returns "null" if url not cached)
-    public var originalChecksumMethod:String {
+    public var originalChecksumMethod: String {
         guard let image = self.originalImageURL,
             let _ = IONRequest.cachedFile(image.URLString) else {
                 return "null"
@@ -80,7 +80,7 @@ extension CanLoadImage {
     }
     
     /// default implementation for checksum (returns "invalid" if url not cached)
-    public var originalChecksum:String {
+    public var originalChecksum: String {
         guard let image = self.originalImageURL,
             let data = IONRequest.cachedFile(image.URLString) else {
                 return "invalid"
@@ -99,7 +99,7 @@ extension CanLoadImage {
         }
         
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
-            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
+            checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
                 guard case .Success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
@@ -127,7 +127,7 @@ extension CanLoadImage {
         }
         
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
-            checksumMethod:self.originalChecksumMethod, checksum: self.originalChecksum) { result in
+            checksumMethod: self.originalChecksumMethod, checksum: self.originalChecksum) { result in
                 guard case .Success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                     return
@@ -172,7 +172,7 @@ extension CanLoadImage {
     ///
     /// - parameter callback: block to execute when the image has been allocated
     public func originalCGImage(callback: (Result<CGImageRef, IONError> -> Void)) {
-        self.cgImage(original:true, callback: callback)
+        self.cgImage(original: true, callback: callback)
     }
     
     
@@ -253,7 +253,7 @@ extension CanLoadImage {
                 return
             }
     
-            let nsImage = NSImage(CGImage: img, size:CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
+            let nsImage = NSImage(CGImage: img, size: CGSizeMake(CGFloat(CGImageGetWidth(img)), CGFloat(CGImageGetHeight(img))))
             responseQueueCallback(callback, parameter: .Success(nsImage))
         }
     }

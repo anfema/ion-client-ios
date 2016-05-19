@@ -20,28 +20,28 @@ public struct IONConfig {
     public var connectionScheme = "ion"
     
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
-    public var serverURL:NSURL?
+    public var serverURL: NSURL?
     
     /// locale-code to work on, defined by server config
-    public var locale:String = "en_EN"
+    public var locale: String = "en_EN"
     
     /// set to `false` to disable logging (defaults to `true` in debug mode)
-    public var loggingEnabled:Bool
+    public var loggingEnabled: Bool
     
     /// variation code to fetch from server, populated by default, only change if neccessary
-    public var variation:String
+    public var variation: String
     
     /// variation code to scale factor table
-    public var variationScaleFactors:[String:CGFloat]
+    public var variationScaleFactors: [String: CGFloat]
     
     /// response queue to run all asynchronous responses in, by default a concurrent queue, may be set to main queue
     public var responseQueue = dispatch_queue_create("com.anfema.ion.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
     
     /// global request progress handler (will be called periodically when progress updates)
-    public var progressHandler:((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
+    public var progressHandler: ((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
     
     /// the session token usually set by `ION.login` but may be overridden for custom login functionality
-    public var sessionToken:String?
+    public var sessionToken: String?
     
     /// Additional Headers that should be added to the requests
     private (set) var additionalHeaders: [String: String] = [:]
@@ -59,7 +59,7 @@ public struct IONConfig {
     public var stringStyling = AttributedStringStyling()
     
     /// ION Device ID, will be generated on first use
-    public var deviceID:String {
+    public var deviceID: String {
         if let deviceID = NSUserDefaults.standardUserDefaults().stringForKey("IONDeviceID") {
             return deviceID
         }
@@ -77,13 +77,13 @@ public struct IONConfig {
     var alamofire: Alamofire.Manager? = nil
     
     /// update detected blocks
-    var updateBlocks: [String:(String -> Void)]
+    var updateBlocks: [String: (String -> Void)]
 
     /// Registered content types
-    var registeredContentTypes = [String:ContentTypeLambda]()
+    var registeredContentTypes = [String: ContentTypeLambda]()
 
     /// full text search settings
-    private var ftsEnabled:[String:Bool]
+    private var ftsEnabled: [String: Bool]
     
     /// only the ION class may init this
     internal init() {
@@ -103,7 +103,7 @@ public struct IONConfig {
         #endif
         
         self.updateBlocks = Dictionary<String, (String -> Void)>()
-        self.ftsEnabled = [String:Bool]()
+        self.ftsEnabled = [String: Bool]()
         #if os(iOS)
             self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
         #else

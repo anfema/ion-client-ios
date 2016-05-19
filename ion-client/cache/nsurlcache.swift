@@ -13,8 +13,8 @@ import Foundation
 
 
 public class IONCacheAvoidance: NSURLProtocol {
-    var session:NSURLSession?
-    var dataTask:NSURLSessionDataTask?
+    var session: NSURLSession?
+    var dataTask: NSURLSessionDataTask?
     
     public override class func canInitWithRequest(request: NSURLRequest) -> Bool {
         guard let serverURL = ION.config.serverURL else {

@@ -16,7 +16,7 @@ import DEjson
 public struct JSONResponse {
     
     /// Decoded JSON object
-    public let json:JSONObject?
+    public let json: JSONObject?
     
     /// HTTP status code of response
     public let statusCode: Int

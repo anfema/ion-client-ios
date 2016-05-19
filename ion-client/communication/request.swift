@@ -34,7 +34,7 @@ public enum IONCacheBehaviour {
 internal extension NSData {
     func hexString() -> String {
         var bytes = [UInt8](count: self.length, repeatedValue: 0)
-        self.getBytes(&bytes, length:self.length)
+        self.getBytes(&bytes, length: self.length)
         
         let convert_table = "0123456789abcdef"
         var s = ""
@@ -49,7 +49,7 @@ internal extension NSData {
 
 /// Base Request class that handles caching
 public class IONRequest {
-    static var cacheDB:[JSONObject]?
+    static var cacheDB: [JSONObject]?
     
     // MARK: - API
 
@@ -59,7 +59,7 @@ public class IONRequest {
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
-    public class func fetchJSON(endpoint: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, callback: (Result<JSONObject, IONError> -> NSDate?)) {
+    public class func fetchJSON(endpoint: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, callback: (Result<JSONObject, IONError> -> NSDate?)) {
         guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
               let url = NSURL(string: urlString),
               let cacheName = self.cacheName(url),
@@ -68,7 +68,7 @@ public class IONRequest {
             return
         }
 
-        let fromCache:(String -> Result<JSONObject, IONError>) = { cacheName in
+        let fromCache: (String -> Result<JSONObject, IONError>) = { cacheName in
             // Check disk cache before running HTTP request
             if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
                 // return from cache instantly
@@ -109,7 +109,7 @@ public class IONRequest {
             }
         }
         
-        let request = alamofire.request(.GET, urlString, headers:headers)
+        let request = alamofire.request(.GET, urlString, headers: headers)
         
         request.responseDEJSON { response in
             if case .Failure(let error) = response.result {
@@ -148,7 +148,7 @@ public class IONRequest {
             
             if let jsonObject = jsonObject {
                 // patch last_updated into response
-                let patchedResult:Result<JSONObject, IONError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
+                let patchedResult: Result<JSONObject, IONError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
                 // call callback in correct queue
                 dispatch_async(ION.config.responseQueue) {
                     if let date = callback(patchedResult) {
@@ -170,7 +170,7 @@ public class IONRequest {
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    public class func fetchBinary(urlString: String, queryParameters: [String:String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, IONError> -> Void)) {
+    public class func fetchBinary(urlString: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: (Result<String, IONError> -> Void)) {
         let headers = self.headers()
         guard let url = NSURL(string: urlString),
               let cacheName = self.cacheName(url),
@@ -307,13 +307,13 @@ public class IONRequest {
     ///
     /// - parameter urlString: url of the file to fetch from cache
     /// - returns: `NSData` with memory mapped file or `nil` if not in cache
-    public class func cachedFile(urlString:String) -> NSData? {
+    public class func cachedFile(urlString: String) -> NSData? {
         guard let url = NSURL(string: urlString),
               let cacheName = self.cacheName(url) else {
             return nil
         }
 
-        var data:NSData? = nil
+        var data: NSData? = nil
         if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
             do {
                 data = try NSData(contentsOfFile: cacheName, options: NSDataReadingOptions.DataReadingMappedIfSafe)
@@ -330,7 +330,7 @@ public class IONRequest {
     /// - parameter queryParameters: any get parameters to include in the query or nil
     /// - parameter body: dictionary with parameters (will be JSON encoded)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
-    public class func postJSON(endpoint: String, queryParameters: [String:String]?, body: [String:AnyObject], callback: (Result<JSONResponse, IONError> -> Void)) {
+    public class func postJSON(endpoint: String, queryParameters: [String: String]?, body: [String: AnyObject], callback: (Result<JSONResponse, IONError> -> Void)) {
         guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
               let alamofire = ION.config.alamofire else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
@@ -355,7 +355,7 @@ public class IONRequest {
     /// - parameter endpoint: the API endpoint
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - returns: complete valid URL string for query based on `ION.config`
-    private class func buildURL(endpoint: String, queryParameters: [String:String]?) -> String? {
+    private class func buildURL(endpoint: String, queryParameters: [String: String]?) -> String? {
         guard let serverURL = ION.config.serverURL else {
             return nil
         }
@@ -370,11 +370,9 @@ public class IONRequest {
         
         var queryItems: [NSURLQueryItem] = []
         
-        if let parameters = queryParameters {
-            for (key, value) in parameters {
-                queryItems.append(NSURLQueryItem(name: key, value: value))
-            }
-        }
+        queryParameters?.forEach({ (key, value) in
+            queryItems.append(NSURLQueryItem(name: key, value: value))
+        })
         
         components.queryItems = queryItems
         
@@ -386,7 +384,7 @@ public class IONRequest {
     /// Prepare headers for request
     ///
     /// - returns: Headers-Dictionary for use in Alamofire request
-    private class func headers() -> [String:String] {
+    private class func headers() -> [String: String] {
         var headers = ION.config.additionalHeaders
         
         if let token = ION.config.sessionToken {
@@ -456,16 +454,17 @@ public class IONRequest {
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
+                
                 return .Failure(.NoData(nil))
             }
         }
         
         // Check disk cache
-        if NSFileManager.defaultManager().fileExistsAtPath(cacheName) {
-            return .Success(cacheName)
-        } else {
+        guard NSFileManager.defaultManager().fileExistsAtPath(cacheName) else {
             return .Failure(.NoData(nil))
         }
+        
+        return .Success(cacheName)
     }
 
     

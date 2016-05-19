@@ -21,7 +21,7 @@ public class ION {
     static internal var collectionCache = [String: IONCollection]()
 
     /// Pending downloads
-    static internal var pendingDownloads = [String:(totalBytes: Int64, downloadedBytes: Int64)]()
+    static internal var pendingDownloads = [String: (totalBytes: Int64, downloadedBytes: Int64)]()
     
     /// Login user
     ///
@@ -155,8 +155,8 @@ public class ION {
         self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
         
         // sum up all pending downloads
-        var totalBytes:Int64 = 0
-        var downloadedBytes:Int64 = 0
+        var totalBytes: Int64 = 0
+        var downloadedBytes: Int64 = 0
         
         for (total, downloaded) in self.pendingDownloads.values {
             totalBytes += total

@@ -77,7 +77,7 @@ extension IONRequest {
     ///
     /// - parameter urlString: the URL to find in the cache DB
     /// - returns: cache db entry (JSON dictionary unpacked into dictionary)
-    internal class func getCacheDBEntry(urlString: String) -> [String:JSONObject]? {
+    internal class func getCacheDBEntry(urlString: String) -> [String: JSONObject]? {
         // load db if not already loaded
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -104,7 +104,7 @@ extension IONRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveToCache(request: NSURLRequest, _ result:Result<JSONResponse, IONError>) {
+    internal class func saveToCache(request: NSURLRequest, _ result: Result<JSONResponse, IONError>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
@@ -133,7 +133,7 @@ extension IONRequest {
         }
     }
     
-    internal class func saveToCache(data: NSData, url: String, checksum:String?, last_updated:NSDate? = nil) {
+    internal class func saveToCache(data: NSData, url: String, checksum: String?, last_updated: NSDate? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -148,7 +148,7 @@ extension IONRequest {
         }
         
         // pop current cache DB entry
-        var obj:[String:JSONObject] = self.getCacheDBEntry(url) ?? [:]
+        var obj: [String: JSONObject] = self.getCacheDBEntry(url) ?? [:]
         self.removeCacheDBEntries(withURL: url)
         
         guard let parsedURL = NSURL(string: url) else {
@@ -216,7 +216,7 @@ extension IONRequest {
         }
         
         // pop current cache DB entry
-        var obj:[String:JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]
+        var obj: [String: JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]
         self.removeCacheDBEntries(withURL: request.URLString)
         
         guard let requestURL = request.URL, requestHost = requestURL.host else {

@@ -31,7 +31,7 @@ public class IONTextContent: IONContent {
     /// Initialize text content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized text content object
-    override init(json:JSONObject) throws {
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }

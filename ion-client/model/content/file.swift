@@ -91,7 +91,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
         }
         
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
-            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
+            checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return

@@ -82,7 +82,7 @@ public class IONCollection {
     /// - parameter callback: Block to call when the collection becomes available.
     ///                       Provides Result.Success containing an `IONCollection` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
-    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback:(Result<IONCollection, IONError> -> Void)?) {
+    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback: (Result<IONCollection, IONError> -> Void)?) {
         self.identifier = identifier
         self.workQueue = dispatch_queue_create("com.anfema.ion.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
         self.locale = locale
@@ -100,7 +100,7 @@ public class IONCollection {
                     self.hasFailed = true
                 } else {
                     ION.collectionCache[identifier] = self
-                    responseQueueCallback(callback, parameter:.Success(self))
+                    responseQueueCallback(callback, parameter: .Success(self))
                 }
                 
                 dispatch_semaphore_signal(semaphore)
@@ -121,7 +121,7 @@ public class IONCollection {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the collection
-    public func page(identifier: String, callback:(Result<IONPage, IONError> -> Void)) -> IONCollection {
+    public func page(identifier: String, callback: (Result<IONPage, IONError> -> Void)) -> IONCollection {
         dispatch_async(self.workQueue) {
             guard !self.hasFailed else {
                 return
@@ -165,7 +165,7 @@ public class IONCollection {
                     return
                 }
                 
-                self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent:meta.parent) { result in
+                self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent: meta.parent) { result in
                     guard case .Success(let page) = result else {
                         responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                         return
@@ -339,7 +339,7 @@ public class IONCollection {
             return nil
         }
         
-        self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .Ignore, parent:meta.parent) { result in
+        self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .Ignore, parent: meta.parent) { result in
             guard case .Success(let page) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
                 return
@@ -397,7 +397,7 @@ public class IONCollection {
     ///
     /// - parameter identifier: collection identifier to get
     /// - parameter callback: block to call when the fetch finished
-    private func fetch(identifier: String, callback:(IONError? -> Void)) {
+    private func fetch(identifier: String, callback: (IONError? -> Void)) {
         IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: self.useCache) { result in
             
             guard case .Success(let resultValue) = result else {

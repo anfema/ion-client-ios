@@ -180,7 +180,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         }
         
         IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
-            checksumMethod:self.checksumMethod, checksum: self.checksum) { result in
+            checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
             guard case .Success(let filename) = result else {
                 responseQueueCallback(callback, parameter: .Failure(.DidFail))
                 return
@@ -220,7 +220,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     
     
     /// Image url for `CanLoadImage` protocol
-    public var imageURL:NSURL? {
+    public var imageURL: NSURL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
         }
@@ -230,7 +230,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     
     
     /// Original image url for `CanLoadImage` protocol
-    public var originalImageURL:NSURL? {
+    public var originalImageURL: NSURL? {
         if self.originalMimeType.hasPrefix("image/") {
             return self.originalURL
         }
