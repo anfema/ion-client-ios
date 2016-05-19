@@ -349,7 +349,7 @@ public class IONCollection {
             
             responseQueueCallback(callback, parameter: .Success(page))
             
-            page.onCompletion { _,_ in
+            page.onCompletion { _, _ in
                 self.checkCompleted()
             }
         }

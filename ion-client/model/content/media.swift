@@ -23,7 +23,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     public var mimeType: String
     
     /// Dimensions of the media file if applicable
-    public var size = CGSizeZero
+    public var size = CGSize.zero
     
     /// File size in bytes
     public var fileSize = 0
@@ -44,7 +44,7 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     public var originalMimeType: String
     
     /// Dimensions of the original media file if applicable
-    public var originalSize = CGSizeZero
+    public var originalSize = CGSize.zero
 
     /// Original media file size in bytes
     public var originalFileSize = 0

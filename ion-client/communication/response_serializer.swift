@@ -43,8 +43,7 @@ extension Request {
                 return .Failure(.ServerUnreachable)
             }
             
-            switch response.statusCode
-            {
+            switch response.statusCode {
             case 401, 403:
                 return .Failure(.NotAuthorized)
             case 304:
@@ -76,8 +75,7 @@ extension Request {
     /// - returns: The request.
     func responseDEJSON(
         completionHandler: Response<JSONResponse, IONError> -> Void)
-        -> Self
-    {
+        -> Self {
         return response(
             responseSerializer: Request.DEJSONResponseSerializer(),
             completionHandler: completionHandler

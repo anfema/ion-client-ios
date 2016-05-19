@@ -15,16 +15,16 @@ import Foundation
 public class IONCacheAvoidance: NSURLProtocol {
     var session: NSURLSession?
     var dataTask: NSURLSessionDataTask?
-    
+
     public override class func canInitWithRequest(request: NSURLRequest) -> Bool {
         guard let serverURL = ION.config.serverURL else {
             return false
         }
-        
+
         guard request.URLString.hasPrefix(serverURL.URLString) else {
             return false
         }
-        
+
         return true
     }
 
@@ -35,7 +35,7 @@ public class IONCacheAvoidance: NSURLProtocol {
     public override class func requestIsCacheEquivalent(a: NSURLRequest, toRequest b: NSURLRequest) -> Bool {
         return false
     }
-    
+
     public override func startLoading() {
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         config.requestCachePolicy = .UseProtocolCachePolicy
@@ -43,25 +43,25 @@ public class IONCacheAvoidance: NSURLProtocol {
         config.HTTPShouldSetCookies = false
 
         self.session = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-        
+
         if let task = self.session?.dataTaskWithRequest(self.request) {
             self.dataTask = task
             task.resume()
         }
     }
-    
+
     public override func stopLoading() {
         self.dataTask?.cancel()
     }
 }
 
 extension IONCacheAvoidance: NSURLSessionDataDelegate {
-    
+
     public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
         self.client?.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
         completionHandler(.Allow)
     }
-    
+
     public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
         self.client?.URLProtocol(self, didLoadData: data)
     }

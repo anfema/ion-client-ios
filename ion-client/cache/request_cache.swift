@@ -133,7 +133,7 @@ extension IONRequest {
         }
     }
     
-    internal class func saveToCache(data: NSData, url: String, checksum: String?, last_updated: NSDate? = nil) {
+    internal class func saveToCache(data: NSData, url: String, checksum: String?, lastUpdated: NSDate? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -141,7 +141,7 @@ extension IONRequest {
         
         // fetch current timestamp truncated to maximum resolution of 1 ms
         var timestamp: Double = 0.0
-        if let last_updated = last_updated {
+        if let last_updated = lastUpdated {
             timestamp = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
         } else {
             timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
@@ -363,5 +363,4 @@ extension IONRequest {
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }
-
 }

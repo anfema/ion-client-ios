@@ -26,7 +26,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     public var mimeType: String
     
     /// Dimensions of the image
-    public var size: CGSize = CGSizeZero
+    public var size: CGSize = CGSize.zero
     
     /// File size in bytes
     public var fileSize: Int = 0
@@ -38,7 +38,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     public var originalMimeType: String
     
     /// Original image dimensions
-    public var originalSize: CGSize = CGSizeZero
+    public var originalSize: CGSize = CGSize.zero
     
     /// Original image file size
     public var originalFileSize: Int = 0
@@ -47,7 +47,7 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     public var originalURL: NSURL?
     
     /// Image translation before cropping to final size
-    public var translation: CGPoint = CGPointZero
+    public var translation: CGPoint = CGPoint.zero
     
     /// Image scale factor before cropping
     public var scale: Float = 1.0

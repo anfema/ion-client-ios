@@ -79,7 +79,7 @@ extension IONCollection {
 
                 dispatch_async(self.workQueue) {
                     let result = self.unpackToCache(filename)
-                    dispatch_async(ION.config.responseQueue){
+                    dispatch_async(ION.config.responseQueue) {
                         if result == true {
                             self.lastCompleteUpdate = NSDate()
                             ION.resetMemCache()
@@ -144,7 +144,7 @@ extension IONCollection {
                         }
                         
                         if filename == file.filename {
-                            IONRequest.saveToCache(file.data, url: url, checksum: checksum, last_updated: file.mtime)
+                            IONRequest.saveToCache(file.data, url: url, checksum: checksum, lastUpdated: file.mtime)
                             found = idx
                             break
                         }

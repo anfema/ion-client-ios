@@ -96,7 +96,7 @@ public class IONPageMeta: CanLoadImage {
             }
         }
         
-        switch(rawParent) {
+        switch rawParent {
         case .JSONNull:
             self.parent = nil
         case .JSONString(let parent):

@@ -61,7 +61,7 @@ internal extension ION {
                 dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER)
                 
                 // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
-                NSNotificationCenter.defaultCenter().postNotificationName(IONFTSDBDidUpdateNotification, object: collection)
+                NSNotificationCenter.defaultCenter().postNotificationName(Notification.ftsDatabaseDidUpdate, object: collection)
                 
                 if let callback = callback {
                     dispatch_async(ION.config.responseQueue) {

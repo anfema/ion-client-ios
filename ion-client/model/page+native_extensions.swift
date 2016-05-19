@@ -21,7 +21,7 @@ extension IONPage: CustomStringConvertible {
 
 
 /// Two pages are the same if the identifier and the collection matches
-public func ==(lhs: IONPage, rhs: IONPage) -> Bool {
+public func == (lhs: IONPage, rhs: IONPage) -> Bool {
     return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
 }
 

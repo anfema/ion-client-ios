@@ -84,7 +84,7 @@ public class HTMLParser {
                     if self.getListContext() == "ul" {
                         result.appendAttributedString(NSAttributedString(string: "•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                     }
-                    if self.getListContext() == "ol"  {
+                    if self.getListContext() == "ol" {
                         guard let counter = counters.popLast() else {
                             continue
                         }
@@ -214,7 +214,7 @@ public class HTMLParser {
                         }
                         result.appendContentsOf("- ")
                     }
-                    if lastListContextItem == "ol"  {
+                    if lastListContextItem == "ol" {
                         guard let counter = counters.popLast() else {
                             continue
                         }

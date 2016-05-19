@@ -13,7 +13,7 @@ import Foundation
 import Markdown
 import sqlite
 
-let SQLITE_TRANSIENT = unsafeBitCast(-1, sqlite3_destructor_type.self)
+let sqliteTransient = unsafeBitCast(-1, sqlite3_destructor_type.self)
 
 internal extension String {
     var byteLength: Int32 {
@@ -82,8 +82,8 @@ public class IONSearchHandle {
     public func search(text: String) -> [IONSearchResult] {
         let searchTerm = self.fixSearchTerm(text)
         
-        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, SQLITE_TRANSIENT)
-        sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, SQLITE_TRANSIENT)
+        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, sqliteTransient)
+        sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, sqliteTransient)
 
         var items = [IONSearchResult]()
         var finished = false
@@ -113,10 +113,9 @@ public class IONSearchHandle {
         self.collection = collection
         
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: IONFTSDBDidUpdateNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: Notification.ftsDatabaseDidUpdate, object: nil)
         
-        guard setupSqliteConnection() else
-        {
+        guard setupSqliteConnection() else {
             return nil
         }
     }
@@ -125,14 +124,12 @@ public class IONSearchHandle {
     @objc
     internal func didUpdateFTSDB(notification: NSNotification) {
         // Extract collection identifier from notification.
-        guard let collectionIdentifier = notification.object as? String else
-        {
+        guard let collectionIdentifier = notification.object as? String else {
             return
         }
         
         // Only update sqlite connection when the collection identifiers match.
-        guard collectionIdentifier == collection.identifier else
-        {
+        guard collectionIdentifier == collection.identifier else {
             return
         }
         
@@ -174,5 +171,3 @@ public class IONSearchHandle {
         sqlite3_close(self.dbHandle)
     }
 }
-
-

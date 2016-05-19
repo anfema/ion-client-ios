@@ -6,4 +6,9 @@
 //  Copyright © 2016 anfema GmbH. All rights reserved.
 //
 
-internal let IONFTSDBDidUpdateNotification = "ion_ftsdb_did_update_notification"
+struct Notification {
+    static let ftsDatabaseDidUpdate = "ion_ftsdb_did_update_notification"
+    
+    // Private initializer to prohibit instantiation
+    private init() {}
+}

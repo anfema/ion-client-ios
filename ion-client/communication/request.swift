@@ -191,7 +191,7 @@ public class IONRequest {
         }
         
         // destination block for Alamofire request
-        let destination = { (file_url: NSURL, response: NSHTTPURLResponse) -> NSURL in
+        let destination = { (fileURL: NSURL, response: NSHTTPURLResponse) -> NSURL in
             return NSURL(fileURLWithPath: cacheName + ".tmp")
         }
 

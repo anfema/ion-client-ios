@@ -70,7 +70,7 @@ public class IONTextContent: IONContent {
     public func htmlText() -> String? {
         // TODO: Write tests for htmlText() function in TextContent
         var text: String = ""
-        switch (self.mimeType) {
+        switch self.mimeType {
         case "text/html":
             text = self.text
         case "text/markdown":
@@ -96,7 +96,7 @@ public class IONTextContent: IONContent {
     /// - returns: Attributed string version of text
     public func attributedString() -> NSAttributedString? {
         // TODO: Write tests for attributedString() function in TextContent
-        switch (self.mimeType) {
+        switch self.mimeType {
         case "text/html":
             return HTMLParser(html: self.text).renderAttributedString(ION.config.stringStyling)
         case "text/markdown":
@@ -120,7 +120,7 @@ public class IONTextContent: IONContent {
     /// - returns: Plaintext string of text
     public func plainText() -> String? {
         // TODO: Write tests for plainText() function in TextContent (probably we need more test-data for this)
-        switch(self.mimeType) {
+        switch self.mimeType {
         case "text/plain":
             return HTMLParser(html: self.text).renderText()
         case "text/html":
