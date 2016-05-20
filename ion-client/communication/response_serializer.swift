@@ -46,6 +46,8 @@ extension Request {
             switch response.statusCode {
             case 401, 403:
                 return .Failure(.NotAuthorized)
+            case 500...511:
+                return .Failure(.ServerUnreachable)
             case 304:
                 return .Success(JSONResponse(json: nil, statusCode: 304))
             case 200:
