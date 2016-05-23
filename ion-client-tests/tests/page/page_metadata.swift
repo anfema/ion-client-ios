@@ -313,4 +313,28 @@ class pageMetadataTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testOriginalChecksum() {
+        let expectation = self.expectationWithDescription("testOriginalChecksum")
+        
+        ION.collection("test").metadata("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let metadata) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertNotNil(metadata.originalChecksum)
+            XCTAssertNotNil(metadata.originalChecksumMethod)
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
