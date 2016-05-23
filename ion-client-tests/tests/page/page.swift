@@ -687,4 +687,52 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testLoadCacheDB() {
+        let expectation = self.expectationWithDescription("testLoadCacheDB")
+        
+        ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(_) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            // cache has content
+            XCTAssertFalse((IONRequest.cacheDB ?? []).isEmpty)
+            
+            // set cacheDB to nil to force loading from file
+            ION.resetDiskCache()
+            ION.resetMemCache()
+            IONRequest.cacheDB = nil
+            
+            // cache should now be empty
+            XCTAssertTrue((IONRequest.cacheDB ?? []).isEmpty)
+            
+            ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
+                guard case .Success(_) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                // cache should now be populated again
+                XCTAssertNotNil(IONRequest.cacheDB)
+                XCTAssertFalse(IONRequest.cacheDB!.isEmpty)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
 }
