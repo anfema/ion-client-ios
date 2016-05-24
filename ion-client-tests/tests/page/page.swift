@@ -312,12 +312,100 @@ class pageTests: LoggedInXCTestCase {
                 return
             }
             
-            guard case .InvalidPageHierarchy = error else {
+            guard case .PageNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    
+    func testPageInvalidChildAsync() {
+        let expectation = self.expectationWithDescription("testPageInvalidChildAsync")
+        
+        ION.collection("test").page("page_002").child("invalid") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Failure(let error) = result else {
+                XCTFail("Child found")
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .PageNotFound = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    
+    func testPageChildInvalidParent() {
+        let expectation = self.expectationWithDescription("testPageChildInvalidParent")
+        
+        ION.collection("test").page("subpage_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(let page) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .Failure(let error) = page.child("page_002") else {
+                XCTFail("Child found")
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .InvalidPageHierarchy = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            expectation.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
+    
+    
+    func testPageChildInvalidParentAsync() {
+        let expectation = self.expectationWithDescription("testPageChildInvalidParentAsync")
+        
+        ION.collection("test").page("subpage_001").child("page_002") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Failure(let error) = result else {
+                XCTFail("Child found")
+                expectation.fulfill()
+                return
+            }
+            
+            guard case .InvalidPageHierarchy = error else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
             expectation.fulfill()
         }
         
