@@ -15,10 +15,9 @@ extension ION {
     /// cache and have a parsing and initialization penalty on next call.
     ///
     public class func resetMemCache() {
-        for collection in self.collectionCache.values {
-            collection.pageCache.removeAll()
+        for collection in self.collectionCache.keys {
+            resetMemCache(collection)
         }
-        self.collectionCache.removeAll()
     }
 
     /// Clear memory cache for a specific collection
@@ -29,10 +28,7 @@ extension ION {
     /// - parameter collection: Collection to clear
     ///
     public class func resetMemCache(collection: String) {
-        guard let c = self.collectionCache[collection] else {
-            return
-        }
-        c.pageCache.removeAll()
+        self.collectionCache[collection]?.pageCache.removeAll()
         self.collectionCache.removeValueForKey(collection)
     }
 
