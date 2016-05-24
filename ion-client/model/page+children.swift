@@ -46,6 +46,10 @@ extension IONPage {
     public func child(identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
 
+        guard page.metadata != nil else {
+            return .Failure(.PageNotFound(identifier))
+        }
+
         guard page.parent == self.identifier else {
             return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
         }
