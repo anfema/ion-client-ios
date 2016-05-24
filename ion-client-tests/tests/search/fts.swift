@@ -124,9 +124,11 @@ class ftsTests: LoggedInXCTestCase {
     
     func testDownloadFTS()
     {
-        // TODO: Test somehow that IONFTSDBDidUpdateNotification was sent.
-        
+        let consumer = NotificationConsumer(notification: Notification.ftsDatabaseDidUpdate)
         let expectation = self.expectationWithDescription("testDownloadFTS")
+        
+        XCTAssertFalse(consumer.notificationWasReceived)
+        XCTAssertNil(consumer.notificationObject)
         
         ION.config.enableFTS("test")
         XCTAssertTrue(ION.config.isFTSEnabled("test"))
@@ -136,13 +138,26 @@ class ftsTests: LoggedInXCTestCase {
             // Test if the correct response queue is used
             XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
             
+            // notificationWasReceived should be true when notification was sent
+            XCTAssertTrue(consumer.notificationWasReceived)
+            XCTAssertNotNil(consumer.notificationObject)
+            
+            // Extract collection identifier from notification.
+            guard let collectionIdentifier = consumer.notificationObject as? String else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            XCTAssertEqual(collectionIdentifier, "test")
+            
             // TODO: Test if download was successful
             expectation.fulfill()
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
     }
-    
+        
     
     func testEnableDisableSearchHandle()
     {
@@ -182,6 +197,31 @@ class ftsTests: LoggedInXCTestCase {
         }
         
         self.waitForExpectationsWithTimeout(2.0, handler: nil)
+    }
+}
+
+
+// Helper class that can listen for notifications
+class NotificationConsumer {
+    
+    var notificationWasReceived = false
+    var notificationUserInfo: [NSObject: AnyObject]?
+    var notificationObject: AnyObject?
+    
+    init(notification: String) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationConsumer.onNotification(_:)), name: notification, object: nil)
+    }
+    
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    
+    @objc func onNotification(notification: NSNotification) {
+        notificationObject = notification.object
+        notificationUserInfo = notification.userInfo
+        notificationWasReceived = true
     }
 }
 
