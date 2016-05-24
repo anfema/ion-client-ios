@@ -199,10 +199,7 @@ public struct IONConfig {
     ///
     /// - returns: true if fts is enabled
     public func isFTSEnabled(collection: String) -> Bool {
-        if let enabled = self.ftsEnabled[collection] {
-            return enabled
-        }
-        return false
+        return self.ftsEnabled[collection] ?? false
     }
 
     /// Register a custom content type
