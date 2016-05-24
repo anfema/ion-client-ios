@@ -735,4 +735,162 @@ class pageTests: LoggedInXCTestCase {
         
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
+    
+    
+    func testLoadInvalidCacheDB() {
+        let expectation = self.expectationWithDescription("testLoadInvalidCacheDB")
+        
+        ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(_) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            // cache has content
+            XCTAssertFalse((IONRequest.cacheDB ?? []).isEmpty)
+            
+            // set cacheDB to nil to force loading from file
+            ION.resetDiskCache()
+            ION.resetMemCache()
+            IONRequest.cacheDB = nil
+            
+            let locale = ION.config.locale
+            let invalidJsonString = "invalid"
+            let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
+            
+            guard let file = fileURL.path else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            guard let basePath = self.cacheBaseDir(locale: locale).path else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            do {
+                // make sure the cache dir is there
+                if !NSFileManager.defaultManager().fileExistsAtPath(basePath) {
+                    try NSFileManager.defaultManager().createDirectoryAtPath(basePath, withIntermediateDirectories: true, attributes: nil)
+                }
+                
+                // try saving to disk
+                try invalidJsonString.writeToFile(file, atomically: true, encoding: NSUTF8StringEncoding)
+            } catch {
+                // saving failed, remove disk cache completely because we don't have a clue what's in it
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(basePath)
+                } catch {
+                    // ok nothing fatal could happen, do nothing
+                }
+            }
+
+            // cache should now be empty
+            XCTAssertTrue((IONRequest.cacheDB ?? []).isEmpty)
+            
+            ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
+                guard case .Success(_) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                // cache should now be populated again
+                XCTAssertNotNil(IONRequest.cacheDB)
+                XCTAssertFalse(IONRequest.cacheDB!.isEmpty)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    func testLoadMissingCacheDB() {
+        let expectation = self.expectationWithDescription("testLoadMissingCacheDB")
+        
+        ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
+            guard case .Success(_) = result else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            // cache has content
+            XCTAssertFalse((IONRequest.cacheDB ?? []).isEmpty)
+            
+            // set cacheDB to nil to force loading from file
+            ION.resetDiskCache()
+            ION.resetMemCache()
+            IONRequest.cacheDB = nil
+            
+            let locale = ION.config.locale
+            
+            guard let basePath = self.cacheBaseDir(locale: locale).path else {
+                XCTFail()
+                expectation.fulfill()
+                return
+            }
+            
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(basePath)
+            } catch {
+                // ok nothing fatal could happen, do nothing
+            }
+            
+            // cache should now be empty
+            XCTAssertTrue((IONRequest.cacheDB ?? []).isEmpty)
+            
+            ION.collection("test").page("page_001") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
+                guard case .Success(_) = result else {
+                    XCTFail()
+                    expectation.fulfill()
+                    return
+                }
+                
+                // cache should now be populated again
+                XCTAssertNotNil(IONRequest.cacheDB)
+                XCTAssertFalse(IONRequest.cacheDB!.isEmpty)
+                
+                expectation.fulfill()
+            }
+        }
+        
+        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+    }
+    
+    
+    
+    /// Helper Functions
+    private func cacheFile(filename: String, locale: String) -> NSURL {
+        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
+        return fileURL
+    }
+    
+    private func cacheBaseDir(locale locale: String) -> NSURL {
+        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
+        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)")
+        return fileURL
+    }
 }
