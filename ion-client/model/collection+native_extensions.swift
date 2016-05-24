@@ -14,14 +14,22 @@ import Foundation
 extension IONCollection: CustomStringConvertible {
     /// Textual description of the collection (only use for debugging purposes)
     public var description: String {
-        return "IONCollection: \(identifier!), \(pageMeta.count) pages"
+        return "IONCollection: \(identifier), \(pageMeta.count) pages"
     }
 }
 
+
 /// Two collections are the same if the identifier matches
-public func ==(lhs: IONCollection, rhs: IONCollection) -> Bool {
+///
+/// - parameter lhs: IONCollection on the left hand side of `==`
+/// - parameter rhs: IONCollection on the right hand side of `==`
+/// - returns: `true` if the collections have the same identifiers
+///            `false` if not.
+///
+public func == (lhs: IONCollection, rhs: IONCollection) -> Bool {
     return (lhs.identifier == rhs.identifier)
 }
+
 
 extension IONCollection: Hashable {
     /// As we use the identifier for equality checks we just reuse it's hash-value for the Hashable protocol

@@ -219,6 +219,7 @@ public struct AttributedStringStyling {
         self.emphasizedText = em
         
         var delete = AttributedStringStyle()
+        delete.font = font
         delete.strikeThrough = true
         delete.foregroundColor = baseColor
         delete.backgroundColor = backgroundColor
@@ -231,6 +232,7 @@ public struct AttributedStringStyling {
         self.inlineCode = inlineCode
         
         var link = AttributedStringStyle()
+        link.font = font
         link.underline = true
         #if os(iOS)
             link.foregroundColor = UIColor.blueColor()

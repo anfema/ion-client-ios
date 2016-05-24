@@ -12,10 +12,19 @@
 import Alamofire
 import DEjson
 
+/// JSON response object, contains json and status code
 public struct JSONResponse {
-    let json:JSONObject?
-    let statusCode: Int
-    
+
+    /// Decoded JSON object
+    public let json: JSONObject?
+
+    /// HTTP status code of response
+    public let statusCode: Int
+
+    /// Initializer
+    ///
+    /// - parameter json: optional, decoded `JSONObject` of the response
+    /// - parameter statusCode: HTTP status code of the response
     public init(json: JSONObject?, statusCode: Int = 200) {
         self.json = json
         self.statusCode = statusCode
@@ -24,50 +33,51 @@ public struct JSONResponse {
 
 /// Extend Alamofire Request with JSON response serializer of own JSON parser
 extension Request {
-    
+
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - returns: A `JSONObject` response serializer
-    public static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
+    static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
         return ResponseSerializer { _, response, data, error in
-            guard let validData = data where response != nil else {
+            guard let validData = data, response = response else {
                 return .Failure(.ServerUnreachable)
             }
-            
-            if response!.statusCode == 401 || response!.statusCode == 403 {
+
+            switch response.statusCode {
+            case 401, 403:
                 return .Failure(.NotAuthorized)
-            }
-            
-            if response!.statusCode == 304 {
+            case 500...511:
+                return .Failure(.ServerUnreachable)
+            case 304:
                 return .Success(JSONResponse(json: nil, statusCode: 304))
-            }
-            
-            if response!.statusCode != 200 {
+            case 200:
+                break // everything is fine
+            default:
                 return .Failure(.NoData(error))
             }
-            
-            if let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) {
-                let JSON = JSONDecoder(jsonString).jsonObject
-                if case .JSONInvalid = JSON {
-                    return .Failure(.InvalidJSON(nil))
-                }
-                return .Success(JSONResponse(json: JSON))
-            } else {
+
+            guard let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) else {
                 return .Failure(.InvalidJSON(nil))
             }
+
+            let JSON = JSONDecoder(jsonString).jsonObject
+            if case .JSONInvalid = JSON {
+                return .Failure(.InvalidJSON(nil))
+            }
+
+            return .Success(JSONResponse(json: JSON))
         }
     }
-    
+
     /// Adds a handler to be called once the request has finished.
     ///
     /// - parameter completionHandler: A closure to be executed once the request has finished. The closure takes 3
     ///                                arguments: the URL request, the URL response and the result produced while
     ///                                creating the JSON object.
     /// - returns: The request.
-    public func responseDEJSON(
+    func responseDEJSON(
         completionHandler: Response<JSONResponse, IONError> -> Void)
-        -> Self
-    {
+        -> Self {
         return response(
             responseSerializer: Request.DEJSONResponseSerializer(),
             completionHandler: completionHandler

@@ -27,10 +27,15 @@ class authTests: DefaultXCTestCase {
         let expectation = self.expectationWithDescription("testLoginSuccess")
         
         ION.login("admin@anfe.ma", password: "test") { success in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             XCTAssert(success)
             XCTAssertNotNil(ION.config.sessionToken)
             expectation.fulfill()
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -39,10 +44,15 @@ class authTests: DefaultXCTestCase {
             let expectation = self.expectationWithDescription("testLoginFailure")
         
             ION.login("admin@anfe.ma", password: "wrongpassword") { success in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 XCTAssert(!success)
                 XCTAssertNil(ION.config.sessionToken)
                 expectation.fulfill()
             }
+            
             self.waitForExpectationsWithTimeout(1.0, handler: nil)
         }
     }

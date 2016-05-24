@@ -44,7 +44,7 @@ class DefaultXCTestCase: XCTestCase {
         self.configure() {
             
             if self.mock {
-                let config = ION.config.alamofire.session.configuration
+                let config = ION.config.alamofire!.session.configuration
                 MockingBird.registerInConfig(config)
                 ION.config.alamofire = Alamofire.Manager(configuration: config)
                 

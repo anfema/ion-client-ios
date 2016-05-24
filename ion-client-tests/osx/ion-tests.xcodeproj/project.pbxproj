@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		6A15DFC11C8F20A800932077 /* ion_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A15DFC01C8F207700932077 /* ion_client.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A8626C41CC7AC7C00B9F8DD /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */; };
+		6AAA551F1CCE004900738B4B /* result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA551E1CCE004900738B4B /* result.swift */; };
 		6AD50C4B1C8ED0CC00A05C20 /* callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD50C481C8ED0CC00A05C20 /* callback.swift */; };
 		8F0D4FC81C905D12003E59CE /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0D4FC71C905D12003E59CE /* Result.swift */; };
 		8F0DB0641C0DFBE900193E8C /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0631C0DFBE900193E8C /* nsurlcache.swift */; };
 		8F0DB0661C0F15B600193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0651C0F15B600193E8C /* connection.swift */; };
 		8F0DB0681C0F177900193E8C /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0DB0671C0F177900193E8C /* connection.swift */; };
 		8F114C6E1C15F44100977640 /* bundles in Resources */ = {isa = PBXBuildFile; fileRef = 8F114C6D1C15F44100977640 /* bundles */; };
-		8F114C701C1AE3F400977640 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */; };
 		8F5872771C89A567005567E1 /* notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5872761C89A567005567E1 /* notifications.swift */; };
 		8F78B2BF1BF36216009D4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */; };
 		8F78B2C11BF36216009D4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F78B2C01BF36216009D4B67 /* Assets.xcassets */; };
@@ -118,6 +119,8 @@
 		606E3FF91CA25DAC5F68F02C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		6A15DFBF1C8F207700932077 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ion-client/Info.plist"; sourceTree = "<group>"; };
 		6A15DFC01C8F207700932077 /* ion_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ion_client.h; path = "ion-client/ion_client.h"; sourceTree = "<group>"; };
+		6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
+		6AAA551E1CCE004900738B4B /* result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = result.swift; sourceTree = "<group>"; };
 		6AD50C481C8ED0CC00A05C20 /* callback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = callback.swift; sourceTree = "<group>"; };
 		84C5F81A940CAE21C579A116 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0D4FC71C905D12003E59CE /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -125,7 +128,6 @@
 		8F0DB0651C0F15B600193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F0DB0671C0F177900193E8C /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
 		8F114C6D1C15F44100977640 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = bundles; path = ../../bundles; sourceTree = "<group>"; };
-		8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8F5872761C89A567005567E1 /* notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
 		8F78B2BB1BF36216009D4B67 /* ion-tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ion-tests.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F78B2BE1BF36216009D4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -344,7 +346,6 @@
 			children = (
 				8F78B2F21BF363AA009D4B67 /* imageloader.swift */,
 				8FCFAECE1C08B5D30051981F /* htmlparser.swift */,
-				8F114C6F1C1AE3F400977640 /* NSDate+ISODate.swift */,
 				6AD50C481C8ED0CC00A05C20 /* callback.swift */,
 			);
 			name = helper;
@@ -407,6 +408,7 @@
 				8F78B3571BF36411009D4B67 /* number.swift */,
 				8F78B3581BF36411009D4B67 /* option.swift */,
 				8F78B3591BF36411009D4B67 /* text.swift */,
+				6AAA551E1CCE004900738B4B /* result.swift */,
 			);
 			name = content;
 			path = ../../tests/content;
@@ -493,6 +495,7 @@
 				8F78B2F41BF363AA009D4B67 /* ion.swift */,
 				8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */,
 				8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */,
+				6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */,
 			);
 			name = ion;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				8F78B2EB1BF36392009D4B67 /* Embed Frameworks */,
 				BD2ED7434318358AC4701229 /* Embed Pods Frameworks */,
 				D90FCD94ACBA2C88255F6A8B /* Copy Pods Resources */,
+				6A544F3F1CEDB33F0047A612 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -576,7 +580,7 @@
 		8F78B2B31BF36216009D4B67 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "anfema GmbH";
 				TargetAttributes = {
@@ -640,6 +644,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		6A544F3F1CEDB33F0047A612 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
 		8FB149B21C493F4100441F82 /* TODOs as Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -724,6 +741,7 @@
 				8F78B3731BF36411009D4B67 /* auto_cache_invalidation.swift in Sources */,
 				8F78B3781BF36411009D4B67 /* page.swift in Sources */,
 				8F78B3701BF36411009D4B67 /* option.swift in Sources */,
+				6AAA551F1CCE004900738B4B /* result.swift in Sources */,
 				8FB149B11C493DE400441F82 /* NSDate+ISODate.swift in Sources */,
 				8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */,
 				8F78B3771BF36411009D4B67 /* memcache.swift in Sources */,
@@ -744,11 +762,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F114C701C1AE3F400977640 /* NSDate+ISODate.swift in Sources */,
 				8F78B3141BF363AA009D4B67 /* number.swift in Sources */,
 				8FF9DB791BF9E5CC00935748 /* page+children.swift in Sources */,
 				8F78B30E1BF363AA009D4B67 /* datetime.swift in Sources */,
 				8F78B30D1BF363AA009D4B67 /* content.swift in Sources */,
+				6A8626C41CC7AC7C00B9F8DD /* ion+connection.swift in Sources */,
 				8F78B30B1BF363AA009D4B67 /* color.swift in Sources */,
 				8F78B3161BF363AA009D4B67 /* text.swift in Sources */,
 				8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */,

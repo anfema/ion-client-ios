@@ -6,4 +6,6 @@
 //  Copyright © 2016 anfema GmbH. All rights reserved.
 //
 
-internal let IONFTSDBDidUpdateNotification = "ion_ftsdb_did_update_notification"
+enum Notification {
+    static let ftsDatabaseDidUpdate = "ion_ftsdb_did_update_notification"
+}

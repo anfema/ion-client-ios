@@ -26,6 +26,10 @@ class memcacheTests: LoggedInXCTestCase {
         let expectation = self.expectationWithDescription("testCollectionMemcache")
         
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Performs the callback in the responseQueue defined in ION.config.responseQueue
-/// 
+///
 /// - parameter callback:  The callback that will be called.
 /// - parameter parameter: The parameter of the callback.
 func responseQueueCallback <T, U> (callback: T -> U, parameter: T) {
@@ -28,6 +28,6 @@ func responseQueueCallback <T, U> (callback: (T -> U)?, parameter: T) {
     guard let callback = callback else {
         return
     }
-    
+
     responseQueueCallback(callback, parameter: parameter)
 }

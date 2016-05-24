@@ -12,28 +12,32 @@
 import Foundation
 import DEjson
 
+
 /// Container content, contains other content objects
 public class IONContainerContent: IONContent {
-    /// children to this container
-    public var children:[IONContent]!
-    
+
+    /// Children of this container
+    public var children: [IONContent]
+
+
     /// Initialize container content object from JSON
-    ///
-    /// - parameter json: `JSONObject` that contains serialized container content object
-    ///
     /// Container content children can be accessed by subscripting the container content object
-    override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
+    ///
+    /// - parameter json: `JSONObject` that contains the serialized container content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.JSONArrayExpected` when `json["children"]` is no `JSONArray`
+    ///
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let rawChildren = dict["children"],
             case .JSONArray(let children) = rawChildren else {
                 throw IONError.JSONArrayExpected(json)
         }
-        
+
         self.children = []
         for child in children {
             do {
@@ -44,56 +48,59 @@ public class IONContainerContent: IONContent {
                 }
             }
         }
+
+        try super.init(json: json)
     }
-    
+
+
     /// Container content has a subscript for it's children
     subscript(index: Int) -> IONContent? {
-        guard self.children != nil && index < self.children.count else {
+        guard index > -1 && index < self.children.count else {
             return nil
         }
+
         return self.children[index]
     }
 }
 
+
 /// Container extension to IONPage
 extension IONPage {
-    
-    /// Fetch `IONContent`-Array from named outlet
+
+    /// Fetch `IONContent`-Array for named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - returns: Array of `IONContent` objects if the outlet was a container outlet and the page was already
-    ///            cached, else nil
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - returns: `Result.Success` containing an array of `IONContent` objects if the outlet is a container outlet
+    ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func children(name: String, position: Int = 0) -> Result<[IONContent], IONError> {
         let result = self.outlet(name, position: position)
+
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
+
         if case let content as IONContainerContent = content {
             return .Success(content.children)
         }
-        return .Failure(.OutletNotFound(name))
+
+        return .Failure(.OutletIncompatible)
     }
-    
-    /// Fetch `IONContent`-Array from named outlet async
+
+
+    /// Fetch `IONContent`-Array for named outlet asynchronously
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the children become available, will not be called if the outlet
-    ///                       is not a container outlet or non-existant or fetching the outlet was canceled because
-    ///                       of a communication error
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the container outlet becomes available.
+    ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func children(name: String, position: Int = 0, callback: (Result<[IONContent], IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
-                return
-            }
-            if case let content as IONContainerContent = content {
-                if let c = content.children {
-                    responseQueueCallback(callback, parameter: .Success(c))
-                }
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.children(name, position: position))
         }
+
         return self
     }
 }

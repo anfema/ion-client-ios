@@ -18,23 +18,80 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         let fontSize = CGFloat(10.0)
         var style = AttributedStringStyling(font: UIFont(name: "Helvetica", size: fontSize)!, strongFont: UIFont(name: "Helvetica-Bold", size: fontSize)!, emphasizedFont: UIFont(name: "Helvetica-Oblique", size: fontSize)!, baseColor: UIColor.blackColor(), backgroundColor: UIColor.whiteColor())
         
         style.unorderedListItem.textIndent = 0
         style.orderedListItem.textIndent = 0
+
+        let parser = HTMLParser(html:
+            "<ul>" +
+            "<li>List Element 1" +
+            "<li>List Element 2" +
+            "<li>List Element 3" +
+            "<li>List Element 4" +
+            "</ul>" +
+            "<ul>" +
+            "<li>List Element 1<ul>" +
+            "<li>List Element 1.1</li>" +
+            "<li>List Element 1.2</li>" +
+            "<li>List Element 1.3</li>" +
+            "<li>List Element 1.4</li>" +
+            "</ul></li>" +
+            "<li>List Element 2<ul>" +
+            "<li>List Element 2.1</li>" +
+            "<li>List Element 2.2</li>" +
+            "<li>List Element 2.3</li>" +
+            "<li>List Element 2.4</li>" +
+            "</ul></li>" +
+            "</ul>" +
+            "<ol>" +
+            "<li>List Element 1</li>" +
+            "<li>List Element 2</li>" +
+            "<li>List Element 3</li>" +
+            "<li>List Element 4</li>" +
+            "</ol>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<br>" +
+            "<pre>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</pre>" +
+            "<br>" +
+            "<blockquote>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</blockquote>" +
+            "<br>" +
+            "<h1>Heading</h1>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<h2>Heading</h2>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<h3>Heading</h3>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<h4>Heading</h4>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<h5>Heading</h5>" +
+            "<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>" +
+            "<strong>strong</strong>" +
+            "<br>" +
+            "<del>deleted</del>" +
+            "<br>" +
+            "<a href=\"https://anfe.ma\">anfe.ma</a>" +
+            "<br>" +
+            "<b>bold</b>" +
+            "<br>" +
+            "<em>emphasized</em>" +
+            "<br>" +
+            "<i>italic</i>" +
+            "<br>" +
+            "<pre>pre</pre>" +
+            "<br>" +
+            "<code>code</code>" +
+            "<p>Lorem <strong>strong</strong> ipsum dolor <a href=\"https://anfe.ma\">anfe.ma</a> sit <b>bold</b> amet, consetetur <br>" +
+            "<del>deleted</del> r sadipscing <em>emphasized</em> sadipscing elitr, <i>italic</i> sed lore <code>code</code> magna aliquyam</p>"
+        )
         
-//        let parser = HTMLParser(html:"<h1>Heading 1</h1>\n<h2>Heading 2</h2>\n\n<p> Text text text text\n\ntext text</p>\n<ul>\n<li>Item 1\n<ol>\n<li>Item 1</li>\n<li>Item 2</li>\n</ol>\n</li>\n<li>Item 2</li>\n</ul>\n\n\n<pre>Code\nblock\n</pre>\n\n<p><strong>Fancy</strong> <em>Text</em> und normal <a href='http://google.de'>weiter</a></p>")
-//        let parser = HTMLParser(html:"<p><b>AUDI AG</b></p><p><b>AUDI AG Postanschrift:<br></b>AUDI AG<br>85045 Ingolstadt</p><p><b>Fachliche Verantwortung:<br></b>I/FP-2 IT-Strategie / Steuerung</p><p><b>Support:</b><br>Audi Service Desk<br>Telefon: +49 (0) 841-89-36565<br>E-Mail: 36565@audi.de</p><p>Die AUDI AG ist eine Aktiengesellschaft deutschen Rechts mit Hauptsitz in Ingolstadt.</p><p><b>Vorstand:</b><br>Rupert Stadler (Vorsitzender des Vorstands)<br>Ulrich Hackenberg<br>Bernd Martens<br>Thomas Siri<br>Axel Stortbak<br>Dietmar Roggenreiter<br>Hubert Waltl</p><p>Die AUDI AG ist im Handelsregister des Amtsgerichts Ingolstadt unter der Nummer HR B 1 eingetragen.</p><p>Die Umsatzsteueridentifikationsnummer der AUDI AG ist DE811115368.</p>")
-
-//        let parser = HTMLParser(html:"<p>Wir führen die Fabrikkostenpotenziale aus laufenden Unternehmensaktivitäten in einer zentralen Registrierkasse zusammen. Hierzu gehören insbesondere folgende Initiativen: </p><ul><li>das frühzeitige Aufzeigen von Fabrikkosteneffekten im Produktentstehungsprozess sowie das Einsteuern von Maßnahmen zur Fabrikkostenoptimierung.</li><li>die Komplexitätsreduzierung in laufender Serie und im Produktentstehungsprozess.</li><li>die Optimierung der Beschaffungsnebenkosten der AUDI AG.</li><li>die kontinuierliche Produktivitätssteigerung in der Fertigung sowie den angrenzenden Bereichen.</li></ul><p>Verantwortlich:</p><ul><li>Jürgen Baur, I/PG-G<br></li><li>Thomas Bartl, I/PG-B<br></li><li>Michael Hauf, I/PL<br></li><li>alle Werkleiter<br></li></ul>")
-
-        let parser = HTMLParser(html:"<ul><li>Aktivitäten der Standorte zur Optimierung der Fabrikkosten im eigenen Einflussbereich.</li><li>Rasche Umsetzung der Ideen am eigenen Standort.</li><li>Wissens- und Erfahrungsaustausch mit anderen Standorten zum Transfer der besten Maßnahmen.</li></ul><p>Verantwortlich:</p><ul><li>IN: Peter Demling, I/PI-5</li><li>NEC: Stefan Reich, N/PN-623</li><li>GY: Christian Bechheim, G/GG</li><li>BRX: Michel Pacolet, B/FC</li></ul>")
-
         self.textView.attributedText = parser.renderAttributedString(style)
-//        self.textView.text = parser.renderText()
+        
+        print(parser.renderText())
     }
 
     override func didReceiveMemoryWarning() {

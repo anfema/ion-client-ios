@@ -23,16 +23,18 @@
 import Foundation
 import Alamofire
 
-/**
-    Used to represent whether a request was successful or encountered an error.
-
-    - Success: The request and all post processing operations were successful resulting in the serialization of the 
-               provided associated value.
-    - Failure: The request encountered an error resulting in a failure. The associated values are the original data 
-               provided by the server as well as the error that caused the failure.
-*/
+/// Used to represent whether a request was successful or encountered an error.
+///
+/// - Success: The request and all post processing operations were successful resulting in the serialization of the
+///            provided associated value.
+/// - Failure: The request encountered an error resulting in a failure. The associated values are the original data
+///            provided by the server as well as the error that caused the failure.
 public enum Result<Value, Error: ErrorType> {
+
+    /// Request successful, contains result
     case Success(Value)
+
+    /// Request failed, contains error
     case Failure(Error)
 
     /// Returns `true` if the result is a success, `false` otherwise.
@@ -69,7 +71,10 @@ public enum Result<Value, Error: ErrorType> {
             return error
         }
     }
-    
+
+    /// Initialize from `Alamofire` result
+    ///
+    /// - parameter result: `Alamofile.Result` object
     public init(result: Alamofire.Result<Value, Error>) {
         switch result {
         case Alamofire.Result.Success(let data):
@@ -78,13 +83,13 @@ public enum Result<Value, Error: ErrorType> {
             self = .Failure(error)
         }
     }
-    
+
     /// Returns the value of .Success or nil when there was an error.
     public func optional() -> Value? {
         guard case .Success(let ret) = self else {
             return nil
         }
-        
+
         return ret
     }
 }
@@ -92,7 +97,7 @@ public enum Result<Value, Error: ErrorType> {
 // MARK: - CustomStringConvertible
 
 extension Result: CustomStringConvertible {
-    /// The textual representation used when written to an output stream, which includes whether the result was a 
+    /// The textual representation used when written to an output stream, which includes whether the result was a
     /// success or failure.
     public var description: String {
         switch self {

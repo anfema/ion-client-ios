@@ -12,85 +12,84 @@
 import Foundation
 import DEjson
 
-/// Connection content, carries a link to another collection/page/outlet
+
+/// Connection content, carries a link to another collection, page or outlet
 public class IONConnectionContent: IONContent {
-    
-    /// value for the selected option
-    public var link:String!
-    
-    /// url convenience
+
+    /// Value of the connection link
+    public var link: String
+
+    /// URL to the connected collection, page or outlet
     public var url: NSURL? {
-        return NSURL(string: "ion://\(self.link)")
+        return NSURL(string: "\(ION.config.connectionScheme):\(self.link)")
     }
-    
-    /// Initialize option content object from JSON
+
+
+    /// Initialize connection content object from JSON
     ///
-    /// - parameter json: `JSONObject` that contains serialized option content object
-    override init(json:JSONObject) throws {
-        try super.init(json: json)
-        
+    /// - parameter json: `JSONObject` that contains the serialized connection content object
+    ///
+    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
+    ///
+    override init(json: JSONObject) throws {
         guard case .JSONDictionary(let dict) = json else {
             throw IONError.JSONObjectExpected(json)
         }
-        
+
         guard let connectionString = dict["connection_string"],
             case .JSONString(let value) = connectionString else {
                 throw IONError.InvalidJSON(json)
         }
-        
+
         self.link = value
+
+        try super.init(json: json)
     }
 }
 
-/// Option extensions to IONPage
+
+/// Connection extensions to IONPage
 extension IONPage {
-    
-    /// Fetch selected option for named outlet
+
+    /// Fetch selected connection for named outlet
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - returns: string if the outlet was an option outlet and the page was already cached, else nil
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - returns: `Result.Success` containing an `NSURL` if the outlet is a connection outlet
+    ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func link(name: String, position: Int = 0) -> Result<NSURL, IONError> {
         let result = self.outlet(name, position: position)
-        
+
         guard case .Success(let content) = result else {
-            return .Failure(result.error!)
+            return .Failure(result.error ?? .UnknownError)
         }
 
-        if case let content as IONConnectionContent = content {
-            if let url = content.url {
-                return .Success(url)
-            } else {
-                return .Failure(.OutletEmpty)
-            }
+        guard case let connectionContent as IONConnectionContent = content else {
+            return .Failure(.OutletIncompatible)
         }
-        return .Failure(.OutletIncompatible)
+
+        guard let url = connectionContent.url else {
+            return .Failure(.OutletEmpty)
+        }
+
+        return .Success(url)
     }
-    
-    /// Fetch selected option for named outlet async
+
+
+    /// Fetch selected connection for named outlet asynchronously
     ///
-    /// - parameter name: the name of the outlet
-    /// - parameter position: (optional) position in the array
-    /// - parameter callback: block to call when the option becomes available, will not be called if the outlet
-    ///                       is not a option outlet or non-existant or fetching the outlet was canceled because of a
-    ///                       communication error
+    /// - parameter name: The name of the outlet
+    /// - parameter position: Position in the array (optional)
+    /// - parameter callback: Block to call when the connection outlet becomes available.
+    ///                       Provides `Result.Success` containing an `NSURL` when successful, or
+    ///                       `Result.Failure` containing an `IONError` when an error occurred.
+    /// - returns: self for chaining
     public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error!))
-                return
-            }
-            
-            if case let content as IONConnectionContent = content {
-                if let url = content.url {
-                    responseQueueCallback(callback, parameter: .Success(url))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(.OutletEmpty))
-                }
-            } else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
-            }
+        dispatch_async(workQueue) {
+            responseQueueCallback(callback, parameter: self.link(name, position: position))
         }
+
         return self
     }
 }

@@ -10,54 +10,57 @@
 // BSD license (see LICENSE.txt for full license text)
 import Foundation
 
+
 extension IONPage {
-    
-    /// fetch page children
+
+    /// Fetch page children
     ///
-    /// - parameter identifier: identifier of child page
-    /// - parameter callback: callback to call when child page is ready, will not be called on hierarchy errors
+    /// - parameter identifier: Identifier of child page
+    /// - parameter callback: Block to call when the child page becomes ready.
+    ///                       Provides Result.Success containing an `IONPage` when successful, or
+    ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the page
     public func child(identifier: String, callback: (Result<IONPage, IONError> -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
             guard case .Success(let page) = result else {
-                if case .Failure(let error) = result
-                {
-                    responseQueueCallback(callback, parameter: .Failure(error))
-                } else {
-                    responseQueueCallback(callback, parameter: .Failure(IONError.DidFail))
-                }
-                
+                responseQueueCallback(callback, parameter: .Failure(result.error ?? .DidFail))
                 return
             }
-            
-            if page.parent == self.identifier {
-                responseQueueCallback(callback, parameter: .Success(page))
-            } else {
+
+            guard page.parent == self.identifier else {
                 responseQueueCallback(callback, parameter: .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
+                return
             }
+
+            responseQueueCallback(callback, parameter: .Success(page))
         }
-        
+
         return self
     }
-    
-    /// fetch page children
+
+
+    /// Fetch page children
     ///
-    /// - parameter identifier: identifier of child page
-    /// - returns: page object that resolves async or nil if page not child of self
+    /// - parameter identifier: Identifier of child page
+    /// - returns: Page object that resolves asynchronously or nil if the page is no child of self
     public func child(identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
-        
-        if page.parent == self.identifier {
-            return .Success(page)
+
+        guard page.metadata != nil else {
+            return .Failure(.PageNotFound(identifier))
         }
-        
-        return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+
+        guard page.parent == self.identifier else {
+            return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+        }
+
+        return .Success(page)
     }
-    
-    
-    /// enumerate page children
+
+
+    /// Enumerate page children
     ///
-    /// - parameter callback: the callback to call for each child
+    /// - parameter callback: The callback to call for each child
     public func children(callback: (Result<IONPage, IONError> -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             for child in children {
@@ -65,17 +68,20 @@ extension IONPage {
             }
         }
     }
-    
-    /// list page children, Attention: those pages returned are not fully loaded!
+
+
+    /// List page children, Attention: those pages returned are not fully loaded!
     ///
-    /// - parameter callback: the callback to call for children list
+    /// - parameter callback: The callback to call for children list
     public func childrenList(callback: ([IONPage] -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             var result = [IONPage]()
+
             for child in children {
                 let page = self.collection.page(child)
                 result.append(page)
             }
+
             responseQueueCallback(callback, parameter: result)
         }
     }

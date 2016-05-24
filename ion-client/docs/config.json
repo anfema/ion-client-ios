@@ -1,13 +1,15 @@
 {
-	"output": "./docs",
+	"output": "./html",
 	"author": "anfema",
-	"author_url": "http://anfe.ma",
-	"swift-version": "2.1",
-	"readme": "./readme.md",
+	"github_url": "https://github.com/anfema/ion-client-ios",
+	"readme": "../../readme.md",
+	"copyright": "Copyright (c) 2015-2016 [anfema GmbH](http://anfe.ma)",
+	"hide-documentation-coverage": true,
 	"clean": true,
-	"module": "amp_client",
-	"module_version": "1.0.15",
-	"min-acl": "public",
-	"template-directory": "./docs.config/templates",
-	"assets-directory": "./docs.config/assets"
+	"module": "ion_client",
+	"module_version": "2.0.6",
+	"sdk": "macosx",
+	"exclude": [
+		"../cache/nsurlcache.swift"
+	]
 }

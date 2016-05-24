@@ -3,6 +3,7 @@ source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
 platform :osx, '10.10'
-link_with 'Tutorial', 'ion-client-tutorial'
 
-pod 'ion-client', :git => 'git@github.com:anfema/amp-ios-client.git', :branch => 'feature/new_error_handling'
+target 'Tutorial' do
+    pod 'ion-client', git: 'git@github.com:anfema/ion-client-ios.git', branch: 'develop'
+end

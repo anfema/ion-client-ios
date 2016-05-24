@@ -26,6 +26,10 @@ class autoCacheTests: LoggedInXCTestCase {
     func testCollectionFetchNoTimeout() {
         let expectation = self.expectationWithDescription("testCollectionFetchNoTimeout")
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -34,6 +38,10 @@ class autoCacheTests: LoggedInXCTestCase {
 
             XCTAssertNotNil(collection.lastUpdate)
             ION.collection("test") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -44,6 +52,7 @@ class autoCacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
+        
         self.waitForExpectationsWithTimeout(1.0, handler: nil)
     }
 
@@ -52,6 +61,10 @@ class autoCacheTests: LoggedInXCTestCase {
         ION.config.cacheTimeout = 1
         ION.config.lastOnlineUpdate = [String:NSDate]()
         ION.collection("test") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
@@ -61,6 +74,10 @@ class autoCacheTests: LoggedInXCTestCase {
             XCTAssertNotNil(collection.lastUpdate)
             sleep(2)
             ION.collection("test") { result in
+                
+                // Test if the correct response queue is used
+                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                
                 guard case .Success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
@@ -114,6 +131,10 @@ class autoCacheTests: LoggedInXCTestCase {
         
         // check page cache content
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 fail = true
@@ -146,6 +167,10 @@ class autoCacheTests: LoggedInXCTestCase {
         
         // check if page has updated
         ION.collection("test").page("page_001") { result in
+            
+            // Test if the correct response queue is used
+            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            
             guard case .Success(let page) = result else {
                 XCTFail()
                 expectation3.fulfill()

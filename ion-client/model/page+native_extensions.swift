@@ -11,6 +11,7 @@
 
 import Foundation
 
+
 extension IONPage: CustomStringConvertible {
     /// Convert page to string representation, only use for debugging purposes
     public var description: String {
@@ -18,10 +19,18 @@ extension IONPage: CustomStringConvertible {
     }
 }
 
+
 /// Two pages are the same if the identifier and the collection matches
-public func ==(lhs: IONPage, rhs: IONPage) -> Bool {
+///
+/// - parameter lhs: IONPage on the left hand side of `==`
+/// - parameter rhs: IONPage on the right hand side of `==`
+/// - returns: `true` if the pages have the same identifiers
+///            `false` if not.
+///
+public func == (lhs: IONPage, rhs: IONPage) -> Bool {
     return (lhs.collection.identifier == rhs.collection.identifier) && (lhs.identifier == rhs.identifier)
 }
+
 
 extension IONPage: Hashable {
     /// Combine collection hash value with self identifier hash value to get somewhat unique hash

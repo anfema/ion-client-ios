@@ -25,7 +25,7 @@
               "variation": "default",
               "outlet": "connection",
               "type": "connectioncontent",
-              "connection_string": "testconnection124"
+              "connection_string": "//test/page_001#number"
             },
             {
               "is_searchable": false,
