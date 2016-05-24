@@ -34,8 +34,8 @@ public struct IONConfig {
     /// variation code to scale factor table
     public var variationScaleFactors: [String: CGFloat]
 
-    /// response queue to run all asynchronous responses in, by default a concurrent queue, may be set to main queue
-    public var responseQueue = dispatch_queue_create("com.anfema.ion.ResponseQueue", DISPATCH_QUEUE_CONCURRENT)
+    /// response queue to run all async responses in, by default the main queue
+    public var responseQueue = dispatch_get_main_queue()
 
     /// global request progress handler (will be called periodically when progress updates)
     public var progressHandler: ((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
