@@ -139,13 +139,11 @@ extension IONRequest {
             self.loadCacheDB()
         }
 
+        // date used for the timestamp
+        let date = lastUpdated ?? NSDate()
+
         // fetch current timestamp truncated to maximum resolution of 1 ms
-        var timestamp: Double = 0.0
-        if let last_updated = lastUpdated {
-            timestamp = trunc(last_updated.timeIntervalSince1970 * 1000.0) / 1000.0
-        } else {
-            timestamp = trunc(NSDate().timeIntervalSince1970 * 1000.0) / 1000.0
-        }
+        let timestamp: Double = trunc(date.timeIntervalSince1970 * 1000.0) / 1000.0
 
         // pop current cache DB entry
         var obj: [String: JSONObject] = self.getCacheDBEntry(url) ?? [:]
