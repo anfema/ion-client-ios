@@ -174,7 +174,12 @@ extension IONRequest {
         }
 
         filename = filename.URLByAppendingPathComponent(hash.hexString())
-        data.writeToFile(path, atomically: true)
+
+        guard let filePath = filename.path else {
+            return
+        }
+
+        data.writeToFile(filePath, atomically: true)
 
         // populate object with current data
         obj["url"]             = .JSONString(url)
