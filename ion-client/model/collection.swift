@@ -130,7 +130,16 @@ public class IONCollection {
             if let page = self.pageCache[identifier] {
                 if page.isReady {
                     if self.checkNeedsUpdate(page) {
-                        self.update(page, callback: callback)
+                        self.update(page, callback: { result in
+                            // return cached page if update failed
+                            guard case .Success(let updatedPage) = result else {
+                                responseQueueCallback(callback, parameter: .Success(page))
+                                return
+                            }
+
+                            // return updated page
+                            responseQueueCallback(callback, parameter: .Success(updatedPage))
+                        })
                     } else {
                         dispatch_async(ION.config.responseQueue) {
                             callback(.Success(page))
