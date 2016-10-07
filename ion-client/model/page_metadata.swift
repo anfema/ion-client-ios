@@ -157,9 +157,10 @@ public class IONPageMeta: CanLoadImage {
 
     /// thumbnail image url for `CanLoadImage`
     public var imageURL: NSURL? {
-        if let urlString = self["thumbnail"] ?? self["icon"] {
+        if let urlString = self["thumbnail"] ?? self["icon"] where urlString.isEmpty == false {
             return NSURL(string: urlString)
         }
+
         return nil
     }
 
