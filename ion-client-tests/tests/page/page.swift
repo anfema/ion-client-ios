@@ -973,12 +973,12 @@ class pageTests: LoggedInXCTestCase {
     private func cacheFile(filename: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
-        return fileURL
+        return fileURL!
     }
     
     private func cacheBaseDir(locale locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)")
-        return fileURL
+        return fileURL!
     }
 }

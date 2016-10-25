@@ -34,7 +34,7 @@
 			<key>showEnvVarsInLog</key>
 			<string>0</string>
 		</dict>
-		<key>09DDEC7C563DDA303225725B</key>
+		<key>1E98C8282ACB7CCE10A96175</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -43,11 +43,101 @@
 			<key>lastKnownFileType</key>
 			<string>text.xcconfig</string>
 			<key>name</key>
-			<string>Pods-ion_client.release.xcconfig</string>
+			<string>Pods-ion-tests.release.xcconfig</string>
 			<key>path</key>
-			<string>Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig</string>
+			<string>Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests.release.xcconfig</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>3C22D82EBE7FE346EEEA7FE6</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-tests.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-tests/Pods-tests.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>4293713014EAA2CC2BD6F361</key>
+		<dict>
+			<key>fileRef</key>
+			<string>60186993775AD70A206DE645</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>434392B39FC02E1EA9530DE4</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Embed Pods Frameworks</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>482C08F60D0CFEDA8D741596</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Embed Pods Frameworks</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-frameworks.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>4D107902FA8D80223C9B52FB</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods_tests.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>5CF806F15A35F48DB105A897</key>
+		<dict>
+			<key>fileRef</key>
+			<string>66C573FF63ECE1B60B0B2EA5</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
 		</dict>
 		<key>60186993775AD70A206DE645</key>
 		<dict>
@@ -59,6 +149,19 @@
 			<string>PBXFileReference</string>
 			<key>path</key>
 			<string>Pods_ion_client.framework</string>
+			<key>sourceTree</key>
+			<string>BUILT_PRODUCTS_DIR</string>
+		</dict>
+		<key>66C573FF63ECE1B60B0B2EA5</key>
+		<dict>
+			<key>explicitFileType</key>
+			<string>wrapper.framework</string>
+			<key>includeInIndex</key>
+			<string>0</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>path</key>
+			<string>Pods_ion_tests.framework</string>
 			<key>sourceTree</key>
 			<string>BUILT_PRODUCTS_DIR</string>
 		</dict>
@@ -285,6 +388,8 @@ fi</string>
 				<string>8F78B2AC1BF36163009D4B67</string>
 				<string>8D059CE25D0784B783F89E4D</string>
 				<string>60186993775AD70A206DE645</string>
+				<string>66C573FF63ECE1B60B0B2EA5</string>
+				<string>4D107902FA8D80223C9B52FB</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -556,6 +661,7 @@ fi
 			<key>files</key>
 			<array>
 				<string>8F78B28C1BF35A9E009D4B67</string>
+				<string>5CF806F15A35F48DB105A897</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -583,11 +689,14 @@ fi
 			<string>8F78B1F61BF35689009D4B67</string>
 			<key>buildPhases</key>
 			<array>
+				<string>B0B7629220973691CE4ABF24</string>
 				<string>8F78B1E01BF35689009D4B67</string>
 				<string>8F78B1E11BF35689009D4B67</string>
 				<string>8F78B1E21BF35689009D4B67</string>
 				<string>8F78B2911BF35A9E009D4B67</string>
 				<string>6A7965471CEDA3A500C00AD6</string>
+				<string>434392B39FC02E1EA9530DE4</string>
+				<string>C43D1AFE67DCA4E1CB471F29</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -942,6 +1051,8 @@ fi
 				<string>NO</string>
 				<key>SDKROOT</key>
 				<string>iphoneos</string>
+				<key>SWIFT_OPTIMIZATION_LEVEL</key>
+				<string>-Owholemodule</string>
 				<key>TARGETED_DEVICE_FAMILY</key>
 				<string>1,2</string>
 				<key>VALIDATE_PRODUCT</key>
@@ -968,6 +1079,8 @@ fi
 		</dict>
 		<key>8F78B1F71BF35689009D4B67</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>A1DAE85453513E51EB006B1B</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES</key>
@@ -992,6 +1105,8 @@ fi
 		</dict>
 		<key>8F78B1F81BF35689009D4B67</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>1E98C8282ACB7CCE10A96175</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES</key>
@@ -1077,7 +1192,9 @@ fi
 			<key>buildActionMask</key>
 			<string>2147483647</string>
 			<key>files</key>
-			<array/>
+			<array>
+				<string>A97B612FE864D439569A203F</string>
+			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
 			<key>runOnlyForDeploymentPostprocessing</key>
@@ -1102,9 +1219,12 @@ fi
 			<string>8F78B21F1BF35945009D4B67</string>
 			<key>buildPhases</key>
 			<array>
+				<string>BED64CD1421D935C15A2AE69</string>
 				<string>8F78B2141BF35945009D4B67</string>
 				<string>8F78B2151BF35945009D4B67</string>
 				<string>8F78B2161BF35945009D4B67</string>
+				<string>482C08F60D0CFEDA8D741596</string>
+				<string>FDB6EADFADD0F1B86DAC0C1F</string>
 			</array>
 			<key>buildRules</key>
 			<array/>
@@ -1187,6 +1307,8 @@ fi
 		</dict>
 		<key>8F78B2201BF35945009D4B67</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>ECFBA7F53F943D9B31B6A14D</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>BUNDLE_LOADER</key>
@@ -1215,6 +1337,8 @@ fi
 		</dict>
 		<key>8F78B2211BF35945009D4B67</key>
 		<dict>
+			<key>baseConfigurationReference</key>
+			<string>3C22D82EBE7FE346EEEA7FE6</string>
 			<key>buildSettings</key>
 			<dict>
 				<key>BUNDLE_LOADER</key>
@@ -1766,7 +1890,7 @@ fi
 				<string>8F78B2AE1BF36163009D4B67</string>
 				<string>8F78B2AF1BF36163009D4B67</string>
 				<string>8F78B2B01BF36163009D4B67</string>
-				<string>F0A803B700EF22AA9B03C60C</string>
+				<string>4293713014EAA2CC2BD6F361</string>
 			</array>
 			<key>isa</key>
 			<string>PBXFrameworksBuildPhase</string>
@@ -1900,9 +2024,11 @@ fi
 		<key>8F78B28F1BF35A9E009D4B67</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>A84DB83EF9F5201E013A0636</string>
+			<string>AF3FC49FCB454A4ECF6A1179</string>
 			<key>buildSettings</key>
 			<dict>
+				<key>ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES</key>
+				<string>YES</string>
 				<key>CODE_SIGN_IDENTITY[sdk=iphoneos*]</key>
 				<string></string>
 				<key>CURRENT_PROJECT_VERSION</key>
@@ -1917,6 +2043,8 @@ fi
 				<string>@rpath</string>
 				<key>FRAMEWORK_SEARCH_PATHS</key>
 				<string>$(inherited)</string>
+				<key>HEADER_SEARCH_PATHS</key>
+				<string></string>
 				<key>INFOPLIST_FILE</key>
 				<string>ion-client/Info.plist</string>
 				<key>INSTALL_PATH</key>
@@ -1948,9 +2076,11 @@ fi
 		<key>8F78B2901BF35A9E009D4B67</key>
 		<dict>
 			<key>baseConfigurationReference</key>
-			<string>09DDEC7C563DDA303225725B</string>
+			<string>D392DC9FB224EFE69858DEDD</string>
 			<key>buildSettings</key>
 			<dict>
+				<key>ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES</key>
+				<string>YES</string>
 				<key>CODE_SIGN_IDENTITY[sdk=iphoneos*]</key>
 				<string></string>
 				<key>CURRENT_PROJECT_VERSION</key>
@@ -1965,6 +2095,8 @@ fi
 				<string>@rpath</string>
 				<key>FRAMEWORK_SEARCH_PATHS</key>
 				<string>$(inherited)</string>
+				<key>HEADER_SEARCH_PATHS</key>
+				<string></string>
 				<key>INFOPLIST_FILE</key>
 				<string>ion-client/Info.plist</string>
 				<key>INSTALL_PATH</key>
@@ -2941,7 +3073,29 @@ find "${SRCROOT}/../../ion-client" \( -name "*.h" -or -name "*.m" -or -name "*.s
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
-		<key>A84DB83EF9F5201E013A0636</key>
+		<key>A1DAE85453513E51EB006B1B</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-ion-tests.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>A97B612FE864D439569A203F</key>
+		<dict>
+			<key>fileRef</key>
+			<string>4D107902FA8D80223C9B52FB</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>AF3FC49FCB454A4ECF6A1179</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
@@ -2956,19 +3110,130 @@ find "${SRCROOT}/../../ion-client" \( -name "*.h" -or -name "*.m" -or -name "*.s
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>F0A803B700EF22AA9B03C60C</key>
+		<key>B0B7629220973691CE4ABF24</key>
 		<dict>
-			<key>fileRef</key>
-			<string>60186993775AD70A206DE645</string>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
 			<key>isa</key>
-			<string>PBXBuildFile</string>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>BED64CD1421D935C15A2AE69</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Check Pods Manifest.lock</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>diff "${PODS_ROOT}/../Podfile.lock" "${PODS_ROOT}/Manifest.lock" &gt; /dev/null
+if [[ $? != 0 ]] ; then
+    cat &lt;&lt; EOM
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+EOM
+    exit 1
+fi
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>C43D1AFE67DCA4E1CB471F29</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
+		</dict>
+		<key>D392DC9FB224EFE69858DEDD</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-ion_client.release.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>ECFBA7F53F943D9B31B6A14D</key>
+		<dict>
+			<key>includeInIndex</key>
+			<string>1</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text.xcconfig</string>
+			<key>name</key>
+			<string>Pods-tests.debug.xcconfig</string>
+			<key>path</key>
+			<string>Pods/Target Support Files/Pods-tests/Pods-tests.debug.xcconfig</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>F14231D510C5EA2F13239CD4</key>
 		<dict>
 			<key>children</key>
 			<array>
-				<string>A84DB83EF9F5201E013A0636</string>
-				<string>09DDEC7C563DDA303225725B</string>
+				<string>A1DAE85453513E51EB006B1B</string>
+				<string>1E98C8282ACB7CCE10A96175</string>
+				<string>AF3FC49FCB454A4ECF6A1179</string>
+				<string>D392DC9FB224EFE69858DEDD</string>
+				<string>ECFBA7F53F943D9B31B6A14D</string>
+				<string>3C22D82EBE7FE346EEEA7FE6</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -2976,6 +3241,30 @@ find "${SRCROOT}/../../ion-client" \( -name "*.h" -or -name "*.m" -or -name "*.s
 			<string>Pods</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
+		</dict>
+		<key>FDB6EADFADD0F1B86DAC0C1F</key>
+		<dict>
+			<key>buildActionMask</key>
+			<string>2147483647</string>
+			<key>files</key>
+			<array/>
+			<key>inputPaths</key>
+			<array/>
+			<key>isa</key>
+			<string>PBXShellScriptBuildPhase</string>
+			<key>name</key>
+			<string>[CP] Copy Pods Resources</string>
+			<key>outputPaths</key>
+			<array/>
+			<key>runOnlyForDeploymentPostprocessing</key>
+			<string>0</string>
+			<key>shellPath</key>
+			<string>/bin/sh</string>
+			<key>shellScript</key>
+			<string>"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-resources.sh"
+</string>
+			<key>showEnvVarsInLog</key>
+			<string>0</string>
 		</dict>
 	</dict>
 	<key>rootObject</key>

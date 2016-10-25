@@ -2,9 +2,9 @@ source 'git@git.assembla.com:anfema-intern.cocoapods.git'
 source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
+platform :ios, '8.4'
 
-target 'ion_client' do
-  platform :ios, '8.4'
+def shared_pods
   pod 'Alamofire', '~> 3.5'
   pod 'HashExtensions', '~> 2.0'
   pod 'DEjson', '~> 1.0'
@@ -13,6 +13,18 @@ target 'ion_client' do
   pod 'Tarpit', '~> 1.0'
   pod 'anfema-mockingbird', '~> 1.0'
   pod 'iso-rfc822-date', '~> 1.0'
+end
+
+target 'ion-tests' do
+  shared_pods
+end
+
+target 'ion_client' do
+  shared_pods
+end
+
+target 'tests' do
+  shared_pods
 end
 
 post_install do |installer|

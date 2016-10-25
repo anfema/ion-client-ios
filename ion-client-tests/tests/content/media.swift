@@ -181,7 +181,7 @@ class mediaContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssertTrue(url.absoluteString.containsString("token="))
+            XCTAssertTrue(url.absoluteString?.containsString("token=") ?? false)
             expectation.fulfill()
         }
         

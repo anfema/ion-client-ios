@@ -229,7 +229,7 @@ class diskcacheTests: LoggedInXCTestCase {
             }
             
             if case let outlet as IONImageContent = po {
-                let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString!, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                 XCTAssertNotNil(result)
                 if case .Success(let filename) = result {
                     print(filename)
@@ -274,7 +274,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 }
 
                 if case let outlet as IONImageContent = po {
-                    let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString!, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
                     if case .Success(let filename) = result {
                         print(filename)
@@ -316,7 +316,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 outlet.image() { image in
                     XCTAssertNotNil(image)
                     
-                    let urlString = outlet.imageURL!.absoluteString
+                    let urlString = outlet.imageURL!.absoluteString!
                     
                     // find entry in cache db and change the checksum
                     var tmpDB = [JSONObject]()

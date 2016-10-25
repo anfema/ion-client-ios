@@ -70,7 +70,7 @@ extension IONRequest {
         }
 
         // generate cache path
-        return fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString()).path
+        return fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString())?.path
     }
 
     /// Internal function to fetch a cache DB entry
@@ -159,7 +159,7 @@ extension IONRequest {
             return
         }
 
-        var filename = self.cacheBaseDir(host, locale: ION.config.locale)
+        let filename = self.cacheBaseDir(host, locale: ION.config.locale)
 
         guard let path = filename.path else {
             return
@@ -173,9 +173,7 @@ extension IONRequest {
             }
         }
 
-        filename = filename.URLByAppendingPathComponent(hash.hexString())
-
-        guard let filePath = filename.path else {
+        guard let filePath = filename.URLByAppendingPathComponent(hash.hexString())?.path else {
             return
         }
 

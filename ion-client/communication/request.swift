@@ -442,7 +442,7 @@ public class IONRequest {
 
         let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
 
-        guard let cacheName = fileURL.URLByAppendingPathComponent(filename).path else {
+        guard let cacheName = fileURL.URLByAppendingPathComponent(filename)?.path else {
             return .Failure(.DidFail)
         }
 

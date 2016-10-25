@@ -122,7 +122,7 @@ class fileContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssert(url.absoluteString.containsString("token="))
+            XCTAssert(url.absoluteString?.containsString("token=") ?? false)
             expectation.fulfill()
         }
         
