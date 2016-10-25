@@ -364,7 +364,8 @@ public class IONRequest {
         let url = serverURL.URLByAppendingPathComponent(endpoint)
 
         // add query parameters
-        guard let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) else {
+        guard let _url = url,
+            let components = NSURLComponents(URL: _url, resolvingAgainstBaseURL: false) else {
             return nil
         }
 

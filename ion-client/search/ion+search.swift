@@ -15,7 +15,7 @@ internal extension ION {
 
     internal class func searchIndex(collection: String) -> String? {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        return directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
+        return directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3")?.path
     }
 
     internal class func downloadFTSDB(collection: String, callback: (Void -> Void)? = nil) {

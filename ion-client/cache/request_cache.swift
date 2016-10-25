@@ -353,18 +353,18 @@ extension IONRequest {
     internal class func cacheBaseDir(host: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(host)")
-        return fileURL
+        return fileURL!
     }
 
     private class func cacheBaseDir(locale locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)")
-        return fileURL
+        return fileURL!
     }
 
     private class func cacheFile(filename: String, locale: String) -> NSURL {
         let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
         let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
-        return fileURL
+        return fileURL!
     }
 }

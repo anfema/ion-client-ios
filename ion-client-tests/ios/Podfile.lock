@@ -1,9 +1,9 @@
 PODS:
-  - Alamofire (3.3.1)
+  - Alamofire (3.5.1)
   - anfema-mockingbird (1.0.1):
     - Alamofire (~> 3.0)
     - DEjson (~> 1.0)
-  - DEjson (1.0.1)
+  - DEjson (1.0.2)
   - HashExtensions (2.0.0)
   - html5tokenizer (1.0.0)
   - iso-rfc822-date (1.0.1)
@@ -11,7 +11,7 @@ PODS:
   - Tarpit (1.0.3)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.1)
+  - Alamofire (~> 3.5)
   - anfema-mockingbird (~> 1.0)
   - DEjson (~> 1.0)
   - HashExtensions (~> 2.0)
@@ -21,13 +21,15 @@ DEPENDENCIES:
   - Tarpit (~> 1.0)
 
 SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Alamofire: 0dfba1184a543e2aa160f4e39cac4e8aba48d223
   anfema-mockingbird: 901cfaac54cb30e8eedd32a0f789eb9ddc548153
-  DEjson: 9630f0cb6973e5243c220ae275cc61d93d3e153f
+  DEjson: ce15860edf60136025d0fb335aa3b7f905404f5f
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 5ae72b28dce669f316d0e7258f2e672f29447beb
+  Markdown: 6d52c9443c49b8cb57e7902103b871de602ed6fa
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 9e03c450a59d05fd673c89021246b6775078129c
+
+COCOAPODS: 1.0.1

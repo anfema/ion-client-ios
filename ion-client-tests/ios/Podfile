@@ -3,12 +3,22 @@ source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
 
-platform :ios, '8.4'
-pod 'Alamofire', '~> 3.1'
-pod 'HashExtensions', '~> 2.0'
-pod 'DEjson', '~> 1.0'
-pod 'Markdown', '~> 1.0'
-pod 'html5tokenizer', '~> 1.0'
-pod 'Tarpit', '~> 1.0'
-pod 'anfema-mockingbird', '~> 1.0'
-pod 'iso-rfc822-date', '~> 1.0'
+target 'ion_client' do
+  platform :ios, '8.4'
+  pod 'Alamofire', '~> 3.5'
+  pod 'HashExtensions', '~> 2.0'
+  pod 'DEjson', '~> 1.0'
+  pod 'Markdown', '~> 1.0'
+  pod 'html5tokenizer', '~> 1.0'
+  pod 'Tarpit', '~> 1.0'
+  pod 'anfema-mockingbird', '~> 1.0'
+  pod 'iso-rfc822-date', '~> 1.0'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['SWIFT_VERSION'] = '2.3'
+    end
+  end
+end

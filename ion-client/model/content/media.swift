@@ -201,12 +201,12 @@ public class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
-        guard let url = self.url else {
+        guard let urlString = self.url?.absoluteString else {
             responseQueueCallback(callback, parameter: .Failure(.DidFail))
             return
         }
 
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : url.absoluteString]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
