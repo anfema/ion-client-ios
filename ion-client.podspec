@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.4"
   s.osx.deployment_target = "10.10"
 
-  s.source       = { :git => "git@github.com:anfema/ion-client-ios.git", :tag => "2.3.0" }
+  s.source       = { :git => "git@github.com:anfema/ion-client-ios.git", :tag => "3.0.0" }
   s.source_files  = "ion-client/cache/*.swift", "ion-client/communication/*.swift", "ion-client/helper/*.swift", "ion-client/model/**/*.swift", "ion-client/search/*.swift"
 
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions", "html5tokenizer", "Tarpit"
