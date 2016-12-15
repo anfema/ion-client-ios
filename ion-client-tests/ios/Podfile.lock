@@ -17,7 +17,7 @@ DEPENDENCIES:
   - HashExtensions (~> 2.0)
   - html5tokenizer (from `https://github.com/anfema/HTML5Tokenizer`, branch `swift_3`)
   - iso-rfc822-date (~> 1.0)
-  - Markdown (~> 1.0)
+  - Markdown (from `https://github.com/anfema/ion-client-ios`, branch `swift_3`)
   - Tarpit (from `https://github.com/anfema/Tarpit`, branch `swift_3`)
 
 EXTERNAL SOURCES:
@@ -30,6 +30,9 @@ EXTERNAL SOURCES:
   html5tokenizer:
     :branch: swift_3
     :git: https://github.com/anfema/HTML5Tokenizer
+  Markdown:
+    :branch: swift_3
+    :git: https://github.com/anfema/ion-client-ios
   Tarpit:
     :branch: swift_3
     :git: https://github.com/anfema/Tarpit
@@ -44,6 +47,9 @@ CHECKOUT OPTIONS:
   html5tokenizer:
     :commit: 4db7aa35e47ffc146c30ebc52ce6ba33f8b9b38f
     :git: https://github.com/anfema/HTML5Tokenizer
+  Markdown:
+    :commit: 1d7f4029b0ed0f295e7f2b86f14011367f67f8ba
+    :git: https://github.com/anfema/ion-client-ios
   Tarpit:
     :commit: e0e4ef87240687d2c4ac769cfb3df07dff5bee13
     :git: https://github.com/anfema/Tarpit
@@ -55,9 +61,9 @@ SPEC CHECKSUMS:
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 6d52c9443c49b8cb57e7902103b871de602ed6fa
+  Markdown: c8f26ecd6aeb09e160986ddc7269b30244841646
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 
-PODFILE CHECKSUM: ea85d22daec282e0c0793317c6ca0c8af9b940e6
+PODFILE CHECKSUM: b8fbbe8924503136f418c4741386c87f7a91e141
 
 COCOAPODS: 1.1.1
