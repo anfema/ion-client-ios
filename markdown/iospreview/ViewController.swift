@@ -24,11 +24,11 @@ class ViewController: UIViewController {
     }
 
 
-    @IBAction func convertMarkdown(sender: AnyObject) {
+    @IBAction func convertMarkdown(_ sender: AnyObject) {
         let renderer = MDParser(markdown: markdownView.text)
         let dom = renderer.render()
         print(dom)
-        let style = AttributedStringStyling(font: UIFont.systemFontOfSize(15), strongFont: UIFont.boldSystemFontOfSize(15), emphasizedFont: UIFont.italicSystemFontOfSize(15), baseColor: UIColor.blackColor(), backgroundColor: UIColor.whiteColor())
+        let style = AttributedStringStyling(font: UIFont.systemFont(ofSize: 15), strongFont: UIFont.boldSystemFont(ofSize: 15), emphasizedFont: UIFont.italicSystemFont(ofSize: 15), baseColor: UIColor.black, backgroundColor: UIColor.white)
         self.renderedView.attributedText = dom.renderAttributedString(style)
     }
 }

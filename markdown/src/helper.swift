@@ -12,9 +12,12 @@
 import Foundation
 
 extension String {
-    func rangeFromNSRange(nsRange : NSRange) -> Range<String.Index>? {
-        let from16 = utf16.startIndex.advancedBy(nsRange.location, limit: utf16.endIndex)
-        let to16 = from16.advancedBy(nsRange.length, limit: utf16.endIndex)
+    func rangeFromNSRange(_ nsRange : NSRange) -> Range<String.Index>? {
+        guard let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
+            let to16 = utf16.index(from16, offsetBy: nsRange.length, limitedBy: utf16.endIndex) else
+        {
+            return nil
+        }
         if let from = String.Index(from16, within: self),
             let to = String.Index(to16, within: self) {
                 return from ..< to
@@ -23,9 +26,12 @@ extension String {
     }
     
     // FIXME: Is this dead code?
-    func range(start: Int, length: Int) -> Range<String.Index>? {
-        let from16 = utf16.startIndex.advancedBy(start, limit: utf16.endIndex)
-        let to16 = from16.advancedBy(length, limit: utf16.endIndex)
+    func range(_ start: Int, length: Int) -> Range<String.Index>? {
+        guard let from16 = utf16.index(utf16.startIndex, offsetBy: start, limitedBy: utf16.endIndex),
+            let to16 = utf16.index(from16, offsetBy: length, limitedBy: utf16.endIndex) else
+        {
+            return nil
+        }
         if let from = String.Index(from16, within: self),
             let to = String.Index(to16, within: self) {
                 return from ..< to
@@ -33,9 +39,12 @@ extension String {
         return nil
     }
 
-    func range(start: Int, end: Int) -> Range<String.Index>? {
-        let from16 = utf16.startIndex.advancedBy(start, limit: utf16.endIndex)
-        let to16 = from16.advancedBy(end - start, limit: utf16.endIndex)
+    func range(_ start: Int, end: Int) -> Range<String.Index>? {
+        guard let from16 = utf16.index(utf16.startIndex, offsetBy: start, limitedBy: utf16.endIndex),
+            let to16 = utf16.index(from16, offsetBy: end - start, limitedBy: utf16.endIndex) else
+        {
+            return nil
+        }
         if let from = String.Index(from16, within: self),
             let to = String.Index(to16, within: self) {
                 return from ..< to
@@ -43,9 +52,9 @@ extension String {
         return nil
     }
     
-    func substringWithRange(range: NSRange) -> String? {
+    func substringWithRange(_ range: NSRange) -> String? {
         if let rng = self.rangeFromNSRange(range) {
-            return self.substringWithRange(rng)
+            return self.substring(with: rng)
         }
         return nil
     }
@@ -53,8 +62,8 @@ extension String {
 
 extension NSRegularExpression {
     
-    func tokenizeString(string: String, options: NSMatchingOptions, range: NSRange, callback:((token: String, match: Bool) -> Void)) {
-        let matches = self.matchesInString(string, options: options, range: range)
+    func tokenizeString(_ string: String, options: NSRegularExpression.MatchingOptions, range: NSRange, callback:((_ token: String, _ match: Bool) -> Void)) {
+        let matches = self.matches(in: string, options: options, range: range)
         if matches.count > 0 {
             for index in 0..<matches.count {
                 let match = matches[index]
@@ -65,24 +74,24 @@ extension NSRegularExpression {
                     lastSplitPoint = lastMatch.range.location + lastMatch.range.length
                 }
                 // text from last match to this match
-                let t = string.substringWithRange(string.range(lastSplitPoint, end:match.range.location)!)
+                let t = string.substring(with: string.range(lastSplitPoint, end:match.range.location)!)
                 if t.characters.count > 0 {
-                    callback(token: t, match: false)
+                    callback(t, false)
                 }
                 // the token match
-                callback(token: string.substringWithRange(match.rangeAtIndex(1))!, match: true)
+                callback(string.substringWithRange(match.rangeAt(1))!, true)
             }
 
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substringWithRange(string.range(lastSplitPoint, end:string.characters.count)!)
+            let t = string.substring(with: string.range(lastSplitPoint, end:string.characters.count)!)
             if t.characters.count > 0 {
-                callback(token: t, match: false)
+                callback(t, false)
             }
         }
     }
     
-    func tokenizeString(string: String, callback:((token: String, match: Bool) -> Void)) {
+    func tokenizeString(_ string: String, callback:((_ token: String, _ match: Bool) -> Void)) {
         let fullString = NSMakeRange(0, string.characters.count)
         self.tokenizeString(string, options: [], range: fullString, callback: callback)
     }

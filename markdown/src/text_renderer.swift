@@ -18,59 +18,59 @@ extension ContentNode {
     public func renderText() -> String {
         var content: String = ""
         for child in self.children {
-            content.appendContentsOf(child.renderText())
+            content.append(child.renderText())
         }
 
         switch self.type {
         // Document level
-        case .Document:
+        case .document:
             return content
             
         // Block level
-        case .Heading:
+        case .heading:
             return "\n\(content)\n\n"
             
-        case .UnorderedList:
+        case .unorderedList:
             return "\n\(content)\n"
             
-        case .UnorderedListItem:
+        case .unorderedListItem:
             return "\(content)\n"
 
-        case .OrderedList:
+        case .orderedList:
             return "\n\(content)\n"
             
-        case .OrderedListItem:
+        case .orderedListItem:
             return "\(content)\n"
 
-        case .CodeBlock:
+        case .codeBlock:
             return "\n\(content)\n\n"
             
-        case .Paragraph:
+        case .paragraph:
             return "\n\(content)\n\n"
             
-        case .Quote:
+        case .quote:
             return "\n\(content)\n\n"
             
         // Inline
-        case .PlainText:
+        case .plainText:
             return self.text
             
-        case .StrongText:
+        case .strongText:
             return content
             
-        case .EmphasizedText:
+        case .emphasizedText:
             return content
 
-        case .DeletedText:
+        case .deletedText:
             return ""
 
-        case .InlineCode:
+        case .inlineCode:
             return content
 
-        case .Link:
+        case .link:
             return content
 
-        case .Image:
+        case .image:
             return content
         }
     }

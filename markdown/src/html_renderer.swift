@@ -15,67 +15,67 @@ extension ContentNode {
     public func renderHTMLFragment() -> String {
         var content: String = ""
         for child in self.children {
-            content.appendContentsOf(child.renderHTML())
+            content.append(child.renderHTML())
         }
-        return content.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        return content.trimmingCharacters(in: CharacterSet.newlines)
     }
     
     public func renderHTML() -> String {
         var content: String = ""
         for child in self.children {
-            content.appendContentsOf(child.renderHTML())
+            content.append(child.renderHTML())
         }
 
         switch self.type {
         // Document level
-        case .Document:
+        case .document:
             return "<html>\n\t<head>\n\t\t<title>Untitled</title>\n\t</head>\n<body>\n\(content)</body>\n</html>"
             
         // Block level
-        case .Heading(let level):
+        case .heading(let level):
             return "<h\(level)>\(content)</h\(level)>\n\n"
             
-        case .UnorderedList:
+        case .unorderedList:
             return "\n<ul>\n\(content)</ul>\n"
             
-        case .UnorderedListItem:
+        case .unorderedListItem:
             return "<li>\(content)</li>\n"
 
-        case .OrderedList:
+        case .orderedList:
             return "\n<ol>\n\(content)</ol>\n"
             
-        case .OrderedListItem:
+        case .orderedListItem:
             return "<li>\(content)</li>\n"
 
-        case .CodeBlock(let language, _):
+        case .codeBlock(let language, _):
             return "\n<pre><code class=\"lang-\(language)\">\(content)</code></pre>\n"
             
-        case .Paragraph:
+        case .paragraph:
             return "\n<p>\(content)</p>\n"
             
-        case .Quote:
+        case .quote:
             return "\n<blockquote>\(content)</blockquote>\n"
             
         // Inline
-        case .PlainText:
+        case .plainText:
             return self.text
             
-        case .StrongText:
+        case .strongText:
             return "<strong>\(content)</strong>"
             
-        case .EmphasizedText:
+        case .emphasizedText:
             return "<em>\(content)</em>"
 
-        case .DeletedText:
+        case .deletedText:
             return "<del>\(content)</del>"
 
-        case .InlineCode:
+        case .inlineCode:
             return "<code>\(content)</code>"
 
-        case .Link(let location):
+        case .link(let location):
             return "<a href=\"\(location)\">\(content)</a>"
 
-        case .Image(let location):
+        case .image(let location):
             return "<img src=\"\(location)\" alt=\"\(content)\">"
         }
     }

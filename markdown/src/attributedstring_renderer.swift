@@ -20,9 +20,9 @@ import Foundation
 #endif
 
 public enum RenderMode {
-    case Normal
-    case ExcludeFont
-    case FontOnly
+    case normal
+    case excludeFont
+    case fontOnly
 }
 
 public struct AttributedStringStyle {
@@ -43,10 +43,10 @@ public struct AttributedStringStyle {
     public var writingDirection:NSWritingDirection?
     public var tabStops = [Float]()
     
-    public func makeAttributeDict(nestingDepth nestingDepth: Int = 0, renderMode: RenderMode = .Normal) -> Dictionary<String, AnyObject> {
-        var result = Dictionary<String, AnyObject>()
+    public func makeAttributeDict(nestingDepth: Int = 0, renderMode: RenderMode = .normal) -> Dictionary<String, Any> {
+        var result = Dictionary<String, Any>()
         
-        if let font = self.font where renderMode != .ExcludeFont {
+        if let font = self.font, renderMode != .excludeFont {
             result[NSFontAttributeName] = font
         }
         
@@ -57,18 +57,24 @@ public struct AttributedStringStyle {
             result[NSBackgroundColorAttributeName] = backgroundColor
         }
         if let underline = self.underline {
-            result[NSUnderlineStyleAttributeName] = (underline ? NSUnderlineStyle.StyleSingle.rawValue : NSUnderlineStyle.StyleNone.rawValue)
+            result[NSUnderlineStyleAttributeName] = (underline ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
         }
         if let strikeThrough = self.strikeThrough {
-            result[NSStrikethroughStyleAttributeName] = (strikeThrough ? NSUnderlineStyle.StyleSingle.rawValue : NSUnderlineStyle.StyleNone.rawValue)
+            result[NSStrikethroughStyleAttributeName] = (strikeThrough ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
         }
         
-        if renderMode == .FontOnly {
+        if renderMode == .fontOnly {
             return result
         }
         
         var useParagraphStyle = false
-        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        
+        #if os(iOS)
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        #else
+        let paragraphStyle = NSParagraphStyle.default().mutableCopy() as! NSMutableParagraphStyle
+        #endif
+        
         
         if let alignment = self.alignment {
             useParagraphStyle = true
@@ -115,11 +121,11 @@ public struct AttributedStringStyle {
         if self.tabStops.count > 0 {
             var align = self.alignment
             if align == nil {
-                align = NSTextAlignment.Left
+                align = NSTextAlignment.left
             }
             var stops = [NSTextTab]()
             for stop in self.tabStops {
-                stops.append(NSTextTab(textAlignment: align!, location: CGFloat(stop), options: [String:AnyObject]()))
+                stops.append(NSTextTab(textAlignment: align!, location: CGFloat(stop), options: [String:Any]()))
             }
             paragraphStyle.tabStops = stops
         }
@@ -152,17 +158,17 @@ public struct AttributedStringStyling {
     
     public init() {
         #if os(iOS)
-            self.init(font: UIFont.systemFontOfSize(17.0),
-                strongFont: UIFont.boldSystemFontOfSize(17.0),
-                emphasizedFont: UIFont.italicSystemFontOfSize(17.0),
-                baseColor: UIColor.blackColor(),
-                backgroundColor: UIColor.whiteColor())
+            self.init(font: UIFont.systemFont(ofSize: 17.0),
+                strongFont: UIFont.boldSystemFont(ofSize: 17.0),
+                emphasizedFont: UIFont.italicSystemFont(ofSize: 17.0),
+                baseColor: UIColor.black,
+                backgroundColor: UIColor.white)
         #else
             self.init(font: NSFont(name: "Helvetica", size: 16.0)!,
                 strongFont: NSFont(name: "Helvetica-Bold", size: 16.0)!,
                 emphasizedFont: NSFont(name: "Helvetica-Oblique", size: 16.0)!,
-                baseColor: NSColor.blackColor(),
-                backgroundColor: NSColor.whiteColor())
+                baseColor: NSColor.black,
+                backgroundColor: NSColor.white)
         #endif
     }
     
@@ -235,9 +241,9 @@ public struct AttributedStringStyling {
         link.font = font
         link.underline = true
         #if os(iOS)
-            link.foregroundColor = UIColor.blueColor()
+            link.foregroundColor = UIColor.blue
         #else
-            link.foregroundColor = NSColor.blueColor()
+            link.foregroundColor = NSColor.blue
         #endif
         self.link = link
         
@@ -247,7 +253,7 @@ public struct AttributedStringStyling {
         self.calculateHeadingSizes(1.1, font: strongFont, baseColor: baseColor, backgroundColor: backgroundColor)
     }
     
-    public mutating func calculateHeadingSizes(multiplier: Float, font: Font, baseColor: Color, backgroundColor: Color) {
+    public mutating func calculateHeadingSizes(_ multiplier: Float, font: Font, baseColor: Color, backgroundColor: Color) {
         self.heading.removeAll()
         for i in 0...4 {
             let fontSize = Float(font.pointSize) * powf(1.1, Float(5 - i))
@@ -270,37 +276,37 @@ public struct AttributedStringStyling {
 
 extension ContentNode {
     
-    public func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
+    public func renderAttributedString(_ style: AttributedStringStyling) -> NSAttributedString {
         let content = NSMutableAttributedString(string: "")
         for child in self.children {
-            content.appendAttributedString(child.renderAttributedString(style))
+            content.append(child.renderAttributedString(style))
         }
         
         switch self.type {
             // Document level
-        case .Document:
+        case .document:
             return content
             
             // Block level
-        case .Heading(let level):
+        case .heading(let level):
             let result = NSMutableAttributedString(string: "\n")
-            result.insertAttributedString(content, atIndex: 0)
+            result.insert(content, at: 0)
             result.addAttributes(style.heading[level - 1].makeAttributeDict(), range: NSMakeRange(0, result.length))
             return result
             
-        case .UnorderedList(let nestingDepth):
+        case .unorderedList(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n")
-            result.insertAttributedString(content, atIndex: 0)
-            result.addAttributes(style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, result.length))
+            result.insert(content, at: 0)
+            result.addAttributes(style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont), range: NSMakeRange(0, result.length))
             return result
             
-        case .UnorderedListItem(let nestingDepth):
+        case .unorderedListItem(let nestingDepth):
             let result = NSMutableAttributedString(string: "•\t\n")
-            result.insertAttributedString(content, atIndex: 2)
-            result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, 2))
+            result.insert(content, at: 2)
+            result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, 2))
             var startIndex:Int? = nil
             // find first attribute with different indent
-            result.enumerateAttribute(NSParagraphStyleAttributeName, inRange: NSMakeRange(2, result.length - 2), options: NSAttributedStringEnumerationOptions(rawValue: 0)) { (value, range, stop) in
+            result.enumerateAttribute(NSParagraphStyleAttributeName, in: NSMakeRange(2, result.length - 2), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
                 if startIndex == nil {
                     startIndex = range.location
                 }
@@ -308,26 +314,26 @@ extension ContentNode {
             if startIndex == nil {
                 startIndex = result.length
             }
-            result.addAttributes(style.unorderedListItem.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, startIndex!))
+            result.addAttributes(style.unorderedListItem.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont), range: NSMakeRange(0, startIndex!))
             return result
             
-        case .OrderedList(let nestingDepth):
+        case .orderedList(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n")
-            result.insertAttributedString(content, atIndex: 0)
-            result.addAttributes(style.orderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, result.length))
+            result.insert(content, at: 0)
+            result.addAttributes(style.orderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont), range: NSMakeRange(0, result.length))
             return result
             
-        case .OrderedListItem(let index, let nestingDepth):
+        case .orderedListItem(let index, let nestingDepth):
             let result = NSMutableAttributedString(string: "\n")
             
             let indexLabel = NSAttributedString(string: NSString(format: "%d.\t", index) as String)
-            result.insertAttributedString(indexLabel, atIndex: 0)
-            result.insertAttributedString(content, atIndex: indexLabel.length)
-            result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, indexLabel.length))
+            result.insert(indexLabel, at: 0)
+            result.insert(content, at: indexLabel.length)
+            result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, indexLabel.length))
             
             var startIndex:Int? = nil
             // find first attribute with different indent
-            result.enumerateAttribute(NSParagraphStyleAttributeName, inRange: NSMakeRange(indexLabel.length, result.length - indexLabel.length), options: NSAttributedStringEnumerationOptions(rawValue: 0)) { (value, range, stop) in
+            result.enumerateAttribute(NSParagraphStyleAttributeName, in: NSMakeRange(indexLabel.length, result.length - indexLabel.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
                 if startIndex == nil && range.location > 0 {
                     startIndex = range.location
                 }
@@ -335,58 +341,58 @@ extension ContentNode {
             if startIndex == nil {
                 startIndex = result.length
             }
-            result.addAttributes(style.orderedListItem.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, startIndex!))
+            result.addAttributes(style.orderedListItem.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont), range: NSMakeRange(0, startIndex!))
             
             // FIXME: do not convert list index types to arabic numbers
             return result
             
-        case .CodeBlock(_, let nestingDepth):
+        case .codeBlock(_, let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 0)
+            result.insert(content, at: 0)
             result.addAttributes(style.codeBlock.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
-        case .Paragraph(let nestingDepth):
+        case .paragraph(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 0)
-            result.addAttributes(style.paragraph.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont), range: NSMakeRange(0, result.length))
+            result.insert(content, at: 0)
+            result.addAttributes(style.paragraph.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont), range: NSMakeRange(0, result.length))
             return result
             
-        case .Quote(let nestingDepth):
+        case .quote(let nestingDepth):
             let result = NSMutableAttributedString(string: "\n\n")
-            result.insertAttributedString(content, atIndex: 1)
+            result.insert(content, at: 1)
             result.addAttributes(style.quoteBlock.makeAttributeDict(nestingDepth: nestingDepth), range: NSMakeRange(0, result.length))
             return result
             
             // Inline
-        case .PlainText:
+        case .plainText:
             let result = NSMutableAttributedString(string: self.text)
-            result.addAttributes(style.paragraph.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, result.length))
+            result.addAttributes(style.paragraph.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, result.length))
             return result
             
-        case .StrongText:
-            content.addAttributes(style.strongText.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, content.length))
+        case .strongText:
+            content.addAttributes(style.strongText.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, content.length))
             return content
             
-        case .EmphasizedText:
-            content.addAttributes(style.emphasizedText.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, content.length))
+        case .emphasizedText:
+            content.addAttributes(style.emphasizedText.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, content.length))
             return content
             
-        case .DeletedText:
+        case .deletedText:
             content.addAttributes(style.deletedText.makeAttributeDict(), range: NSMakeRange(0, content.length))
             return content
             
-        case .InlineCode:
-            content.setAttributes(style.inlineCode.makeAttributeDict(renderMode: .FontOnly), range: NSMakeRange(0, content.length))
+        case .inlineCode:
+            content.setAttributes(style.inlineCode.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, content.length))
             return content
             
-        case .Link(let location):
+        case .link(let location):
             var attribs = style.strongText.makeAttributeDict()
             attribs[NSLinkAttributeName] = location
             content.addAttributes(attribs, range: NSMakeRange(0, content.length))
             return content
             
-        case .Image:
+        case .image:
             if style.embedImages {
                 // TODO: Embed image
             }
