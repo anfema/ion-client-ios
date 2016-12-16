@@ -25,14 +25,14 @@ struct DefaultConfig {
 
 class DefaultXCTestCase: XCTestCase {
     let mock = true
-
-    func configure(callback: (Void -> Void)) {
-        ION.config.serverURL = NSURL(string: DefaultConfig.serverURL)
+    
+    func configure(_ callback: @escaping ((Void) -> Void)) {
+        ION.config.serverURL = URL(string: DefaultConfig.serverURL)
         ION.config.locale = DefaultConfig.locale
-        ION.config.responseQueue = dispatch_queue_create("com.anfema.ion.responsequeue.test", DISPATCH_QUEUE_SERIAL)
+        ION.config.responseQueue = DispatchQueue(label: "com.anfema.ion.responsequeue.test", attributes: [])
         ION.config.variation = "default"
         
-        dispatch_async(ION.config.responseQueue) {
+        (ION.config.responseQueue).async {
             callback()
         }
     }
@@ -40,15 +40,15 @@ class DefaultXCTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        let expectation = self.expectationWithDescription("login")
+        let expectation = self.expectation(description: "login")
         self.configure() {
             
             if self.mock {
                 let config = ION.config.alamofire!.session.configuration
                 MockingBird.registerInConfig(config)
-                ION.config.alamofire = Alamofire.Manager(configuration: config)
+                ION.config.alamofire = Alamofire.SessionManager(configuration: config)
                 
-                let path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
+                let path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
                 do {
                     try MockingBird.setMockBundle(path)
                 } catch {
@@ -60,19 +60,26 @@ class DefaultXCTestCase: XCTestCase {
         }
 
         //ION.resetMemCache()
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 }
 
+
+var currentQueueLabel : String?{
+    let label = __dispatch_queue_get_label(nil)
+    return String(cString: label, encoding: .utf8)
+}
+
+
 class LoggedInXCTestCase: DefaultXCTestCase {
-    override func configure(callback: (Void -> Void)) {
-        ION.config.serverURL = NSURL(string: DefaultConfig.serverURL)
+    override func configure(_ callback: @escaping ((Void) -> Void)) {
+        ION.config.serverURL = URL(string: DefaultConfig.serverURL)
         ION.config.locale = DefaultConfig.locale
         
         // setup sessionToken
         if let _ = ION.config.sessionToken {
             // already logged in
-            dispatch_async(ION.config.responseQueue) {
+            (ION.config.responseQueue).async {
                 callback()
             }
         } else {

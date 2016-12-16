@@ -25,20 +25,20 @@ class optionContentTests: LoggedInXCTestCase {
     
     
     func testOptionOutletFetchSync() {
-        let expectation = self.expectationWithDescription("testOptionOutletFetchSync")
+        let expectation = self.expectation(description: "testOptionOutletFetchSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            if case .Success(let value) = page.selectedOption("option") {
+            if case .success(let value) = page.selectedOption("option") {
                 XCTAssertEqual(value, "2")
             } else {
                 XCTFail("option content 'Option' returned nil")
@@ -46,19 +46,19 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOptionOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("testOptionOutletFetchAsync")
+        let expectation = self.expectation(description: "testOptionOutletFetchAsync")
         
         ION.collection("test").page("page_001").selectedOption("option") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let value) = result else {
+            guard case .success(let value) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -68,25 +68,25 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     
     func testOutletIncompatible() {
-        let expectation = self.expectationWithDescription("testOutletIncompatible")
+        let expectation = self.expectation(description: "testOutletIncompatible")
         
         ION.collection("test").page("page_001").selectedOption("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -95,31 +95,31 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOutletIncompatibleSync() {
-        let expectation = self.expectationWithDescription("testOutletIncompatibleSync")
+        let expectation = self.expectation(description: "testOutletIncompatibleSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.selectedOption("number") else {
+            guard case .failure(let error) = page.selectedOption("number") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -128,25 +128,25 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidOutlet")
+        let expectation = self.expectation(description: "testInvalidOutlet")
         
         ION.collection("test").page("page_001").selectedOption("wrong") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -155,31 +155,31 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutletSync() {
-        let expectation = self.expectationWithDescription("testInvalidOutletSync")
+        let expectation = self.expectation(description: "testInvalidOutletSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.selectedOption("wrong") else {
+            guard case .failure(let error) = page.selectedOption("wrong") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -188,7 +188,7 @@ class optionContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
@@ -203,7 +203,7 @@ class optionContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else {
+            guard case IONError.invalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -224,7 +224,7 @@ class optionContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else {
+            guard case IONError.invalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

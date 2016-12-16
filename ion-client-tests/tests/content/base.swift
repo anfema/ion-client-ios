@@ -24,20 +24,20 @@ class contentBaseTests: LoggedInXCTestCase {
     }
 
     func testOutletFetchSync() {
-        let expectation = self.expectationWithDescription("testOutletFetchSync")
+        let expectation = self.expectation(description: "testOutletFetchSync")
         
         ION.collection("test").page("page_001"){ result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            if case .Success = page.outlet("text") {
+            if case .success = page.outlet("text") {
                 // all ok
             } else {
                 XCTFail("outlet for name 'text' returned nil")
@@ -45,18 +45,18 @@ class contentBaseTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("testOutletFetchAsync")
+        let expectation = self.expectation(description: "testOutletFetchAsync")
         
         ION.collection("test").page("page_001").outlet("text") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
+            guard case .success = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -64,19 +64,19 @@ class contentBaseTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testOutletFetchFail() {
-        let expectation = self.expectationWithDescription("testOutletFetchFail")
+        let expectation = self.expectation(description: "testOutletFetchFail")
         
         ION.collection("test").page("page_001").outlet("UnknownOutlet") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
-                if case .OutletNotFound(let name) = result.error! {
+            guard case .success = result else {
+                if case IONError.outletNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "UnknownOutlet")
                 } else {
                     XCTFail()
@@ -89,18 +89,18 @@ class contentBaseTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     func testOutletArrayCount() {
-        let expectation = self.expectationWithDescription("testOutletArrayCount")
+        let expectation = self.expectation(description: "testOutletArrayCount")
         
         ION.collection("test").page("page_002").numberOfContentsForOutlet("colorarray") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let count) = result else {
+            guard case .success(let count) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -110,18 +110,18 @@ class contentBaseTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     func testOutletArrayValues() {
         for i in 0..<32 {
-            let expectation = self.expectationWithDescription("testOutletArrayValues")
+            let expectation = self.expectation(description: "testOutletArrayValues")
             ION.collection("test").page("page_002").color("colorarray", position: i) { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let color) = result else {
+                guard case .success(let color) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -140,7 +140,7 @@ class contentBaseTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     
@@ -165,7 +165,7 @@ class contentBaseTests: LoggedInXCTestCase {
             try IONContent.factory(JSONObject.jsonDictionary(jsonDict))
             XCTFail()
         } catch let err {
-            guard case IONError.InvalidJSON(_) = err else {
+            guard case IONError.invalidJSON(_) = err else {
                 XCTFail()
                 return
             }

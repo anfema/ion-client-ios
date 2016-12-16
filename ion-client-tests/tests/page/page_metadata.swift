@@ -23,15 +23,15 @@ class pageMetadataTests: LoggedInXCTestCase {
     }
     
     func testMetadataFetchAsync() {
-        let expectation = self.expectationWithDescription("testMetadataFetchAsync")
+        let expectation = self.expectation(description: "testMetadataFetchAsync")
         ION.resetMemCache()
         
         ION.collection("test").metadata("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -44,19 +44,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testMetadataFetchAsync2() {
-        let expectation = self.expectationWithDescription("testMetadataFetchAsync2")
+        let expectation = self.expectation(description: "testMetadataFetchAsync2")
         ION.resetMemCache()
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -70,19 +70,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
 
     func testMetadataListAsync() {
-        let expectation = self.expectationWithDescription("testMetadataListAsync")
+        let expectation = self.expectation(description: "testMetadataListAsync")
         
         ION.collection("test").metadataList(nil) { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let list) = result else {
+            guard case .success(let list) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -98,18 +98,18 @@ class pageMetadataTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testMetadataListAsync2() {
-        let expectation = self.expectationWithDescription("testMetadataListAsync2")
+        let expectation = self.expectation(description: "testMetadataListAsync2")
         
         ION.collection("test").metadataList("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let list) = result else {
+            guard case .success(let list) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -118,25 +118,25 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssert(list.count == 1)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testMetadataThumbnailAsync() {
-        let expectation = self.expectationWithDescription("testMetadataThumbnailAsync")
+        let expectation = self.expectation(description: "testMetadataThumbnailAsync")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
             metadata.image { result in
-                guard case .Success(let image) = result else {
+                guard case .success(let image) = result else {
                     XCTFail()
                     return
                 }
@@ -147,18 +147,18 @@ class pageMetadataTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     func testMetaChildren() {
-        let expectation = self.expectationWithDescription("testMetaChildren")
+        let expectation = self.expectation(description: "testMetaChildren")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -170,19 +170,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     
     func testOriginalImage() {
-        let expectation = self.expectationWithDescription("testOriginalImage")
+        let expectation = self.expectation(description: "testOriginalImage")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -191,19 +191,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertEqual(metadata.originalImageURL, nil)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testSubscriptSuccess1() {
-        let expectation = self.expectationWithDescription("testSubscriptSuccess1")
+        let expectation = self.expectation(description: "testSubscriptSuccess1")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -212,19 +212,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertEqual(metadata["title"], "Donec ullamcorper")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testSubscriptSuccess2() {
-        let expectation = self.expectationWithDescription("testSubscriptSuccess2")
+        let expectation = self.expectation(description: "testSubscriptSuccess2")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -239,19 +239,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertEqual(value, "Donec ullamcorper")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testSubscriptFail1() {
-        let expectation = self.expectationWithDescription("testSubscriptFail1")
+        let expectation = self.expectation(description: "testSubscriptFail1")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -259,19 +259,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertNil(metadata["doesnotexist"])
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testSubscriptFail2() {
-        let expectation = self.expectationWithDescription("testSubscriptFail2")
+        let expectation = self.expectation(description: "testSubscriptFail2")
         
         ION.collection("test").metadata("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -279,27 +279,27 @@ class pageMetadataTests: LoggedInXCTestCase {
             XCTAssertNil(metadata["title", 1])
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testPageFromMetadata() {
-        let expectation = self.expectationWithDescription("testPageFromMetadata")
+        let expectation = self.expectation(description: "testPageFromMetadata")
         ION.resetMemCache()
         
         ION.collection("test").metadata("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
             metadata.page({ result in
-                guard case .Success(let page) = result else {
+                guard case .success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -311,19 +311,19 @@ class pageMetadataTests: LoggedInXCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOriginalChecksum() {
-        let expectation = self.expectationWithDescription("testOriginalChecksum")
+        let expectation = self.expectation(description: "testOriginalChecksum")
         
         ION.collection("test").metadata("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metadata) = result else {
+            guard case .success(let metadata) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -335,6 +335,6 @@ class pageMetadataTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 }

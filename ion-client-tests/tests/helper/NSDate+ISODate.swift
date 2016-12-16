@@ -20,25 +20,25 @@ class NSDate_ISODate: XCTestCase {
     }
     
     func testIsoDateString() {
-        let date = NSDate(timeIntervalSince1970: 443795696)
-        let isoString = date.isoDateString()
+        let date = Date(timeIntervalSince1970: 443795696)
+        let isoString = (date as NSDate).isoDateString()
         XCTAssertTrue(isoString == "1984-01-24T12:34:56Z")
         
-        if let newDate = NSDate(ISODateString: isoString) {
-            XCTAssert(date.compare(newDate) == .OrderedSame)
+        if let newDate = NSDate(isoDateString: isoString) as? Date {
+            XCTAssert(date.compare(newDate) == .orderedSame)
         } else {
             XCTFail("initializer 'isoDateString:' of NSDate returned nil")
         }
         
         let alternativeIsoString = "1984-01-24T12:34:56Z"
-        if let newDate2 = NSDate(ISODateString: alternativeIsoString) {
-            XCTAssert(date.compare(newDate2) == .OrderedSame)
+        if let newDate2 = NSDate(isoDateString: alternativeIsoString) as? Date {
+            XCTAssert(date.compare(newDate2) == .orderedSame)
         } else {
             XCTFail("initializer 'isoDateString:' of NSDate returned nil")
         }
         
         let invalidIsoString = "1984-01-24T12:34:56.Z"
-        if let newDate3 = NSDate(ISODateString: invalidIsoString) {
+        if let newDate3 = NSDate(isoDateString: invalidIsoString) as? Date {
             XCTFail("initializer 'isoDateString:' of NSDate did not return \(newDate3) - but should fail")
         } else {
             // failed as intended

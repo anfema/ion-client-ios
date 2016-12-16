@@ -18,39 +18,39 @@ import HashExtensions
 class flagContentTests: LoggedInXCTestCase {
     
     func testFlagOutletFetchSync() {
-        let expectation = self.expectationWithDescription("testFlagOutletFetchSync")
+        let expectation = self.expectation(description: "testFlagOutletFetchSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            if case .Success(let value) = page.isSet("flag") {
+            if case .success(let value) = page.isSet("flag") {
                 XCTAssertEqual(value, false)
             } else {
                 XCTFail("flag content 'Flag' returned nil")
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testFlagOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("testFlagOutletFetchAsync")
+        let expectation = self.expectation(description: "testFlagOutletFetchAsync")
         
         ION.collection("test").page("page_001").isSet("flag") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let value) = result else {
+            guard case .success(let value) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -59,25 +59,25 @@ class flagContentTests: LoggedInXCTestCase {
             XCTAssertEqual(value, false)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOutletIncompatible() {
-        let expectation = self.expectationWithDescription("testOutletIncompatible")
+        let expectation = self.expectation(description: "testOutletIncompatible")
         
         ION.collection("test").page("page_001").isSet("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -86,31 +86,31 @@ class flagContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOutletIncompatibleSync() {
-        let expectation = self.expectationWithDescription("testOutletIncompatibleSync")
+        let expectation = self.expectation(description: "testOutletIncompatibleSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.isSet("number") else {
+            guard case .failure(let error) = page.isSet("number") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -119,25 +119,25 @@ class flagContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidOutlet")
+        let expectation = self.expectation(description: "testInvalidOutlet")
         
         ION.collection("test").page("page_001").isSet("wrong") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -146,31 +146,31 @@ class flagContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutletSync() {
-        let expectation = self.expectationWithDescription("testInvalidOutletSync")
+        let expectation = self.expectation(description: "testInvalidOutletSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.isSet("wrong") else {
+            guard case .failure(let error) = page.isSet("wrong") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -179,7 +179,7 @@ class flagContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
@@ -194,7 +194,7 @@ class flagContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else {
+            guard case .invalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -215,7 +215,7 @@ class flagContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else {
+            guard case .invalidJSON(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

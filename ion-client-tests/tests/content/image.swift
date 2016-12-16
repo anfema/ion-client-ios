@@ -25,14 +25,14 @@ class imageContentTests: LoggedInXCTestCase {
     }
     
     func testImageOutletFetchAsyncCGImage() {
-        let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
+        let expectation = self.expectation(description: "testImageOutletFetchAsyncCGImage")
         
         ION.collection("test").page("page_001").image("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let image) = result else {
+            guard case .success(let image) = result else {
                 XCTFail()
                 return
             }
@@ -42,18 +42,18 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testImageOutletFetchAsyncOriginalCGImage() {
-        let expectation = self.expectationWithDescription("testImageOutletFetchAsyncCGImage")
+        let expectation = self.expectation(description: "testImageOutletFetchAsyncCGImage")
         
         ION.collection("test").page("page_001").originalImage("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let image) = result else {
+            guard case .success(let image) = result else {
                 XCTFail()
                 return
             }
@@ -63,39 +63,39 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testImageOutletTempURL() {
-        let expectation = self.expectationWithDescription("testImageOutletTempURL")
+        let expectation = self.expectation(description: "testImageOutletTempURL")
         
         ION.collection("test").page("page_001").temporaryURL("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let url) = result else {
+            guard case .success(let url) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            XCTAssert(url.absoluteString?.containsString("token=") ?? false)
+            XCTAssert(url.absoluteString.contains("token=") ?? false)
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     func testImageOutletAsync() {
-        let expectation = self.expectationWithDescription("testImageOutletAsync")
+        let expectation = self.expectation(description: "testImageOutletAsync")
         
         ION.collection("test").page("page_001").outlet("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -114,7 +114,7 @@ class imageContentTests: LoggedInXCTestCase {
             XCTAssert(imageOutlet.originalChecksum == "d8b358afb51ed64c2a9abdaf874b1cd0ab35dd20744b84d502ba3172b49ddc56")
             
             imageOutlet.originalCGImage({ result in
-                guard case .Success(let cgImage) = result else {
+                guard case .success(let cgImage) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -125,7 +125,7 @@ class imageContentTests: LoggedInXCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testImageInitializerFail1() {
@@ -166,7 +166,7 @@ class imageContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
     
-            guard case .InvalidJSON(let obj) = e else
+            guard case .invalidJSON(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return
@@ -182,20 +182,20 @@ class imageContentTests: LoggedInXCTestCase {
     
     
     func testInvalidMediaURLOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidMediaURLOutlet")
+        let expectation = self.expectation(description: "testInvalidMediaURLOutlet")
         
         ION.collection("test").page("page_001").mediaURL("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -204,25 +204,25 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testInvalidCachedMediaURLOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidCachedMediaURLOutlet")
+        let expectation = self.expectation(description: "testInvalidCachedMediaURLOutlet")
         
         ION.collection("test").page("page_001").cachedMediaURL("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -231,25 +231,25 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testInvalidTemporaryURLOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidTemporaryURLOutlet")
+        let expectation = self.expectation(description: "testInvalidTemporaryURLOutlet")
         
         ION.collection("test").page("page_001").temporaryURL("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -258,25 +258,25 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testInvalidMediaDataOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        let expectation = self.expectation(description: "testInvalidMediaDataOutlet")
         
         ION.collection("test").page("page_001").mediaData("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -285,25 +285,25 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testInvalidThumbnailOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        let expectation = self.expectation(description: "testInvalidMediaDataOutlet")
         
         ION.collection("test").page("page_001").thumbnail("number", size: CGSize(width: 100, height: 100)) { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -312,25 +312,25 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testWrongThumbnailOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidMediaDataOutlet")
+        let expectation = self.expectation(description: "testInvalidMediaDataOutlet")
         
         ION.collection("test").page("page_001").thumbnail("wrong", size: CGSize(width: 100, height: 100)) { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail("wrong error thrown")
                 expectation.fulfill()
                 return
@@ -339,20 +339,20 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     
     
     func testThumbnail() {
-        let expectation = self.expectationWithDescription("testThumbnail")
+        let expectation = self.expectation(description: "testThumbnail")
         
         ION.collection("test").page("page_001").outlet("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -367,27 +367,27 @@ class imageContentTests: LoggedInXCTestCase {
             let maxSize = 100
             let size = CGSize(width: maxSize, height: maxSize)
             
-            imageOutlet.thumbnail(size: size, callback: { result in
-                guard case .Success(let imgRef) = result else {
+            imageOutlet.thumbnail(withSize: size, callback: { result in
+                guard case .success(let imgRef) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
                 
-                let w = CGImageGetWidth(imgRef)
-                let h = CGImageGetHeight(imgRef)
+                let w = imgRef.width
+                let h = imgRef.height
                 
                 XCTAssertTrue(max(w, h) == maxSize)
                 
                 ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
-                    guard case .Success(let thumbnail) = result else {
+                    guard case .success(let thumbnail) = result else {
                         XCTFail()
                         expectation.fulfill()
                         return
                     }
                     
-                    let w2 = CGImageGetWidth(thumbnail)
-                    let h2 = CGImageGetHeight(thumbnail)
+                    let w2 = thumbnail.width
+                    let h2 = thumbnail.height
                     
                     XCTAssertEqual(w, w2)
                     XCTAssertEqual(h, h2)
@@ -399,19 +399,19 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testThumbnailTooBig() {
-        let expectation = self.expectationWithDescription("testThumbnailTooBig")
+        let expectation = self.expectation(description: "testThumbnailTooBig")
         
         ION.collection("test").page("page_001").outlet("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -427,28 +427,28 @@ class imageContentTests: LoggedInXCTestCase {
             let size = CGSize(width: maxSize, height: maxSize)
             
             // Desired size is bigger than original image => thumbnail should not be bigger than the original image
-            imageOutlet.thumbnail(size: size, callback: { result in
-                guard case .Success(let imgRef) = result else {
+            imageOutlet.thumbnail(withSize: size, callback: { result in
+                guard case .success(let imgRef) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
                 
-                let w = CGImageGetWidth(imgRef)
-                let h = CGImageGetHeight(imgRef)
+                let w = imgRef.width
+                let h = imgRef.height
                 
                 XCTAssertTrue(w == Int(imageOutlet.originalSize.width))
                 XCTAssertTrue(h == Int(imageOutlet.originalSize.height))
                 
                 ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
-                    guard case .Success(let thumbnail) = result else {
+                    guard case .success(let thumbnail) = result else {
                         XCTFail()
                         expectation.fulfill()
                         return
                     }
                     
-                    let w2 = CGImageGetWidth(thumbnail)
-                    let h2 = CGImageGetHeight(thumbnail)
+                    let w2 = thumbnail.width
+                    let h2 = thumbnail.height
                     
                     XCTAssertEqual(w, w2)
                     XCTAssertEqual(h, h2)
@@ -461,18 +461,18 @@ class imageContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testMetadataThumbnailFail()
     {
-        let expectation = self.expectationWithDescription("testMetadataThumbnail")
+        let expectation = self.expectation(description: "testMetadataThumbnail")
         ION.collection("test").metadata("page_001") { result in
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let metaPage) = result else {
+            guard case .success(let metaPage) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -482,18 +482,18 @@ class imageContentTests: LoggedInXCTestCase {
             let size = CGSize(width: maxSize, height: maxSize)
             
             // Thumbnail should only work for outlets named "thumbnail" or "icon"
-            metaPage.thumbnail(size: size, callback: { result in
+            metaPage.thumbnail(withSize: size, callback: { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Failure(let error) = result else {
+                guard case .failure(let error) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
                 
-                guard case .DidFail = error else {
+                guard case IONError.didFail = error else {
                     XCTFail("wrong error thrown")
                     expectation.fulfill()
                     return
@@ -503,19 +503,19 @@ class imageContentTests: LoggedInXCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testChecksum() {
-        let expectation = self.expectationWithDescription("testChecksum")
+        let expectation = self.expectation(description: "testChecksum")
         
         ION.collection("test").page("page_001").outlet("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -529,13 +529,13 @@ class imageContentTests: LoggedInXCTestCase {
             
             
             imageOutlet.dataProvider({ result in
-                guard case .Success(let dataProvider) = result else {
+                guard case .success(let dataProvider) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
                 
-                guard let data: NSData = CGDataProviderCopyData(dataProvider) else {
+                guard let data: NSData = dataProvider.data else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -552,19 +552,19 @@ class imageContentTests: LoggedInXCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     
     func testOriginalChecksum() {
-        let expectation = self.expectationWithDescription("testOriginalChecksum")
+        let expectation = self.expectation(description: "testOriginalChecksum")
         
         ION.collection("test").page("page_001").outlet("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -578,13 +578,13 @@ class imageContentTests: LoggedInXCTestCase {
             
             
             imageOutlet.originalDataProvider({ result in
-                guard case .Success(let dataProvider) = result else {
+                guard case .success(let dataProvider) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
                 
-                guard let data: NSData = CGDataProviderCopyData(dataProvider) else {
+                guard let data: NSData = dataProvider.data else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -601,6 +601,6 @@ class imageContentTests: LoggedInXCTestCase {
             })
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 }

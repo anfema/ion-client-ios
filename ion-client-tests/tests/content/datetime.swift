@@ -26,49 +26,49 @@ class datetimeContentTests: LoggedInXCTestCase {
  
     
     func testDateOutletFetchSync() {
-        let expectation = self.expectationWithDescription("testDateOutletFetchSync")
+        let expectation = self.expectation(description: "testDateOutletFetchSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            if case .Success(let value) = page.date("datetime") {
-                XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)
+            if case .success(let value) = page.date("datetime") {
+                XCTAssert(value.compare(Date(timeIntervalSince1970: 443795696)) == .orderedSame)
             } else {
                 XCTFail("date content 'Datetime' returned nil")
             }
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     func testDateOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("testDateOutletFetchAsync")
+        let expectation = self.expectation(description: "testDateOutletFetchAsync")
         
         ION.collection("test").page("page_001").date("datetime") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let value) = result else {
+            guard case .success(let value) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            XCTAssert(value.compare(NSDate(timeIntervalSince1970: 443795696)) == NSComparisonResult.OrderedSame)
+            XCTAssert(value.compare(Date(timeIntervalSince1970: 443795696)) == .orderedSame)
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
@@ -84,7 +84,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
+            guard case .invalidJSON(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return
@@ -110,7 +110,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
+            guard case .invalidJSON(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return
@@ -154,20 +154,20 @@ class datetimeContentTests: LoggedInXCTestCase {
     
     
     func testOutletIncompatible() {
-        let expectation = self.expectationWithDescription("testOutletIncompatible")
+        let expectation = self.expectation(description: "testOutletIncompatible")
         
         ION.collection("test").page("page_001").date("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -176,31 +176,31 @@ class datetimeContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testOutletIncompatibleSync() {
-        let expectation = self.expectationWithDescription("testOutletIncompatibleSync")
+        let expectation = self.expectation(description: "testOutletIncompatibleSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.date("number") else {
+            guard case .failure(let error) = page.date("number") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -209,25 +209,25 @@ class datetimeContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidOutlet")
+        let expectation = self.expectation(description: "testInvalidOutlet")
         
         ION.collection("test").page("page_001").date("wrong") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -236,31 +236,31 @@ class datetimeContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutletSync() {
-        let expectation = self.expectationWithDescription("testInvalidOutletSync")
+        let expectation = self.expectation(description: "testInvalidOutletSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.date("wrong") else {
+            guard case .failure(let error) = page.date("wrong") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -269,6 +269,6 @@ class datetimeContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 }

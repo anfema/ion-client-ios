@@ -24,13 +24,13 @@ class autoCacheTests: LoggedInXCTestCase {
     }
     
     func testCollectionFetchNoTimeout() {
-        let expectation = self.expectationWithDescription("testCollectionFetchNoTimeout")
+        let expectation = self.expectation(description: "testCollectionFetchNoTimeout")
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -40,9 +40,9 @@ class autoCacheTests: LoggedInXCTestCase {
             ION.collection("test") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let collection2) = result else {
+                guard case .success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -53,19 +53,19 @@ class autoCacheTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testCollectionFetchWithTimeout() {
-        let expectation = self.expectationWithDescription("testCollectionFetchWithTimeout")
+        let expectation = self.expectation(description: "testCollectionFetchWithTimeout")
         ION.config.cacheTimeout = 1
-        ION.config.lastOnlineUpdate = [String:NSDate]()
+        ION.config.lastOnlineUpdate = [String:Date]()
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -76,9 +76,9 @@ class autoCacheTests: LoggedInXCTestCase {
             ION.collection("test") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let collection2) = result else {
+                guard case .success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -88,7 +88,7 @@ class autoCacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
         ION.config.cacheTimeout = 600
     }
 
@@ -101,7 +101,7 @@ class autoCacheTests: LoggedInXCTestCase {
         var fail = false
 
         // set default mock bundle
-        var path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
+        var path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
         do {
             try MockingBird.setMockBundle(path)
         } catch {
@@ -114,7 +114,7 @@ class autoCacheTests: LoggedInXCTestCase {
         ION.resetDiskCache()
         ION.resetMemCache()
         
-        let expectation = self.expectationWithDescription("testAutoPageUpdate1")
+        let expectation = self.expectation(description: "testAutoPageUpdate1")
 
         // seed cache
         ION.collection("test").download { success in
@@ -123,19 +123,19 @@ class autoCacheTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
         if fail {
             return
         }
-        let expectation2 = self.expectationWithDescription("testAutoPageUpdate2")
+        let expectation2 = self.expectation(description: "testAutoPageUpdate2")
         
         // check page cache content
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 fail = true
                 expectation2.fulfill()
@@ -146,18 +146,18 @@ class autoCacheTests: LoggedInXCTestCase {
             expectation2.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
         if fail {
             return
         }
-        let expectation3 = self.expectationWithDescription("testAutoPageUpdate3")
+        let expectation3 = self.expectation(description: "testAutoPageUpdate3")
 
         // reset online update so the next call fetches the collection again
-        ION.config.lastOnlineUpdate = [String:NSDate]()
+        ION.config.lastOnlineUpdate = [String:Date]()
         
 
         // Switch to other mock bundle
-        path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion_refresh"
+        path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion_refresh"
         do {
             try MockingBird.setMockBundle(path)
         } catch {
@@ -169,9 +169,9 @@ class autoCacheTests: LoggedInXCTestCase {
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation3.fulfill()
                 return
@@ -181,10 +181,10 @@ class autoCacheTests: LoggedInXCTestCase {
             expectation3.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(10.0, handler: nil)
+        self.waitForExpectations(timeout: 10.0, handler: nil)
         
         // set default mock bundle
-        path = NSBundle(forClass: self.dynamicType).resourcePath! + "/bundles/ion"
+        path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
         do {
             try MockingBird.setMockBundle(path)
         } catch {

@@ -24,14 +24,14 @@ class diskcacheTests: LoggedInXCTestCase {
     }
     
     func testCollectionDiskCache() {
-        let expectation = self.expectationWithDescription("testCollectionDiskCache")
+        let expectation = self.expectation(description: "testCollectionDiskCache")
         ION.resetMemCache()
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -42,9 +42,9 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.collection("test") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let collection2) = result else {
+                guard case .success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -52,21 +52,21 @@ class diskcacheTests: LoggedInXCTestCase {
 
                 XCTAssertNotNil(collection2.lastUpdate)
                 XCTAssert(collection2 !== collection)
-                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedSame)
+                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .orderedSame)
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testCollectionDiskCacheClean() {
-        let expectation = self.expectationWithDescription("testCollectionDiskCacheClean")
+        let expectation = self.expectation(description: "testCollectionDiskCacheClean")
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -78,9 +78,9 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.collection("test") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let collection2) = result else {
+                guard case .success(let collection2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -89,21 +89,21 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssert(collection2 !== collection)
                 XCTAssert(collection2 == collection)
                 XCTAssertNotNil(collection2.lastUpdate)
-                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .OrderedSame)
+                XCTAssert(collection2.lastUpdate!.compare(collection.lastUpdate!) == .orderedSame)
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testPageDiskCache() {
-        let expectation = self.expectationWithDescription("testPageDiskCache")
+        let expectation = self.expectation(description: "testPageDiskCache")
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -114,9 +114,9 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let page2) = result else {
+                guard case .success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -125,21 +125,21 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssertNotNil(page2.lastUpdate)
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
-                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
+                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .orderedSame)
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testPageDiskCacheClean() {
-        let expectation = self.expectationWithDescription("testPageDiskCacheClean")
+        let expectation = self.expectation(description: "testPageDiskCacheClean")
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -151,9 +151,9 @@ class diskcacheTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let page2) = result else {
+                guard case .success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -162,21 +162,21 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
-                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
+                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .orderedSame)
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testPageDiskCacheLocaleClean() {
-        let expectation = self.expectationWithDescription("testPageDiskCacheLocaleClean")
+        let expectation = self.expectation(description: "testPageDiskCacheLocaleClean")
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -184,13 +184,13 @@ class diskcacheTests: LoggedInXCTestCase {
 
             XCTAssertNotNil(page.lastUpdate)
             ION.resetMemCache()
-            ION.resetDiskCache(locale: page.locale)
+            ION.resetDiskCache(page.locale)
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let page2) = result else {
+                guard case .success(let page2) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -199,39 +199,39 @@ class diskcacheTests: LoggedInXCTestCase {
                 XCTAssert(page2 !== page)
                 XCTAssert(page2 == page)
                 XCTAssertNotNil(page2.lastUpdate)
-                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .OrderedSame)
+                XCTAssert(page2.lastUpdate!.compare(page.lastUpdate!) == .orderedSame)
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testDiskCacheForBinaryFilesMiss() {
-        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesMiss")
+        let expectation = self.expectation(description: "testDiskCacheForBinaryFilesMiss")
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
             XCTAssertNotNil(page.lastUpdate)
-            guard case .Success(let po) = page.outlet("image") else {
+            guard case .success(let po) = page.outlet("image") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
             if case let outlet as IONImageContent = po {
-                let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString!, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                 XCTAssertNotNil(result)
-                if case .Success(let filename) = result {
+                if case .success(let filename) = result {
                     print(filename)
                     XCTFail("Cached image found when it should not be found")
                 } else {
@@ -242,41 +242,41 @@ class diskcacheTests: LoggedInXCTestCase {
             }
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testDiskCacheForBinaryFilesHit() {
-        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesHit")
+        let expectation = self.expectation(description: "testDiskCacheForBinaryFilesHit")
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001").image("image") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssertNotNil(result)
             
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let page) = result else {
+                guard case .success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
 
-                guard case .Success(let po) = page.outlet("image") else {
+                guard case .success(let po) = page.outlet("image") else {
                     XCTFail()
                     expectation.fulfill()
                     return
                 }
 
                 if case let outlet as IONImageContent = po {
-                    let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString!, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
-                    if case .Success(let filename) = result {
+                    if case .success(let filename) = result {
                         print(filename)
                     } else {
                         print("Cache miss!")
@@ -288,25 +288,25 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testDiskCacheForBinaryFilesChange() {
-        let expectation = self.expectationWithDescription("testDiskCacheForBinaryFilesChange")
+        let expectation = self.expectation(description: "testDiskCacheForBinaryFilesChange")
         ION.resetMemCache()
         ION.resetDiskCache()
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            guard case .Success(let po) = page.outlet("image") else {
+            guard case .success(let po) = page.outlet("image") else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -316,13 +316,13 @@ class diskcacheTests: LoggedInXCTestCase {
                 outlet.image() { image in
                     XCTAssertNotNil(image)
                     
-                    let urlString = outlet.imageURL!.absoluteString!
+                    let urlString = outlet.imageURL!.absoluteString
                     
                     // find entry in cache db and change the checksum
                     var tmpDB = [JSONObject]()
                     for case .jsonDictionary(let dict) in IONRequest.cacheDB! {
                         guard dict["url"] != nil,
-                            case .jsonString(let entryURL) = dict["url"]! where entryURL == urlString else {
+                            case .jsonString(let entryURL) = dict["url"]!, entryURL == urlString else {
                                 tmpDB.append(.jsonDictionary(dict))
                                 continue
                         }
@@ -337,7 +337,7 @@ class diskcacheTests: LoggedInXCTestCase {
                     // now a cache lookup has to fail
                     let result = IONRequest.fetchFromCache(urlString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
-                    if case .Success(let filename) = result {
+                    if case .success(let filename) = result {
                         print(filename)
                         XCTFail("Cached image found but checksum has changed, so a reload had to happen but didn't")
                     } else {
@@ -350,7 +350,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 expectation.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
 }

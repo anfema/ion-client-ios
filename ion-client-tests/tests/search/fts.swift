@@ -24,14 +24,14 @@ class ftsTests: LoggedInXCTestCase {
     }
     
     func testCollectionSearch() {
-        let expectation = self.expectationWithDescription("testCollectionSearch")
+        let expectation = self.expectation(description: "testCollectionSearch")
         
         ION.collection("test").getSearchHandle { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let search) = result else {
+            guard case .success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -42,18 +42,18 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     func testCollectionSearchExclusion() {
-        let expectation = self.expectationWithDescription("testCollectionSearchExclusion")
+        let expectation = self.expectation(description: "testCollectionSearchExclusion")
         
         ION.collection("test").getSearchHandle { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let search) = result else {
+            guard case .success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -74,18 +74,18 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     func testCollectionStatement() {
-        let expectation = self.expectationWithDescription("testCollectionStatement")
+        let expectation = self.expectation(description: "testCollectionStatement")
         
         ION.collection("test").getSearchHandle { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let search) = result else {
+            guard case .success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -96,18 +96,18 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     func testCollectionPhrase() {
-        let expectation = self.expectationWithDescription("testCollectionPhrase")
+        let expectation = self.expectation(description: "testCollectionPhrase")
         
         ION.collection("test").getSearchHandle { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let search) = result else {
+            guard case .success(let search) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -118,14 +118,14 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     
     func testDownloadFTS()
     {
         let consumer = NotificationConsumer(notification: Notification.ftsDatabaseDidUpdate)
-        let expectation = self.expectationWithDescription("testDownloadFTS")
+        let expectation = self.expectation(description: "testDownloadFTS")
         
         XCTAssertFalse(consumer.notificationWasReceived)
         XCTAssertNil(consumer.notificationObject)
@@ -136,7 +136,7 @@ class ftsTests: LoggedInXCTestCase {
         ION.downloadFTSDB("test") {
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             // notificationWasReceived should be true when notification was sent
             XCTAssertTrue(consumer.notificationWasReceived)
@@ -155,7 +155,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
         
     
@@ -171,7 +171,7 @@ class ftsTests: LoggedInXCTestCase {
     
     func testGetSearchHandle()
     {
-        let expectation = self.expectationWithDescription("testGetSearchHandle")
+        let expectation = self.expectation(description: "testGetSearchHandle")
         
         ION.config.disableFTS("test")
         XCTAssertFalse(ION.config.isFTSEnabled("test"))
@@ -179,15 +179,15 @@ class ftsTests: LoggedInXCTestCase {
         ION.collection("test").getSearchHandle { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .DidFail = error else {
+            guard case IONError.didFail = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -196,7 +196,7 @@ class ftsTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 }
 
@@ -205,20 +205,20 @@ class ftsTests: LoggedInXCTestCase {
 class NotificationConsumer {
     
     var notificationWasReceived = false
-    var notificationUserInfo: [NSObject: AnyObject]?
-    var notificationObject: AnyObject?
+    var notificationUserInfo: [AnyHashable: Any]?
+    var notificationObject: Any?
     
     init(notification: String) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NotificationConsumer.onNotification(_:)), name: notification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NotificationConsumer.onNotification(_:)), name: Foundation.Notification.Name(notification), object: nil)
     }
     
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     
-    @objc func onNotification(notification: NSNotification) {
+    @objc func onNotification(_ notification: Foundation.Notification) {
         notificationObject = notification.object
         notificationUserInfo = notification.userInfo
         notificationWasReceived = true

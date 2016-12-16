@@ -24,36 +24,36 @@ class authTests: DefaultXCTestCase {
     }
     
     func testLoginSuccess() {
-        let expectation = self.expectationWithDescription("testLoginSuccess")
+        let expectation = self.expectation(description: "testLoginSuccess")
         
         ION.login("admin@anfe.ma", password: "test") { success in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssert(success)
             XCTAssertNotNil(ION.config.sessionToken)
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testLoginFailure() {
         if !self.mock {
-            let expectation = self.expectationWithDescription("testLoginFailure")
+            let expectation = self.expectation(description: "testLoginFailure")
         
             ION.login("admin@anfe.ma", password: "wrongpassword") { success in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
                 XCTAssert(!success)
                 XCTAssertNil(ION.config.sessionToken)
                 expectation.fulfill()
             }
             
-            self.waitForExpectationsWithTimeout(1.0, handler: nil)
+            self.waitForExpectations(timeout: 1.0, handler: nil)
         }
     }
 }

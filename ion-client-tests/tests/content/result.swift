@@ -21,14 +21,14 @@ class resultTests: LoggedInXCTestCase {
     }
     
     func testSuccess() {
-        let expectation = self.expectationWithDescription("testSuccess")
+        let expectation = self.expectation(description: "testSuccess")
         
         ION.collection("test").page("page_001").outlet("text") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
+            guard case .success = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -44,20 +44,20 @@ class resultTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testFailure() {
-        let expectation = self.expectationWithDescription("testFailure")
+        let expectation = self.expectation(description: "testFailure")
         
         ION.collection("test").page("page_001").outlet("UnknownOutlet") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
-                if case .OutletNotFound(let name) = result.error! {
+            guard case .success = result else {
+                if case IONError.outletNotFound(let name) = result.error! {
                     XCTAssertTrue(result.debugDescription.hasPrefix("FAILURE: "))
                     XCTAssertTrue(result.isFailure)
                     XCTAssertFalse(result.isSuccess)
@@ -77,6 +77,6 @@ class resultTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 }

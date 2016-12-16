@@ -24,14 +24,14 @@ class pageTests: LoggedInXCTestCase {
     
     
     func testPageHashValue() {
-        let expectation = self.expectationWithDescription("testPageHashValue")
+        let expectation = self.expectation(description: "testPageHashValue")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -42,20 +42,20 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
 
     func testPageFetchSync() {
-        let expectation = self.expectationWithDescription("testPageFetchSync")
+        let expectation = self.expectation(description: "testPageFetchSync")
         ION.resetMemCache()
         
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -67,19 +67,19 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(page.layout == "layout-001")
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testPagePositionSync() {
-        let expectation1 = self.expectationWithDescription("testPagePositionSync 1")
-        let expectation2 = self.expectationWithDescription("testPagePositionSync 2")
+        let expectation1 = self.expectation(description: "testPagePositionSync 1")
+        let expectation2 = self.expectation(description: "testPagePositionSync 2")
         
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation1.fulfill()
                 return
@@ -95,9 +95,9 @@ class pageTests: LoggedInXCTestCase {
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation2.fulfill()
                 return
@@ -110,18 +110,18 @@ class pageTests: LoggedInXCTestCase {
             expectation2.fulfill()
         }
 
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testPageFetchAsync() {
-        let expectation = self.expectationWithDescription("testPageFetchAsync")
+        let expectation = self.expectation(description: "testPageFetchAsync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -132,19 +132,19 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testPagePositionAsync() {
-        let expectation1 = self.expectationWithDescription("testPagePositionAync 1")
-        let expectation2 = self.expectationWithDescription("testPagePositionAync 2")
+        let expectation1 = self.expectation(description: "testPagePositionAync 1")
+        let expectation2 = self.expectation(description: "testPagePositionAync 2")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation1.fulfill()
                 return
@@ -158,9 +158,9 @@ class pageTests: LoggedInXCTestCase {
         ION.collection("test").page("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation2.fulfill()
                 return
@@ -171,19 +171,19 @@ class pageTests: LoggedInXCTestCase {
             expectation2.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testPageFetchFail() {
-        let expectation = self.expectationWithDescription("testPageFetchFail")
+        let expectation = self.expectation(description: "testPageFetchFail")
         
         ION.collection("test").page("unknown_page") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
-                if case .PageNotFound(let name) = result.error! {
+            guard case .success = result else {
+                if case IONError.pageNotFound(let name) = result.error! {
                     XCTAssertEqual(name, "unknown_page")
                 } else {
                     XCTFail()
@@ -195,18 +195,18 @@ class pageTests: LoggedInXCTestCase {
             XCTFail()
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     func testPageParentAsync() {
-        let expectation = self.expectationWithDescription("testPageParentAsync")
+        let expectation = self.expectation(description: "testPageParentAsync")
         
         ION.collection("test").page("subpage_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -218,14 +218,14 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testPageCount() {
         ION.collection("test").pageCount(nil) { count in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssert(count == 2)
         }
@@ -233,20 +233,20 @@ class pageTests: LoggedInXCTestCase {
         ION.collection("test").pageCount("page_002") { count in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssert(count == 1)
         }
     }
 
     func testPageParent() {
-        let expectation = self.expectationWithDescription("testPageParent")
+        let expectation = self.expectation(description: "testPageParent")
         ION.collection("test").page("subpage_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -258,24 +258,24 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
 
     func testPageChild() {
-        let expectation = self.expectationWithDescription("testPageChild")
+        let expectation = self.expectation(description: "testPageChild")
         
         ION.collection("test").page("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            guard case .Success(let child) = page.child("subpage_001") else {
+            guard case .success(let child) = page.child("subpage_001") else {
                 XCTFail("Child not found")
                 expectation.fulfill()
                 return
@@ -288,31 +288,31 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     
     func testPageInvalidChild() {
-        let expectation = self.expectationWithDescription("testPageInvalidChild")
+        let expectation = self.expectation(description: "testPageInvalidChild")
         
         ION.collection("test").page("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            guard case .Failure(let error) = page.child("invalid_page") else {
+            guard case .failure(let error) = page.child("invalid_page") else {
                 XCTFail("Child found")
                 expectation.fulfill()
                 return
             }
             
-            guard case .PageNotFound = error else {
+            guard case IONError.pageNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -321,25 +321,25 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     
     func testPageInvalidChildAsync() {
-        let expectation = self.expectationWithDescription("testPageInvalidChildAsync")
+        let expectation = self.expectation(description: "testPageInvalidChildAsync")
         
         ION.collection("test").page("page_002").child("invalid") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail("Child found")
                 expectation.fulfill()
                 return
             }
             
-            guard case .PageNotFound = error else {
+            guard case IONError.pageNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -348,31 +348,31 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     
     func testPageChildInvalidParent() {
-        let expectation = self.expectationWithDescription("testPageChildInvalidParent")
+        let expectation = self.expectation(description: "testPageChildInvalidParent")
         
         ION.collection("test").page("subpage_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.child("page_002") else {
+            guard case .failure(let error) = page.child("page_002") else {
                 XCTFail("Child found")
                 expectation.fulfill()
                 return
             }
             
-            guard case .InvalidPageHierarchy = error else {
+            guard case IONError.invalidPageHierarchy = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -381,26 +381,26 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     
     
     func testPageChildInvalidParentAsync() {
-        let expectation = self.expectationWithDescription("testPageChildInvalidParentAsync")
+        let expectation = self.expectation(description: "testPageChildInvalidParentAsync")
         
         ION.collection("test").page("subpage_001").child("page_002") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail("Child found")
                 expectation.fulfill()
                 return
             }
             
-            guard case .InvalidPageHierarchy = error else {
+            guard case IONError.invalidPageHierarchy = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -409,19 +409,19 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
 
     func testPageChildAsync() {
-        let expectation = self.expectationWithDescription("testPageChildAsync")
+        let expectation = self.expectation(description: "testPageChildAsync")
         
         ION.collection("test").page("page_002").child("subpage_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -434,19 +434,19 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testPageChildFail() {
-        let expectation = self.expectationWithDescription("testPageChildFail")
+        let expectation = self.expectation(description: "testPageChildFail")
 
         ION.collection("test").page("page_002").child("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success = result else {
-                if case .InvalidPageHierarchy(let parent, let child) = result.error! {
+            guard case .success = result else {
+                if case IONError.invalidPageHierarchy(let parent, let child) = result.error! {
                     XCTAssert(parent == "page_002")
                     XCTAssert(child == "page_001")
                 } else {
@@ -461,7 +461,7 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
 //    func testPageEnumeration() {
@@ -484,14 +484,14 @@ class pageTests: LoggedInXCTestCase {
 //    }
     
     func testSubPageEnumeration() {
-        let expectation = self.expectationWithDescription("testSubPageEnumeration")
+        let expectation = self.expectation(description: "testSubPageEnumeration")
         
         ION.collection("test").page("page_002").children { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -501,16 +501,16 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testSubPageList() {
-        let expectation = self.expectationWithDescription("testSubPageList")
+        let expectation = self.expectation(description: "testSubPageList")
         
         ION.collection("test").page("page_002").childrenList { list in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssert(list.count == 1)
             if list.count == 1 {
@@ -519,18 +519,18 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testOutletExists() {
-        let expectation = self.expectationWithDescription("testOutletExists")
+        let expectation = self.expectation(description: "testOutletExists")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -540,18 +540,18 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     func testOutletExistsAsync() {
-        let expectation = self.expectationWithDescription("testOutletExistsAsync")
+        let expectation = self.expectation(description: "testOutletExistsAsync")
         
         ION.collection("test").page("page_001").outletExists("text") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let exists) = result else {
+            guard case .success(let exists) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -561,18 +561,18 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     func testOutletDoesNotExistAsync() {
-        let expectation = self.expectationWithDescription("testOutletDoesNotExistAsync")
+        let expectation = self.expectation(description: "testOutletDoesNotExistAsync")
         
         ION.collection("test").page("page_001").outletExists("Unknown_Outlet") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let exists) = result else {
+            guard case .success(let exists) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -582,21 +582,21 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     func testCancelablePage() {
         ION.resetMemCache()
         XCTAssert(ION.collectionCache.count == 0)
         
-        let expectation = self.expectationWithDescription("testCancelableCollection")
+        let expectation = self.expectation(description: "testCancelableCollection")
         
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -609,9 +609,9 @@ class pageTests: LoggedInXCTestCase {
             collection.page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let page) = result else {
+                guard case .success(let page) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -627,7 +627,7 @@ class pageTests: LoggedInXCTestCase {
                 XCTAssert(collection.pageCache.count == 2)
                 
                 // suspend the work queue to be able to queue deterministically
-                dispatch_suspend(p.workQueue)
+                p.workQueue.suspend()
                 
                 // cancel the fork
                 p.cancel()
@@ -636,50 +636,50 @@ class pageTests: LoggedInXCTestCase {
                 p.onCompletion() { page, completed in
                     
                     // Test if the correct response queue is used
-                    XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                    XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                     
                     XCTAssert(completed == false)
                     // cancel/finish has happened here already so only the original page should be in the cache
-                    dispatch_async(p.workQueue) {
+                    p.workQueue.async {
                         XCTAssert(collection.pageCache.count == 1)
                         expectation.fulfill()
                     }
                 }
                 
                 // now start the thing
-                dispatch_resume(p.workQueue)
+                p.workQueue.resume()
             }
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
 
     
     func testWaitUntilReady() {
-        let expectation = self.expectationWithDescription("testWaitUntilReady")
+        let expectation = self.expectation(description: "testWaitUntilReady")
 
         ION.collection("test").page("page_001").waitUntilReady{ page in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             XCTAssertNotNil(page)
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testNumberOfContentsForOutletSync() {
-        let expectation = self.expectationWithDescription("testNumberOfContentsForOutletSync")
+        let expectation = self.expectation(description: "testNumberOfContentsForOutletSync")
         
         ION.collection("test").page("page_001"){ result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -691,19 +691,19 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testNumberOfContentsForOutletAsync() {
-        let expectation = self.expectationWithDescription("testNumberOfContentsForOutletAsync")
+        let expectation = self.expectation(description: "testNumberOfContentsForOutletAsync")
         
         ION.collection("test").page("page_001").numberOfContentsForOutlet("text") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let count) = result else {
+            guard case .success(let count) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -715,48 +715,48 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testFailOnInvalidPageIdentifier() {
-        let expectation = self.expectationWithDescription("testFailOnInvalidPageIdentifier")
+        let expectation = self.expectation(description: "testFailOnInvalidPageIdentifier")
         
         ION.collection("test").page("invalidpageidentifier").outlet("text") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .DidFail = error else {
+            guard case IONError.didFail = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            XCTAssertEqual(error.errorDomain, "com.anfema.ion")
+            XCTAssertEqual(IONError.didFail.errorDomain, "com.anfema.ion")
             
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testGetMetaPage() {
-        let expectation = self.expectationWithDescription("testGetMetaPage")
+        let expectation = self.expectation(description: "testGetMetaPage")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -773,19 +773,19 @@ class pageTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testLoadCacheDB() {
-        let expectation = self.expectationWithDescription("testLoadCacheDB")
+        let expectation = self.expectation(description: "testLoadCacheDB")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(_) = result else {
+            guard case .success(_) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -805,9 +805,9 @@ class pageTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(_) = result else {
+                guard case .success(_) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -821,19 +821,19 @@ class pageTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testLoadInvalidCacheDB() {
-        let expectation = self.expectationWithDescription("testLoadInvalidCacheDB")
+        let expectation = self.expectation(description: "testLoadInvalidCacheDB")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(_) = result else {
+            guard case .success(_) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -851,30 +851,21 @@ class pageTests: LoggedInXCTestCase {
             let invalidJsonString = "invalid"
             let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
             
-            guard let file = fileURL.path else {
-                XCTFail()
-                expectation.fulfill()
-                return
-            }
-            
-            guard let basePath = self.cacheBaseDir(locale: locale).path else {
-                XCTFail()
-                expectation.fulfill()
-                return
-            }
+            let file = fileURL.path
+            let basePath = self.cacheBaseDir(locale: locale).path
             
             do {
                 // make sure the cache dir is there
-                if !NSFileManager.defaultManager().fileExistsAtPath(basePath) {
-                    try NSFileManager.defaultManager().createDirectoryAtPath(basePath, withIntermediateDirectories: true, attributes: nil)
+                if !FileManager.default.fileExists(atPath: basePath) {
+                    try FileManager.default.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
                 }
                 
                 // try saving to disk
-                try invalidJsonString.writeToFile(file, atomically: true, encoding: NSUTF8StringEncoding)
+                try invalidJsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
             } catch {
                 // saving failed, remove disk cache completely because we don't have a clue what's in it
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(basePath)
+                    try FileManager.default.removeItem(atPath: basePath)
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
@@ -886,9 +877,9 @@ class pageTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(_) = result else {
+                guard case .success(_) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -902,19 +893,19 @@ class pageTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testLoadMissingCacheDB() {
-        let expectation = self.expectationWithDescription("testLoadMissingCacheDB")
+        let expectation = self.expectation(description: "testLoadMissingCacheDB")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(_) = result else {
+            guard case .success(_) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -929,15 +920,10 @@ class pageTests: LoggedInXCTestCase {
             IONRequest.cacheDB = nil
             
             let locale = ION.config.locale
-            
-            guard let basePath = self.cacheBaseDir(locale: locale).path else {
-                XCTFail()
-                expectation.fulfill()
-                return
-            }
+            let basePath = self.cacheBaseDir(locale: locale).path
             
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(basePath)
+                try FileManager.default.removeItem(atPath: basePath)
             } catch {
                 // ok nothing fatal could happen, do nothing
             }
@@ -948,9 +934,9 @@ class pageTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(_) = result else {
+                guard case .success(_) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -964,21 +950,21 @@ class pageTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     
     /// Helper Functions
-    private func cacheFile(filename: String, locale: String) -> NSURL {
-        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
-        return fileURL!
+    fileprivate func cacheFile(_ filename: String, locale: String) -> URL {
+        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
+        return fileURL
     }
     
-    private func cacheBaseDir(locale locale: String) -> NSURL {
-        let directoryURLs = NSFileManager.defaultManager().URLsForDirectory(.CachesDirectory, inDomains: .UserDomainMask)
-        let fileURL = directoryURLs[0].URLByAppendingPathComponent("com.anfema.ion/\(locale)")
-        return fileURL!
+    fileprivate func cacheBaseDir(locale: String) -> URL {
+        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
+        return fileURL
     }
 }

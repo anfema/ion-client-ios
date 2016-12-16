@@ -23,14 +23,14 @@ class memcacheTests: LoggedInXCTestCase {
     }
     
     func testCollectionMemcache() {
-        let expectation = self.expectationWithDescription("testCollectionMemcache")
+        let expectation = self.expectation(description: "testCollectionMemcache")
         
         ION.collection("test") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let collection) = result else {
+            guard case .success(let collection) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -40,6 +40,6 @@ class memcacheTests: LoggedInXCTestCase {
             XCTAssert(collection2 === collection)
             expectation.fulfill()
         }
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }   
 }

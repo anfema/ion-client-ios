@@ -25,14 +25,14 @@ class fileContentTests: LoggedInXCTestCase {
     }
        
     func testFileOutletFetchAsync() {
-        let expectation = self.expectationWithDescription("testFileOutletFetchAsync")
+        let expectation = self.expectation(description: "testFileOutletFetchAsync")
         
         ION.collection("test").page("page_001").outlet("file") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -41,9 +41,9 @@ class fileContentTests: LoggedInXCTestCase {
             ION.collection("test").page("page_001").fileData("file") { result in
                 
                 // Test if the correct response queue is used
-                XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
                 
-                guard case .Success(let data) = result else {
+                guard case .success(let data) = result else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -60,24 +60,24 @@ class fileContentTests: LoggedInXCTestCase {
                 
                 XCTAssert(hashTypeFromName(ckSum) == .SHA256)
                 XCTAssert(ckSum == file.checksumMethod)
-                XCTAssert(data.cryptoHash(hashTypeFromName(ckSum)).hexString() as String == file.checksum)
+                XCTAssert((data as NSData).cryptoHash(hashTypeFromName(ckSum)).hexString() as String == file.checksum)
                 expectation.fulfill()
             }
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     
     func testFileOutletFetchAsyncCGImage() {
-        let expectation = self.expectationWithDescription("testFileOutletFetchAsyncCGImage")
+        let expectation = self.expectation(description: "testFileOutletFetchAsyncCGImage")
 
         ION.collection("test").page("page_001").outlet("file") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -90,7 +90,7 @@ class fileContentTests: LoggedInXCTestCase {
             }
             if img.mimeType.hasPrefix("image/") {
                 img.image() { result in
-                    guard case .Success(let image) = result else {
+                    guard case .success(let image) = result else {
                         XCTFail()
                         return
                     }
@@ -105,34 +105,34 @@ class fileContentTests: LoggedInXCTestCase {
             }
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testFileOutletTempURL() {
-        let expectation = self.expectationWithDescription("testFileOutletTempURL")
+        let expectation = self.expectation(description: "testFileOutletTempURL")
         
         ION.collection("test").page("page_001").temporaryURL("file") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let url) = result else {
+            guard case .success(let url) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
 
-            XCTAssert(url.absoluteString?.containsString("token=") ?? false)
+            XCTAssert(url.absoluteString.contains("token=") ?? false)
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(2.0, handler: nil)
+        self.waitForExpectations(timeout: 2.0, handler: nil)
     }
     
     
     func testFileDownloadProgress() {
-        let expectation1 = self.expectationWithDescription("testFileDownloadProgress")
-        let expectation2 = self.expectationWithDescription("testFileDownloadFinished")
+        let expectation1 = self.expectation(description: "testFileDownloadProgress")
+        let expectation2 = self.expectation(description: "testFileDownloadFinished")
 
         ION.resetDiskCache()
         
@@ -141,7 +141,7 @@ class fileContentTests: LoggedInXCTestCase {
         ION.config.progressHandler = { total, downloaded, count in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             if count > 0 {
                 XCTAssert(total > 0)
@@ -158,9 +158,9 @@ class fileContentTests: LoggedInXCTestCase {
         ION.collection("test").page("page_001").outlet("file") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation2.fulfill()
                 return
@@ -171,37 +171,37 @@ class fileContentTests: LoggedInXCTestCase {
                 return
             }
             file.data { result in
-                guard case .Success(let data) = result else {
+                guard case .success(let data) = result else {
                     XCTFail()
                     expectation2.fulfill()
                     return
                 }
 
-                XCTAssert(data.length == file.size)
+                XCTAssert(data.count == file.size)
                 expectation2.fulfill()
             }
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
         ION.config.progressHandler = nil
     }
     
     
     func testOutletIncompatible() {
-        let expectation = self.expectationWithDescription("testOutletIncompatible")
+        let expectation = self.expectation(description: "testOutletIncompatible")
         
         ION.collection("test").page("page_001").fileData("number") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletIncompatible = error else {
+            guard case IONError.outletIncompatible = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -210,25 +210,25 @@ class fileContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutlet() {
-        let expectation = self.expectationWithDescription("testInvalidOutlet")
+        let expectation = self.expectation(description: "testInvalidOutlet")
         
         ION.collection("test").page("page_001").fileData("wrong") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Failure(let error) = result else {
+            guard case .failure(let error) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -237,31 +237,31 @@ class fileContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
     func testInvalidOutletSync() {
-        let expectation = self.expectationWithDescription("testInvalidOutletSync")
+        let expectation = self.expectation(description: "testInvalidOutletSync")
         
         ION.collection("test").page("page_001") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let page) = result else {
+            guard case .success(let page) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .Failure(let error) = page.link("wrong") else {
+            guard case .failure(let error) = page.link("wrong") else {
                 XCTFail()
                 expectation.fulfill()
                 return
             }
             
-            guard case .OutletNotFound = error else {
+            guard case IONError.outletNotFound = error else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -270,7 +270,7 @@ class fileContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(1.0, handler: nil)
+        self.waitForExpectations(timeout: 1.0, handler: nil)
     }
     
     
@@ -285,7 +285,7 @@ class fileContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
+            guard case IONError.invalidJSON(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return
@@ -310,7 +310,7 @@ class fileContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .InvalidJSON(let obj) = e else
+            guard case IONError.invalidJSON(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return
@@ -354,14 +354,14 @@ class fileContentTests: LoggedInXCTestCase {
     
     
     func testFileOutletAsync() {
-        let expectation = self.expectationWithDescription("testFileOutletAsync")
+        let expectation = self.expectation(description: "testFileOutletAsync")
         
         ION.collection("test").page("page_001").outlet("file") { result in
             
             // Test if the correct response queue is used
-            XCTAssertTrue(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(ION.config.responseQueue))
+            XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
-            guard case .Success(let outlet) = result else {
+            guard case .success(let outlet) = result else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -379,6 +379,6 @@ class fileContentTests: LoggedInXCTestCase {
             expectation.fulfill()
         }
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 }
