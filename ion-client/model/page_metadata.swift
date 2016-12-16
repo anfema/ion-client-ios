@@ -68,10 +68,10 @@ open class IONPageMeta: CanLoadImage {
             case .jsonString(let lastChanged) = rawLastChanged,
             case .jsonString(let layout)      = rawLayout,
             case .jsonString(let identifier)  = rawIdentifier else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
         }
 
-        self.lastChanged = NSDate(ISODateString: lastChanged) ?? NSDate.distantPast()
+        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date ?? Date.distantPast
         self.identifier  = identifier
         self.layout = layout
         self.position = position
@@ -106,7 +106,7 @@ open class IONPageMeta: CanLoadImage {
         case .jsonString(let parent):
             self.parent = parent
         default:
-            throw IONError.InvalidJSON(json)
+            throw IONError.invalidJSON(json)
         }
     }
 
@@ -145,9 +145,9 @@ open class IONPageMeta: CanLoadImage {
     /// - parameter callback: Block to call when the page becomes available.
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
-    open func page(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) {
+    open func page(_ callback: @escaping ((Result<IONPage>) -> Void)) {
         guard let collection = collection else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 

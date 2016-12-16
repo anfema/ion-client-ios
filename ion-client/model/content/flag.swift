@@ -53,15 +53,15 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the outlet is a flag outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func isSet(_ name: String, position: Int = 0) -> Result<Bool, IONError> {
+    public func isSet(_ name: String, position: Int = 0) -> Result<Bool> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let flagContent as IONFlagContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         return .success(flagContent.enabled)
@@ -76,7 +76,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func isSet(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool, IONError>) -> Void)) -> IONPage {
+    public func isSet(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.isSet(name, position: position))
         }

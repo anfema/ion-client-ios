@@ -53,15 +53,15 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Double` if the outlet is a number outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func number(_ name: String, position: Int = 0) -> Result<Double, IONError> {
+    public func number(_ name: String, position: Int = 0) -> Result<Double> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let numberContent as IONNumberContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         return .success(numberContent.value)
@@ -76,7 +76,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Double` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func number(_ name: String, position: Int = 0, callback: @escaping ((Result<Double, IONError>) -> Void)) -> IONPage {
+    public func number(_ name: String, position: Int = 0, callback: @escaping ((Result<Double>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.number(name, position: position))
         }

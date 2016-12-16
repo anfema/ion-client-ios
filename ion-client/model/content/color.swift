@@ -57,7 +57,7 @@ open class IONColorContent: IONContent {
             case .jsonNumber(let g) = rawG,
             case .jsonNumber(let b) = rawB,
             case .jsonNumber(let a) = rawA else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
         }
 
         // Init from deserialized data
@@ -145,19 +145,19 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `UIColor` if the outlet is a color outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func cachedColor(_ name: String, position: Int = 0) -> Result<UIColor, IONError> {
+    public func cachedColor(_ name: String, position: Int = 0) -> Result<UIColor> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let colorContent as IONColorContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         guard let color = colorContent.color() else {
-            return .failure(.outletEmpty)
+            return .failure(IONError.outletEmpty)
         }
 
         return .success(color)
@@ -172,7 +172,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing a `UIColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<UIColor, IONError>) -> Void)) -> IONPage {
+    public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<UIColor>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }

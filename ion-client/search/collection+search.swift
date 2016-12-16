@@ -16,9 +16,9 @@ public extension IONCollection {
     /// Get a fulltext search handle
     ///
     /// - parameter callback: Callback to be called when the search handle is ready
-    public func getSearchHandle(_ callback: @escaping ((Result<IONSearchHandle, IONError>) -> Void)) {
+    public func getSearchHandle(_ callback: @escaping ((Result<IONSearchHandle>) -> Void)) {
         guard let searchIndex = ION.searchIndex(self.identifier), ION.config.isFTSEnabled(self.identifier) else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
@@ -26,7 +26,7 @@ public extension IONCollection {
         func performCallback() {
             self.workQueue.async {
                 guard let handle = IONSearchHandle(collection: self) else {
-                    responseQueueCallback(callback, parameter: .failure(.didFail))
+                    responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                     return
                 }
 

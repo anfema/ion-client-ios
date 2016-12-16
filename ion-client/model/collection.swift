@@ -50,7 +50,7 @@ open class IONCollection {
     fileprivate var useCache = IONCacheBehaviour.prefer
 
     /// Block to call on completion
-    fileprivate var completionBlock: ((_ collection: Result<IONCollection, IONError>, _ completed: Bool) -> Void)?
+    fileprivate var completionBlock: ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)?
 
     /// Archive download url
     internal var archiveURL: String?
@@ -82,7 +82,7 @@ open class IONCollection {
     /// - parameter callback: Block to call when the collection becomes available.
     ///                       Provides Result.Success containing an `IONCollection` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
-    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback: ((Result<IONCollection, IONError>) -> Void)?) {
+    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback: ((Result<IONCollection>) -> Void)?) {
         self.identifier = identifier
         self.workQueue = DispatchQueue(label: "com.anfema.ion.collection.\(identifier)", attributes: [])
         self.locale = locale
@@ -121,7 +121,7 @@ open class IONCollection {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the collection
-    open func page(_ identifier: String, callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONCollection {
+    open func page(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
                 return
@@ -170,13 +170,13 @@ open class IONCollection {
                 }
             } else {
                 guard let meta = self.getPageMetaForPage(identifier) else {
-                    responseQueueCallback(callback, parameter: .failure(.pageNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
                     return
                 }
 
                 self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .prefer, parent: meta.parent) { result in
                     guard case .success(let page) = result else {
-                        responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                        responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                         return
                     }
 
@@ -266,7 +266,7 @@ open class IONCollection {
     ///
     /// - parameter callback: Block to call for each page
     /// - returns: self for chaining
-    open func pages(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONCollection {
+    open func pages(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
         // append page listing to work queue
         self.workQueue.async {
             guard !self.hasFailed else {
@@ -293,10 +293,10 @@ open class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func waitUntilReady(_ callback: @escaping ((Result<IONCollection, IONError>) -> Void)) -> IONCollection {
+    open func waitUntilReady(_ callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
-                responseQueueCallback(callback, parameter: .failure(.didFail))
+                responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                 return
             }
 
@@ -315,7 +315,7 @@ open class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection, IONError>, _ completed: Bool) -> Void)) -> IONCollection {
+    open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
         }) 
@@ -343,7 +343,7 @@ open class IONCollection {
     }
 
 
-    fileprivate func update(_ page: IONPage, callback: ((Result<IONPage, IONError>) -> Void)?) -> IONPage? {
+    fileprivate func update(_ page: IONPage, callback: ((Result<IONPage>) -> Void)?) -> IONPage? {
         // fetch page update
         guard let meta = self.getPageMetaForPage(page.identifier) else {
             return nil
@@ -351,7 +351,7 @@ open class IONCollection {
 
         self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .ignore, parent: meta.parent) { result in
             guard case .success(let page) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
@@ -410,11 +410,11 @@ open class IONCollection {
     fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
         IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: self.useCache) { result in
 
-            guard case .Success(let resultValue) = result else {
-                if let error = result.error, case .NotAuthorized = error {
-                    callback(error)
+            guard case .success(let resultValue) = result else {
+                if let error = result.error, case IONError.notAuthorized = error {
+                    callback(.notAuthorized)
                 } else {
-                    callback(.CollectionNotFound(identifier))
+                    callback(IONError.collectionNotFound(identifier))
                 }
 
                 return nil
@@ -434,7 +434,7 @@ open class IONCollection {
                     return nil
             }
 
-            self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
+            self.lastUpdate = Date(timeIntervalSince1970: timestamp)
 
             // if we have a nonzero result
             if let firstItem = array.first, case .jsonDictionary(let dict) = firstItem {
@@ -449,7 +449,7 @@ open class IONCollection {
                     case .jsonString(let defaultLocale)  = rawDefaultLocale,
                     case .jsonString(let archiveURL)     = rawArchive,
                     case .jsonArray(let pages)           = rawPages else {
-                        callback(.InvalidJSON(resultValue))
+                        callback(.invalidJSON(resultValue))
                         return nil
                 }
 
@@ -467,7 +467,7 @@ open class IONCollection {
 
                 if let rawLastChanged = dict["last_changed"] {
                     if case .jsonString(let lastChanged) = rawLastChanged {
-                        self.lastChanged = NSDate(ISODateString: lastChanged)
+                        self.lastChanged = NSDate(isoDateString: lastChanged) as! Date
                         self.lastUpdate = self.lastChanged
                     }
                 }
@@ -504,7 +504,7 @@ open class IONCollection {
             }
 
             // revert to using cache
-            self.useCache = .Prefer
+            self.useCache = .prefer
 
             // all finished, call callback
             callback(nil)

@@ -28,7 +28,7 @@ public protocol TemporaryURLProvider {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     ///
-    func temporaryURL(_ callback: @escaping ((Result<URL, IONError>) -> Void))
+    func temporaryURL(_ callback: @escaping ((Result<URL>) -> Void))
 }
 
 
@@ -65,7 +65,7 @@ open class IONContent {
             let rawOutlet      = dict["outlet"],
             case .jsonString(let variation) = rawVariation,
             case .jsonString(let outlet)    = rawOutlet else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
 		}
 
 		self.variation = variation
@@ -104,7 +104,7 @@ open class IONContent {
 
         guard let rawType = dict["type"],
             case .jsonString(let contentType) = rawType else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
         }
 
         // dispatcher
@@ -117,7 +117,7 @@ open class IONContent {
                 }
             }
 
-            throw IONError.UnknownContentType(contentType)
+            throw IONError.unknownContentType(contentType)
         }
     }
 }

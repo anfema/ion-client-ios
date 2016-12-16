@@ -20,15 +20,15 @@ extension IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the page
-    public func child(_ identifier: String, callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONPage {
+    public func child(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
             guard case .success(let page) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .didFail))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.didFail))
                 return
             }
 
             guard page.parent == self.identifier else {
-                responseQueueCallback(callback, parameter: .failure(.invalidPageHierarchy(parent: self.identifier, child: page.identifier)))
+                responseQueueCallback(callback, parameter: .failure(IONError.invalidPageHierarchy(parent: self.identifier, child: page.identifier)))
                 return
             }
 
@@ -43,15 +43,15 @@ extension IONPage {
     ///
     /// - parameter identifier: Identifier of child page
     /// - returns: Page object that resolves asynchronously or nil if the page is no child of self
-    public func child(_ identifier: String) -> Result<IONPage, IONError> {
+    public func child(_ identifier: String) -> Result<IONPage> {
         let page = self.collection.page(identifier)
 
         guard page.metadata != nil else {
-            return .failure(.pageNotFound(identifier))
+            return .failure(IONError.pageNotFound(identifier))
         }
 
         guard page.parent == self.identifier else {
-            return .failure(.invalidPageHierarchy(parent: self.identifier, child: page.identifier))
+            return .failure(IONError.invalidPageHierarchy(parent: self.identifier, child: page.identifier))
         }
 
         return .success(page)
@@ -61,7 +61,7 @@ extension IONPage {
     /// Enumerate page children
     ///
     /// - parameter callback: The callback to call for each child
-    public func children(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) {
+    public func children(_ callback: @escaping ((Result<IONPage>) -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             for child in children {
                 self.child(child, callback: callback)

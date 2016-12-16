@@ -21,7 +21,7 @@ open class IONCacheAvoidance: URLProtocol {
             return false
         }
 
-        guard request.URLString.hasPrefix(serverURL.URLString) else {
+        guard let url = request.url, url.absoluteString.hasPrefix(serverURL.absoluteString) else {
             return false
         }
 

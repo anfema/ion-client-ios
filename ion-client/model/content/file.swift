@@ -58,7 +58,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
             case .jsonString(let mimeType) = rawMimeType,
             case .jsonString(let fileName) = rawName,
             case .jsonNumber(let size)     = rawFileSize else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
         }
 
         self.mimeType = mimeType
@@ -66,7 +66,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
         self.size     = Int(size)
 
         if case .jsonString(let checksum)  = rawChecksum {
-            let checksumParts = checksum.componentsSeparatedByString(":")
+            let checksumParts = checksum.components(separatedBy: ":")
 
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
@@ -75,7 +75,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
         }
 
         if case .jsonString(let fileUrl) = rawFile {
-            self.url     = NSURL(string: fileUrl)
+            self.url     = URL(string: fileUrl)
             self.isValid = true
         }
 
@@ -88,24 +88,28 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
     /// - parameter callback: Block to call when file data gets available.
     ///                       Provides `Result.Success` containing `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func data(_ callback: @escaping ((Result<Data, IONError>) -> Void)) {
+    open func data(_ callback: @escaping ((Result<Data>) -> Void)) {
         guard let url = self.url, self.isValid else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
-        IONRequest.fetchBinary(url.URLString, queryParameters: nil, cached: ION.config.cacheBehaviour(.Prefer),
+        IONRequest.fetchBinary(url.absoluteString, queryParameters: nil, cached: ION.config.cacheBehaviour(.prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
-            guard case .Success(let filename) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let filename) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
+            guard let fileURL = URL(string: filename) else{
+                responseQueueCallback(callback, parameter: .failure(IONError.noData(nil)))
+                return
+            }
             do {
-                let data = try NSData(contentsOfFile: filename, options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                responseQueueCallback(callback, parameter: .Success(data))
+                let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
+                responseQueueCallback(callback, parameter: .success(data))
             } catch {
-                responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
+                responseQueueCallback(callback, parameter: .failure(IONError.noData(error)))
             }
         }
     }
@@ -116,9 +120,9 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func temporaryURL(_ callback: @escaping ((Result<URL, IONError>) -> Void)) {
+    open func temporaryURL(_ callback: @escaping ((Result<URL>) -> Void)) {
         guard let urlString = self.url?.absoluteString else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
@@ -129,16 +133,16 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
                 case .jsonDictionary(let dict) = json,
                 let rawURL = dict["url"],
                 case .jsonString(let urlString) = rawURL else {
-                    responseQueueCallback(callback, parameter: .failure(.didFail))
+                    responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                     return
             }
 
             guard let url = URL(string: urlString) else {
-                responseQueueCallback(callback, parameter: .failure(.didFail))
+                responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                 return
             }
 
-            responseQueueCallback(callback, parameter: .Success(url))
+            responseQueueCallback(callback, parameter: .success(url))
         }
     }
 
@@ -172,15 +176,15 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func fileData(_ name: String, position: Int = 0, callback: @escaping ((Result<Data, IONError>) -> Void)) -> IONPage {
+    public func fileData(_ name: String, position: Int = 0, callback: @escaping ((Result<Data>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
             guard case let fileContent as IONFileContent = content else {
-                responseQueueCallback(callback, parameter: .failure(.outletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(IONError.outletIncompatible))
                 return
             }
 

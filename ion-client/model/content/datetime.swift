@@ -55,19 +55,19 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSDate` if the outlet is a datetime outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func date(_ name: String, position: Int = 0) -> Result<Date, IONError> {
+    public func date(_ name: String, position: Int = 0) -> Result<Date> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let timeContent as IONDateTimeContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         guard let date = timeContent.date else {
-            return .failure(.outletEmpty)
+            return .failure(IONError.outletEmpty)
         }
 
         return .success(date)
@@ -82,7 +82,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSDate` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func date(_ name: String, position: Int = 0, callback: @escaping ((Result<Date, IONError>) -> Void)) -> IONPage {
+    public func date(_ name: String, position: Int = 0, callback: @escaping ((Result<Date>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.date(name, position: position))
         }

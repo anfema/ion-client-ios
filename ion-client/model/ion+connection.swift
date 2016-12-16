@@ -16,9 +16,9 @@ extension ION {
     /// - parameter callback: Result object either containing the `IONCollection` in succes case or an `IONError`
     ///                       when the collection could not be resolved.
     ///
-    public class func resolve(_ url: URL, callback: @escaping ((Result<IONCollection, IONError>) -> Void)) {
+    public class func resolve(_ url: URL, callback: @escaping ((Result<IONCollection>) -> Void)) {
         guard let identifier = url.host else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
@@ -32,16 +32,16 @@ extension ION {
     /// - parameter callback: Result object either containing the `IONPage` in succes case or an `IONError`
     ///                       when the page could not be resolved.
     ///
-    public class func resolve(_ url: URL, callback: @escaping ((Result<IONPage, IONError>) -> Void)) {
+    public class func resolve(_ url: URL, callback: @escaping ((Result<IONPage>) -> Void)) {
         let identifier = url.lastPathComponent
         guard identifier != "/" else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
-        resolve(url) { (result: Result<IONCollection, IONError>) in
+        resolve(url) { (result: Result<IONCollection>) in
             guard case .success(let collection) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
@@ -56,15 +56,15 @@ extension ION {
     /// - parameter callback: Result object either containing the `IONContent` in succes case or an `IONError`
     ///                       when the outlet could not be resolved.
     ///
-    public class func resolve(_ url: URL, callback: @escaping ((Result<IONContent, IONError>) -> Void)) {
+    public class func resolve(_ url: URL, callback: @escaping ((Result<IONContent>) -> Void)) {
         guard let name = url.fragment else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
-        resolve(url) { (result: Result<IONPage, IONError>) in
+        resolve(url) { (result: Result<IONPage>) in
             guard case .success(let page) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 

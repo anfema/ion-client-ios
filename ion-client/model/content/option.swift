@@ -53,15 +53,15 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `String` if the outlet is an option outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func selectedOption(_ name: String, position: Int = 0) -> Result<String, IONError> {
+    public func selectedOption(_ name: String, position: Int = 0) -> Result<String> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let outletContent as IONOptionContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         return .success(outletContent.value)
@@ -76,7 +76,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func selectedOption(_ name: String, position: Int = 0, callback: @escaping ((Result<String, IONError>) -> Void)) -> IONPage {
+    public func selectedOption(_ name: String, position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.selectedOption(name, position: position))
         }

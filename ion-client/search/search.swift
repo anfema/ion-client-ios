@@ -91,11 +91,10 @@ open class IONSearchHandle {
             let result = sqlite3_step(stmt)
             switch result {
             case SQLITE_ROW:
-                guard let pageIdentifier = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 0)), encoding: String.Encoding.utf8),
-                      let outletName     = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 1)), encoding: String.Encoding.utf8),
-                      let snippet        = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 2)), encoding: String.Encoding.utf8) else {
-                        continue
-                }
+                // TODO: Check if this is safe??
+                let pageIdentifier = String(cString: sqlite3_column_text(stmt, 0))
+                let outletName     = String(cString: sqlite3_column_text(stmt, 1))
+                let snippet        = String(cString: sqlite3_column_text(stmt, 2))
                 items.append(IONSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
             case SQLITE_DONE:
                 finished = true

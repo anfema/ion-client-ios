@@ -24,12 +24,8 @@ extension IONRequest {
         // remove complete cache dir for this host
         let fileURL = self.cacheBaseDir(locale: locale)
 
-        guard let path = fileURL.path else {
-            return
-        }
-
         do {
-            try FileManager.default.removeItem(atPath: path)
+            try FileManager.default.removeItem(atPath: fileURL.path)
         } catch {
             // non-fatal, could not remove item at path, so probably path did not exist
         }
@@ -54,14 +50,10 @@ extension IONRequest {
 
         let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
 
-        guard let path = fileURL.path else {
-            return nil
-        }
-
         // try to create the path if it does not exist
-        if !FileManager.default.fileExists(atPath: path) {
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
             do {
-                try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: fileURL.path, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 if ION.config.loggingEnabled {
                     print("ION: Could not create cache dir!")
@@ -70,7 +62,7 @@ extension IONRequest {
         }
 
         // generate cache path
-        return fileURL.URLByAppendingPathComponent(url.URLString.cryptoHash(.MD5).hexString())?.path
+        return fileURL.appendingPathComponent(url.absoluteString.cryptoHash(.MD5).hexString()).path
     }
 
     /// Internal function to fetch a cache DB entry
@@ -104,7 +96,7 @@ extension IONRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveToCache(_ request: URLRequest, _ result: Result<JSONResponse, IONError>) {
+    internal class func saveToCache(_ request: URLRequest, _ result: Result<JSONResponse>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
@@ -153,17 +145,14 @@ extension IONRequest {
             return
         }
 
-        let hash = url.cryptoHash(.MD5)
-
-        guard let host = parsedURL.host else {
+        guard let hash = url.cryptoHash(.MD5),
+            let host = parsedURL.host else {
             return
         }
 
         let filename = self.cacheBaseDir(host, locale: ION.config.locale)
 
-        guard let path = filename.path else {
-            return
-        }
+        let path = filename.path
 
         if !FileManager.default.fileExists(atPath: path) {
             do {
@@ -173,11 +162,14 @@ extension IONRequest {
             }
         }
 
-        guard let filePath = filename.appendingPathComponent((hash?.hexString())!).path else {
+        let filePath = filename.appendingPathComponent((hash.hexString())).path
+
+        guard let fileURL = URL(string: filePath) else
+        {
             return
         }
-
-        data.writeToFile(filePath, atomically: true)
+        
+        try? data.write(to: fileURL)
 
         // populate object with current data
         obj["url"]             = .jsonString(url)
@@ -217,18 +209,25 @@ extension IONRequest {
             timestamp = trunc(Date().timeIntervalSince1970 * 1000.0) / 1000.0
         }
 
+        guard let requestURL = request.url else
+        {
+            return
+        }
+        
+        let urlString = requestURL.absoluteString
+        
         // pop current cache DB entry
-        var obj: [String: JSONObject] = self.getCacheDBEntry(request.URLString) ?? [:]
-        self.removeCacheDBEntries(withURL: request.URLString)
+        var obj: [String: JSONObject] = self.getCacheDBEntry(urlString) ?? [:]
+        self.removeCacheDBEntries(withURL: urlString)
 
-        guard let requestURL = request.url, let requestHost = requestURL.host else {
+        guard let requestHost = requestURL.host else {
             return
         }
 
         // populate object with current data
-        obj["url"]             = .jsonString(request.URLString)
+        obj["url"]             = .jsonString(urlString)
         obj["host"]            = .jsonString(requestHost)
-        obj["filename"]        = .jsonString(request.URLString.cryptoHash(.MD5).hexString())
+        obj["filename"]        = .jsonString(urlString.cryptoHash(.MD5).hexString())
         obj["last_updated"]    = .jsonNumber(timestamp)
         obj["checksum_method"] = .jsonString(checksumMethod)
         obj["checksum"]        = .jsonString(checksum)
@@ -244,10 +243,7 @@ extension IONRequest {
     fileprivate class func loadCacheDB(_ locale: String = ION.config.locale) {
         let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
 
-        guard let cacheIndexPath = fileURL.path else {
-            self.cacheDB = []
-            return
-        }
+        let cacheIndexPath = fileURL.path
 
         do {
             // try loading from disk
@@ -260,9 +256,10 @@ extension IONRequest {
             } else {
                 // invalid json, reset the cache db and remove disk cache completely
                 do {
-                    if let path = self.cacheBaseDir(locale: locale).path {
-                        try FileManager.default.removeItem(atPath: path)
-                    }
+                    
+                    let path = self.cacheBaseDir(locale: locale).path
+                    try FileManager.default.removeItem(atPath: path)
+                    
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
@@ -291,14 +288,10 @@ extension IONRequest {
             return
         }
 
-        guard let basePath = self.cacheBaseDir(locale: locale).path else {
-            return
-        }
+        let basePath = self.cacheBaseDir(locale: locale).path
 
         do {
-            guard let file = self.cacheFile("cacheIndex.json", locale: locale).path else {
-                return
-            }
+            let file = self.cacheFile("cacheIndex.json", locale: locale).path
 
             // make sure the cache dir is there
             if !FileManager.default.fileExists(atPath: basePath) {
@@ -306,7 +299,7 @@ extension IONRequest {
             }
 
             // try saving to disk
-            try jsonString.writeToFile(file, atomically: true, encoding: String.Encoding.utf8)
+            try jsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
         } catch {
             // saving failed, remove disk cache completely because we don't have a clue what's in it
             do {

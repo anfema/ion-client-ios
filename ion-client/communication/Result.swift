@@ -29,7 +29,7 @@ import Alamofire
 ///            provided associated value.
 /// - Failure: The request encountered an error resulting in a failure. The associated values are the original data
 ///            provided by the server as well as the error that caused the failure.
-public enum Result<Value, Error: Error> {
+public enum Result<Value> {
 
     /// Request successful, contains result
     case success(Value)
@@ -75,12 +75,12 @@ public enum Result<Value, Error: Error> {
     /// Initialize from `Alamofire` result
     ///
     /// - parameter result: `Alamofile.Result` object
-    public init(result: Alamofire.Result<Value, Error>) {
+    public init(result: Alamofire.Result<Value>) {
         switch result {
-        case Alamofire.Result.Success(let data):
-            self = .Success(data)
-        case Alamofire.Result.Failure(let error):
-            self = .Failure(error)
+        case Alamofire.Result.success(let data):
+            self = .success(data)
+        case Alamofire.Result.failure(let error):
+            self = .failure(error)
         }
     }
 

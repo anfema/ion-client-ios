@@ -73,18 +73,18 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an array of `IONContent` objects if the outlet is a container outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func children(_ name: String, position: Int = 0) -> Result<[IONContent], IONError> {
+    public func children(_ name: String, position: Int = 0) -> Result<[IONContent]> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         if case let content as IONContainerContent = content {
             return .success(content.children)
         }
 
-        return .failure(.outletIncompatible)
+        return .failure(IONError.outletIncompatible)
     }
 
 
@@ -96,7 +96,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func children(_ name: String, position: Int = 0, callback: @escaping ((Result<[IONContent], IONError>) -> Void)) -> IONPage {
+    public func children(_ name: String, position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.children(name, position: position))
         }

@@ -104,14 +104,14 @@ open class ION {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    open class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection, IONError>) -> Void)) -> IONCollection {
+    open class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
-                    responseQueueCallback(callback, parameter: .failure(.collectionNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(IONError.collectionNotFound(identifier)))
                 } else {
                     responseQueueCallback(callback, parameter: .success(cachedCollection))
                 }
@@ -126,7 +126,7 @@ open class ION {
         let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
         let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
             guard case .success(let collection) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 

@@ -32,40 +32,40 @@ public struct JSONResponse {
 }
 
 /// Extend Alamofire Request with JSON response serializer of own JSON parser
-extension Request {
+extension DataRequest {
 
     /// Creates a response serializer that returns an JSON object constructed from the response data
     ///
     /// - returns: A `JSONObject` response serializer
-    static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
-        return ResponseSerializer { _, response, data, error in
+    static func DEJSONResponseSerializer() -> DataResponseSerializer<JSONResponse> {
+        return DataResponseSerializer { _, response, data, error in
             guard let validData = data, let response = response else {
-                return .Failure(.ServerUnreachable)
+                return .failure(IONError.serverUnreachable)
             }
 
             switch response.statusCode {
             case 401, 403:
-                return .Failure(.NotAuthorized)
+                return .failure(IONError.notAuthorized)
             case 500...511:
-                return .Failure(.ServerUnreachable)
+                return .failure(IONError.serverUnreachable)
             case 304:
-                return .Success(JSONResponse(json: nil, statusCode: 304))
+                return .success(JSONResponse(json: nil, statusCode: 304))
             case 200:
                 break // everything is fine
             default:
-                return .Failure(.NoData(error))
+                return .failure(IONError.noData(error))
             }
 
-            guard let jsonString = String(data: validData, encoding: NSUTF8StringEncoding) else {
-                return .Failure(.InvalidJSON(nil))
+            guard let jsonString = String(data: validData, encoding: String.Encoding.utf8) else {
+                return .failure(IONError.invalidJSON(nil))
             }
 
             let JSON = JSONDecoder(jsonString).jsonObject
             if case .jsonInvalid = JSON {
-                return .Failure(.InvalidJSON(nil))
+                return .failure(IONError.invalidJSON(nil))
             }
 
-            return .Success(JSONResponse(json: JSON))
+            return .success(JSONResponse(json: JSON))
         }
     }
 
@@ -76,11 +76,10 @@ extension Request {
     ///                                creating the JSON object.
     /// - returns: The request.
     func responseDEJSON(
-        _ completionHandler: (Response<JSONResponse, IONError>) -> Void)
+        _ completionHandler: @escaping (DataResponse<JSONResponse>) -> Void)
         -> Self {
         return response(
-            responseSerializer: Request.DEJSONResponseSerializer(),
-            completionHandler: completionHandler
-        )
+            responseSerializer: DataRequest.DEJSONResponseSerializer(),
+            completionHandler: completionHandler)
     }
 }

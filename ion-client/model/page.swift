@@ -88,7 +88,7 @@ open class IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     ///
-    init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage, IONError>) -> Void)?) {
+    init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage>) -> Void)?) {
         // Full asynchronous initializer, self will be populated asynchronously
         self.identifier = identifier
         self.workQueue = DispatchQueue(label: "com.anfema.ion.page.\(identifier)", attributes: [])
@@ -175,10 +175,10 @@ open class IONPage {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func waitUntilReady(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONPage {
+    open func waitUntilReady(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
         workQueue.async {
             guard !self.hasFailed else {
-                responseQueueCallback(callback, parameter: .failure(.didFail))
+                responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                 return
             }
 
@@ -211,15 +211,15 @@ open class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: Result.Success containing an `IONContent` if the outlet is valid
     ///            and the page was already cached, else an Result.Failure containing an `IONError`.
-    open func outlet(_ name: String, position: Int = 0) -> Result<IONContent, IONError> {
+    open func outlet(_ name: String, position: Int = 0) -> Result<IONContent> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
-            return .failure(.didFail)
+            return .failure(IONError.didFail)
         }
 
         // search for content with the named outlet and specified position
         guard let cObj = self.content.filter({ $0.outlet == name && $0.position == position }).first else {
-            return .failure(.outletNotFound(name))
+            return .failure(IONError.outletNotFound(name))
         }
 
         return .success(cObj)
@@ -234,7 +234,7 @@ open class IONPage {
     ///                       Provides `Result.Success` containing an `IONContent` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` to be able to chain another call
-    open func outlet(_ name: String, position: Int = 0, callback: @escaping ((Result<IONContent, IONError>) -> Void)) -> IONPage {
+    open func outlet(_ name: String, position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outlet(name, position: position))
         }
@@ -249,10 +249,10 @@ open class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the page becomes available
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    open func outletExists(_ name: String, position: Int = 0) -> Result<Bool, IONError> {
+    open func outletExists(_ name: String, position: Int = 0) -> Result<Bool> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
-            return .failure(.didFail)
+            return .failure(IONError.didFail)
         }
 
         // search first occurrence of content with the named outlet and specified position
@@ -274,7 +274,7 @@ open class IONPage {
     ///                       Provides `Result.Success` containing a `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` for chaining
-    open func outletExists(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool, IONError>) -> Void)) -> IONPage {
+    open func outletExists(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outletExists(name, position: position))
         }
@@ -288,7 +288,7 @@ open class IONPage {
     /// - parameter callback: callback with object count
     ///
     /// - returns: `self` for chaining
-    open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int, IONError>) -> Void)) -> IONPage {
+    open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.numberOfContentsForOutlet(name))
         }
@@ -301,10 +301,10 @@ open class IONPage {
     /// - parameter name: outlet to check
     ///
     /// - returns: count if page was ready, `nil` if page is not loaded
-    open func numberOfContentsForOutlet(_ name: String) -> Result<Int, IONError> {
+    open func numberOfContentsForOutlet(_ name: String) -> Result<Int> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a async loading page
-            return .failure(.didFail)
+            return .failure(IONError.didFail)
         }
 
         // search content
@@ -333,9 +333,9 @@ open class IONPage {
     fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
         IONRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: ION.config.cacheBehaviour(self.useCache)) { result in
 
-            guard case .Success(let resultValue) = result else {
-                if let error = result.error, case .notAuthorized = error {
-                    callback(error)
+            guard case .success(let resultValue) = result else {
+                if let error = result.error, case IONError.notAuthorized = error {
+                    callback(.notAuthorized)
                 } else {
                     callback(.pageNotFound(identifier))
                 }
@@ -368,7 +368,7 @@ open class IONPage {
                     case .jsonArray(let contents) = rawContents,
                     case .jsonString(let last_changed) = rawLastChanged,
                     case .jsonString(let locale) = rawLocale else {
-                        callback(.InvalidJSON(resultValue))
+                        callback(.invalidJSON(resultValue))
                         return nil
                 }
 
@@ -380,7 +380,7 @@ open class IONPage {
 
                 self.identifier = id
                 self.locale = locale
-                self.lastUpdate = NSDate(ISODateString: last_changed)
+                self.lastUpdate = NSDate(isoDateString: last_changed) as Date?
 
                 // Parse and append content to this page
                 for c in contents {

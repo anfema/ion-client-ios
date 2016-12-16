@@ -132,9 +132,9 @@ open class HTMLParser {
                 var stripped = data
                 if lastStackItem.tagName != "pre" {
                     stripped = data.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
-                    stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
-                    stripped = stripped.stringByReplacingOccurrencesOfString("\u{2028}", withString: " ")
-                    stripped = stripped.stringByReplacingOccurrencesOfString("\u{2029}", withString: " ")
+                    stripped = stripped.replacingOccurrences(of: "\n", with: " ")
+                    stripped = stripped.replacingOccurrences(of: "\u{2028}", with: " ")
+                    stripped = stripped.replacingOccurrences(of: "\u{2029}", with: " ")
                 }
                 if stripped.characters.isEmpty {
                     continue
@@ -240,7 +240,7 @@ open class HTMLParser {
                     result.append("\n")
                 }
 
-            case .EndTag(let name):
+            case .endTag(let name):
                 guard let name = name else {
                     continue
                 }
@@ -263,19 +263,19 @@ open class HTMLParser {
                 }
 
 
-            case .Text(let data):
+            case .text(let data):
                 guard let data = data else {
                     continue
                 }
                 var stripped = data
                 if lastTagName != "pre" {
-                    stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                    stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
+                    stripped = data.trimmingCharacters(in: .whitespacesAndNewlines)
+                    stripped = stripped.replacingOccurrences(of: "\n", with: " ")
                 }
                 if result.characters.isEmpty == false && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
                     result.append(" ")
                 }
-                result.appendContentsOf(stripped)
+                result.append(stripped)
 
             default:
                 continue

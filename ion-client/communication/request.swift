@@ -14,6 +14,7 @@ import Foundation
 import HashExtensions
 import DEjson
 import iso_rfc822_date
+import Alamofire
 
 
 // TODO: Export interface and make generic to use cache for other requests
@@ -59,16 +60,16 @@ open class IONRequest {
     /// - parameter queryParameters: any query parameters to include in the query or nil
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
-    open class func fetchJSON(_ endpoint: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, callback: @escaping ((Result<JSONObject, IONError>) -> NSDate?)) {
+    open class func fetchJSON(_ endpoint: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, callback: @escaping ((Result<JSONObject>) -> Date?)) {
         guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
               let url = URL(string: urlString),
               let cacheName = self.cacheName(url),
               let alamofire = ION.config.alamofire else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
 
-        let fromCache: ((String) -> Result<JSONObject, IONError>) = { cacheName in
+        let fromCache: ((String) -> Result<JSONObject>) = { cacheName in
             // Check disk cache before running HTTP request
             if FileManager.default.fileExists(atPath: cacheName) {
                 // return from cache instantly
@@ -84,7 +85,7 @@ open class IONRequest {
                     // do nothing, fallthrough to HTTP request
                 }
             }
-            return .failure(.noData(nil))
+            return .failure(IONError.noData(nil))
         }
 
         if cached == .prefer || cached == .force {
@@ -94,7 +95,7 @@ open class IONRequest {
                 responseQueueCallback(callback, parameter: .success(json))
                 return
             } else if cached == .force {
-                responseQueueCallback(callback, parameter: .failure(.serverUnreachable))
+                responseQueueCallback(callback, parameter: .failure(IONError.serverUnreachable))
                 return
             }
         }
@@ -105,28 +106,28 @@ open class IONRequest {
             if let rawLastUpdated = index["last_updated"],
                case .jsonNumber(let timestamp) = rawLastUpdated {
                 let lastUpdated = Date(timeIntervalSince1970: TimeInterval(timestamp))
-                headers["If-Modified-Since"] = lastUpdated.rfc822DateString()
+                headers["If-Modified-Since"] = (lastUpdated as NSDate).rfc822DateString()
             }
         }
 
-        let request = alamofire.request(.GET, urlString, headers: headers)
+        let request = alamofire.request(urlString, method: .get, headers: headers)
 
         request.responseDEJSON { response in
-            if case .Failure(let error) = response.result {
+            if case .failure(let error) = response.result {
                 // Request failed with `.ServerUnreachable` and caching set to `.Ignore`.
                 // Try to load request again witch caching set to `.Prefer`
                 // to load json from the cache if already cached.
-                if case .ServerUnreachable = error, cached == .Ignore {
-                    self.fetchJSON(endpoint, queryParameters: queryParameters, cached: .Prefer, callback: callback)
+                if case IONError.serverUnreachable = error, cached == .ignore {
+                    self.fetchJSON(endpoint, queryParameters: queryParameters, cached: .prefer, callback: callback)
                 } else {
-                    responseQueueCallback(callback, parameter: .Failure(error))
+                    responseQueueCallback(callback, parameter: .failure(error))
                 }
 
                 return
             }
 
             guard let request = response.request else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                 return
             }
 
@@ -141,22 +142,22 @@ open class IONRequest {
                 jsonObject = json
             } else {
                 // fallback to cache
-                if case .Success(let json) = fromCache(cacheName) {
+                if case .success(let json) = fromCache(cacheName) {
                     jsonObject = json
                 }
             }
 
             if let jsonObject = jsonObject {
                 // patch last_updated into response
-                let patchedResult: Result<JSONObject, IONError> = .Success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
+                let patchedResult: Result<JSONObject> = .success(self.augmentJSONWithChangeDate(jsonObject, urlString: urlString))
                 // call callback in correct queue
-                dispatch_async(ION.config.responseQueue) {
+                ION.config.responseQueue.async {
                     if let date = callback(patchedResult) {
                         self.saveToCache(request, checksumMethod: "null", checksum: "", lastUpdate: date)
                     }
                 }
             } else {
-                responseQueueCallback(callback, parameter: .Failure(.NoData(nil)))
+                responseQueueCallback(callback, parameter: .failure(IONError.noData(nil)))
             }
         }
 
@@ -170,12 +171,12 @@ open class IONRequest {
     /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
-    open class func fetchBinary(_ urlString: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: @escaping ((Result<String, IONError>) -> Void)) {
+    open class func fetchBinary(_ urlString: String, queryParameters: [String: String]?, cached: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: @escaping ((Result<String>) -> Void)) {
         let headers = self.headers()
         guard let url = URL(string: urlString),
               let cacheName = self.cacheName(url),
               let alamofire = ION.config.alamofire else {
-                responseQueueCallback(callback, parameter: .failure(.didFail))
+                responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                 return
         }
 
@@ -185,25 +186,29 @@ open class IONRequest {
                 responseQueueCallback(callback, parameter: cacheResult)
                 return
             } else if cached == .force {
-                responseQueueCallback(callback, parameter: .failure(.serverUnreachable))
+                responseQueueCallback(callback, parameter: .failure(IONError.serverUnreachable))
                 return
             }
         }
 
-        // destination block for Alamofire request
-        let destination = { (fileURL: URL, response: HTTPURLResponse) -> URL in
-            return URL(fileURLWithPath: cacheName + ".tmp")
+        let destinationURL = URL(fileURLWithPath: cacheName + ".tmp")
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            // TODO: Check if correct options were set here
+            return (destinationURL, [.createIntermediateDirectories, .removePreviousFile])
         }
-
+        
+        
         // Start download task
-        let downloadTask = alamofire.download(
-            .GET, urlString,
-            parameters: queryParameters,
-            encoding: .URLEncodedInURL,
-            headers: headers,
-            destination: destination)
-
-        downloadTask.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
+        let downloadTask = alamofire.download(urlString,
+                                              method: .get,
+                                              parameters: queryParameters,
+                                              encoding: URLEncoding.default,
+                                              headers: headers,
+                                              to: destination)
+        
+        
+        // TODO: Fix this. I think the register progress has to be rewritten
+        /*downloadTask.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
             // Register the download with the global progress handler
             if totalBytesExpectedToRead < 0 {
                 // server sent no content-length header, we expect one byte more than we got
@@ -212,42 +217,42 @@ open class IONRequest {
                 // server sent a content-length header, trust it
                 ION.registerProgress(totalBytesRead, bytesExpected: totalBytesExpectedToRead, urlString: urlString)
             }
-        }
+        }*/
 
-        downloadTask.response { (request, response, data, error) -> Void in
+        downloadTask.response { (response) in
             // check for download errors
-            if error != nil || response?.statusCode != 200 {
+            if response.error != nil || response.response?.statusCode != 200 {
                 // TODO: Request bogus binary to test error case
-
+                
                 // remove temp file
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(cacheName + ".tmp")
+                    try FileManager.default.removeItem(atPath: cacheName + ".tmp")
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-
-                guard let response = response else {
-                    responseQueueCallback(callback, parameter: .Failure(.ServerUnreachable))
+                
+                guard let response = response.response else {
+                    responseQueueCallback(callback, parameter: .failure(IONError.serverUnreachable))
                     return
                 }
-
+                
                 if response.statusCode == 401 || response.statusCode == 403 {
-                    responseQueueCallback(callback, parameter: .Failure(.NotAuthorized))
+                    responseQueueCallback(callback, parameter: .failure(IONError.notAuthorized))
                     return
                 }
-
+                
                 // call final update for progress, we're using 1 here because the user likely wants to
                 // calculate a percentage and thus divides those numbers
                 if response.allHeaderFields["Content-Length"] == nil {
                     ION.registerProgress(1, bytesExpected: 1, urlString: urlString)
                 }
-
+                
                 // try falling back to cache
-                dispatch_async(ION.config.responseQueue) {
+                ION.config.responseQueue.async {
                     let result = fetchFromCache(urlString, checksumMethod: checksumMethod, checksum: checksum)
-                    if case .Failure = result {
+                    if case .failure = result {
                         if response.statusCode == 304 {
-                            callback(.Success(""))
+                            callback(.success(""))
                             return
                         }
                     }
@@ -256,23 +261,23 @@ open class IONRequest {
             } else {
                 // move temp file
                 do {
-                    try NSFileManager.defaultManager().removeItemAtPath(cacheName)
+                    try FileManager.default.removeItem(atPath: cacheName)
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
                 do {
-                    try NSFileManager.defaultManager().moveItemAtPath(cacheName + ".tmp", toPath: cacheName)
+                    try FileManager.default.moveItem(atPath: cacheName + ".tmp", toPath: cacheName)
                 } catch {
                     // ok moving failed
-                    responseQueueCallback(callback, parameter: .Failure(.NoData(error)))
+                    responseQueueCallback(callback, parameter: .failure(IONError.noData(error)))
                     return
                 }
-
-                guard let request = request else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                
+                guard let request = response.request else {
+                    responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                     return
                 }
-
+                
                 // no error, save file to cache db
                 var ckSumMethod = checksumMethod
                 var ckSum = checksum
@@ -280,23 +285,23 @@ open class IONRequest {
                     // update checksum if method was "null"
                     if let cachedFileData = self.cachedFile(urlString) {
                         ckSumMethod = "sha256"
-                        ckSum = cachedFileData.cryptoHash(.SHA256).hexString()
+                        ckSum = (cachedFileData as NSData).cryptoHash(.SHA256).hexString()
                     } else {
                         // TODO: return error or do nothing when checksum could not be updated?
                     }
                 }
-
+                
                 // finish up progress reporting
-                if let unwrapped = response, unwrapped.allHeaderFields["Content-Length"] == nil,
-                   let cachedFileData = self.cachedFile(urlString) {
-                    let bytes: Int64 = Int64(cachedFileData.length)
+                if let unwrapped = response.response, unwrapped.allHeaderFields["Content-Length"] == nil,
+                    let cachedFileData = self.cachedFile(urlString) {
+                    let bytes: Int64 = Int64(cachedFileData.count)
                     ION.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
                 }
-
+                
                 self.saveToCache(request, checksumMethod: ckSumMethod, checksum: ckSum)
-
+                
                 // call callback in correct queue
-                responseQueueCallback(callback, parameter: .Success(cacheName))
+                responseQueueCallback(callback, parameter: .success(cacheName))
             }
         }
 
@@ -330,17 +335,18 @@ open class IONRequest {
     /// - parameter queryParameters: any get parameters to include in the query or nil
     /// - parameter body: dictionary with parameters (will be JSON encoded)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
-    open class func postJSON(_ endpoint: String, queryParameters: [String: String]?, body: [String: AnyObject], callback: @escaping ((Result<JSONResponse, IONError>) -> Void)) {
+    open class func postJSON(_ endpoint: String, queryParameters: [String: String]?, body: [String: Any], callback: @escaping ((Result<JSONResponse>) -> Void)) {
         guard let urlString = self.buildURL(endpoint, queryParameters: queryParameters),
               let alamofire = ION.config.alamofire else {
-            responseQueueCallback(callback, parameter: .failure(.didFail))
+            responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
         var headers = self.headers()
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
 
-        let request = alamofire.request(.POST, urlString, parameters: body, encoding: .json, headers: headers)
+        
+        let request = alamofire.request(urlString, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
             responseQueueCallback(callback, parameter: ion_client.Result(result: response.result))
@@ -419,15 +425,15 @@ open class IONRequest {
     /// - parameter checksumMethod: used checksumming method
     /// - parameter checksum: checksum to compare to
     /// - returns: Success with cached file name or Failure
-    internal class func fetchFromCache(_ urlString: String, checksumMethod: String, checksum: String) -> Result<String, IONError> {
+    internal class func fetchFromCache(_ urlString: String, checksumMethod: String, checksum: String) -> Result<String> {
 
         guard let url = URL(string: urlString), let host = url.host else {
-            return .failure(.didFail)
+            return .failure(IONError.didFail)
         }
 
         // validate checksum
         guard let cacheDBEntry = self.getCacheDBEntry(urlString) else {
-            return .failure(.invalidJSON(nil))
+            return .failure(IONError.invalidJSON(nil))
         }
 
         guard let rawFileName = cacheDBEntry["filename"],
@@ -436,7 +442,7 @@ open class IONRequest {
             case .jsonString(let filename)             = rawFileName,
             case .jsonString(let cachedChecksumMethod) = rawChecksumMethod,
             case .jsonString(let cachedChecksum)       = rawChecksum else {
-                return .failure(.invalidJSON(nil))
+                return .failure(IONError.invalidJSON(nil))
         }
 
         let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
@@ -453,13 +459,13 @@ open class IONRequest {
                     // do nothing, perhaps the file did not exist
                 }
 
-                return .failure(.noData(nil))
+                return .failure(IONError.noData(nil))
             }
         }
 
         // Check disk cache
         guard FileManager.default.fileExists(atPath: cacheName) else {
-            return .failure(.noData(nil))
+            return .failure(IONError.noData(nil))
         }
 
         return .success(cacheName)

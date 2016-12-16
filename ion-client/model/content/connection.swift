@@ -39,7 +39,7 @@ open class IONConnectionContent: IONContent {
 
         guard let connectionString = dict["connection_string"],
             case .jsonString(let value) = connectionString else {
-                throw IONError.InvalidJSON(json)
+                throw IONError.invalidJSON(json)
         }
 
         self.link = value
@@ -58,19 +58,19 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSURL` if the outlet is a connection outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func link(_ name: String, position: Int = 0) -> Result<URL, IONError> {
+    public func link(_ name: String, position: Int = 0) -> Result<URL> {
         let result = self.outlet(name, position: position)
 
         guard case .success(let content) = result else {
-            return .failure(result.error ?? .unknownError)
+            return .failure(result.error ?? IONError.unknownError)
         }
 
         guard case let connectionContent as IONConnectionContent = content else {
-            return .failure(.outletIncompatible)
+            return .failure(IONError.outletIncompatible)
         }
 
         guard let url = connectionContent.url else {
-            return .failure(.outletEmpty)
+            return .failure(IONError.outletEmpty)
         }
 
         return .success(url)
@@ -85,7 +85,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func link(_ name: String, position: Int = 0, callback: @escaping ((Result<URL, IONError>) -> Void)) -> IONPage {
+    public func link(_ name: String, position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.link(name, position: position))
         }
