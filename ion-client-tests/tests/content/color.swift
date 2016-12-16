@@ -138,13 +138,13 @@ class colorContentTests: LoggedInXCTestCase {
     
     
     func testColorInitializerSuccess() {
-        let json: JSONObject = .JSONDictionary([
-            "r": .JSONNumber(255),
-            "g": .JSONNumber(100),
-            "b": .JSONNumber(100),
-            "a": .JSONNumber(255),
-            "variation": .JSONString("@2x"),
-            "outlet": .JSONString("color")])
+        let json: JSONObject = .jsonDictionary([
+            "r": .jsonNumber(255),
+            "g": .jsonNumber(100),
+            "b": .jsonNumber(100),
+            "a": .jsonNumber(255),
+            "variation": .jsonString("@2x"),
+            "outlet": .jsonString("color")])
 
         do {
             let color = try IONColorContent(json: json)
@@ -159,12 +159,12 @@ class colorContentTests: LoggedInXCTestCase {
     
     
     func testColorInitializerFail1() {
-        let json: JSONObject = .JSONDictionary([
-            "r": .JSONNumber(255),
-            "b": .JSONNumber(100),
-            "a": .JSONNumber(255),
-            "variation": .JSONString("@2x"),
-            "outlet": .JSONString("color")])
+        let json: JSONObject = .jsonDictionary([
+            "r": .jsonNumber(255),
+            "b": .jsonNumber(100),
+            "a": .jsonNumber(255),
+            "variation": .jsonString("@2x"),
+            "outlet": .jsonString("color")])
         
         do {
             let color = try IONColorContent(json: json)
@@ -192,12 +192,12 @@ class colorContentTests: LoggedInXCTestCase {
     
     
     func testColorInitializerFail2() {
-        let json: JSONObject = .JSONDictionary([
-            "r": .JSONNumber(255),
-            "g": .JSONNumber(100),
-            "b": .JSONNumber(100),
-            "a": .JSONNumber(255),
-            "outlet": .JSONString("color")])
+        let json: JSONObject = .jsonDictionary([
+            "r": .jsonNumber(255),
+            "g": .jsonNumber(100),
+            "b": .jsonNumber(100),
+            "a": .jsonNumber(255),
+            "outlet": .jsonString("color")])
         
         do {
             let color = try IONColorContent(json: json)
@@ -225,7 +225,7 @@ class colorContentTests: LoggedInXCTestCase {
     
     
     func testColorInitializerFail3() {
-        let json: JSONObject = .JSONString("invalid")
+        let json: JSONObject = .jsonString("invalid")
         
         do {
             let color = try IONColorContent(json: json)
@@ -236,7 +236,7 @@ class colorContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else
+            guard case .jsonObjectExpected(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return

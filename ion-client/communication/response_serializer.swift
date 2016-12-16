@@ -39,7 +39,7 @@ extension Request {
     /// - returns: A `JSONObject` response serializer
     static func DEJSONResponseSerializer() -> ResponseSerializer<JSONResponse, IONError> {
         return ResponseSerializer { _, response, data, error in
-            guard let validData = data, response = response else {
+            guard let validData = data, let response = response else {
                 return .Failure(.ServerUnreachable)
             }
 
@@ -61,7 +61,7 @@ extension Request {
             }
 
             let JSON = JSONDecoder(jsonString).jsonObject
-            if case .JSONInvalid = JSON {
+            if case .jsonInvalid = JSON {
                 return .Failure(.InvalidJSON(nil))
             }
 
@@ -76,7 +76,7 @@ extension Request {
     ///                                creating the JSON object.
     /// - returns: The request.
     func responseDEJSON(
-        completionHandler: Response<JSONResponse, IONError> -> Void)
+        _ completionHandler: (Response<JSONResponse, IONError>) -> Void)
         -> Self {
         return response(
             responseSerializer: Request.DEJSONResponseSerializer(),

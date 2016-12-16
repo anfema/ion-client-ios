@@ -320,16 +320,16 @@ class diskcacheTests: LoggedInXCTestCase {
                     
                     // find entry in cache db and change the checksum
                     var tmpDB = [JSONObject]()
-                    for case .JSONDictionary(let dict) in IONRequest.cacheDB! {
+                    for case .jsonDictionary(let dict) in IONRequest.cacheDB! {
                         guard dict["url"] != nil,
-                            case .JSONString(let entryURL) = dict["url"]! where entryURL == urlString else {
-                                tmpDB.append(.JSONDictionary(dict))
+                            case .jsonString(let entryURL) = dict["url"]! where entryURL == urlString else {
+                                tmpDB.append(.jsonDictionary(dict))
                                 continue
                         }
                         
                         var changed = dict
-                        changed["checksum"] = .JSONString("xxx")
-                        tmpDB.append(.JSONDictionary(changed))
+                        changed["checksum"] = .jsonString("xxx")
+                        tmpDB.append(.jsonDictionary(changed))
                     }
                     IONRequest.cacheDB = tmpDB
                     IONRequest.saveCacheDB()

@@ -13,54 +13,54 @@ import Foundation
 import DEjson
 
 /// Error codes used by ION
-public enum IONError: ErrorType {
+public enum IONError: Error {
     /// No data received error (underlying error in associated value)
-    case NoData(ErrorType?)
+    case noData(Error?)
 
     /// Invalid json error, probably a transmission error
-    case InvalidJSON(JSONObject?)
+    case invalidJSON(JSONObject?)
 
     /// Expected a JSON object but found another thing
-    case JSONObjectExpected(JSONObject?)
+    case jsonObjectExpected(JSONObject?)
 
     /// Expected a JSON array but found another thing
-    case JSONArrayExpected(JSONObject?)
+    case jsonArrayExpected(JSONObject?)
 
     /// Expected top level JSON object or array but found something other
-    case JSONArrayOrObjectExpected(JSONObject?)
+    case jsonArrayOrObjectExpected(JSONObject?)
 
     /// Unknown content type returned (IONContent subclass not found)
-    case UnknownContentType(String)
+    case unknownContentType(String)
 
     /// Collection with that name is not available
-    case CollectionNotFound(String)
+    case collectionNotFound(String)
 
     /// Page with that name is not available
-    case PageNotFound(String)
+    case pageNotFound(String)
 
     /// Page `child` is not a sub page of `parent`
-    case InvalidPageHierarchy(parent: String, child: String)
+    case invalidPageHierarchy(parent: String, child: String)
 
     /// Outlet with that name not found
-    case OutletNotFound(String)
+    case outletNotFound(String)
 
     /// Outlet of incompatible type
-    case OutletIncompatible
+    case outletIncompatible
 
     /// Empty outlet
-    case OutletEmpty
+    case outletEmpty
 
     /// Authorization with token or username/password tuple failed
-    case NotAuthorized
+    case notAuthorized
 
     /// ION Server unreachable, either the server is offline or the user is
-    case ServerUnreachable
+    case serverUnreachable
 
     /// TODO: this is just a temp error for now
-    case UnknownError
+    case unknownError
 
     /// TODO: this is just a temp error for now
-    case DidFail
+    case didFail
 
     /// Error domain for conversion into NSError
     public var errorDomain: String {

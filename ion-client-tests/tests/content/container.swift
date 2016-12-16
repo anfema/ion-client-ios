@@ -222,7 +222,7 @@ class containerContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["children": .JSONString("wrong")])
+        let json1: JSONObject = .jsonDictionary(["children": .jsonString("wrong")])
         
         do {
             let _ = try IONContainerContent(json: json1)
@@ -231,7 +231,7 @@ class containerContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONArrayExpected(let obj) = e else {
+            guard case .jsonArrayExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -243,7 +243,7 @@ class containerContentTests: LoggedInXCTestCase {
         
         
         // no "children" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONContainerContent(json: json2)
@@ -252,7 +252,7 @@ class containerContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONArrayExpected(let obj) = e else {
+            guard case .jsonArrayExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -265,7 +265,7 @@ class containerContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("children")
+        let json: JSONObject = .jsonString("children")
         
         do {
             let _ = try IONContainerContent(json: json)
@@ -274,7 +274,7 @@ class containerContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

@@ -14,27 +14,27 @@ import DEjson
 
 
 /// Number content, has a float value
-public class IONNumberContent: IONContent {
+open class IONNumberContent: IONContent {
 
     /// Value
-    public var value: Double = 0.0
+    open var value: Double = 0.0
 
 
     /// Initialize number content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized number content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawValue = dict["value"],
-            case .JSONNumber(let value) = rawValue else {
-                throw IONError.InvalidJSON(json)
+            case .jsonNumber(let value) = rawValue else {
+                throw IONError.invalidJSON(json)
         }
 
         self.value = value
@@ -53,18 +53,18 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Double` if the outlet is a number outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func number(name: String, position: Int = 0) -> Result<Double, IONError> {
+    public func number(_ name: String, position: Int = 0) -> Result<Double, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let numberContent as IONNumberContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
-        return .Success(numberContent.value)
+        return .success(numberContent.value)
     }
 
 
@@ -76,8 +76,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Double` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func number(name: String, position: Int = 0, callback: (Result<Double, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func number(_ name: String, position: Int = 0, callback: @escaping ((Result<Double, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.number(name, position: position))
         }
 

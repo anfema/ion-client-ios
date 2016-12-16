@@ -13,25 +13,25 @@ import Foundation
 import Markdown
 import sqlite
 
-let sqliteTransient = unsafeBitCast(-1, sqlite3_destructor_type.self)
+let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 internal extension String {
     var byteLength: Int32 {
-        return Int32(self.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+        return Int32(self.lengthOfBytes(using: String.Encoding.utf8))
     }
 }
 
 /// Full text search result item
-public class IONSearchResult {
+open class IONSearchResult {
 
     /// Page metadata object for search result
-    public var meta: IONPageMeta?
+    open var meta: IONPageMeta?
 
     /// Outlet name where the search hit
-    public let outletName: String
+    open let outletName: String
 
     /// Text snippet of hit
-    private let snippet: String
+    fileprivate let snippet: String
 
     internal init(collection: IONCollection, page: String, outlet: String, snippet: String) {
         self.outletName = outlet
@@ -46,30 +46,30 @@ public class IONSearchResult {
     /// Convert snippet to HTML
     ///
     /// - returns: html fragment of snippet
-    public func html() -> String {
+    open func html() -> String {
         return MDParser(markdown: self.snippet).render().renderHTMLFragment()
     }
 
     /// Convert snippet to attributed string
     ///
     /// - returns: attributed string of snippet
-    public func attributedString() -> NSAttributedString {
+    open func attributedString() -> NSAttributedString {
         return MDParser(markdown: self.snippet).render().renderAttributedString(ION.config.stringStyling)
     }
 }
 
 
 /// Full text search handle to be re-used for subsequent fast searches
-public class IONSearchHandle {
+open class IONSearchHandle {
 
     /// Collection for this handle
-    public let collection: IONCollection
+    open let collection: IONCollection
 
     /// SQLite DB handle
-    private var dbHandle: COpaquePointer = nil
+    fileprivate var dbHandle: OpaquePointer? = nil
 
     /// SQLite prepared statement for searching
-    private var stmt: COpaquePointer = nil
+    fileprivate var stmt: OpaquePointer? = nil
 
     /// Search for a text
     ///
@@ -79,7 +79,7 @@ public class IONSearchHandle {
     ///
     /// - parameter text: text to search for
     /// - returns: list with search results, may be an empty list
-    public func search(text: String) -> [IONSearchResult] {
+    open func search(_ text: String) -> [IONSearchResult] {
         let searchTerm = self.fixSearchTerm(text)
 
         sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, sqliteTransient)
@@ -91,9 +91,9 @@ public class IONSearchHandle {
             let result = sqlite3_step(stmt)
             switch result {
             case SQLITE_ROW:
-                guard let pageIdentifier = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 0)), encoding: NSUTF8StringEncoding),
-                      let outletName     = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 1)), encoding: NSUTF8StringEncoding),
-                      let snippet        = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 2)), encoding: NSUTF8StringEncoding) else {
+                guard let pageIdentifier = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 0)), encoding: String.Encoding.utf8),
+                      let outletName     = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 1)), encoding: String.Encoding.utf8),
+                      let snippet        = String(CString: UnsafePointer<CChar>(sqlite3_column_text(stmt, 2)), encoding: String.Encoding.utf8) else {
                         continue
                 }
                 items.append(IONSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
@@ -113,7 +113,7 @@ public class IONSearchHandle {
         self.collection = collection
 
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: Notification.ftsDatabaseDidUpdate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: NSNotification.Name(rawValue: Notification.ftsDatabaseDidUpdate), object: nil)
 
         guard setupSqliteConnection() else {
             return nil
@@ -122,7 +122,7 @@ public class IONSearchHandle {
 
 
     @objc
-    internal func didUpdateFTSDB(notification: NSNotification) {
+    internal func didUpdateFTSDB(_ notification: Foundation.Notification) {
         // Extract collection identifier from notification.
         guard let collectionIdentifier = notification.object as? String else {
             return
@@ -138,7 +138,7 @@ public class IONSearchHandle {
 
 
     internal func setupSqliteConnection() -> Bool {
-        guard let searchIndex = ION.searchIndex(self.collection.identifier) where sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard let searchIndex = ION.searchIndex(self.collection.identifier), sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return false
         }
 
@@ -154,18 +154,18 @@ public class IONSearchHandle {
 
     // MARK: - Private
 
-    private func fixSearchTerm(text: String) -> String {
-        if text.rangeOfString("\"") != nil {
+    fileprivate func fixSearchTerm(_ text: String) -> String {
+        if text.range(of: "\"") != nil {
             return text
         }
         var result = text
-        result = result.stringByReplacingOccurrencesOfString(" ", withString: "* ")
-        result = result.stringByReplacingOccurrencesOfString(" -", withString: " NOT ")
+        result = result.replacingOccurrences(of: " ", with: "* ")
+        result = result.replacingOccurrences(of: " -", with: " NOT ")
         return result + "*"
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
 
         sqlite3_finalize(self.stmt)
         sqlite3_close(self.dbHandle)

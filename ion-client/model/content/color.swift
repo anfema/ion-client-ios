@@ -19,33 +19,33 @@ import DEjson
 
 
 /// Color content
-public class IONColorContent: IONContent {
+open class IONColorContent: IONContent {
 
     /// Red component (0-255)
-    public var r: Int
+    open var r: Int
 
     /// Green component (0-255)
-    public var g: Int
+    open var g: Int
 
     /// Blue component (0-255)
-    public var b: Int
+    open var b: Int
 
     /// Alpha component (0-255), zero is fully transparent
-    public var alpha: Int
+    open var alpha: Int
 
 
     /// Initialize color content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized color content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
 
         // Make sure we're dealing with a dict
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         // Make sure all data is there
@@ -53,10 +53,10 @@ public class IONColorContent: IONContent {
             let rawG = dict["g"],
             let rawB = dict["b"],
             let rawA = dict["a"],
-            case .JSONNumber(let r) = rawR,
-            case .JSONNumber(let g) = rawG,
-            case .JSONNumber(let b) = rawB,
-            case .JSONNumber(let a) = rawA else {
+            case .jsonNumber(let r) = rawR,
+            case .jsonNumber(let g) = rawG,
+            case .jsonNumber(let b) = rawB,
+            case .jsonNumber(let a) = rawA else {
                 throw IONError.InvalidJSON(json)
         }
 
@@ -74,7 +74,7 @@ public class IONColorContent: IONContent {
     /// Create an `UIColor` instance from the color object
     ///
     /// - returns: `UIColor` instance with values from color object
-    public func color() -> UIColor? {
+    open func color() -> UIColor? {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
     #endif
@@ -145,22 +145,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `UIColor` if the outlet is a color outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func cachedColor(name: String, position: Int = 0) -> Result<UIColor, IONError> {
+    public func cachedColor(_ name: String, position: Int = 0) -> Result<UIColor, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let colorContent as IONColorContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let color = colorContent.color() else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(color)
+        return .success(color)
     }
 
 
@@ -172,8 +172,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing a `UIColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func color(name: String, position: Int = 0, callback: (Result<UIColor, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<UIColor, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
 

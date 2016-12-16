@@ -13,9 +13,9 @@ import Foundation
 import Markdown
 
 /// ION base class, use all ION functionality by using this object's class methods
-public class ION {
+open class ION {
     /// ION configuration, be sure to set up before using any ION calls or risk a crash!
-    static public var config = IONConfig()
+    static open var config = IONConfig()
 
     /// Internal cache for collections
     static internal var collectionCache = [String: IONCollection]()
@@ -28,7 +28,7 @@ public class ION {
     /// - parameter username: the username to log in
     /// - parameter password: the password to send
     /// - parameter callback: block to call when login request finished (Bool parameter is success flag)
-    public class func login(username: String, password: String, callback: (Bool -> Void)) {
+    open class func login(_ username: String, password: String, callback: @escaping ((Bool) -> Void)) {
         IONRequest.postJSON("login", queryParameters: nil, body: [
             "login": [
                 "username": username,
@@ -38,11 +38,11 @@ public class ION {
             guard result.isSuccess,
                   let jsonResponse = result.value,
                   let json = jsonResponse.json,
-                  case .JSONDictionary(let dict) = json,
+                  case .jsonDictionary(let dict) = json,
                   let rawLogin = dict["login"],
-                  case .JSONDictionary(let loginDict) = rawLogin,
+                  case .jsonDictionary(let loginDict) = rawLogin,
                   let rawToken = loginDict["token"],
-                  case .JSONString(let token) = rawToken else {
+                  case .jsonString(let token) = rawToken else {
 
                 self.config.sessionToken = nil
                 responseQueueCallback(callback, parameter: false)
@@ -63,7 +63,7 @@ public class ION {
     ///
     /// - parameter identifier: the identifier of the collection
     /// - returns: collection object from cache or empty collection object
-    public class func collection(identifier: String) -> IONCollection {
+    open class func collection(_ identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out
@@ -73,18 +73,18 @@ public class ION {
             }
         } else {
             // remove from mem cache if expired
-            self.collectionCache.removeValueForKey(identifier)
+            self.collectionCache.removeValue(forKey: identifier)
         }
 
         // try an online update
-        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
         let newCollection = IONCollection(
             identifier: identifier,
             locale: ION.config.locale,
             useCache: cache
         ) { result in
-            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed,
-                  case .Success(let collection) = result else {
+            guard let cachedCollection = cachedCollection, !cachedCollection.hasFailed,
+                  case .success(let collection) = result else {
                     // FIXME: What happens in error case?
                 return
             }
@@ -93,7 +93,7 @@ public class ION {
         }
 
         if self.hasCacheTimedOut(identifier) {
-            self.config.lastOnlineUpdate[identifier] = NSDate()
+            self.config.lastOnlineUpdate[identifier] = Date()
         }
 
         return newCollection
@@ -104,42 +104,42 @@ public class ION {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    public class func collection(identifier: String, callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
+    open class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection, IONError>) -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out
         if !self.hasCacheTimedOut(identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
-                    responseQueueCallback(callback, parameter: .Failure(.CollectionNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(.collectionNotFound(identifier)))
                 } else {
-                    responseQueueCallback(callback, parameter: .Success(cachedCollection))
+                    responseQueueCallback(callback, parameter: .success(cachedCollection))
                 }
                 return cachedCollection
             }
         } else {
             // remove from mem cache if expired
-            self.collectionCache.removeValueForKey(identifier)
+            self.collectionCache.removeValue(forKey: identifier)
         }
 
         // try an online update
-        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .Ignore : .Prefer)
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
         let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
-            guard case .Success(let collection) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let collection) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
-            responseQueueCallback(callback, parameter: .Success(collection))
+            responseQueueCallback(callback, parameter: .success(collection))
 
-            guard let cachedCollection = cachedCollection where !cachedCollection.hasFailed else {
+            guard let cachedCollection = cachedCollection, !cachedCollection.hasFailed else {
                 return
             }
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
 
         if self.hasCacheTimedOut(identifier) {
-            self.config.lastOnlineUpdate[identifier] = NSDate()
+            self.config.lastOnlineUpdate[identifier] = Date()
         }
 
         return newCollection
@@ -153,7 +153,7 @@ public class ION {
     /// - parameter bytesExpected: Number of total expected bytes
     /// - parameter urlString: The URL of the file the progress should be reported
     ///
-    class func registerProgress(bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
+    class func registerProgress(_ bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
         self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
 
         // sum up all pending downloads
@@ -168,17 +168,17 @@ public class ION {
         // call progress handler
         if let progressHandler = ION.config.progressHandler {
             let count = self.pendingDownloads.count
-            dispatch_async(ION.config.responseQueue) {
-                progressHandler(totalBytes: totalBytes, downloadedBytes: downloadedBytes, numberOfPendingDownloads: count)
+            ION.config.responseQueue.async {
+                progressHandler(totalBytes, downloadedBytes, count)
             }
         }
 
         // remove from pending when total == downloaded
         if bytesReceived == bytesExpected {
-            self.pendingDownloads.removeValueForKey(urlString)
-            if let progressHandler = ION.config.progressHandler where self.pendingDownloads.isEmpty {
-                dispatch_async(ION.config.responseQueue) {
-                    progressHandler(totalBytes: 0, downloadedBytes: 0, numberOfPendingDownloads: 0)
+            self.pendingDownloads.removeValue(forKey: urlString)
+            if let progressHandler = ION.config.progressHandler, self.pendingDownloads.isEmpty {
+                ION.config.responseQueue.async {
+                    progressHandler(0, 0, 0)
                 }
             }
         }
@@ -189,9 +189,9 @@ public class ION {
     /// Call all update notification blocks
     ///
     /// - parameter collectionIdentifier: collection id to send to update block
-    private class func callUpdateBlocks(collectionIdentifier: String) {
+    fileprivate class func callUpdateBlocks(_ collectionIdentifier: String) {
         for block in ION.config.updateBlocks.values {
-            dispatch_async(ION.config.responseQueue) {
+            ION.config.responseQueue.async {
                 block(collectionIdentifier)
             }
         }
@@ -201,7 +201,7 @@ public class ION {
     ///
     /// - parameter collection1: first collection
     /// - parameter collection2: second collection
-    private class func notifyForUpdates(collection1: IONCollection, collection2: IONCollection) {
+    fileprivate class func notifyForUpdates(_ collection1: IONCollection, collection2: IONCollection) {
         if collection1.equals(collection2) == false {
             // call change blocks
             ION.callUpdateBlocks(collection1.identifier)
@@ -209,5 +209,5 @@ public class ION {
     }
 
     /// Init is private because only class functions should be used
-    private init() {}
+    fileprivate init() {}
 }

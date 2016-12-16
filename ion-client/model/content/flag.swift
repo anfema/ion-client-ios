@@ -14,27 +14,27 @@ import DEjson
 
 
 /// Flag content, can be enabled or not
-public class IONFlagContent: IONContent {
+open class IONFlagContent: IONContent {
 
     /// Status of the flag
-    public var enabled: Bool
+    open var enabled: Bool
 
 
     /// Initialize flag content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized flag content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawIsEnabled = dict["is_enabled"],
-            case .JSONBoolean(let enabled) = rawIsEnabled else {
-                throw IONError.InvalidJSON(json)
+            case .jsonBoolean(let enabled) = rawIsEnabled else {
+                throw IONError.invalidJSON(json)
         }
 
         self.enabled = enabled
@@ -53,18 +53,18 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the outlet is a flag outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func isSet(name: String, position: Int = 0) -> Result<Bool, IONError> {
+    public func isSet(_ name: String, position: Int = 0) -> Result<Bool, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let flagContent as IONFlagContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
-        return .Success(flagContent.enabled)
+        return .success(flagContent.enabled)
     }
 
 
@@ -76,8 +76,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func isSet(name: String, position: Int = 0, callback: (Result<Bool, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func isSet(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.isSet(name, position: position))
         }
 

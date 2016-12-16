@@ -14,40 +14,40 @@ import DEjson
 
 
 /// File content
-public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
+open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
 
     /// MIME type of the file
-    public var mimeType: String
+    open var mimeType: String
 
     /// File name
-    public var fileName: String
+    open var fileName: String
 
     /// File size in bytes
-    public var size: Int = 0
+    open var size: Int = 0
 
     /// Method used for checksum calculation
-    public var checksumMethod: String = "null"
+    open var checksumMethod: String = "null"
 
     /// Checksum as hexadecimal encoded string
-    public var checksum: String = ""
+    open var checksum: String = ""
 
     /// URL to the file
-    public var url: NSURL?
+    open var url: URL?
 
     /// If the file is valid or not
-    public var isValid = false
+    open var isValid = false
 
 
     /// Initialize file content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized file content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawMimeType   = dict["mime_type"],
@@ -55,9 +55,9 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             let rawFileSize     = dict["file_size"],
             let rawChecksum     = dict["checksum"],
             let rawFile         = dict["file"],
-            case .JSONString(let mimeType) = rawMimeType,
-            case .JSONString(let fileName) = rawName,
-            case .JSONNumber(let size)     = rawFileSize else {
+            case .jsonString(let mimeType) = rawMimeType,
+            case .jsonString(let fileName) = rawName,
+            case .jsonNumber(let size)     = rawFileSize else {
                 throw IONError.InvalidJSON(json)
         }
 
@@ -65,7 +65,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
         self.fileName = fileName
         self.size     = Int(size)
 
-        if case .JSONString(let checksum)  = rawChecksum {
+        if case .jsonString(let checksum)  = rawChecksum {
             let checksumParts = checksum.componentsSeparatedByString(":")
 
             if checksumParts.count > 1 {
@@ -74,7 +74,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
             }
         }
 
-        if case .JSONString(let fileUrl) = rawFile {
+        if case .jsonString(let fileUrl) = rawFile {
             self.url     = NSURL(string: fileUrl)
             self.isValid = true
         }
@@ -88,9 +88,9 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
     /// - parameter callback: Block to call when file data gets available.
     ///                       Provides `Result.Success` containing `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func data(callback: (Result<NSData, IONError> -> Void)) {
-        guard let url = self.url where self.isValid else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+    open func data(_ callback: @escaping ((Result<Data, IONError>) -> Void)) {
+        guard let url = self.url, self.isValid else {
+            responseQueueCallback(callback, parameter: .failure(.didFail))
             return
         }
 
@@ -116,25 +116,25 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
+    open func temporaryURL(_ callback: @escaping ((Result<URL, IONError>) -> Void)) {
         guard let urlString = self.url?.absoluteString else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .failure(.didFail))
             return
         }
 
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
-                case .JSONDictionary(let dict) = json,
+                case .jsonDictionary(let dict) = json,
                 let rawURL = dict["url"],
-                case .JSONString(let urlString) = rawURL else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                case .jsonString(let urlString) = rawURL else {
+                    responseQueueCallback(callback, parameter: .failure(.didFail))
                     return
             }
 
-            guard let url = NSURL(string: urlString) else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            guard let url = URL(string: urlString) else {
+                responseQueueCallback(callback, parameter: .failure(.didFail))
                 return
             }
 
@@ -144,7 +144,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
 
 
     /// Image url for `CanLoadImage` protocol
-    public var imageURL: NSURL? {
+    open var imageURL: URL? {
         if self.mimeType.hasPrefix("image/") {
             return self.url
         }
@@ -154,7 +154,7 @@ public class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURL
 
 
     /// Original image url for `CanLoadImage` protocol, always nil
-    public var originalImageURL: NSURL? {
+    open var originalImageURL: URL? {
         return nil
     }
 }
@@ -172,15 +172,15 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func fileData(name: String, position: Int = 0, callback: (Result<NSData, IONError> -> Void)) -> IONPage {
+    public func fileData(_ name: String, position: Int = 0, callback: @escaping ((Result<Data, IONError>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             guard case let fileContent as IONFileContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(.outletIncompatible))
                 return
             }
 

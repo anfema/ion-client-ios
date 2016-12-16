@@ -74,7 +74,7 @@ class datetimeContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["datetime": .JSONNumber(0)])
+        let json1: JSONObject = .jsonDictionary(["datetime": .jsonNumber(0)])
         
         do {
             let _ = try IONDateTimeContent(json: json1)
@@ -100,7 +100,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         
         
         // no "datetime" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONDateTimeContent(json: json2)
@@ -127,7 +127,7 @@ class datetimeContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("datetime")
+        let json: JSONObject = .jsonString("datetime")
         
         do {
             let _ = try IONDateTimeContent(json: json)
@@ -137,7 +137,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else
+            guard case .jsonObjectExpected(let obj) = e else
             {
                 XCTFail("wrong error thrown")
                 return

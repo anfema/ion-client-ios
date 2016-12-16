@@ -327,7 +327,7 @@ class mediaContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["name": .JSONNumber(0)])
+        let json1: JSONObject = .jsonDictionary(["name": .jsonNumber(0)])
         
         do {
             let _ = try IONMediaContent(json: json1)
@@ -348,7 +348,7 @@ class mediaContentTests: LoggedInXCTestCase {
         
         
         // no "is_enabled" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONMediaContent(json: json2)
@@ -370,7 +370,7 @@ class mediaContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("name")
+        let json: JSONObject = .jsonString("name")
         
         do {
             let _ = try IONMediaContent(json: json)
@@ -379,7 +379,7 @@ class mediaContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

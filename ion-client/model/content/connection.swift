@@ -14,14 +14,14 @@ import DEjson
 
 
 /// Connection content, carries a link to another collection, page or outlet
-public class IONConnectionContent: IONContent {
+open class IONConnectionContent: IONContent {
 
     /// Value of the connection link
-    public var link: String
+    open var link: String
 
     /// URL to the connected collection, page or outlet
-    public var url: NSURL? {
-        return NSURL(string: "\(ION.config.connectionScheme):\(self.link)")
+    open var url: URL? {
+        return URL(string: "\(ION.config.connectionScheme):\(self.link)")
     }
 
 
@@ -29,16 +29,16 @@ public class IONConnectionContent: IONContent {
     ///
     /// - parameter json: `JSONObject` that contains the serialized connection content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let connectionString = dict["connection_string"],
-            case .JSONString(let value) = connectionString else {
+            case .jsonString(let value) = connectionString else {
                 throw IONError.InvalidJSON(json)
         }
 
@@ -58,22 +58,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSURL` if the outlet is a connection outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func link(name: String, position: Int = 0) -> Result<NSURL, IONError> {
+    public func link(_ name: String, position: Int = 0) -> Result<URL, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let connectionContent as IONConnectionContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let url = connectionContent.url else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(url)
+        return .success(url)
     }
 
 
@@ -85,8 +85,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func link(name: String, position: Int = 0, callback: (Result<NSURL, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func link(_ name: String, position: Int = 0, callback: @escaping ((Result<URL, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.link(name, position: position))
         }
 

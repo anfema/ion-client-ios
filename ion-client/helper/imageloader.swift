@@ -34,17 +34,17 @@ public protocol CanLoadImage {
     var originalChecksum: String { get }
 
     /// url of the image
-    var imageURL: NSURL? { get }
+    var imageURL: URL? { get }
 
     /// url of the original image
-    var originalImageURL: NSURL? { get }
+    var originalImageURL: URL? { get }
 
     /// variation of this outlet (used for determining scale factor)
     var variation: String { get }
 }
 
 /// Queue used to calculate preview images
-let serialQueue = dispatch_queue_create("com.anfema.ion.SerialImageConverterQueue", DISPATCH_QUEUE_SERIAL)
+let serialQueue = DispatchQueue(label: "com.anfema.ion.SerialImageConverterQueue", attributes: [])
 
 /// This protocol extension implements image loading, in principle you'll have to implement only `imageURL` to make it work
 extension CanLoadImage {
@@ -94,9 +94,9 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the data provider becomes available.
     ///                       Provides `Result.Success` containing an `CGDataProviderRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func dataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
+    public func dataProvider(_ callback: @escaping ((Result<CGDataProvider, IONError>) -> Void)) {
         guard let url = self.imageURL else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .failure(.didFail))
             return
         }
 
@@ -124,9 +124,9 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the data provider becomes available.
     ///                       Provides `Result.Success` containing an `CGDataProviderRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func originalDataProvider(callback: (Result<CGDataProviderRef, IONError> -> Void)) {
+    public func originalDataProvider(_ callback: @escaping ((Result<CGDataProvider, IONError>) -> Void)) {
         guard let url = self.originalImageURL else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .failure(.didFail))
             return
         }
 
@@ -156,30 +156,30 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func cgImage(original original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
+    public func cgImage(_ original: Bool = false, callback: @escaping ((Result<CGImage, IONError>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         dataProviderFunc() { result in
-            guard case .Success(let provider) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let provider) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             let options = Dictionary<String, AnyObject>()
-            guard let src = CGImageSourceCreateWithDataProvider(provider, options),
-                let img = CGImageSourceCreateImageAtIndex(src, 0, options) else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            guard let src = CGImageSourceCreateWithDataProvider(provider, options as CFDictionary?),
+                let img = CGImageSourceCreateImageAtIndex(src, 0, options as CFDictionary?) else {
+                responseQueueCallback(callback, parameter: .failure(.didFail))
                 return
             }
 
-            responseQueueCallback(callback, parameter: .Success(img))
+            responseQueueCallback(callback, parameter: .success(img))
         }
     }
 
     /// create a `CGImage` from the original image data
     ///
     /// - parameter callback: block to execute when the image has been allocated
-    public func originalCGImage(callback: (Result<CGImageRef, IONError> -> Void)) {
-        self.cgImage(original: true, callback: callback)
+    public func originalCGImage(_ callback: @escaping ((Result<CGImage, IONError>) -> Void)) {
+        self.cgImage(true, callback: callback)
     }
 
 
@@ -190,16 +190,16 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the thumbnail image has been created.
     ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func thumbnail(size size: CGSize, original: Bool = false, callback: (Result<CGImageRef, IONError> -> Void)) {
+    public func thumbnail(withSize size: CGSize, original: Bool = false, callback: @escaping ((Result<CGImage, IONError>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
 
         dataProviderFunc() { result in
-            guard case .Success(let provider) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let provider) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
-            dispatch_async(serialQueue) {
+            serialQueue.async {
                 let options: [NSString: NSObject] = [
                     kCGImageSourceThumbnailMaxPixelSize: max(size.width, size.height),
                     kCGImageSourceCreateThumbnailFromImageAlways: true,
@@ -208,17 +208,17 @@ extension CanLoadImage {
                     kCGImageSourceCreateThumbnailWithTransform: true
                 ]
 
-                guard let src = CGImageSourceCreateWithDataProvider(provider, options) else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                guard let src = CGImageSourceCreateWithDataProvider(provider, options as CFDictionary?) else {
+                    responseQueueCallback(callback, parameter: .failure(.didFail))
                     return
                 }
 
-                guard let img = CGImageSourceCreateThumbnailAtIndex(src, 0, options) else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                guard let img = CGImageSourceCreateThumbnailAtIndex(src, 0, options as CFDictionary?) else {
+                    responseQueueCallback(callback, parameter: .failure(.didFail))
                     return
                 }
 
-                responseQueueCallback(callback, parameter: .Success(img))
+                responseQueueCallback(callback, parameter: .success(img))
             }
         }
     }
@@ -231,18 +231,18 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(original original: Bool = false, callback: (Result<UIImage, IONError> -> Void)) {
-        self.cgImage(original: original) { result in
-            guard case .Success(let img) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+    public func image(_ original: Bool = false, callback: @escaping ((Result<UIImage, IONError>) -> Void)) {
+        self.cgImage(original) { result in
+            guard case .success(let img) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             // use the scale factor of the variation or 1.0 if none was found
             let scale = ION.config.variationScaleFactors[self.variation] ?? 1.0
 
-            let uiImage = UIImage(CGImage: img, scale: scale, orientation: .Up)
-            responseQueueCallback(callback, parameter: .Success(uiImage))
+            let uiImage = UIImage(cgImage: img, scale: scale, orientation: .up)
+            responseQueueCallback(callback, parameter: .success(uiImage))
         }
     }
 
@@ -251,8 +251,8 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func originalImage(callback: (Result<UIImage, IONError> -> Void)) {
-        self.image(original: true, callback: callback)
+    public func originalImage(_ callback: @escaping ((Result<UIImage, IONError>) -> Void)) {
+        self.image(true, callback: callback)
     }
     #endif
 
@@ -263,7 +263,7 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(original original: Bool = false, callback: (Result<NSImage, IONError> -> Void)) {
+    public func image(original: Bool = false, callback: (Result<NSImage, IONError> -> Void)) {
         self.cgImage(original: original) { result in
             guard case .Success(let img) = result else {
                 responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))

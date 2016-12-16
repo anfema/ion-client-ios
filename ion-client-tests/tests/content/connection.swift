@@ -521,7 +521,7 @@ class connectionContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["connection_string": .JSONNumber(0)])
+        let json1: JSONObject = .jsonDictionary(["connection_string": .jsonNumber(0)])
         
         do {
             let _ = try IONConnectionContent(json: json1)
@@ -542,7 +542,7 @@ class connectionContentTests: LoggedInXCTestCase {
         
         
         // no "datetime" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONConnectionContent(json: json2)
@@ -564,7 +564,7 @@ class connectionContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("connection_string")
+        let json: JSONObject = .jsonString("connection_string")
         
         do {
             let _ = try IONConnectionContent(json: json)
@@ -573,7 +573,7 @@ class connectionContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

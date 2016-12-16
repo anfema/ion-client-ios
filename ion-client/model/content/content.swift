@@ -16,7 +16,7 @@ import DEjson
 /// Implement this protocol to gain `url` functionality
 public protocol URLProvider {
     /// url to the file
-    var url: NSURL? { get }
+    var url: URL? { get }
 }
 
 
@@ -28,24 +28,24 @@ public protocol TemporaryURLProvider {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     ///
-    func temporaryURL(callback: (Result<NSURL, IONError> -> Void))
+    func temporaryURL(_ callback: @escaping ((Result<URL, IONError>) -> Void))
 }
 
 
 /// IONContent base class, carries common values
-public class IONContent {
+open class IONContent {
 
     /// Variation name
-    public var variation: String
+    open var variation: String
 
     /// Outlet name
-    public var outlet: String
+    open var outlet: String
 
     /// If the outlet is searchable or not
-	public var isSearchable = false
+	open var isSearchable = false
 
     /// Array position
-    public var position: Int
+    open var position: Int
 
 
     /// Initialize content object from JSON
@@ -53,18 +53,18 @@ public class IONContent {
     ///
     /// - parameter json: `JSONObject` that contains the serialized content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
 	public init(json: JSONObject) throws {
-		guard case .JSONDictionary(let dict) = json else {
-			throw IONError.JSONObjectExpected(json)
+		guard case .jsonDictionary(let dict) = json else {
+			throw IONError.jsonObjectExpected(json)
 		}
 
 		guard let rawVariation = dict["variation"],
             let rawOutlet      = dict["outlet"],
-            case .JSONString(let variation) = rawVariation,
-            case .JSONString(let outlet)    = rawOutlet else {
+            case .jsonString(let variation) = rawVariation,
+            case .jsonString(let outlet)    = rawOutlet else {
                 throw IONError.InvalidJSON(json)
 		}
 
@@ -72,12 +72,12 @@ public class IONContent {
 		self.outlet = outlet
 
         if let searchableObj = dict["is_searchable"] {
-            if case .JSONBoolean(let searchable) = searchableObj {
+            if case .jsonBoolean(let searchable) = searchableObj {
                 self.isSearchable = searchable
             }
         }
 
-        if let p = dict["position"], case .JSONNumber(let pos) = p {
+        if let p = dict["position"], case .jsonNumber(let pos) = p {
             self.position = Int(pos)
         } else {
             self.position = 0
@@ -92,18 +92,18 @@ public class IONContent {
     ///
     /// - parameter json: The JSON object to parse
     /// - returns: Subclass of `IONContent` depending on the type provided in the JSON.
-    /// - throws: `IONError.JSONObjectExpected`: The provided `JSONObject` is no `JSONDictionary`.
+    /// - throws: `IONError.jsonObjectExpected`: The provided `JSONObject` is no `JSONDictionary`.
     ///           `IONError.InvalidJSON`: Missing keys in the provided `JSONDictionary` or wrong
     ///                                      value types.
     ///           `IONError.UnknownContentType`: The provied `JSONObject` can not be initialized
     ///                                             with any of the registered content types.
-    public class func factory(json: JSONObject) throws -> IONContent {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+    open class func factory(_ json: JSONObject) throws -> IONContent {
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawType = dict["type"],
-            case .JSONString(let contentType) = rawType else {
+            case .jsonString(let contentType) = rawType else {
                 throw IONError.InvalidJSON(json)
         }
 

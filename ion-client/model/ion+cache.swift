@@ -27,9 +27,9 @@ extension ION {
     ///
     /// - parameter collection: Collection to clear
     ///
-    public class func resetMemCache(collection: String) {
+    public class func resetMemCache(_ collection: String) {
         self.collectionCache[collection]?.pageCache.removeAll()
-        self.collectionCache.removeValueForKey(collection)
+        self.collectionCache.removeValue(forKey: collection)
     }
 
     /// Clear disk cache
@@ -41,7 +41,7 @@ extension ION {
         for (_, collection) in self.collectionCache {
             collection.lastCompleteUpdate = nil
         }
-        IONRequest.resetCache(locale: self.config.locale)
+        IONRequest.resetCache(self.config.locale)
     }
 
     /// Clear disk cache for specific locale and all hosts
@@ -50,12 +50,12 @@ extension ION {
     ///
     /// - parameter locale: a locale code to empty the cache for
     ///
-    public class func resetDiskCache(locale locale: String) {
+    public class func resetDiskCache(_ locale: String) {
         self.config.lastOnlineUpdate.removeAll()
-        let prefs = NSUserDefaults.standardUserDefaults()
-        prefs.removeObjectForKey("ION.collection.lastUpdated")
+        let prefs = UserDefaults.standard
+        prefs.removeObject(forKey: "ION.collection.lastUpdated")
         prefs.synchronize()
-        IONRequest.resetCache(locale: locale)
+        IONRequest.resetCache(locale)
     }
 
     /// Determine if collection cache has timed out
@@ -64,11 +64,11 @@ extension ION {
     ///
     /// - returns: true if cache is old
     ///
-    internal class func hasCacheTimedOut(identifier: String) -> Bool {
+    internal class func hasCacheTimedOut(_ identifier: String) -> Bool {
         var timeout = false
         if let lastUpdate = self.config.lastOnlineUpdate[identifier] {
-            let currentDate = NSDate()
-            if lastUpdate.dateByAddingTimeInterval(self.config.cacheTimeout).compare(currentDate) == NSComparisonResult.OrderedAscending {
+            let currentDate = Date()
+            if lastUpdate.addingTimeInterval(self.config.cacheTimeout).compare(currentDate) == ComparisonResult.orderedAscending {
                 timeout = true
             }
         } else {

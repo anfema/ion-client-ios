@@ -191,7 +191,7 @@ class numberContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["value": .JSONString("wrong")])
+        let json1: JSONObject = .jsonDictionary(["value": .jsonString("wrong")])
         
         do {
             let _ = try IONNumberContent(json: json1)
@@ -212,7 +212,7 @@ class numberContentTests: LoggedInXCTestCase {
         
         
         // no "value" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONNumberContent(json: json2)
@@ -234,7 +234,7 @@ class numberContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("value")
+        let json: JSONObject = .jsonString("value")
         
         do {
             let _ = try IONNumberContent(json: json)
@@ -243,7 +243,7 @@ class numberContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }

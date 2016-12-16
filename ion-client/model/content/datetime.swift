@@ -15,30 +15,30 @@ import iso_rfc822_date
 
 
 /// DateTime content
-public class IONDateTimeContent: IONContent {
+open class IONDateTimeContent: IONContent {
 
     /// Parsed date
-    public var date: NSDate? = nil
+    open var date: Date? = nil
 
 
     /// Initialize datetime content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized datetime content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawDateTime = dict["datetime"] else {
-            throw IONError.InvalidJSON(json)
+            throw IONError.invalidJSON(json)
         }
 
-        if case .JSONString(let datetime) = rawDateTime {
-            self.date = NSDate(ISODateString: datetime)
+        if case .jsonString(let datetime) = rawDateTime {
+            self.date = NSDate(isoDateString: datetime) as Date?
         }
 
         try super.init(json: json)
@@ -55,22 +55,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSDate` if the outlet is a datetime outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func date(name: String, position: Int = 0) -> Result<NSDate, IONError> {
+    public func date(_ name: String, position: Int = 0) -> Result<Date, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let timeContent as IONDateTimeContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let date = timeContent.date else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(date)
+        return .success(date)
     }
 
 
@@ -82,8 +82,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSDate` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func date(name: String, position: Int = 0, callback: (Result<NSDate, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func date(_ name: String, position: Int = 0, callback: @escaping ((Result<Date, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.date(name, position: position))
         }
 

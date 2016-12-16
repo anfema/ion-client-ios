@@ -20,64 +20,64 @@ import DEjson
 
 
 /// Image content, has OS specific image loading functionality
-public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
+open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
 
     /// MIME type of the image
-    public var mimeType: String
+    open var mimeType: String
 
     /// Dimensions of the image
-    public var size: CGSize = CGSize.zero
+    open var size: CGSize = CGSize.zero
 
     /// File size in bytes
-    public var fileSize: Int = 0
+    open var fileSize: Int = 0
 
     /// URL of the image
-    public var url: NSURL?
+    open var url: URL?
 
     /// Original image mime type
-    public var originalMimeType: String
+    open var originalMimeType: String
 
     /// Original image dimensions
-    public var originalSize: CGSize = CGSize.zero
+    open var originalSize: CGSize = CGSize.zero
 
     /// Original image file size
-    public var originalFileSize: Int = 0
+    open var originalFileSize: Int = 0
 
     /// Original image URL
-    public var originalURL: NSURL?
+    open var originalURL: URL?
 
     /// Image translation before cropping to final size
-    public var translation: CGPoint = CGPoint.zero
+    open var translation: CGPoint = CGPoint.zero
 
     /// Image scale factor before cropping
-    public var scale: Float = 1.0
+    open var scale: Float = 1.0
 
     /// Method used for checksum calculation
-    public var checksumMethod: String = "null"
+    open var checksumMethod: String = "null"
 
     /// Checksum as hexadecimal encoded string
-    public var checksum: String = ""
+    open var checksum: String = ""
 
     /// Original method used for checksum calculation
-    public var originalChecksumMethod: String = "null"
+    open var originalChecksumMethod: String = "null"
 
     /// Original checksum as hexadecimal encoded string
-    public var originalChecksum: String = ""
+    open var originalChecksum: String = ""
 
     /// If the image file is valid or not
-    public var isValid = false
+    open var isValid = false
 
 
     /// Initialize image content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized image content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawMimeType           = dict["mime_type"],
@@ -95,26 +95,26 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             let rawTranslationY         = dict["translation_y"],
             let rawChecksum             = dict["checksum"],
             let rawOriginalChecksum     = dict["original_checksum"],
-            case .JSONString(let mimeType)  = rawMimeType,
-            case .JSONString(let oMimeType) = rawOriginalMimeType,
-            case .JSONNumber(let width)     = rawWidth,
-            case .JSONNumber(let height)    = rawHeight,
-            case .JSONNumber(let oWidth)    = rawOriginalWidth,
-            case .JSONNumber(let oHeight)   = rawOriginalHeight,
-            case .JSONNumber(let fileSize)  = rawFileSize,
-            case .JSONNumber(let oFileSize) = rawOriginalFileSize,
-            case .JSONNumber(let scale)     = rawScale,
-            case .JSONNumber(let transX)    = rawTranslationX,
-            case .JSONNumber(let transY)    = rawTranslationY else {
-                throw IONError.InvalidJSON(json)
+            case .jsonString(let mimeType)  = rawMimeType,
+            case .jsonString(let oMimeType) = rawOriginalMimeType,
+            case .jsonNumber(let width)     = rawWidth,
+            case .jsonNumber(let height)    = rawHeight,
+            case .jsonNumber(let oWidth)    = rawOriginalWidth,
+            case .jsonNumber(let oHeight)   = rawOriginalHeight,
+            case .jsonNumber(let fileSize)  = rawFileSize,
+            case .jsonNumber(let oFileSize) = rawOriginalFileSize,
+            case .jsonNumber(let scale)     = rawScale,
+            case .jsonNumber(let transX)    = rawTranslationX,
+            case .jsonNumber(let transY)    = rawTranslationY else {
+                throw IONError.invalidJSON(json)
         }
 
         self.mimeType = mimeType
         self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
 
-        if case .JSONString(let fileUrl) = rawImage {
-            self.url = NSURL(string: fileUrl)
+        if case .jsonString(let fileUrl) = rawImage {
+            self.url = URL(string: fileUrl)
             self.isValid = true
         }
 
@@ -125,12 +125,13 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
 
-        if case .JSONString(let oFileUrl) = rawOriginalImage {
-            self.originalURL = NSURL(string: oFileUrl)
+        if case .jsonString(let oFileUrl) = rawOriginalImage {
+            self.originalURL = URL(string: oFileUrl)
         }
 
-        if case .JSONString(let checksum)  = rawChecksum {
-            let checksumParts = checksum.componentsSeparatedByString(":")
+        if case .jsonString(let checksum)  = rawChecksum {
+            
+            let checksumParts = checksum.components(separatedBy: ":")
 
             if checksumParts.count > 1 {
                 self.checksumMethod = checksumParts[0]
@@ -138,8 +139,8 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
             }
         }
 
-        if case .JSONString(let oChecksum) = rawOriginalChecksum {
-            let originalChecksumParts = oChecksum.componentsSeparatedByString(":")
+        if case .jsonString(let oChecksum) = rawOriginalChecksum {
+            let originalChecksumParts = oChecksum.components(separatedBy: ":")
 
             if originalChecksumParts.count > 1 {
                 self.originalChecksumMethod = originalChecksumParts[0]
@@ -150,31 +151,31 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
         try super.init(json: json)
     }
 
-
+    
     /// Get a temporary valid url for this image file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func temporaryURL(callback: (Result<NSURL, IONError> -> Void)) {
+    open func temporaryURL(_ callback: @escaping ((Result<URL, IONError>) -> Void)) {
         guard let urlString = self.url?.absoluteString else {
-            responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            responseQueueCallback(callback, parameter: .failure(.didFail))
             return
         }
 
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString]) { result in
+        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
-                case .JSONDictionary(let dict) = json,
+                case .jsonDictionary(let dict) = json,
                 let rawURL = dict["url"],
-                case .JSONString(let urlString) = rawURL else {
-                    responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                case .jsonString(let urlString) = rawURL else {
+                    responseQueueCallback(callback, parameter: .failure(.didFail))
                     return
             }
 
-            guard let url = NSURL(string: urlString) else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+            guard let url = URL(string: urlString) else {
+                responseQueueCallback(callback, parameter: .failure(.didFail))
                 return
             }
 
@@ -184,13 +185,13 @@ public class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryUR
 
 
     /// Image url for `CanLoadImage` protocol
-    public var imageURL: NSURL? {
+    open var imageURL: URL? {
         return self.url
     }
 
 
     /// Original image url for `CanLoadImage` protocol
-    public var originalImageURL: NSURL? {
+    open var originalImageURL: URL? {
         return self.originalURL
     }
 }
@@ -208,19 +209,19 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `CGImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func thumbnail(name: String, size: CGSize, position: Int = 0, callback: (Result<CGImage, IONError> -> Void)) -> IONPage {
+    public func thumbnail(_ name: String, size: CGSize, position: Int = 0, callback: @escaping ((Result<CGImage, IONError>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(.outletIncompatible))
                 return
             }
 
-            imageContent.thumbnail(size: size, original: false, callback: callback)
+            imageContent.thumbnail(withSize: size, original: false, callback: callback)
         }
 
         return self
@@ -236,15 +237,15 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func image(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
+    public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage, IONError>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(.outletIncompatible))
                 return
             }
 
@@ -263,15 +264,15 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func originalImage(name: String, position: Int = 0, callback: (Result<UIImage, IONError> -> Void)) -> IONPage {
+    public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage, IONError>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(.outletIncompatible))
                 return
             }
 

@@ -16,37 +16,37 @@ import html5tokenizer
 
 
 /// Text content, may be rendered in different markup
-public class IONTextContent: IONContent {
+open class IONTextContent: IONContent {
 
     /// MIME type of the contained text (usually one of: text/plain, text/html, text/markdown)
-    public var mimeType: String = "text/plain"
+    open var mimeType: String = "text/plain"
 
     /// Multi line hint
-    public var multiLine: Bool = false
+    open var multiLine: Bool = false
 
     /// Text, private because of conversion functions
-    private var text: String
+    fileprivate var text: String
 
 
     /// Initialize text content object from JSON
     ///
     /// - parameter json: `JSONObject` that contains the serialized text content object
     ///
-    /// - throws: `IONError.JSONObjectExpected` when `json` is no `JSONDictionary`
+    /// - throws: `IONError.jsonObjectExpected` when `json` is no `JSONDictionary`
     ///           `IONError.InvalidJSON` when values in `json` are missing or having the wrong type
     ///
     override init(json: JSONObject) throws {
-        guard case .JSONDictionary(let dict) = json else {
-            throw IONError.JSONObjectExpected(json)
+        guard case .jsonDictionary(let dict) = json else {
+            throw IONError.jsonObjectExpected(json)
         }
 
         guard let rawMimeType   = dict["mime_type"],
             let rawIsMultiline  = dict["is_multiline"],
             let rawText         = dict["text"],
-            case .JSONString(let mimeType)      = rawMimeType,
-            case .JSONBoolean(let multiLine)    = rawIsMultiline,
-            case .JSONString(let text)          = rawText else {
-                throw IONError.InvalidJSON(json)
+            case .jsonString(let mimeType)      = rawMimeType,
+            case .jsonBoolean(let multiLine)    = rawIsMultiline,
+            case .jsonString(let text)          = rawText else {
+                throw IONError.invalidJSON(json)
         }
 
         self.mimeType = mimeType
@@ -71,7 +71,7 @@ public class IONTextContent: IONContent {
     /// - markdown: Convert to html and wrap in div
     ///
     /// - returns: String with HTML encoded text
-    public func htmlText() -> String? {
+    open func htmlText() -> String? {
         // TODO: Write tests for htmlText() function in TextContent
         var text: String = ""
         switch self.mimeType {
@@ -80,7 +80,7 @@ public class IONTextContent: IONContent {
         case "text/markdown":
             text = MDParser(markdown: self.text).render().renderHTMLFragment()
         case "text/plain":
-            text = self.text.stringByReplacingOccurrencesOfString("\n", withString: "<br>\n")
+            text = self.text.replacingOccurrences(of: "\n", with: "<br>\n")
         default:
             return nil
         }
@@ -98,7 +98,7 @@ public class IONTextContent: IONContent {
     /// - markdown: Try to make best efford representation as attributed string
     ///
     /// - returns: Attributed string version of text
-    public func attributedString() -> NSAttributedString? {
+    open func attributedString() -> NSAttributedString? {
         // TODO: Write tests for attributedString() function in TextContent
         switch self.mimeType {
         case "text/html":
@@ -122,7 +122,7 @@ public class IONTextContent: IONContent {
     /// - markdown: Strip markup (asterisk, underscore, links, heading markers)
     ///
     /// - returns: Plaintext string of text
-    public func plainText() -> String? {
+    open func plainText() -> String? {
         // TODO: Write tests for plainText() function in TextContent (probably we need more test-data for this)
         switch self.mimeType {
         case "text/plain":
@@ -148,22 +148,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func text(name: String, position: Int = 0) -> Result<String, IONError> {
+    public func text(_ name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let textContent as IONTextContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let text = textContent.plainText() else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(text)
+        return .success(text)
     }
 
 
@@ -175,8 +175,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func text(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func text(_ name: String, position: Int = 0, callback: @escaping ((Result<String, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.text(name, position: position))
         }
 
@@ -190,22 +190,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func html(name: String, position: Int = 0) -> Result<String, IONError> {
+    public func html(_ name: String, position: Int = 0) -> Result<String, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let textContent as IONTextContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let text = textContent.htmlText() else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(text)
+        return .success(text)
     }
 
 
@@ -217,8 +217,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func html(name: String, position: Int = 0, callback: (Result<String, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func html(_ name: String, position: Int = 0, callback: @escaping ((Result<String, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.html(name, position: position))
         }
 
@@ -232,22 +232,22 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `NSAttributedString` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func attributedString(name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
+    public func attributedString(_ name: String, position: Int = 0) -> Result<NSAttributedString, IONError> {
         let result = self.outlet(name, position: position)
 
-        guard case .Success(let content) = result else {
-            return .Failure(result.error ?? .UnknownError)
+        guard case .success(let content) = result else {
+            return .failure(result.error ?? .unknownError)
         }
 
         guard case let textContent as IONTextContent = content else {
-            return .Failure(.OutletIncompatible)
+            return .failure(.outletIncompatible)
         }
 
         guard let text = textContent.attributedString() else {
-            return .Failure(.OutletEmpty)
+            return .failure(.outletEmpty)
         }
 
-        return .Success(text)
+        return .success(text)
     }
 
 
@@ -259,8 +259,8 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSAttributedString` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func attributedString(name: String, position: Int = 0, callback: (Result<NSAttributedString, IONError> -> Void)) -> IONPage {
-        dispatch_async(workQueue) {
+    public func attributedString(_ name: String, position: Int = 0, callback: @escaping ((Result<NSAttributedString, IONError>) -> Void)) -> IONPage {
+        workQueue.async {
             responseQueueCallback(callback, parameter: self.attributedString(name, position: position))
         }
 

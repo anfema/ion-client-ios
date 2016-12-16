@@ -129,7 +129,7 @@ class imageContentTests: LoggedInXCTestCase {
     }
     
     func testImageInitializerFail1() {
-        let json: JSONObject = .JSONString("invalid")
+        let json: JSONObject = .jsonString("invalid")
         
         do {
             let image = try IONImageContent(json: json)
@@ -140,7 +140,7 @@ class imageContentTests: LoggedInXCTestCase {
         {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
@@ -156,7 +156,7 @@ class imageContentTests: LoggedInXCTestCase {
     
     
     func testImageInitializerFail2() {
-        let json: JSONObject = .JSONDictionary(["variation": .JSONString("@2x"), "outlet": .JSONString("titleImage")])
+        let json: JSONObject = .jsonDictionary(["variation": .jsonString("@2x"), "outlet": .jsonString("titleImage")])
         
         do {
             let image = try IONImageContent(json: json)

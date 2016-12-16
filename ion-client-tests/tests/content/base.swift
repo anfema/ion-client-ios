@@ -147,10 +147,10 @@ class contentBaseTests: LoggedInXCTestCase {
     /// Test if the IONContent.factory throws the correct error when provided with the wrong JSONObject type.
     func testFactoryErrorWrongJSONObject() {
         do {
-            try IONContent.factory(JSONObject.JSONString("dummyString"))
+            try IONContent.factory(JSONObject.jsonString("dummyString"))
             XCTFail()
         } catch let err {
-            guard case IONError.JSONObjectExpected(_) = err else {
+            guard case IONError.jsonObjectExpected(_) = err else {
                 XCTFail()
                 return
             }
@@ -161,8 +161,8 @@ class contentBaseTests: LoggedInXCTestCase {
     /// Test if the IONContent.factory throws the correct error when the provided JSONDictionary is missing the "type" key.
     func testFactoryErrorDictHasNoKeyType() {
         do {
-            let jsonDict = ["dummyKey": JSONObject.JSONString("dummyValue")]
-            try IONContent.factory(JSONObject.JSONDictionary(jsonDict))
+            let jsonDict = ["dummyKey": JSONObject.jsonString("dummyValue")]
+            try IONContent.factory(JSONObject.jsonDictionary(jsonDict))
             XCTFail()
         } catch let err {
             guard case IONError.InvalidJSON(_) = err else {

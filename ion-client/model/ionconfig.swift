@@ -20,7 +20,7 @@ public struct IONConfig {
     public var connectionScheme = "ion"
 
     /// Server base URL for API (http://127.0.0.1:8000/client/v1/)
-    public var serverURL: NSURL?
+    public var serverURL: URL?
 
     /// locale-code to work on, defined by server config
     public var locale: String = "en_EN"
@@ -35,22 +35,22 @@ public struct IONConfig {
     public var variationScaleFactors: [String: CGFloat]
 
     /// response queue to run all async responses in, by default the main queue
-    public var responseQueue = dispatch_get_main_queue()
+    public var responseQueue = DispatchQueue.main
 
     /// global request progress handler (will be called periodically when progress updates)
-    public var progressHandler: ((totalBytes: Int64, downloadedBytes: Int64, numberOfPendingDownloads: Int) -> Void)?
+    public var progressHandler: ((_ totalBytes: Int64, _ downloadedBytes: Int64, _ numberOfPendingDownloads: Int) -> Void)?
 
     /// the session token usually set by `ION.login` but may be overridden for custom login functionality
     public var sessionToken: String?
 
     /// Additional Headers that should be added to the requests
-    private (set) var additionalHeaders: [String: String] = [:]
+    fileprivate (set) var additionalHeaders: [String: String] = [:]
 
     /// last collection fetch, delete entry from dictionary to force a collection reload from server
-    public var lastOnlineUpdate: [String: NSDate] = [:]
+    public var lastOnlineUpdate: [String: Date] = [:]
 
     /// collection cache timeout
-    public var cacheTimeout: NSTimeInterval = 600
+    public var cacheTimeout: TimeInterval = 600
 
     /// offline mode: do not send any request
     public var offlineMode = false
@@ -60,37 +60,37 @@ public struct IONConfig {
 
     /// ION Device ID, will be generated on first use
     public var deviceID: String {
-        if let deviceID = NSUserDefaults.standardUserDefaults().stringForKey("IONDeviceID") {
+        if let deviceID = UserDefaults.standard.string(forKey: "IONDeviceID") {
             return deviceID
         }
 
-        let devID = NSUUID().UUIDString
-        NSUserDefaults.standardUserDefaults().setObject(devID as NSString, forKey: "IONDeviceID")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        let devID = UUID().uuidString
+        UserDefaults.standard.set(devID as NSString, forKey: "IONDeviceID")
+        UserDefaults.standard.synchronize()
         return devID
     }
 
     /// Needed to register additional content types with the default dispatcher
-    public typealias ContentTypeLambda = (JSONObject throws -> IONContent)
+    public typealias ContentTypeLambda = ((JSONObject) throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     var alamofire: Alamofire.Manager? = nil
 
     /// update detected blocks
-    var updateBlocks: [String: (String -> Void)]
+    var updateBlocks: [String: ((String) -> Void)]
 
     /// Registered content types
     var registeredContentTypes = [String: ContentTypeLambda]()
 
     /// full text search settings
-    private var ftsEnabled: [String: Bool]
+    fileprivate var ftsEnabled: [String: Bool]
 
     /// only the ION class may init this
     internal init() {
-        let configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
-        configuration.HTTPCookieAcceptPolicy = .Never
-        configuration.HTTPShouldSetCookies = false
+        let configuration: URLSessionConfiguration = URLSessionConfiguration.default
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.httpShouldSetCookies = false
 
         var protocolClasses = [AnyClass]()
         protocolClasses.append(IONCacheAvoidance)
@@ -102,10 +102,10 @@ public struct IONConfig {
             self.loggingEnabled = false
         #endif
 
-        self.updateBlocks = Dictionary<String, (String -> Void)>()
+        self.updateBlocks = Dictionary<String, ((String) -> Void)>()
         self.ftsEnabled = [String: Bool]()
         #if os(iOS)
-            self.variation = NSString(format: "@%dx", Int(UIScreen.mainScreen().scale)) as String
+            self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String
         #else
             self.variation = "default"
         #endif
@@ -162,26 +162,26 @@ public struct IONConfig {
     ///
     /// - parameter identifier: block identifier
     /// - parameter block:      block to call
-    public mutating func registerUpdateBlock(identifier: String, block: (String -> Void)) {
+    public mutating func registerUpdateBlock(_ identifier: String, block: @escaping ((String) -> Void)) {
         self.updateBlocks[identifier] = block
     }
 
     /// De-Register update notification block
     ///
     /// - parameter identifier: block identifier
-    public mutating func removeUpdateBlock(identifier: String) {
-        self.updateBlocks.removeValueForKey(identifier)
+    public mutating func removeUpdateBlock(_ identifier: String) {
+        self.updateBlocks.removeValue(forKey: identifier)
     }
 
     /// Enable Full text search for a collection (fetches additional data from server)
     ///
     /// - parameter collection: collection identifier
-    public mutating func enableFTS(collection: String) {
+    public mutating func enableFTS(_ collection: String) {
         guard let searchIndex = ION.searchIndex(collection) else {
             return
         }
         self.ftsEnabled[collection] = true
-        if !NSFileManager.defaultManager().fileExistsAtPath(searchIndex) {
+        if !FileManager.default.fileExists(atPath: searchIndex) {
             ION.downloadFTSDB(collection)
         }
     }
@@ -189,7 +189,7 @@ public struct IONConfig {
     /// Disable Full text search for a collection
     ///
     /// - parameter collection: collection identifier
-    public mutating func disableFTS(collection: String) {
+    public mutating func disableFTS(_ collection: String) {
         self.ftsEnabled[collection] = false
     }
 
@@ -198,7 +198,7 @@ public struct IONConfig {
     /// - parameter collection: collection identifier
     ///
     /// - returns: true if fts is enabled
-    public func isFTSEnabled(collection: String) -> Bool {
+    public func isFTSEnabled(_ collection: String) -> Bool {
         return self.ftsEnabled[collection] ?? false
     }
 
@@ -212,15 +212,15 @@ public struct IONConfig {
     ///
     /// - parameter typeName: type name in JSON
     /// - parameter creationBlock: a block to create an instance of the content type
-    public mutating func registerContentType(typeName: String, creationBlock: ContentTypeLambda) {
+    public mutating func registerContentType(_ typeName: String, creationBlock: @escaping ContentTypeLambda) {
         self.registeredContentTypes[typeName] = creationBlock
     }
 
     /// De-register custom content type
     ///
     /// - parameter typeName: type name in JSON
-    public mutating func unRegisterContentType(typeName: String) {
-        self.registeredContentTypes.removeValueForKey(typeName)
+    public mutating func unRegisterContentType(_ typeName: String) {
+        self.registeredContentTypes.removeValue(forKey: typeName)
     }
 
     /// Set the credentials for HTTP Basic Authentication.
@@ -228,19 +228,19 @@ public struct IONConfig {
     ///
     /// - parameter user: The user
     /// - parameter password: The password
-    public mutating func setBasicAuthCredentials(user user: String, password: String) {
+    public mutating func setBasicAuthCredentials(user: String, password: String) {
         let auth = "\(user):\(password)" as NSString
 
-        guard let authData = auth.dataUsingEncoding(NSUTF8StringEncoding) else {
+        guard let authData = auth.data(using: String.Encoding.utf8.rawValue) else {
             return
         }
 
-        self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedString(options: NSData.Base64EncodingOptions())
     }
 
-    internal func cacheBehaviour(requestedBehaviour: IONCacheBehaviour) -> IONCacheBehaviour {
+    internal func cacheBehaviour(_ requestedBehaviour: IONCacheBehaviour) -> IONCacheBehaviour {
         if self.offlineMode {
-            return .Force
+            return .force
         }
         return requestedBehaviour
     }

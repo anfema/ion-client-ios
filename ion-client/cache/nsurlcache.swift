@@ -12,11 +12,11 @@
 import Foundation
 
 
-public class IONCacheAvoidance: NSURLProtocol {
-    var session: NSURLSession?
-    var dataTask: NSURLSessionDataTask?
+open class IONCacheAvoidance: URLProtocol {
+    var session: Foundation.URLSession?
+    var dataTask: URLSessionDataTask?
 
-    public override class func canInitWithRequest(request: NSURLRequest) -> Bool {
+    open override class func canInit(with request: URLRequest) -> Bool {
         guard let serverURL = ION.config.serverURL else {
             return false
         }
@@ -28,51 +28,51 @@ public class IONCacheAvoidance: NSURLProtocol {
         return true
     }
 
-    public override class func canonicalRequestForRequest(request: NSURLRequest) -> NSURLRequest {
+    open override class func canonicalRequest(for request: URLRequest) -> URLRequest {
         return request
     }
 
-    public override class func requestIsCacheEquivalent(a: NSURLRequest, toRequest b: NSURLRequest) -> Bool {
+    open override class func requestIsCacheEquivalent(_ a: URLRequest, to b: URLRequest) -> Bool {
         return false
     }
 
-    public override func startLoading() {
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.requestCachePolicy = .UseProtocolCachePolicy
-        config.HTTPCookieAcceptPolicy = .Never
-        config.HTTPShouldSetCookies = false
+    open override func startLoading() {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .useProtocolCachePolicy
+        config.httpCookieAcceptPolicy = .never
+        config.httpShouldSetCookies = false
 
-        self.session = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        self.session = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
 
-        if let task = self.session?.dataTaskWithRequest(self.request) {
+        if let task = self.session?.dataTask(with: self.request) {
             self.dataTask = task
             task.resume()
         }
     }
 
-    public override func stopLoading() {
+    open override func stopLoading() {
         self.dataTask?.cancel()
     }
 }
 
-extension IONCacheAvoidance: NSURLSessionDataDelegate {
+extension IONCacheAvoidance: URLSessionDataDelegate {
 
-    public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-        self.client?.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: .NotAllowed)
-        completionHandler(.Allow)
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        completionHandler(.allow)
     }
 
-    public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-        self.client?.URLProtocol(self, didLoadData: data)
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        self.client?.urlProtocol(self, didLoad: data)
     }
 }
 
-extension IONCacheAvoidance: NSURLSessionDelegate {
-    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+extension IONCacheAvoidance: URLSessionDelegate {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            self.client?.URLProtocol(self, didFailWithError: error)
+            self.client?.urlProtocol(self, didFailWithError: error)
         } else {
-            self.client?.URLProtocolDidFinishLoading(self)
+            self.client?.urlProtocolDidFinishLoading(self)
         }
     }
 }

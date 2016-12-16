@@ -12,8 +12,8 @@ import Foundation
 ///
 /// - parameter callback:  The callback that will be called.
 /// - parameter parameter: The parameter of the callback.
-func responseQueueCallback <T, U> (callback: T -> U, parameter: T) {
-    dispatch_async(ION.config.responseQueue) {
+func responseQueueCallback <T, U> (_ callback: @escaping (T) -> U, parameter: T) {
+    ION.config.responseQueue.async {
         callback(parameter)
     }
 }
@@ -24,7 +24,7 @@ func responseQueueCallback <T, U> (callback: T -> U, parameter: T) {
 ///
 /// - parameter callback:  The callback that will be called if not nil.
 /// - parameter parameter: The parameter of the callback.
-func responseQueueCallback <T, U> (callback: (T -> U)?, parameter: T) {
+func responseQueueCallback <T, U> (_ callback: ((T) -> U)?, parameter: T) {
     guard let callback = callback else {
         return
     }

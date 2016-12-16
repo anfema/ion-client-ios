@@ -11,13 +11,13 @@ import html5tokenizer
 import Markdown
 
 /// Render HTML to attributed strings
-public class HTMLParser {
-    private let tokens: [HTML5Token]
-    private var formatStack = [FormatStackItem]()
+open class HTMLParser {
+    fileprivate let tokens: [HTML5Token]
+    fileprivate var formatStack = [FormatStackItem]()
 
-    private struct FormatStackItem {
+    fileprivate struct FormatStackItem {
         var tagName: String
-        var styleDict: [String: AnyObject]
+        var styleDict: [String: Any]
     }
 
     /// Initialize with HTML string, instantly runs the tokenizer
@@ -31,7 +31,7 @@ public class HTMLParser {
     ///
     /// - parameter style: Document style
     /// - returns: `NSAttributedString` for HTML
-    public func renderAttributedString(style: AttributedStringStyling) -> NSAttributedString {
+    open func renderAttributedString(_ style: AttributedStringStyling) -> NSAttributedString {
         let result = NSMutableAttributedString()
         var counters = [Int]()
         var depth = 0
@@ -46,13 +46,13 @@ public class HTMLParser {
             }
 
             switch token {
-            case .StartTag(let name, let selfClosing, let attributes):
+            case .startTag(let name, let selfClosing, let attributes):
                 guard let name = name else {
                     continue
                 }
                 if selfClosing {
                     if name == "br" {
-                        result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
+                        result.append(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
                     } else {
                         continue
                     }
@@ -70,11 +70,11 @@ public class HTMLParser {
                 }
 
                 if self.isBlock(name) {
-                    result.appendAttributedString(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
+                    result.append(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                 }
                 if name == "p" || name == "pre" {
                     if !result.string.hasSuffix("\n\n") {
-                        result.appendAttributedString(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
+                        result.append(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                     }
                 }
 
@@ -82,14 +82,14 @@ public class HTMLParser {
                 switch name {
                 case "li":
                     if self.getListContext() == "ul" {
-                        result.appendAttributedString(NSAttributedString(string: "•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.append(NSAttributedString(string: "•\t", attributes: style.unorderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                     }
                     if self.getListContext() == "ol" {
                         guard let counter = counters.popLast() else {
                             continue
                         }
 
-                        result.appendAttributedString(NSAttributedString(string: "\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
+                        result.append(NSAttributedString(string: "\(counter).\t", attributes: style.orderedListItem.makeAttributeDict(nestingDepth: depth - 1)))
                         counters.append(counter + 1)
                     }
                     continue
@@ -97,12 +97,12 @@ public class HTMLParser {
                     depth += 1
                     counters.append(1)
                 case "br":
-                    result.appendAttributedString(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
+                    result.append(NSAttributedString(string: "\u{2028}", attributes: lastStackItem.styleDict))
                 default:
                     break
                 }
 
-            case .EndTag(let name):
+            case .endTag(let name):
                 guard let name = name else {
                     continue
                 }
@@ -121,17 +121,17 @@ public class HTMLParser {
 
                 if !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
                     let a = (oldFormat ?? lastStackItem).styleDict
-                    result.appendAttributedString(NSAttributedString(string: " ", attributes: a))
+                    result.append(NSAttributedString(string: " ", attributes: a))
                 }
 
-            case .Text(let data):
+            case .text(let data):
                 guard let data = data else {
                     continue
                 }
                 let attribs = lastStackItem.styleDict
                 var stripped = data
                 if lastStackItem.tagName != "pre" {
-                    stripped = data.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                    stripped = data.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
                     stripped = stripped.stringByReplacingOccurrencesOfString("\u{2028}", withString: " ")
                     stripped = stripped.stringByReplacingOccurrencesOfString("\u{2029}", withString: " ")
@@ -143,7 +143,7 @@ public class HTMLParser {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
-                result.appendAttributedString(string)
+                result.append(string)
 
             default:
                 continue
@@ -151,22 +151,22 @@ public class HTMLParser {
         }
 
         while true {
-            if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: .BackwardsSearch) where rng.endIndex == result.string.endIndex {
-                let len = rng.startIndex.distanceTo(rng.endIndex)
+            if let rng = result.string.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines, options: .backwards), rng.upperBound == result.string.endIndex {
+                let len = result.string.distance(from: rng.lowerBound, to: rng.upperBound)
                 let stringLength = (result.string as NSString).length
                 let range = NSRange(location: stringLength - len, length: len)
-                result.replaceCharactersInRange(range, withAttributedString: NSAttributedString())
+                result.replaceCharacters(in: range, with: NSAttributedString())
             } else {
                 break
             }
         }
 
         while true {
-            if let rng = result.string.rangeOfCharacterFromSet(NSCharacterSet.whitespaceAndNewlineCharacterSet(), options: NSStringCompareOptions()) where rng.startIndex == result.string.startIndex {
-                let start = result.string.startIndex.distanceTo(rng.startIndex)
-                let len = rng.startIndex.distanceTo(rng.endIndex)
+            if let rng = result.string.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines, options: NSString.CompareOptions()), rng.lowerBound == result.string.startIndex {
+                let start = result.string.characters.distance(from: result.string.startIndex, to: rng.lowerBound)
+                let len = result.string.distance(from: rng.lowerBound, to: rng.upperBound)
                 let range = NSRange(location: start, length: len)
-                result.replaceCharactersInRange(range, withAttributedString: NSAttributedString())
+                result.replaceCharacters(in: range, with: NSAttributedString())
             } else {
                 break
             }
@@ -178,7 +178,7 @@ public class HTMLParser {
     /// Render text only version of HTML
     ///
     /// - returns: Plaintext version of HTML stripped of all tags
-    public func renderText() -> String {
+    open func renderText() -> String {
         var result = String()
         var counters = [Int]()
         var depth = 0
@@ -193,13 +193,13 @@ public class HTMLParser {
             }
 
             switch token {
-            case .StartTag(let name, let selfClosing, _):
+            case .startTag(let name, let selfClosing, _):
                 guard let name = name else {
                     continue
                 }
                 if selfClosing {
                     if name == "br" {
-                        result.appendContentsOf("\n")
+                        result.append("\n")
                     } else {
                         continue
                     }
@@ -210,22 +210,22 @@ public class HTMLParser {
                 switch name {
                 case "li":
                     if lastListContextItem == "ul" {
-                        result.appendContentsOf("\n")
+                        result.append("\n")
                         for _ in 0..<depth {
-                            result.appendContentsOf("    ")
+                            result.append("    ")
                         }
-                        result.appendContentsOf("- ")
+                        result.append("- ")
                     }
                     if lastListContextItem == "ol" {
                         guard let counter = counters.popLast() else {
                             continue
                         }
 
-                        result.appendContentsOf("\n")
+                        result.append("\n")
                         for _ in 0..<depth {
-                            result.appendContentsOf("    ")
+                            result.append("    ")
                         }
-                        result.appendContentsOf("\(counter). ")
+                        result.append("\(counter). ")
                         counters.append(counter + 1)
                     }
                     continue
@@ -237,7 +237,7 @@ public class HTMLParser {
                     break
                 }
                 if result.characters.isEmpty == false && self.isBlock(name) {
-                    result.appendContentsOf("\n")
+                    result.append("\n")
                 }
 
             case .EndTag(let name):
@@ -248,7 +248,7 @@ public class HTMLParser {
                 switch name {
                 case "ol", "ul":
                     listContext.popLast()
-                    result.appendContentsOf("\n")
+                    result.append("\n")
                     depth -= 1
                     counters.popLast()
                     continue
@@ -259,7 +259,7 @@ public class HTMLParser {
                 }
 
                 if !result.hasSuffix(" ") {
-                    result.appendContentsOf(" ")
+                    result.append(" ")
                 }
 
 
@@ -273,7 +273,7 @@ public class HTMLParser {
                     stripped = stripped.stringByReplacingOccurrencesOfString("\n", withString: " ")
                 }
                 if result.characters.isEmpty == false && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
-                    result.appendContentsOf(" ")
+                    result.append(" ")
                 }
                 result.appendContentsOf(stripped)
 
@@ -285,7 +285,7 @@ public class HTMLParser {
         return result
     }
 
-    private func pushFormat(style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
+    fileprivate func pushFormat(_ style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
         switch tagName {
         case "h1":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[0].makeAttributeDict(nestingDepth: nestingDepth)))
@@ -298,9 +298,9 @@ public class HTMLParser {
         case "h5":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[4].makeAttributeDict(nestingDepth: nestingDepth)))
         case "ul":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.unorderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont)))
         case "ol":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.orderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .ExcludeFont)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.orderedList.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .excludeFont)))
         case "li":
             if self.getListContext() == "ul" {
                 self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.unorderedListItem.makeAttributeDict(nestingDepth: nestingDepth)))
@@ -317,13 +317,13 @@ public class HTMLParser {
 
 
         case "strong":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.strongText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .FontOnly)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.strongText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .fontOnly)))
         case "b":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.strongText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .FontOnly)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.strongText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .fontOnly)))
         case "em":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.emphasizedText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .FontOnly)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.emphasizedText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .fontOnly)))
         case "i":
-            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.emphasizedText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .FontOnly)))
+            self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.emphasizedText.makeAttributeDict(nestingDepth: nestingDepth, renderMode: .fontOnly)))
         case "del":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.deletedText.makeAttributeDict(nestingDepth: nestingDepth)))
         case "code":
@@ -341,7 +341,7 @@ public class HTMLParser {
         }
     }
 
-    private func popFormat(tagName: String) -> FormatStackItem? {
+    fileprivate func popFormat(_ tagName: String) -> FormatStackItem? {
         guard let lastStackItem = self.formatStack.last else {
             return nil
         }
@@ -357,7 +357,7 @@ public class HTMLParser {
 
             // search upwards in stack
             var lastFound = 0
-            for (index, item) in self.formatStack.enumerate() {
+            for (index, item) in self.formatStack.enumerated() {
                 if item.tagName == tagName {
                     lastFound = index
                 }
@@ -373,7 +373,7 @@ public class HTMLParser {
         return nil
     }
 
-    private func isBlock(tagName: String) -> Bool {
+    fileprivate func isBlock(_ tagName: String) -> Bool {
         switch tagName {
         case "h1", "h2", "h3", "h4", "h5", "ul", "ol", "li", "pre", "p", "blockquote":
             return true
@@ -384,8 +384,8 @@ public class HTMLParser {
         }
     }
 
-    private func getListContext() -> String {
-        let stack = self.formatStack.reverse()
+    fileprivate func getListContext() -> String {
+        let stack = self.formatStack.reversed()
         for item in stack {
             if item.tagName == "ol" || item.tagName == "ul" {
                 return item.tagName

@@ -20,19 +20,19 @@ extension IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the page
-    public func child(identifier: String, callback: (Result<IONPage, IONError> -> Void)) -> IONPage {
+    public func child(_ identifier: String, callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
-            guard case .Success(let page) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .DidFail))
+            guard case .success(let page) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .didFail))
                 return
             }
 
             guard page.parent == self.identifier else {
-                responseQueueCallback(callback, parameter: .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier)))
+                responseQueueCallback(callback, parameter: .failure(.invalidPageHierarchy(parent: self.identifier, child: page.identifier)))
                 return
             }
 
-            responseQueueCallback(callback, parameter: .Success(page))
+            responseQueueCallback(callback, parameter: .success(page))
         }
 
         return self
@@ -43,25 +43,25 @@ extension IONPage {
     ///
     /// - parameter identifier: Identifier of child page
     /// - returns: Page object that resolves asynchronously or nil if the page is no child of self
-    public func child(identifier: String) -> Result<IONPage, IONError> {
+    public func child(_ identifier: String) -> Result<IONPage, IONError> {
         let page = self.collection.page(identifier)
 
         guard page.metadata != nil else {
-            return .Failure(.PageNotFound(identifier))
+            return .failure(.pageNotFound(identifier))
         }
 
         guard page.parent == self.identifier else {
-            return .Failure(.InvalidPageHierarchy(parent: self.identifier, child: page.identifier))
+            return .failure(.invalidPageHierarchy(parent: self.identifier, child: page.identifier))
         }
 
-        return .Success(page)
+        return .success(page)
     }
 
 
     /// Enumerate page children
     ///
     /// - parameter callback: The callback to call for each child
-    public func children(callback: (Result<IONPage, IONError> -> Void)) {
+    public func children(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             for child in children {
                 self.child(child, callback: callback)
@@ -73,7 +73,7 @@ extension IONPage {
     /// List page children, Attention: those pages returned are not fully loaded!
     ///
     /// - parameter callback: The callback to call for children list
-    public func childrenList(callback: ([IONPage] -> Void)) {
+    public func childrenList(_ callback: @escaping (([IONPage]) -> Void)) {
         self.collection.getChildIdentifiersForPage(self.identifier) { children in
             var result = [IONPage]()
 

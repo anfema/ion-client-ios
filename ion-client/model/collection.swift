@@ -14,25 +14,25 @@ import DEjson
 
 
 /// Collection class, contains pages, has functionality to asynchronously fetch data
-public class IONCollection {
+open class IONCollection {
 
     /// Identifier
-    public var identifier: String
+    open var identifier: String
 
     /// Locale code
-    public var locale: String
+    open var locale: String
 
     /// Default locale for this collection
-    public var defaultLocale: String?
+    open var defaultLocale: String?
 
     /// Last update date
-    public var lastUpdate: NSDate?
+    open var lastUpdate: Date?
 
     /// Last change date on server
-    public var lastChanged: NSDate?
+    open var lastChanged: Date?
 
     /// This instance produced an error while fetching from net
-    public var hasFailed: Bool = false
+    open var hasFailed: Bool = false
 
     /// Page metadata
     internal var pageMeta = [IONPageMeta]()
@@ -44,13 +44,13 @@ public class IONCollection {
     internal var parentLock = NSLock()
 
     /// Work queue
-    internal var workQueue: dispatch_queue_t
+    internal var workQueue: DispatchQueue
 
     /// Set to false to avoid using the cache (refreshes, etc.)
-    private var useCache = IONCacheBehaviour.Prefer
+    fileprivate var useCache = IONCacheBehaviour.prefer
 
     /// Block to call on completion
-    private var completionBlock: ((collection: Result<IONCollection, IONError>, completed: Bool) -> Void)?
+    fileprivate var completionBlock: ((_ collection: Result<IONCollection, IONError>, _ completed: Bool) -> Void)?
 
     /// Archive download url
     internal var archiveURL: String?
@@ -59,7 +59,7 @@ public class IONCollection {
     internal var ftsDownloadURL: String?
 
     /// Internal id
-    internal var uuid = NSUUID().UUIDString
+    internal var uuid = UUID().uuidString
 
     /// Internal identifier used to store the collection into the `ION.collectionCache`
     /// when using the `forkedWorkQueueWithCollection` initializer
@@ -82,33 +82,33 @@ public class IONCollection {
     /// - parameter callback: Block to call when the collection becomes available.
     ///                       Provides Result.Success containing an `IONCollection` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
-    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback: (Result<IONCollection, IONError> -> Void)?) {
+    init(identifier: String, locale: String, useCache: IONCacheBehaviour, callback: ((Result<IONCollection, IONError>) -> Void)?) {
         self.identifier = identifier
-        self.workQueue = dispatch_queue_create("com.anfema.ion.collection.\(identifier)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = DispatchQueue(label: "com.anfema.ion.collection.\(identifier)", attributes: [])
         self.locale = locale
         self.useCache = useCache
 
         // Dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
-        dispatch_barrier_async(self.workQueue) {
+        self.workQueue.async(flags: .barrier, execute: {
             self.parentLock.lock()
-            let semaphore = dispatch_semaphore_create(0)
+            let semaphore = DispatchSemaphore(value: 0)
 
             self.fetch(identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
-                    responseQueueCallback(callback, parameter: .Failure(error))
+                    responseQueueCallback(callback, parameter: .failure(error))
                     self.hasFailed = true
                 } else {
                     ION.collectionCache[identifier] = self
-                    responseQueueCallback(callback, parameter: .Success(self))
+                    responseQueueCallback(callback, parameter: .success(self))
                 }
 
-                dispatch_semaphore_signal(semaphore)
+                semaphore.signal()
             }
 
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+            semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }
+        }) 
     }
 
 
@@ -121,8 +121,8 @@ public class IONCollection {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the collection
-    public func page(identifier: String, callback: (Result<IONPage, IONError> -> Void)) -> IONCollection {
-        dispatch_async(self.workQueue) {
+    open func page(_ identifier: String, callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONCollection {
+        self.workQueue.async {
             guard !self.hasFailed else {
                 return
             }
@@ -132,25 +132,25 @@ public class IONCollection {
                     if self.checkNeedsUpdate(page) {
                         self.update(page, callback: { result in
                             // return cached page if update failed
-                            guard case .Success(let updatedPage) = result else {
-                                responseQueueCallback(callback, parameter: .Success(page))
+                            guard case .success(let updatedPage) = result else {
+                                responseQueueCallback(callback, parameter: .success(page))
                                 return
                             }
 
                             // return updated page
-                            responseQueueCallback(callback, parameter: .Success(updatedPage))
+                            responseQueueCallback(callback, parameter: .success(updatedPage))
                         })
                     } else {
-                        dispatch_async(ION.config.responseQueue) {
-                            callback(.Success(page))
+                        ION.config.responseQueue.async {
+                            callback(.success(page))
 
-                            dispatch_barrier_async(self.workQueue) {
+                            self.workQueue.async(flags: .barrier, execute: {
                                 self.checkCompleted()
-                            }
+                            }) 
                         }
                     }
                 } else {
-                    dispatch_async(page.workQueue) {
+                    page.workQueue.async {
                         guard !self.hasFailed else {
                             return
                         }
@@ -158,25 +158,25 @@ public class IONCollection {
                         if self.checkNeedsUpdate(page) {
                             self.update(page, callback: callback)
                         } else {
-                            dispatch_async(ION.config.responseQueue) {
-                                callback(.Success(page))
+                            ION.config.responseQueue.async {
+                                callback(.success(page))
 
-                                dispatch_barrier_async(self.workQueue) {
+                                self.workQueue.async(flags: .barrier, execute: {
                                     self.checkCompleted()
-                                }
+                                }) 
                             }
                         }
                     }
                 }
             } else {
                 guard let meta = self.getPageMetaForPage(identifier) else {
-                    responseQueueCallback(callback, parameter: .Failure(.PageNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(.pageNotFound(identifier)))
                     return
                 }
 
-                self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .Prefer, parent: meta.parent) { result in
-                    guard case .Success(let page) = result else {
-                        responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+                self.pageCache[identifier] = IONPage(collection: self, identifier: identifier, layout: meta.layout, useCache: .prefer, parent: meta.parent) { result in
+                    guard case .success(let page) = result else {
+                        responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                         return
                     }
 
@@ -202,7 +202,7 @@ public class IONCollection {
     ///
     /// - parameter identifier: Page identifier
     /// - returns: A `IONPage` that resolves automatically if the underlying page becomes available, nil if page unknown
-    public func page(identifier: String) -> IONPage {
+    open func page(_ identifier: String) -> IONPage {
 
         if let page = self.pageCache[identifier] {
             // well page is cached, just return cached version
@@ -227,10 +227,10 @@ public class IONCollection {
         }
 
         // not cached, fetch from web and add it to the cache
-        let page = IONPage(collection: self, identifier: identifier, layout: layout, useCache: .Prefer, parent: parent) { page in
-            dispatch_barrier_async(self.workQueue) {
+        let page = IONPage(collection: self, identifier: identifier, layout: layout, useCache: .prefer, parent: parent) { page in
+            self.workQueue.async(flags: .barrier, execute: {
                 self.checkCompleted()
-            }
+            }) 
         }
 
         page.position = position
@@ -247,12 +247,12 @@ public class IONCollection {
     ///
     /// - parameter index: Position of the page in the collection
     /// - returns: A page that resolves automatically if the underlying page becomes available, nil if page unknown
-    public func page(index: Int) -> IONPage? {
+    open func page(_ index: Int) -> IONPage? {
         guard index > 0 else {
             return nil
         }
 
-        let pages = self.pageMeta.filter({ $0.parent == nil }).sort({ $0.0.position < $0.1.position })
+        let pages = self.pageMeta.filter({ $0.parent == nil }).sorted(by: { $0.0.position < $0.1.position })
 
         guard pages.isEmpty == false && index < pages.count else {
             return nil
@@ -266,9 +266,9 @@ public class IONCollection {
     ///
     /// - parameter callback: Block to call for each page
     /// - returns: self for chaining
-    public func pages(callback: (Result<IONPage, IONError> -> Void)) -> IONCollection {
+    open func pages(_ callback: @escaping ((Result<IONPage, IONError>) -> Void)) -> IONCollection {
         // append page listing to work queue
-        dispatch_async(self.workQueue) {
+        self.workQueue.async {
             guard !self.hasFailed else {
                 return
             }
@@ -285,7 +285,7 @@ public class IONCollection {
     /// Fork the work queue, the returning collection has to be finished or canceled, else you risk a memory leak
     ///
     /// - returns: self with new work queue that is cancelable
-    public func cancelable() -> CancelableIONCollection {
+    open func cancelable() -> CancelableIONCollection {
         return CancelableIONCollection(collection: self)
     }
 
@@ -293,14 +293,14 @@ public class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    public func waitUntilReady(callback: (Result<IONCollection, IONError> -> Void)) -> IONCollection {
-        dispatch_async(self.workQueue) {
+    open func waitUntilReady(_ callback: @escaping ((Result<IONCollection, IONError>) -> Void)) -> IONCollection {
+        self.workQueue.async {
             guard !self.hasFailed else {
-                responseQueueCallback(callback, parameter: .Failure(.DidFail))
+                responseQueueCallback(callback, parameter: .failure(.didFail))
                 return
             }
 
-            responseQueueCallback(callback, parameter: .Success(self))
+            responseQueueCallback(callback, parameter: .success(self))
         }
 
         return self
@@ -315,10 +315,10 @@ public class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    public func onCompletion(callback: ((collection: Result<IONCollection, IONError>, completed: Bool) -> Void)) -> IONCollection {
-        dispatch_barrier_async(self.workQueue) {
+    open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection, IONError>, _ completed: Bool) -> Void)) -> IONCollection {
+        self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
-        }
+        }) 
 
         return self
     }
@@ -326,13 +326,13 @@ public class IONCollection {
 
     // MARK: - Private
 
-    private func checkNeedsUpdate(page: IONPage) -> Bool {
+    fileprivate func checkNeedsUpdate(_ page: IONPage) -> Bool {
         // ready, check if we need to update
         if page.hasFailed {
             return true
         } else {
             if let meta = self.getPageMetaForPage(page.identifier) {
-                if let lastUpdate = page.lastUpdate where lastUpdate.compare(meta.lastChanged) == NSComparisonResult.OrderedAscending {
+                if let lastUpdate = page.lastUpdate, lastUpdate.compare(meta.lastChanged) == ComparisonResult.orderedAscending {
                     // page out of date, force update
                     return true
                 }
@@ -343,21 +343,21 @@ public class IONCollection {
     }
 
 
-    private func update(page: IONPage, callback: (Result<IONPage, IONError> -> Void)?) -> IONPage? {
+    fileprivate func update(_ page: IONPage, callback: ((Result<IONPage, IONError>) -> Void)?) -> IONPage? {
         // fetch page update
         guard let meta = self.getPageMetaForPage(page.identifier) else {
             return nil
         }
 
-        self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .Ignore, parent: meta.parent) { result in
-            guard case .Success(let page) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+        self.pageCache[identifier] = IONPage(collection: self, identifier: page.identifier, layout: meta.layout, useCache: .ignore, parent: meta.parent) { result in
+            guard case .success(let page) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? .unknownError))
                 return
             }
 
             page.position = meta.position
 
-            responseQueueCallback(callback, parameter: .Success(page))
+            responseQueueCallback(callback, parameter: .success(page))
 
             page.onCompletion { _, _ in
                 self.checkCompleted()
@@ -368,8 +368,8 @@ public class IONCollection {
     }
 
 
-    private func checkCompleted() {
-        dispatch_barrier_async(self.workQueue) {
+    fileprivate func checkCompleted() {
+        self.workQueue.async(flags: .barrier, execute: {
             var completed = true
 
             for (_, page) in self.pageCache {
@@ -379,24 +379,24 @@ public class IONCollection {
                 }
             }
 
-            guard let completionBlock = self.completionBlock where completed == true else {
+            guard let completionBlock = self.completionBlock, completed == true else {
                 return
             }
 
             self.completionBlock = nil
 
-            dispatch_async(ION.config.responseQueue) {
-                completionBlock(collection: .Success(self), completed: !self.hasFailed)
+            ION.config.responseQueue.async {
+                completionBlock(.success(self), !self.hasFailed)
             }
-        }
+        }) 
     }
 
 
-    private init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
+    fileprivate init(forkedWorkQueueWithIdentifier identifier: String, locale: String) {
         self.locale = locale
-        self.useCache = .Prefer
+        self.useCache = .prefer
         self.identifier = identifier
-        self.workQueue = dispatch_queue_create("com.anfema.ion.collection.\(identifier).forked.\(NSDate().timeIntervalSince1970)", DISPATCH_QUEUE_SERIAL)
+        self.workQueue = DispatchQueue(label: "com.anfema.ion.collection.\(identifier).forked.\(Date().timeIntervalSince1970)", attributes: [])
 
         // FIXME: How to remove this from the collection cache again?
         ION.collectionCache[self.forkedIdentifier] = self
@@ -407,7 +407,7 @@ public class IONCollection {
     ///
     /// - parameter identifier: collection identifier to get
     /// - parameter callback: block to call when the fetch finished
-    private func fetch(identifier: String, callback: (IONError? -> Void)) {
+    fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
         IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: self.useCache) { result in
 
             guard case .Success(let resultValue) = result else {
@@ -421,23 +421,23 @@ public class IONCollection {
             }
 
             // we need a result value and need it to be a dictionary
-            guard case .JSONDictionary(let dict) = resultValue else {
-                callback(.JSONObjectExpected(resultValue))
+            guard case .jsonDictionary(let dict) = resultValue else {
+                callback(.jsonObjectExpected(resultValue))
                 return nil
             }
 
             // furthermore we need a collection and a last_updated element
-            guard let rawCollection = dict["collection"], rawLastUpdated = dict["last_updated"],
-                case .JSONArray(let array)      = rawCollection,
-                case .JSONNumber(let timestamp) = rawLastUpdated else {
-                    callback(.JSONObjectExpected(resultValue))
+            guard let rawCollection = dict["collection"], let rawLastUpdated = dict["last_updated"],
+                case .jsonArray(let array)      = rawCollection,
+                case .jsonNumber(let timestamp) = rawLastUpdated else {
+                    callback(.jsonObjectExpected(resultValue))
                     return nil
             }
 
             self.lastUpdate = NSDate(timeIntervalSince1970: timestamp)
 
             // if we have a nonzero result
-            if let firstItem = array.first, case .JSONDictionary(let dict) = firstItem {
+            if let firstItem = array.first, case .jsonDictionary(let dict) = firstItem {
 
                 // make sure everything is there
                 guard let rawIdentifier     = dict["identifier"],
@@ -445,10 +445,10 @@ public class IONCollection {
                     let rawDefaultLocale    = dict["default_locale"],
                     let rawArchive          = dict["archive"],
                     let rawFTSdb            = dict["fts_db"],
-                    case .JSONString(let id)             = rawIdentifier,
-                    case .JSONString(let defaultLocale)  = rawDefaultLocale,
-                    case .JSONString(let archiveURL)     = rawArchive,
-                    case .JSONArray(let pages)           = rawPages else {
+                    case .jsonString(let id)             = rawIdentifier,
+                    case .jsonString(let defaultLocale)  = rawDefaultLocale,
+                    case .jsonString(let archiveURL)     = rawArchive,
+                    case .jsonArray(let pages)           = rawPages else {
                         callback(.InvalidJSON(resultValue))
                         return nil
                 }
@@ -458,7 +458,7 @@ public class IONCollection {
                 self.defaultLocale = defaultLocale
                 self.archiveURL = archiveURL
 
-                if case .JSONString(let ftsURL) = rawFTSdb {
+                if case .jsonString(let ftsURL) = rawFTSdb {
                     self.ftsDownloadURL = ftsURL
                 }
 
@@ -466,7 +466,7 @@ public class IONCollection {
                 self.lastChanged = self.lastUpdate
 
                 if let rawLastChanged = dict["last_changed"] {
-                    if case .JSONString(let lastChanged) = rawLastChanged {
+                    if case .jsonString(let lastChanged) = rawLastChanged {
                         self.lastChanged = NSDate(ISODateString: lastChanged)
                         self.lastUpdate = self.lastChanged
                     }
@@ -521,7 +521,7 @@ extension IONCollection {
     ///
     /// - parameter otherCollection: The collection you want to check for equal content.
     /// - returns: `true` if both collections have the same content - `false` if they have different content.
-    public func equals(otherCollection: IONCollection) -> Bool {
+    public func equals(_ otherCollection: IONCollection) -> Bool {
         var collectionChanged = false
 
         // compare metadata count
@@ -533,7 +533,7 @@ extension IONCollection {
                 let c1 = self.pageMeta[i]
                 let c2 = otherCollection.pageMeta[i]
 
-                if c1.identifier != c2.identifier || c1.lastChanged.compare(c2.lastChanged) != .OrderedSame {
+                if c1.identifier != c2.identifier || c1.lastChanged.compare(c2.lastChanged as Date) != .orderedSame {
                     collectionChanged = true
                     break
                 }
@@ -546,13 +546,13 @@ extension IONCollection {
 
 
 /// Cancelable collection, remove from memory by calling either `cancel()` or `finish()`. Will leak if not done!
-public class CancelableIONCollection: IONCollection {
+open class CancelableIONCollection: IONCollection {
 
     init(collection: IONCollection) {
         super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
 
         // dispatch barrier block into work queue, this sets the queue to standby until the fetch is complete
-        dispatch_barrier_async(self.workQueue) {
+        self.workQueue.async(flags: .barrier, execute: {
             collection.parentLock.lock()
 
             self.identifier = collection.identifier
@@ -565,12 +565,12 @@ public class CancelableIONCollection: IONCollection {
             collection.parentLock.unlock()
 
             self.checkCompleted()
-        }
+        }) 
     }
 
     /// Cancel all requests queued for a collection
-    public func cancel() {
-        dispatch_barrier_async(self.workQueue) {
+    open func cancel() {
+        self.workQueue.async(flags: .barrier, execute: {
             // cancel all page loads
 
             // TODO: Test cancelling of page loads, needs support in mock framework
@@ -585,14 +585,14 @@ public class CancelableIONCollection: IONCollection {
 
             // remove self from cache
             self.finish()
-        }
+        }) 
     }
 
     /// Finish the processing and discard the collection
-    public func finish() {
-        dispatch_barrier_async(self.workQueue) {
+    open func finish() {
+        self.workQueue.async(flags: .barrier, execute: {
             self.pageCache.removeAll() // break cycle
-            ION.collectionCache.removeValueForKey(self.forkedIdentifier)
-        }
+            ION.collectionCache.removeValue(forKey: self.forkedIdentifier)
+        }) 
     }
 }

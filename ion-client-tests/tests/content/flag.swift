@@ -185,7 +185,7 @@ class flagContentTests: LoggedInXCTestCase {
     
     func testInvalidJSON() {
         // invalid value for correct key
-        let json1: JSONObject = .JSONDictionary(["is_enabled": .JSONString("wrong")])
+        let json1: JSONObject = .jsonDictionary(["is_enabled": .jsonString("wrong")])
         
         do {
             let _ = try IONFlagContent(json: json1)
@@ -206,7 +206,7 @@ class flagContentTests: LoggedInXCTestCase {
         
         
         // no "is_enabled" key
-        let json2: JSONObject = .JSONDictionary(["test": .JSONString("test")])
+        let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
             let _ = try IONFlagContent(json: json2)
@@ -228,7 +228,7 @@ class flagContentTests: LoggedInXCTestCase {
     
     
     func testJSONObjectExpected() {
-        let json: JSONObject = .JSONString("is_enabled")
+        let json: JSONObject = .jsonString("is_enabled")
         
         do {
             let _ = try IONFlagContent(json: json)
@@ -237,7 +237,7 @@ class flagContentTests: LoggedInXCTestCase {
         catch let e as IONError {
             XCTAssertNotNil(e)
             
-            guard case .JSONObjectExpected(let obj) = e else {
+            guard case .jsonObjectExpected(let obj) = e else {
                 XCTFail("wrong error thrown")
                 return
             }
