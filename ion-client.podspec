@@ -28,11 +28,11 @@ Pod::Spec.new do |s|
   s.libraries  = "sqlite3"
   s.module_map = "ion-client/cocoapods.modulemap"
 
-  s.dependency "Alamofire", "~> 3.5"
-  s.dependency "DEjson", "~> 1.0"
-  s.dependency "Markdown", "~> 1.0"
-  s.dependency "HashExtensions", "~> 2.0"
-  s.dependency "html5tokenizer", "~> 1.0"
-  s.dependency "Tarpit", "~> 1.0"
-  s.dependency "iso-rfc822-date", "~> 1.0"
+  s.dependency "Alamofire", '~> 4.2'
+  s.dependency "DEjson", :git => 'https://github.com/anfema/DEjson', :branch => 'swift_3'
+  s.dependency "Markdown", :git => 'https://github.com/anfema/ion-client-ios', :branch => 'swift_3'
+  s.dependency "HashExtensions", '~> 2.0'
+  s.dependency "html5tokenizer", :git => 'https://github.com/anfema/HTML5Tokenizer', :branch => 'swift_3'
+  s.dependency "Tarpit", :git => 'https://github.com/anfema/Tarpit', :branch => 'swift_3'
+  s.dependency "iso-rfc822-date", '~> 1.0'
 end
