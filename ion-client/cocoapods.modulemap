@@ -1,5 +1,15 @@
-module sqlite {
-    header "/usr/include/sqlite3.h"
+module SQLiteMacOSX {
+	header "/users/shared/Xcode/include/sqlite3.h"
+    export *
+}
+
+module SQLiteiPhoneOS {
+    header "/users/shared/Xcode/include/sqlite3.h"
+    export *
+}
+
+module SQLiteiPhoneSimulator {
+    header "/users/shared/Xcode/include/sqlite3.h"
     export *
 }
 
