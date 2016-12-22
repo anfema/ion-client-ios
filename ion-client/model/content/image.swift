@@ -293,15 +293,15 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func image(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
+    public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
             guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(IONError.outletIncompatible))
                 return
             }
 
@@ -320,19 +320,19 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func originalImage(name: String, position: Int = 0, callback: (Result<NSImage, IONError> -> Void)) -> IONPage {
+    public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
-            guard case .Success(let content) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? .UnknownError))
+            guard case .success(let content) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
             guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .Failure(.OutletIncompatible))
+                responseQueueCallback(callback, parameter: .failure(IONError.outletIncompatible))
                 return
             }
 
-            imageContent.originalImage(callback)
+            imageContent.originalImage(callback: callback)
         }
 
         return self

@@ -263,15 +263,15 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(original: Bool = false, callback: (Result<NSImage, IONError> -> Void)) {
-        self.cgImage(original: original) { result in
-            guard case .Success(let img) = result else {
-                responseQueueCallback(callback, parameter: .Failure(result.error ?? IONError.UnknownError))
+    public func image(_ original: Bool = false, callback: @escaping ((Result<NSImage>) -> Void)) {
+        self.cgImage(original) { result in
+            guard case .success(let img) = result else {
+                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
-            let nsImage = NSImage(CGImage: img, size: CGSize(width: CGFloat(CGImageGetWidth(img)), height: CGFloat(CGImageGetHeight(img))))
-            responseQueueCallback(callback, parameter: .Success(nsImage))
+            let nsImage = NSImage(cgImage: img, size: CGSize(width: CGFloat(img.width), height: CGFloat(img.height)))
+            responseQueueCallback(callback, parameter: .success(nsImage))
         }
     }
 
@@ -280,8 +280,8 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func originalImage(callback: (Result<NSImage> -> Void)) {
-        self.image(original: true, callback: callback)
+    public func originalImage(callback: @escaping ((Result<NSImage>) -> Void)) {
+        self.image(true, callback: callback)
     }
     #endif
 }

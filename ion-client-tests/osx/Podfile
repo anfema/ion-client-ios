@@ -4,11 +4,26 @@ source 'https://github.com/CocoaPods/Specs'
 use_frameworks!
 
 platform :osx, '10.10'
-pod 'Alamofire', '~> 3.1'
-pod 'HashExtensions', '~> 2.0'
-pod 'DEjson', '~> 1.0'
-pod 'Markdown', '~> 1.0'
-pod 'html5tokenizer', '~> 1.0'
-pod 'Tarpit', '~> 1.0'
-pod 'anfema-mockingbird', '~> 1.0'
-pod 'iso-rfc822-date', '~> 1.0'
+
+def shared_pods
+    pod 'Alamofire', '~> 4.2'
+    pod 'HashExtensions', '~> 2.0'
+    pod 'DEjson', :git => 'https://github.com/anfema/DEjson', :branch => 'swift_3'
+    pod 'Markdown', :git => 'https://github.com/anfema/ion-client-ios', :branch => 'swift_3'
+    pod 'html5tokenizer', :git => 'https://github.com/anfema/HTML5Tokenizer', :branch => 'swift_3'
+    pod 'Tarpit', :git => 'https://github.com/anfema/Tarpit', :branch => 'swift_3'
+    pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_3'
+    pod 'iso-rfc822-date', '~> 1.0'
+end
+
+target 'ion-tests' do
+    shared_pods
+end
+
+target 'ion_client' do
+    shared_pods
+end
+
+target 'tests' do
+    shared_pods
+end

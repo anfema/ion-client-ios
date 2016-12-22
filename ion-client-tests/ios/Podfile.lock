@@ -2,7 +2,7 @@ PODS:
   - Alamofire (4.2.0)
   - anfema-mockingbird (1.0.1):
     - Alamofire (~> 4.2)
-    - DEjson (~> 1.0)
+    - DEjson
   - DEjson (1.0.3)
   - HashExtensions (2.0.0)
   - html5tokenizer (1.0.0)
@@ -39,16 +39,16 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   anfema-mockingbird:
-    :commit: 616413d1360a85ad94264f7024ec82831e20bb10
+    :commit: 2c686920bba1d12b75403deb8ac7bc7566552d0e
     :git: https://github.com/anfema/Mockingbird
   DEjson:
-    :commit: 527ad2c337ebdd51d9c224bf86b6655284cb8805
+    :commit: aa73e57f1a66242fe4a2ee23a6b83009234a377e
     :git: https://github.com/anfema/DEjson
   html5tokenizer:
     :commit: 4db7aa35e47ffc146c30ebc52ce6ba33f8b9b38f
     :git: https://github.com/anfema/HTML5Tokenizer
   Markdown:
-    :commit: 1d7f4029b0ed0f295e7f2b86f14011367f67f8ba
+    :commit: 1b9970ac5db22d5d311b3b74a3464168e0cf5142
     :git: https://github.com/anfema/ion-client-ios
   Tarpit:
     :commit: e0e4ef87240687d2c4ac769cfb3df07dff5bee13
@@ -56,7 +56,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
-  anfema-mockingbird: 159eb4f797108fd19002747312e493722a5855cd
+  anfema-mockingbird: f1c8fc4c5a5411c7bfb33c109e2f44e3912c600d
   DEjson: b647d67d4106889a7739063567bbaff7111af6df
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
