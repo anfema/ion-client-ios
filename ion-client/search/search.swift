@@ -63,7 +63,7 @@ open class IONSearchResult {
     ///
     /// - returns: attributed string of snippet
     open func attributedString() -> NSAttributedString {
-        return MDParser(markdown: self.snippet).render().renderAttributedString(ION.config.stringStyling)
+        return MDParser(markdown: self.snippet).render().renderAttributedString(usingStyle: ION.config.stringStyling)
     }
 }
 

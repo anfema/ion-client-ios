@@ -104,7 +104,7 @@ open class IONTextContent: IONContent {
         case "text/html":
             return HTMLParser(html: self.text).renderAttributedString(ION.config.stringStyling)
         case "text/markdown":
-            return MDParser(markdown: self.text).render().renderAttributedString(ION.config.stringStyling)
+            return MDParser(markdown: self.text).render().renderAttributedString(usingStyle: ION.config.stringStyling)
         case "text/plain":
             return NSAttributedString(string: self.text)
         default:

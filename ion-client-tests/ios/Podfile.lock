@@ -45,13 +45,13 @@ CHECKOUT OPTIONS:
     :commit: aa73e57f1a66242fe4a2ee23a6b83009234a377e
     :git: https://github.com/anfema/DEjson
   html5tokenizer:
-    :commit: 4db7aa35e47ffc146c30ebc52ce6ba33f8b9b38f
+    :commit: 08c0d99c4e2e75013d023da6bf16c53319b37c50
     :git: https://github.com/anfema/HTML5Tokenizer
   Markdown:
-    :commit: 49fc0c3aa40a8251d8ab2fac9ca9594a09fb608c
+    :commit: 667f416500574deef0b87b5c1c6a3a37bb4259b7
     :git: https://github.com/anfema/ion-client-ios
   Tarpit:
-    :commit: e0e4ef87240687d2c4ac769cfb3df07dff5bee13
+    :commit: ca2e46690e182fbb34db4daca51b4201f7bb983d
     :git: https://github.com/anfema/Tarpit
 
 SPEC CHECKSUMS:
