@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		175C97151731F61AA533C2E4 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E53026DF88A57C0D04D16D33 /* Pods.framework */; };
+		049429E1277A9F4C7EABD64F /* Pods_ion_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */; };
 		8F32628C1CCFB38500A787BC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F32628B1CCFB38500A787BC /* libsqlite3.tbd */; };
 		8F326B531CCFB0F30041FC40 /* ion-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F326B521CCFB0F30041FC40 /* ion-client.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F326B581CCFB10D0041FC40 /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B0B1CCFB0D30041FC40 /* nsurlcache.swift */; };
@@ -50,8 +50,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4C94AC22A46E8AC8C07C40DC /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		60E7CBE44F5D2E252CF1EA88 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		22EDEA0642F1815FE1E26E94 /* Pods-ion_client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.release.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig"; sourceTree = "<group>"; };
+		3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F32628B1CCFB38500A787BC /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8F326B0B1CCFB0D30041FC40 /* nsurlcache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nsurlcache.swift; sourceTree = "<group>"; };
 		8F326B0C1CCFB0D30041FC40 /* request_cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = request_cache.swift; sourceTree = "<group>"; };
@@ -94,6 +94,7 @@
 		8F326B501CCFB0F30041FC40 /* ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F326B521CCFB0F30041FC40 /* ion-client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ion-client.h"; sourceTree = "<group>"; };
 		8F326B541CCFB0F30041FC40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDE09F13163B41C489B3012D /* Pods-ion_client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.debug.xcconfig"; sourceTree = "<group>"; };
 		E53026DF88A57C0D04D16D33 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -103,18 +104,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F32628C1CCFB38500A787BC /* libsqlite3.tbd in Frameworks */,
-				175C97151731F61AA533C2E4 /* Pods.framework in Frameworks */,
+				049429E1277A9F4C7EABD64F /* Pods_ion_client.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8869EEBAD8DFAF2ADA465FA5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DDE09F13163B41C489B3012D /* Pods-ion_client.debug.xcconfig */,
+				22EDEA0642F1815FE1E26E94 /* Pods-ion_client.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		8CC9F298B2CD7606BEF23CC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				8F32628B1CCFB38500A787BC /* libsqlite3.tbd */,
 				E53026DF88A57C0D04D16D33 /* Pods.framework */,
+				3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -129,8 +140,8 @@
 				8F326B451CCFB0D30041FC40 /* search */,
 				8F326B511CCFB0F30041FC40 /* ion-client */,
 				8F326B011CCFB0A70041FC40 /* Products */,
-				D3F451E5DCCEC2FD0AA0ADD3 /* Pods */,
 				8CC9F298B2CD7606BEF23CC7 /* Frameworks */,
+				8869EEBAD8DFAF2ADA465FA5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -232,15 +243,6 @@
 			path = "ion-client";
 			sourceTree = "<group>";
 		};
-		D3F451E5DCCEC2FD0AA0ADD3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				60E7CBE44F5D2E252CF1EA88 /* Pods.debug.xcconfig */,
-				4C94AC22A46E8AC8C07C40DC /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -259,12 +261,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8F326B551CCFB0F30041FC40 /* Build configuration list for PBXNativeTarget "ion_client" */;
 			buildPhases = (
-				C134B4A613CF5F819073C557 /* Check Pods Manifest.lock */,
+				B0C61D5BB8D0067EBC182305 /* [CP] Check Pods Manifest.lock */,
 				8F326B4B1CCFB0F30041FC40 /* Sources */,
 				8F326B4C1CCFB0F30041FC40 /* Frameworks */,
 				8F326B4D1CCFB0F30041FC40 /* Headers */,
 				8F326B4E1CCFB0F30041FC40 /* Resources */,
-				922F360CC54F6767E63DDF5A /* Copy Pods Resources */,
+				C5B9D5543B58CF40C47C5EA5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -282,12 +284,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "anfema GmbH";
 				TargetAttributes = {
 					8F326B4F1CCFB0F30041FC40 = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -319,34 +321,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		922F360CC54F6767E63DDF5A /* Copy Pods Resources */ = {
+		B0C61D5BB8D0067EBC182305 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		C134B4A613CF5F819073C557 /* Check Pods Manifest.lock */ = {
+		C5B9D5543B58CF40C47C5EA5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ion_client/Pods-ion_client-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -487,7 +489,7 @@
 		};
 		8F326B561CCFB0F30041FC40 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60E7CBE44F5D2E252CF1EA88 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = DDE09F13163B41C489B3012D /* Pods-ion_client.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -505,7 +507,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -513,7 +515,7 @@
 		};
 		8F326B571CCFB0F30041FC40 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4C94AC22A46E8AC8C07C40DC /* Pods.release.xcconfig */;
+			baseConfigurationReference = 22EDEA0642F1815FE1E26E94 /* Pods-ion_client.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -531,7 +533,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

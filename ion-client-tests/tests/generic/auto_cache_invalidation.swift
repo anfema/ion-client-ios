@@ -103,7 +103,7 @@ class autoCacheTests: LoggedInXCTestCase {
         // set default mock bundle
         var path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
         do {
-            try MockingBird.setMockBundle(path)
+            try MockingBird.setMockBundle(withPath: path)
         } catch {
             XCTFail("Could not set up API mocking")
             return
@@ -159,7 +159,7 @@ class autoCacheTests: LoggedInXCTestCase {
         // Switch to other mock bundle
         path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion_refresh"
         do {
-            try MockingBird.setMockBundle(path)
+            try MockingBird.setMockBundle(withPath: path)
         } catch {
             XCTFail("Could not set up API mocking")
             return
@@ -186,7 +186,7 @@ class autoCacheTests: LoggedInXCTestCase {
         // set default mock bundle
         path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
         do {
-            try MockingBird.setMockBundle(path)
+            try MockingBird.setMockBundle(withPath: path)
         } catch {
             XCTFail("Could not set up API mocking")
             return

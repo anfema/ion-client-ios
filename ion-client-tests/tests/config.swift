@@ -45,12 +45,12 @@ class DefaultXCTestCase: XCTestCase {
             
             if self.mock {
                 let config = ION.config.alamofire!.session.configuration
-                MockingBird.registerInConfig(config)
+                MockingBird.register(inConfig: config)
                 ION.config.alamofire = Alamofire.SessionManager(configuration: config)
                 
                 let path = Bundle(for: type(of: self)).resourcePath! + "/bundles/ion"
                 do {
-                    try MockingBird.setMockBundle(path)
+                    try MockingBird.setMockBundle(withPath: path)
                 } catch {
                     XCTFail("Could not set up API mocking")
                 }

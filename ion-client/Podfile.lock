@@ -1,9 +1,9 @@
 PODS:
-  - Alamofire (3.3.1)
+  - Alamofire (4.2.0)
   - anfema-mockingbird (1.0.1):
-    - Alamofire (~> 3.0)
-    - DEjson (~> 1.0)
-  - DEjson (1.0.1)
+    - Alamofire (~> 4.2)
+    - DEjson
+  - DEjson (1.0.3)
   - HashExtensions (2.0.0)
   - html5tokenizer (1.0.0)
   - iso-rfc822-date (1.0.1)
@@ -11,23 +11,59 @@ PODS:
   - Tarpit (1.0.3)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.1)
-  - anfema-mockingbird (~> 1.0)
-  - DEjson (~> 1.0)
+  - Alamofire (~> 4.2)
+  - anfema-mockingbird (from `https://github.com/anfema/Mockingbird`, branch `swift_3`)
+  - DEjson (from `https://github.com/anfema/DEjson`, branch `swift_3`)
   - HashExtensions (~> 2.0)
-  - html5tokenizer (~> 1.0)
+  - html5tokenizer (from `https://github.com/anfema/HTML5Tokenizer`, branch `swift_3`)
   - iso-rfc822-date (~> 1.0)
-  - Markdown (~> 1.0)
-  - Tarpit (~> 1.0)
+  - Markdown (from `https://github.com/anfema/ion-client-ios`, branch `swift_3`)
+  - Tarpit (from `https://github.com/anfema/Tarpit`, branch `swift_3`)
+
+EXTERNAL SOURCES:
+  anfema-mockingbird:
+    :branch: swift_3
+    :git: https://github.com/anfema/Mockingbird
+  DEjson:
+    :branch: swift_3
+    :git: https://github.com/anfema/DEjson
+  html5tokenizer:
+    :branch: swift_3
+    :git: https://github.com/anfema/HTML5Tokenizer
+  Markdown:
+    :branch: swift_3
+    :git: https://github.com/anfema/ion-client-ios
+  Tarpit:
+    :branch: swift_3
+    :git: https://github.com/anfema/Tarpit
+
+CHECKOUT OPTIONS:
+  anfema-mockingbird:
+    :commit: 9c741617f1137af49c5b0dc54b4cf00152778e19
+    :git: https://github.com/anfema/Mockingbird
+  DEjson:
+    :commit: aa73e57f1a66242fe4a2ee23a6b83009234a377e
+    :git: https://github.com/anfema/DEjson
+  html5tokenizer:
+    :commit: 4db7aa35e47ffc146c30ebc52ce6ba33f8b9b38f
+    :git: https://github.com/anfema/HTML5Tokenizer
+  Markdown:
+    :commit: 49fc0c3aa40a8251d8ab2fac9ca9594a09fb608c
+    :git: https://github.com/anfema/ion-client-ios
+  Tarpit:
+    :commit: e0e4ef87240687d2c4ac769cfb3df07dff5bee13
+    :git: https://github.com/anfema/Tarpit
 
 SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  anfema-mockingbird: 901cfaac54cb30e8eedd32a0f789eb9ddc548153
-  DEjson: 9630f0cb6973e5243c220ae275cc61d93d3e153f
+  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  anfema-mockingbird: f1c8fc4c5a5411c7bfb33c109e2f44e3912c600d
+  DEjson: b647d67d4106889a7739063567bbaff7111af6df
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 5ae72b28dce669f316d0e7258f2e672f29447beb
+  Markdown: c8f26ecd6aeb09e160986ddc7269b30244841646
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 9c3b2e3854e04cb2f6fb46a9ac2b0e0557e09bc6
+
+COCOAPODS: 1.1.1

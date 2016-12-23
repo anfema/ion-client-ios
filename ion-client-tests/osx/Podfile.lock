@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   anfema-mockingbird:
-    :commit: 2c686920bba1d12b75403deb8ac7bc7566552d0e
+    :commit: 9c741617f1137af49c5b0dc54b4cf00152778e19
     :git: https://github.com/anfema/Mockingbird
   DEjson:
     :commit: aa73e57f1a66242fe4a2ee23a6b83009234a377e
@@ -48,7 +48,7 @@ CHECKOUT OPTIONS:
     :commit: 4db7aa35e47ffc146c30ebc52ce6ba33f8b9b38f
     :git: https://github.com/anfema/HTML5Tokenizer
   Markdown:
-    :commit: 1b9970ac5db22d5d311b3b74a3464168e0cf5142
+    :commit: 49fc0c3aa40a8251d8ab2fac9ca9594a09fb608c
     :git: https://github.com/anfema/ion-client-ios
   Tarpit:
     :commit: e0e4ef87240687d2c4ac769cfb3df07dff5bee13

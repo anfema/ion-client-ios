@@ -4,21 +4,13 @@ source 'https://github.com/CocoaPods/Specs'
 use_frameworks!
 platform :osx, '10.10'
 
-target 'ion-client' do
+target 'ion_client' do
   pod 'Alamofire', '~> 4.2'
   pod 'HashExtensions', '~> 2.0'
-  pod 'DEjson', :git => 'https://github.com/anfema/DEjson', :branch => 'swift_3
+  pod 'DEjson', :git => 'https://github.com/anfema/DEjson', :branch => 'swift_3'
   pod 'Markdown', :git => 'https://github.com/anfema/ion-client-ios', :branch => 'swift_3'
   pod 'html5tokenizer', :git => 'https://github.com/anfema/HTML5Tokenizer', :branch => 'swift_3'
   pod 'Tarpit', :git => 'https://github.com/anfema/Tarpit', :branch => 'swift_3'
   pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_3'
   pod 'iso-rfc822-date', '~> 1.0'
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '2.3'
-    end
-  end
 end
