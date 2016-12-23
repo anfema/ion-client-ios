@@ -100,13 +100,9 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
-
-            guard let fileURL = URL(string: filename) else{
-                responseQueueCallback(callback, parameter: .failure(IONError.noData(nil)))
-                return
-            }
+                
             do {
-                let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
+                let data = try Data(contentsOf: URL(fileURLWithPath: filename), options: .mappedIfSafe)
                 responseQueueCallback(callback, parameter: .success(data))
             } catch {
                 responseQueueCallback(callback, parameter: .failure(IONError.noData(error)))
