@@ -206,18 +206,16 @@ open class IONRequest {
                                               headers: headers,
                                               to: destination)
         
-        
-        // TODO: Fix this. I think the register progress has to be rewritten
-        /*downloadTask.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
-            // Register the download with the global progress handler
-            if totalBytesExpectedToRead < 0 {
+        downloadTask.downloadProgress { (progress) in
+            if progress.totalUnitCount < 0 {
                 // server sent no content-length header, we expect one byte more than we got
-                ION.registerProgress(totalBytesRead, bytesExpected: totalBytesRead + 1, urlString: urlString)
+                ION.registerProgress(progress.completedUnitCount, bytesExpected: progress.completedUnitCount + 1, urlString: urlString)
             } else {
                 // server sent a content-length header, trust it
-                ION.registerProgress(totalBytesRead, bytesExpected: totalBytesExpectedToRead, urlString: urlString)
+                ION.registerProgress(progress.completedUnitCount, bytesExpected: progress.totalUnitCount, urlString: urlString)
             }
-        }*/
+        }
+        
 
         downloadTask.response { (response) in
             // check for download errors
