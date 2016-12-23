@@ -77,7 +77,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["datetime": .jsonNumber(0)])
         
         do {
-            let _ = try IONDateTimeContent(json: json1)
+            _ = try IONDateTimeContent(json: json1)
         }
             
         catch let e as IONError
@@ -103,7 +103,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONDateTimeContent(json: json2)
+            _ = try IONDateTimeContent(json: json2)
         }
             
         catch let e as IONError
@@ -130,7 +130,7 @@ class datetimeContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("datetime")
         
         do {
-            let _ = try IONDateTimeContent(json: json)
+            _ = try IONDateTimeContent(json: json)
         }
             
         catch let e as IONError

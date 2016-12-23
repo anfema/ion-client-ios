@@ -122,7 +122,7 @@ class fileContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssert(url.absoluteString.contains("token=") ?? false)
+            XCTAssert(url.absoluteString.contains("token="))
             expectation.fulfill()
         }
         
@@ -278,7 +278,7 @@ class fileContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["connection_string": .jsonNumber(0)])
         
         do {
-            let _ = try IONFileContent(json: json1)
+            _ = try IONFileContent(json: json1)
         }
             
         catch let e as IONError
@@ -303,7 +303,7 @@ class fileContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONFileContent(json: json2)
+            _ = try IONFileContent(json: json2)
         }
             
         catch let e as IONError
@@ -330,7 +330,7 @@ class fileContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("connection_string")
         
         do {
-            let _ = try IONFileContent(json: json)
+            _ = try IONFileContent(json: json)
         }
             
         catch let e as IONError

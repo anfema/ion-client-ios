@@ -96,7 +96,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func children(_ name: String, position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
+    @discardableResult public func children(_ name: String, position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.children(name, position: position))
         }

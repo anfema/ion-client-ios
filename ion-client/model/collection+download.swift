@@ -47,7 +47,7 @@ extension IONCollection {
     ///
     /// - parameter callback: Callback to call when the download finished or errored (parameter is success state)
     /// - returns: Collection for chaining
-    public func download(_ callback: @escaping ((Bool) -> Void)) -> IONCollection {
+    @discardableResult public func download(_ callback: @escaping ((Bool) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard let archiveURL = self.archiveURL else {
                 responseQueueCallback(callback, parameter: false)

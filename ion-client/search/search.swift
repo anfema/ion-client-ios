@@ -141,7 +141,7 @@ open class IONSearchHandle {
             return
         }
 
-        setupSqliteConnection()
+        _ = setupSqliteConnection()
     }
 
 

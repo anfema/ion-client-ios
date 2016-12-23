@@ -76,7 +76,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Double` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func number(_ name: String, position: Int = 0, callback: @escaping ((Result<Double>) -> Void)) -> IONPage {
+    @discardableResult public func number(_ name: String, position: Int = 0, callback: @escaping ((Result<Double>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.number(name, position: position))
         }

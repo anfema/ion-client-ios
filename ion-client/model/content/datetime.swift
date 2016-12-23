@@ -82,7 +82,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSDate` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func date(_ name: String, position: Int = 0, callback: @escaping ((Result<Date>) -> Void)) -> IONPage {
+    @discardableResult public func date(_ name: String, position: Int = 0, callback: @escaping ((Result<Date>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.date(name, position: position))
         }

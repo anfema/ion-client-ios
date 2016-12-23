@@ -153,7 +153,7 @@ open class IONPage {
                 }
             }
 
-            semaphore.wait(timeout: DispatchTime.distantFuture)
+            _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
         }) 
 
@@ -175,7 +175,7 @@ open class IONPage {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func waitUntilReady(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
+    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
         workQueue.async {
             guard !self.hasFailed else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -196,7 +196,7 @@ open class IONPage {
     ///
     /// - parameter callback: callback to call
     /// - returns: `self` for chaining
-    open func onCompletion(_ callback: @escaping ((_ page: IONPage, _ completed: Bool) -> Void)) -> IONPage {
+    @discardableResult open func onCompletion(_ callback: @escaping ((_ page: IONPage, _ completed: Bool) -> Void)) -> IONPage {
         workQueue.async(flags: .barrier, execute: {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
         }) 
@@ -234,7 +234,7 @@ open class IONPage {
     ///                       Provides `Result.Success` containing an `IONContent` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` to be able to chain another call
-    open func outlet(_ name: String, position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
+    @discardableResult open func outlet(_ name: String, position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outlet(name, position: position))
         }
@@ -274,7 +274,7 @@ open class IONPage {
     ///                       Provides `Result.Success` containing a `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` for chaining
-    open func outletExists(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
+    @discardableResult open func outletExists(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outletExists(name, position: position))
         }
@@ -288,7 +288,7 @@ open class IONPage {
     /// - parameter callback: callback with object count
     ///
     /// - returns: `self` for chaining
-    open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int>) -> Void)) -> IONPage {
+    @discardableResult open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.numberOfContentsForOutlet(name))
         }

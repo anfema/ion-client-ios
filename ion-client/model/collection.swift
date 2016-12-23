@@ -106,7 +106,7 @@ open class IONCollection {
                 semaphore.signal()
             }
 
-            semaphore.wait(timeout: DispatchTime.distantFuture)
+            _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
         }) 
     }
@@ -121,7 +121,7 @@ open class IONCollection {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the collection
-    open func page(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
+    @discardableResult open func page(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
                 return
@@ -266,7 +266,7 @@ open class IONCollection {
     ///
     /// - parameter callback: Block to call for each page
     /// - returns: self for chaining
-    open func pages(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
+    @discardableResult open func pages(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
         // append page listing to work queue
         self.workQueue.async {
             guard !self.hasFailed else {
@@ -293,7 +293,7 @@ open class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func waitUntilReady(_ callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
+    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -315,7 +315,7 @@ open class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
+    @discardableResult open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
         }) 
@@ -343,7 +343,7 @@ open class IONCollection {
     }
 
 
-    fileprivate func update(_ page: IONPage, callback: ((Result<IONPage>) -> Void)?) -> IONPage? {
+    @discardableResult fileprivate func update(_ page: IONPage, callback: ((Result<IONPage>) -> Void)?) -> IONPage? {
         // fetch page update
         guard let meta = self.getPageMetaForPage(page.identifier) else {
             return nil
@@ -467,7 +467,7 @@ open class IONCollection {
 
                 if let rawLastChanged = dict["last_changed"] {
                     if case .jsonString(let lastChanged) = rawLastChanged {
-                        self.lastChanged = NSDate(isoDateString: lastChanged) as! Date
+                        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date
                         self.lastUpdate = self.lastChanged
                     }
                 }

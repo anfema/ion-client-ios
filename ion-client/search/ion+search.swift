@@ -58,7 +58,7 @@ internal extension ION {
                     }
                 }
 
-                sema.wait(timeout: DispatchTime.distantFuture)
+                _ = sema.wait(timeout: DispatchTime.distantFuture)
 
                 // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
                 NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: Notification.ftsDatabaseDidUpdate), object: collection)

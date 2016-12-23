@@ -75,7 +75,7 @@ extension DataRequest {
     ///                                arguments: the URL request, the URL response and the result produced while
     ///                                creating the JSON object.
     /// - returns: The request.
-    func responseDEJSON(
+    @discardableResult func responseDEJSON(
         _ completionHandler: @escaping (DataResponse<JSONResponse>) -> Void)
         -> Self {
         return response(

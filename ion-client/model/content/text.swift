@@ -175,7 +175,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func text(_ name: String, position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
+    @discardableResult public func text(_ name: String, position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.text(name, position: position))
         }
@@ -217,7 +217,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func html(_ name: String, position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
+    @discardableResult public func html(_ name: String, position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.html(name, position: position))
         }
@@ -259,7 +259,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSAttributedString` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func attributedString(_ name: String, position: Int = 0, callback: @escaping ((Result<NSAttributedString>) -> Void)) -> IONPage {
+    @discardableResult public func attributedString(_ name: String, position: Int = 0, callback: @escaping ((Result<NSAttributedString>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.attributedString(name, position: position))
         }

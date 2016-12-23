@@ -112,7 +112,7 @@ open class HTMLParser {
                 switch name {
                 case "ol", "ul":
                     depth -= 1
-                    counters.popLast()
+                    _ = counters.popLast()
                 case "li":
                     continue
                 default:
@@ -247,10 +247,10 @@ open class HTMLParser {
 
                 switch name {
                 case "ol", "ul":
-                    listContext.popLast()
+                    _ = listContext.popLast()
                     result.append("\n")
                     depth -= 1
-                    counters.popLast()
+                    _ = counters.popLast()
                     continue
                 case "li":
                     continue

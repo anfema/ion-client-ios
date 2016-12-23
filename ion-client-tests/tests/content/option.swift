@@ -197,7 +197,7 @@ class optionContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["value": .jsonNumber(0.0)])
         
         do {
-            let _ = try IONOptionContent(json: json1)
+            _ = try IONOptionContent(json: json1)
         }
             
         catch let e as IONError {
@@ -218,7 +218,7 @@ class optionContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONOptionContent(json: json2)
+            _ = try IONOptionContent(json: json2)
         }
             
         catch let e as IONError {
@@ -240,7 +240,7 @@ class optionContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("value")
         
         do {
-            let _ = try IONOptionContent(json: json)
+            _ = try IONOptionContent(json: json)
         }
             
         catch let e as IONError {

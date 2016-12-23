@@ -19,7 +19,7 @@ extension IONCollection {
     /// - parameter parent: Parent to get page count for, nil == top level
     /// - parameter callback: Block to call for page count return value
     /// - returns: self for chaining
-    public func pageCount(_ parent: String?, callback: @escaping ((Int) -> Void)) -> IONCollection {
+    @discardableResult public func pageCount(_ parent: String?, callback: @escaping ((Int) -> Void)) -> IONCollection {
         // append page count to work queue
         self.workQueue.async {
             if let result = self.pageCount(parent) {
@@ -49,7 +49,7 @@ extension IONCollection {
     /// - parameter identifier: Page identifier to get metadata for
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    public func metadata(_ identifier: String, callback: @escaping ((Result<IONPageMeta>) -> Void)) -> IONCollection {
+    @discardableResult public func metadata(_ identifier: String, callback: @escaping ((Result<IONPageMeta>) -> Void)) -> IONCollection {
         // this block fetches the page count after the collection is ready
         self.workQueue.async {
             let result = self.metadata(identifier)
@@ -84,7 +84,7 @@ extension IONCollection {
     /// - parameter parent: Parent to enumerate metadata for, nil == top level
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    public func metadataList(_ parent: String?, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
+    @discardableResult public func metadataList(_ parent: String?, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         self.workQueue.async {
             responseQueueCallback(callback, parameter: self.metadataList(parent))
@@ -117,7 +117,7 @@ extension IONCollection {
     /// - parameter pageIdentifier: The page identifier to calculate the path for
     /// - parameter callback: Callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
     /// - returns: self for chaining
-    public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
+    @discardableResult public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard let result = self.metaPath(pageIdentifier) else {
                 responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(pageIdentifier)))

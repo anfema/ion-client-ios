@@ -14,7 +14,7 @@ import Foundation
 /// - parameter parameter: The parameter of the callback.
 func responseQueueCallback <T, U> (_ callback: @escaping (T) -> U, parameter: T) {
     ION.config.responseQueue.async {
-        callback(parameter)
+        _ = callback(parameter)
     }
 }
 

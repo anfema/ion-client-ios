@@ -194,7 +194,7 @@ class numberContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["value": .jsonString("wrong")])
         
         do {
-            let _ = try IONNumberContent(json: json1)
+            _ = try IONNumberContent(json: json1)
         }
             
         catch let e as IONError {
@@ -215,7 +215,7 @@ class numberContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONNumberContent(json: json2)
+            _ = try IONNumberContent(json: json2)
         }
             
         catch let e as IONError {
@@ -237,7 +237,7 @@ class numberContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("value")
         
         do {
-            let _ = try IONNumberContent(json: json)
+            _ = try IONNumberContent(json: json)
         }
             
         catch let e as IONError {

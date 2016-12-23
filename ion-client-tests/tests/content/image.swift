@@ -80,7 +80,7 @@ class imageContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssert(url.absoluteString.contains("token=") ?? false)
+            XCTAssert(url.absoluteString.contains("token="))
             expectation.fulfill()
         }
         

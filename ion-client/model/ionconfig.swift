@@ -93,7 +93,7 @@ public struct IONConfig {
         configuration.httpShouldSetCookies = false
 
         var protocolClasses = [AnyClass]()
-        protocolClasses.append(IONCacheAvoidance)
+        protocolClasses.append(IONCacheAvoidance.self)
         configuration.protocolClasses = protocolClasses
 
         #if DEBUG

@@ -209,7 +209,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `CGImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func thumbnail(_ name: String, size: CGSize, position: Int = 0, callback: @escaping ((Result<CGImage>) -> Void)) -> IONPage {
+    @discardableResult public func thumbnail(_ name: String, size: CGSize, position: Int = 0, callback: @escaping ((Result<CGImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -237,7 +237,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage>) -> Void)) -> IONPage {
+    @discardableResult public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -264,7 +264,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage>) -> Void)) -> IONPage {
+    @discardableResult public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<UIImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -293,7 +293,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
+    @discardableResult public func image(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -320,7 +320,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
+    @discardableResult public func originalImage(_ name: String, position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
         self.outlet(name, position: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))

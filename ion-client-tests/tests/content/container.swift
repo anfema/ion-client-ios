@@ -225,7 +225,7 @@ class containerContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["children": .jsonString("wrong")])
         
         do {
-            let _ = try IONContainerContent(json: json1)
+            _ = try IONContainerContent(json: json1)
         }
             
         catch let e as IONError {
@@ -246,7 +246,7 @@ class containerContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONContainerContent(json: json2)
+            _ = try IONContainerContent(json: json2)
         }
             
         catch let e as IONError {
@@ -268,7 +268,7 @@ class containerContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("children")
         
         do {
-            let _ = try IONContainerContent(json: json)
+            _ = try IONContainerContent(json: json)
         }
             
         catch let e as IONError {

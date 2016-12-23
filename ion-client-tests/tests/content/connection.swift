@@ -524,7 +524,7 @@ class connectionContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["connection_string": .jsonNumber(0)])
         
         do {
-            let _ = try IONConnectionContent(json: json1)
+            _ = try IONConnectionContent(json: json1)
         }
             
         catch let e as IONError {
@@ -545,7 +545,7 @@ class connectionContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONConnectionContent(json: json2)
+            _ = try IONConnectionContent(json: json2)
         }
             
         catch let e as IONError {
@@ -567,7 +567,7 @@ class connectionContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("connection_string")
         
         do {
-            let _ = try IONConnectionContent(json: json)
+            _ = try IONConnectionContent(json: json)
         }
             
         catch let e as IONError {

@@ -20,7 +20,7 @@ extension IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the page
-    public func child(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
+    @discardableResult public func child(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
             guard case .success(let page) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.didFail))

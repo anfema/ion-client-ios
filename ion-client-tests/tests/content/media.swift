@@ -175,7 +175,7 @@ class mediaContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssertTrue(url.absoluteString.contains("token=") ?? false)
+            XCTAssertTrue(url.absoluteString.contains("token="))
             expectation.fulfill()
         }
         
@@ -318,7 +318,7 @@ class mediaContentTests: LoggedInXCTestCase {
         let json1: JSONObject = .jsonDictionary(["name": .jsonNumber(0)])
         
         do {
-            let _ = try IONMediaContent(json: json1)
+            _ = try IONMediaContent(json: json1)
         }
             
         catch let e as IONError {
@@ -339,7 +339,7 @@ class mediaContentTests: LoggedInXCTestCase {
         let json2: JSONObject = .jsonDictionary(["test": .jsonString("test")])
         
         do {
-            let _ = try IONMediaContent(json: json2)
+            _ = try IONMediaContent(json: json2)
         }
             
         catch let e as IONError {
@@ -361,7 +361,7 @@ class mediaContentTests: LoggedInXCTestCase {
         let json: JSONObject = .jsonString("name")
         
         do {
-            let _ = try IONMediaContent(json: json)
+            _ = try IONMediaContent(json: json)
         }
             
         catch let e as IONError {

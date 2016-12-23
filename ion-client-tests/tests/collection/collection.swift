@@ -344,7 +344,7 @@ class collectionTests: LoggedInXCTestCase {
                 if case IONError.didFail = result.error! {
                     // ok
                 } else {
-                    print(result.error)
+                    print(result.error as Any)
                     XCTFail()
                 }
                 expectation.fulfill()

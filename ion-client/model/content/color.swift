@@ -128,7 +128,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<NSColor>) -> Void)) -> IONPage {
+    @discardableResult public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<NSColor>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
@@ -171,7 +171,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing a `UIColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<UIColor>) -> Void)) -> IONPage {
+    @discardableResult public func color(_ name: String, position: Int = 0, callback: @escaping ((Result<UIColor>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.cachedColor(name, position: position))
         }
