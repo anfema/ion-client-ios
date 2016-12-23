@@ -13,12 +13,12 @@ import Foundation
 import Markdown
 
 #if os(OSX)
-    import SQLiteMacOSX
+    import sqlite_MacOSX
 #elseif os(iOS)
 #if (arch(i386) || arch(x86_64))
-    import SQLiteiPhoneSimulator
+    import sqlite_iPhoneSimulator
     #else
-    import SQLiteiPhoneOS
+    import sqlite_iPhoneOS
 #endif
 #endif
 

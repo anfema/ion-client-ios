@@ -1,14 +1,14 @@
-module SQLiteMacOSX {
+module sqlite_MacOSX {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sqlite3.h"
     export *
 }
 
-module SQLiteiPhoneOS {
+module sqlite_iPhoneOS {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include/sqlite3.h"
     export *
 }
 
-module SQLiteiPhoneSimulator {
+module sqlite_iPhoneSimulator {
     header "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/include/sqlite3.h"
     export *
 }
