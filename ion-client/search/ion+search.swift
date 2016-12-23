@@ -13,12 +13,12 @@ import Foundation
 
 internal extension ION {
 
-    internal class func searchIndex(_ collection: String) -> String? {
+    internal class func searchIndex(forCollection collection: String) -> String? {
         let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return directoryURLs[0].appendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
     }
 
-    internal class func downloadFTSDB(_ collection: String, callback: ((Void) -> Void)? = nil) {
+    internal class func downloadFTSDB(forCollection collection: String, callback: ((Void) -> Void)? = nil) {
         ION.collection(collection) { result in
             guard case .success(let c) = result,
                   let ftsURL = c.ftsDownloadURL else {
@@ -34,7 +34,7 @@ internal extension ION {
                         sema.signal()
                     }
 
-                    guard let searchIndex = ION.searchIndex(collection),
+                    guard let searchIndex = ION.searchIndex(forCollection: collection),
                           case .success(let filename) = result else {
                         return
                     }
@@ -61,7 +61,7 @@ internal extension ION {
                 _ = sema.wait(timeout: DispatchTime.distantFuture)
 
                 // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
-                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: Notification.ftsDatabaseDidUpdate), object: collection)
+                NotificationCenter.default.post(name: Notification.ftsDatabaseDidUpdate, object: collection)
 
                 if let callback = callback {
                     ION.config.responseQueue.async {

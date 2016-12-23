@@ -88,8 +88,8 @@ open class IONSearchHandle {
     ///
     /// - parameter text: text to search for
     /// - returns: list with search results, may be an empty list
-    open func search(_ text: String) -> [IONSearchResult] {
-        let searchTerm = self.fixSearchTerm(text)
+    open func search(for text: String) -> [IONSearchResult] {
+        let searchTerm = text.fixedSearchTerm
 
         sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, sqliteTransient)
         sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, sqliteTransient)
@@ -121,7 +121,7 @@ open class IONSearchHandle {
         self.collection = collection
 
         // Listen for fts db updates so that the sqlite connection can be reopened with the new file.
-        NotificationCenter.default.addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(_:)), name: NSNotification.Name(rawValue: Notification.ftsDatabaseDidUpdate), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(IONSearchHandle.didUpdateFTSDB(notification:)), name: Notification.ftsDatabaseDidUpdate, object: nil)
 
         guard setupSqliteConnection() else {
             return nil
@@ -130,7 +130,7 @@ open class IONSearchHandle {
 
 
     @objc
-    internal func didUpdateFTSDB(_ notification: Foundation.Notification) {
+    internal func didUpdateFTSDB(notification: Foundation.Notification) {
         // Extract collection identifier from notification.
         guard let collectionIdentifier = notification.object as? String else {
             return
@@ -146,7 +146,7 @@ open class IONSearchHandle {
 
 
     internal func setupSqliteConnection() -> Bool {
-        guard let searchIndex = ION.searchIndex(self.collection.identifier), sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard let searchIndex = ION.searchIndex(forCollection: self.collection.identifier), sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
             return false
         }
 
@@ -158,24 +158,28 @@ open class IONSearchHandle {
 
         return true
     }
-
-
-    // MARK: - Private
-
-    fileprivate func fixSearchTerm(_ text: String) -> String {
-        if text.range(of: "\"") != nil {
-            return text
-        }
-        var result = text
-        result = result.replacingOccurrences(of: " ", with: "* ")
-        result = result.replacingOccurrences(of: " -", with: " NOT ")
-        return result + "*"
-    }
+    
 
     deinit {
         NotificationCenter.default.removeObserver(self)
 
         sqlite3_finalize(self.stmt)
         sqlite3_close(self.dbHandle)
+    }
+}
+
+
+fileprivate extension String
+{
+    fileprivate var fixedSearchTerm : String
+    {
+        if range(of: "\"") != nil {
+            return self
+        }
+        
+        var result = self
+        result = result.replacingOccurrences(of: " ", with: "* ")
+        result = result.replacingOccurrences(of: " -", with: " NOT ")
+        return result + "*"
     }
 }

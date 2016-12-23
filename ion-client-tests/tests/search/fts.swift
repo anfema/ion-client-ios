@@ -37,7 +37,7 @@ class ftsTests: LoggedInXCTestCase {
                 return
             }
             
-            let items = search.search("ullamcorper")
+            let items = search.search(for: "ullamcorper")
             XCTAssert(items.count == 4)
             expectation.fulfill()
         }
@@ -59,7 +59,7 @@ class ftsTests: LoggedInXCTestCase {
                 return
             }
             
-            let items = search.search("ullamcorper -nulla")
+            let items = search.search(for: "ullamcorper -nulla")
             XCTAssert(items.count == 1)
             
             guard let item = items.first else {
@@ -91,7 +91,7 @@ class ftsTests: LoggedInXCTestCase {
                 return
             }
             
-            let items = search.search("donec duis")
+            let items = search.search(for: "donec duis")
             XCTAssert(items.count == 3)
             expectation.fulfill()
         }
@@ -113,7 +113,7 @@ class ftsTests: LoggedInXCTestCase {
                 return
             }
             
-            let items = search.search("\"donec duis\"")
+            let items = search.search(for: "\"donec duis\"")
             XCTAssert(items.count == 0)
             expectation.fulfill()
         }
@@ -133,7 +133,7 @@ class ftsTests: LoggedInXCTestCase {
         ION.config.enableFTS("test")
         XCTAssertTrue(ION.config.isFTSEnabled("test"))
         
-        ION.downloadFTSDB("test") {
+        ION.downloadFTSDB(forCollection: "test") {
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -208,8 +208,8 @@ class NotificationConsumer {
     var notificationUserInfo: [AnyHashable: Any]?
     var notificationObject: Any?
     
-    init(notification: String) {
-        NotificationCenter.default.addObserver(self, selector: #selector(NotificationConsumer.onNotification(_:)), name: Foundation.Notification.Name(notification), object: nil)
+    init(notification: Foundation.Notification.Name) {
+        NotificationCenter.default.addObserver(self, selector: #selector(NotificationConsumer.onNotification(_:)), name: notification, object: nil)
     }
     
     

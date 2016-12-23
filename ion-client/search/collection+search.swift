@@ -17,7 +17,7 @@ public extension IONCollection {
     ///
     /// - parameter callback: Callback to be called when the search handle is ready
     public func getSearchHandle(_ callback: @escaping ((Result<IONSearchHandle>) -> Void)) {
-        guard let searchIndex = ION.searchIndex(self.identifier), ION.config.isFTSEnabled(self.identifier) else {
+        guard let searchIndex = ION.searchIndex(forCollection: self.identifier), ION.config.isFTSEnabled(self.identifier) else {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
@@ -35,7 +35,7 @@ public extension IONCollection {
         }
 
         if !FileManager.default.fileExists(atPath: searchIndex) {
-            ION.downloadFTSDB(self.identifier) {
+            ION.downloadFTSDB(forCollection: self.identifier) {
                 performCallback()
             }
         } else {

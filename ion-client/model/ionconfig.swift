@@ -153,7 +153,7 @@ public struct IONConfig {
 
         self.registerUpdateBlock("fts") { collectionIdentifier in
             if ION.config.isFTSEnabled(collectionIdentifier) {
-                ION.downloadFTSDB(collectionIdentifier)
+                ION.downloadFTSDB(forCollection: collectionIdentifier)
             }
         }
     }
@@ -177,12 +177,12 @@ public struct IONConfig {
     ///
     /// - parameter collection: collection identifier
     public mutating func enableFTS(_ collection: String) {
-        guard let searchIndex = ION.searchIndex(collection) else {
+        guard let searchIndex = ION.searchIndex(forCollection: collection) else {
             return
         }
         self.ftsEnabled[collection] = true
         if !FileManager.default.fileExists(atPath: searchIndex) {
-            ION.downloadFTSDB(collection)
+            ION.downloadFTSDB(forCollection: collection)
         }
     }
 
