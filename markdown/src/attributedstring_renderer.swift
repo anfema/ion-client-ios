@@ -276,10 +276,10 @@ public struct AttributedStringStyling {
 
 extension ContentNode {
     
-    public func renderAttributedString(_ style: AttributedStringStyling) -> NSAttributedString {
+    public func renderAttributedString(usingStyle style: AttributedStringStyling) -> NSAttributedString {
         let content = NSMutableAttributedString(string: "")
         for child in self.children {
-            content.append(child.renderAttributedString(style))
+            content.append(child.renderAttributedString(usingStyle: style))
         }
         
         switch self.type {

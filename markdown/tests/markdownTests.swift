@@ -150,7 +150,7 @@ class markdownTests: XCTestCase {
     func testCascadedComplexList() {
         let domNode = MDParser(markdown:"1. List __item__ 1\n    - Level 2 `item` 1\n    - Level 2 item 2\n2. *List* item 2\n3. List item 3").render()
         print(domNode.debugDescription)
-        print(domNode.renderAttributedString(AttributedStringStyling()))
+        print(domNode.renderAttributedString(usingStyle: AttributedStringStyling()))
         XCTAssertEqual(domNode.renderHTMLFragment(), "<ol>\n<li>\n<p>List <strong>item</strong> 1</p>\n\n<ul>\n<li>Level 2 <code>item</code> 1</li>\n<li>Level 2 item 2</li>\n</ul>\n</li>\n<li><em>List</em> item 2</li>\n<li>List item 3</li>\n</ol>")
     }
 }

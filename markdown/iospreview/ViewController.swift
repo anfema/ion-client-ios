@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         let dom = renderer.render()
         print(dom)
         let style = AttributedStringStyling(font: UIFont.systemFont(ofSize: 15), strongFont: UIFont.boldSystemFont(ofSize: 15), emphasizedFont: UIFont.italicSystemFont(ofSize: 15), baseColor: UIColor.black, backgroundColor: UIColor.white)
-        self.renderedView.attributedText = dom.renderAttributedString(style)
+        self.renderedView.attributedText = dom.renderAttributedString(usingStyle: style)
     }
 }
 
