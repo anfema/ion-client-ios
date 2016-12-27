@@ -28,7 +28,7 @@ open class ION {
     /// - parameter username: the username to log in
     /// - parameter password: the password to send
     /// - parameter callback: block to call when login request finished (Bool parameter is success flag)
-    open class func login(_ username: String, password: String, callback: @escaping ((Bool) -> Void)) {
+    open class func login(withUsername username: String, password: String, callback: @escaping ((Bool) -> Void)) {
         IONRequest.postJSON(toEndpoint: "login", queryParameters: nil, body: [
             "login": [
                 "username": username,
@@ -65,9 +65,9 @@ open class ION {
     /// - returns: collection object from cache or empty collection object
     open class func collection(_ identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
-
+        
         // return memcache if not timed out
-        if !self.hasCacheTimedOut(identifier) {
+        if !self.hasCacheTimedOut(collection: identifier) {
             if let cachedCollection = cachedCollection {
                 return cachedCollection
             }
@@ -77,7 +77,7 @@ open class ION {
         }
 
         // try an online update
-        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(collection: identifier)) ? .ignore : .prefer)
         let newCollection = IONCollection(
             identifier: identifier,
             locale: ION.config.locale,
@@ -92,7 +92,7 @@ open class ION {
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
 
-        if self.hasCacheTimedOut(identifier) {
+        if self.hasCacheTimedOut(collection: identifier) {
             self.config.lastOnlineUpdate[identifier] = Date()
         }
 
@@ -108,7 +108,7 @@ open class ION {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out
-        if !self.hasCacheTimedOut(identifier) {
+        if !self.hasCacheTimedOut(collection: identifier) {
             if let cachedCollection = cachedCollection {
                 if cachedCollection.hasFailed {
                     responseQueueCallback(callback, parameter: .failure(IONError.collectionNotFound(identifier)))
@@ -123,7 +123,7 @@ open class ION {
         }
 
         // try an online update
-        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
+        let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(collection: identifier)) ? .ignore : .prefer)
         let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, cacheBehaviour: cache) { result in
             guard case .success(let collection) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -138,7 +138,7 @@ open class ION {
             self.notifyForUpdates(collection, collection2: cachedCollection)
         }
 
-        if self.hasCacheTimedOut(identifier) {
+        if self.hasCacheTimedOut(collection: identifier) {
             self.config.lastOnlineUpdate[identifier] = Date()
         }
 
@@ -153,7 +153,7 @@ open class ION {
     /// - parameter bytesExpected: Number of total expected bytes
     /// - parameter urlString: The URL of the file the progress should be reported
     ///
-    class func registerProgress(_ bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
+    class func registerProgress(bytesReceived: Int64, bytesExpected: Int64, urlString: String) {
         self.pendingDownloads[urlString] = (totalBytes: bytesExpected, downloadedBytes: bytesReceived)
 
         // sum up all pending downloads
@@ -189,7 +189,7 @@ open class ION {
     /// Call all update notification blocks
     ///
     /// - parameter collectionIdentifier: collection id to send to update block
-    fileprivate class func callUpdateBlocks(_ collectionIdentifier: String) {
+    fileprivate class func callUpdateBlocks(withCollection collectionIdentifier: String) {
         for block in ION.config.updateBlocks.values {
             ION.config.responseQueue.async {
                 block(collectionIdentifier)
@@ -204,7 +204,7 @@ open class ION {
     fileprivate class func notifyForUpdates(_ collection1: IONCollection, collection2: IONCollection) {
         if collection1.equals(to: collection2) == false {
             // call change blocks
-            ION.callUpdateBlocks(collection1.identifier)
+            ION.callUpdateBlocks(withCollection: collection1.identifier)
         }
     }
 

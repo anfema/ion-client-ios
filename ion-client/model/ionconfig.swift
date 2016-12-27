@@ -120,39 +120,39 @@ public struct IONConfig {
             alamofire.startRequestsImmediately = false
         }
 
-        self.registerContentType("colorcontent") { json in
+        self.registerContentType(named: "colorcontent") { json in
             return try IONColorContent(json: json)
         }
-        self.registerContentType("connectioncontent") { json in
+        self.registerContentType(named: "connectioncontent") { json in
             return try IONConnectionContent(json: json)
         }
-        self.registerContentType("datetimecontent") { json in
+        self.registerContentType(named: "datetimecontent") { json in
             return try IONDateTimeContent(json: json)
         }
-        self.registerContentType("filecontent") { json in
+        self.registerContentType(named: "filecontent") { json in
             return try IONFileContent(json: json)
         }
-        self.registerContentType("flagcontent") { json in
+        self.registerContentType(named: "flagcontent") { json in
             return try IONFlagContent(json: json)
         }
-        self.registerContentType("imagecontent") { json in
+        self.registerContentType(named: "imagecontent") { json in
             return try IONImageContent(json: json)
         }
-        self.registerContentType("numbercontent") { json in
+        self.registerContentType(named: "numbercontent") { json in
             return try IONNumberContent(json: json)
         }
-        self.registerContentType("mediacontent") { json in
+        self.registerContentType(named: "mediacontent") { json in
             return try IONMediaContent(json: json)
         }
-        self.registerContentType("optioncontent") { json in
+        self.registerContentType(named: "optioncontent") { json in
             return try IONOptionContent(json: json)
         }
-        self.registerContentType("textcontent") { json in
+        self.registerContentType(named: "textcontent") { json in
             return try IONTextContent(json: json)
         }
 
-        self.registerUpdateBlock("fts") { collectionIdentifier in
-            if ION.config.isFTSEnabled(collectionIdentifier) {
+        self.registerUpdateBlock(identifier: "fts") { collectionIdentifier in
+            if ION.config.isFTSEnabled(forCollection: collectionIdentifier) {
                 ION.downloadFTSDB(forCollection: collectionIdentifier)
             }
         }
@@ -162,44 +162,44 @@ public struct IONConfig {
     ///
     /// - parameter identifier: block identifier
     /// - parameter block:      block to call
-    public mutating func registerUpdateBlock(_ identifier: String, block: @escaping ((String) -> Void)) {
+    public mutating func registerUpdateBlock(identifier: String, block: @escaping ((String) -> Void)) {
         self.updateBlocks[identifier] = block
     }
 
     /// De-Register update notification block
     ///
     /// - parameter identifier: block identifier
-    public mutating func removeUpdateBlock(_ identifier: String) {
+    public mutating func removeUpdateBlock(identifier: String) {
         self.updateBlocks.removeValue(forKey: identifier)
     }
 
     /// Enable Full text search for a collection (fetches additional data from server)
     ///
-    /// - parameter collection: collection identifier
-    public mutating func enableFTS(_ collection: String) {
-        guard let searchIndex = ION.searchIndex(forCollection: collection) else {
+    /// - parameter collectionIdentifier: collection identifier
+    public mutating func enableFTS(forCollection collectionIdentifier: String) {
+        guard let searchIndex = ION.searchIndex(forCollection: collectionIdentifier) else {
             return
         }
-        self.ftsEnabled[collection] = true
+        self.ftsEnabled[collectionIdentifier] = true
         if !FileManager.default.fileExists(atPath: searchIndex) {
-            ION.downloadFTSDB(forCollection: collection)
+            ION.downloadFTSDB(forCollection: collectionIdentifier)
         }
     }
 
     /// Disable Full text search for a collection
     ///
-    /// - parameter collection: collection identifier
-    public mutating func disableFTS(_ collection: String) {
-        self.ftsEnabled[collection] = false
+    /// - parameter collectionIdentifier: collection identifier
+    public mutating func disableFTS(forCollection collectionIdentifier: String) {
+        self.ftsEnabled[collectionIdentifier] = false
     }
 
     /// Check if full text search is enabled for a collection
     ///
-    /// - parameter collection: collection identifier
+    /// - parameter collectionIdentifier: collection identifier
     ///
     /// - returns: true if fts is enabled
-    public func isFTSEnabled(_ collection: String) -> Bool {
-        return self.ftsEnabled[collection] ?? false
+    public func isFTSEnabled(forCollection collectionIdentifier: String) -> Bool {
+        return self.ftsEnabled[collectionIdentifier] ?? false
     }
 
     /// Register a custom content type
@@ -212,14 +212,14 @@ public struct IONConfig {
     ///
     /// - parameter typeName: type name in JSON
     /// - parameter creationBlock: a block to create an instance of the content type
-    public mutating func registerContentType(_ typeName: String, creationBlock: @escaping ContentTypeLambda) {
+    public mutating func registerContentType(named typeName: String, creationBlock: @escaping ContentTypeLambda) {
         self.registeredContentTypes[typeName] = creationBlock
     }
 
     /// De-register custom content type
     ///
     /// - parameter typeName: type name in JSON
-    public mutating func unRegisterContentType(_ typeName: String) {
+    public mutating func unRegisterContentType(named typeName: String) {
         self.registeredContentTypes.removeValue(forKey: typeName)
     }
 

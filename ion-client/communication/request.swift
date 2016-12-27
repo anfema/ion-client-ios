@@ -209,10 +209,10 @@ open class IONRequest {
         downloadTask.downloadProgress { (progress) in
             if progress.totalUnitCount < 0 {
                 // server sent no content-length header, we expect one byte more than we got
-                ION.registerProgress(progress.completedUnitCount, bytesExpected: progress.completedUnitCount + 1, urlString: urlString)
+                ION.registerProgress(bytesReceived: progress.completedUnitCount, bytesExpected: progress.completedUnitCount + 1, urlString: urlString)
             } else {
                 // server sent a content-length header, trust it
-                ION.registerProgress(progress.completedUnitCount, bytesExpected: progress.totalUnitCount, urlString: urlString)
+                ION.registerProgress(bytesReceived: progress.completedUnitCount, bytesExpected: progress.totalUnitCount, urlString: urlString)
             }
         }
         
@@ -242,7 +242,7 @@ open class IONRequest {
                 // call final update for progress, we're using 1 here because the user likely wants to
                 // calculate a percentage and thus divides those numbers
                 if response.allHeaderFields["Content-Length"] == nil {
-                    ION.registerProgress(1, bytesExpected: 1, urlString: urlString)
+                    ION.registerProgress(bytesReceived: 1, bytesExpected: 1, urlString: urlString)
                 }
                 
                 // try falling back to cache
@@ -293,7 +293,7 @@ open class IONRequest {
                 if let unwrapped = response.response, unwrapped.allHeaderFields["Content-Length"] == nil,
                     let cachedFileData = self.cachedData(forURL: urlString) {
                     let bytes: Int64 = Int64(cachedFileData.count)
-                    ION.registerProgress(bytes, bytesExpected: bytes, urlString: urlString)
+                    ION.registerProgress(bytesReceived: bytes, bytesExpected: bytes, urlString: urlString)
                 }
                 
                 self.saveJSONToCache(using: request, checksumMethod: ckSumMethod, checksum: ckSum)

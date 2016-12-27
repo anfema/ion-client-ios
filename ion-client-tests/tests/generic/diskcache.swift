@@ -184,7 +184,7 @@ class diskcacheTests: LoggedInXCTestCase {
 
             XCTAssertNotNil(page.lastUpdate)
             ION.resetMemCache()
-            ION.resetDiskCache(page.locale)
+            ION.resetDiskCache(forLocale: page.locale)
             ION.collection("test").page("page_001") { result in
                 
                 // Test if the correct response queue is used

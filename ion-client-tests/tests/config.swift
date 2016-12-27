@@ -84,7 +84,7 @@ class LoggedInXCTestCase: DefaultXCTestCase {
             }
         } else {
             print("ION Test: Logging in")
-            ION.login("admin@anfe.ma", password: "test") { success in
+            ION.login(withUsername: "admin@anfe.ma", password: "test") { success in
                 if success {
                     print("ION Test: Login successful")
                 } else {

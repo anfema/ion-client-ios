@@ -16,7 +16,7 @@ extension ION {
     ///
     public class func resetMemCache() {
         for collection in self.collectionCache.keys {
-            resetMemCache(collection)
+            resetMemCache(forCollection: collection)
         }
     }
 
@@ -25,11 +25,11 @@ extension ION {
     /// Call in cases of memory warnings to purge the memory cache, calls to cached objects will punch through to disk
     /// cache and have a parsing and initialization penalty on next call.
     ///
-    /// - parameter collection: Collection to clear
+    /// - parameter collectionIdentifier: Collection to clear
     ///
-    public class func resetMemCache(_ collection: String) {
-        self.collectionCache[collection]?.pageCache.removeAll()
-        self.collectionCache.removeValue(forKey: collection)
+    public class func resetMemCache(forCollection collectionIdentifier: String) {
+        self.collectionCache[collectionIdentifier]?.pageCache.removeAll()
+        self.collectionCache.removeValue(forKey: collectionIdentifier)
     }
 
     /// Clear disk cache
@@ -50,7 +50,7 @@ extension ION {
     ///
     /// - parameter locale: a locale code to empty the cache for
     ///
-    public class func resetDiskCache(_ locale: String) {
+    public class func resetDiskCache(forLocale locale: String) {
         self.config.lastOnlineUpdate.removeAll()
         let prefs = UserDefaults.standard
         prefs.removeObject(forKey: "ION.collection.lastUpdated")
@@ -60,13 +60,13 @@ extension ION {
 
     /// Determine if collection cache has timed out
     ///
-    /// - parameter identifier: The identifier of the `IONCollection` that should be tested if timed out.
+    /// - parameter collectionIdentifier: The identifier of the `IONCollection` that should be tested if timed out.
     ///
     /// - returns: true if cache is old
     ///
-    internal class func hasCacheTimedOut(_ identifier: String) -> Bool {
+    internal class func hasCacheTimedOut(collection collectionIdentifier: String) -> Bool {
         var timeout = false
-        if let lastUpdate = self.config.lastOnlineUpdate[identifier] {
+        if let lastUpdate = self.config.lastOnlineUpdate[collectionIdentifier] {
             let currentDate = Date()
             if lastUpdate.addingTimeInterval(self.config.cacheTimeout).compare(currentDate) == ComparisonResult.orderedAscending {
                 timeout = true

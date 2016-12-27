@@ -26,7 +26,7 @@ class authTests: DefaultXCTestCase {
     func testLoginSuccess() {
         let expectation = self.expectation(description: "testLoginSuccess")
         
-        ION.login("admin@anfe.ma", password: "test") { success in
+        ION.login(withUsername: "admin@anfe.ma", password: "test") { success in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -43,7 +43,7 @@ class authTests: DefaultXCTestCase {
         if !self.mock {
             let expectation = self.expectation(description: "testLoginFailure")
         
-            ION.login("admin@anfe.ma", password: "wrongpassword") { success in
+            ION.login(withUsername: "admin@anfe.ma", password: "wrongpassword") { success in
                 
                 // Test if the correct response queue is used
                 XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
