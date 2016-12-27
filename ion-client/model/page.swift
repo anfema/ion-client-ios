@@ -385,7 +385,7 @@ open class IONPage {
                 // Parse and append content to this page
                 for c in contents {
                     do {
-                        let obj = try IONContent.factory(c)
+                        let obj = try IONContent.factory(json: c)
                         self.appendContent(obj)
                     } catch {
                         // Content could not be deserialized, do not add to page

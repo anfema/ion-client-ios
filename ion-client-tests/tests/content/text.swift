@@ -142,7 +142,7 @@ class textContentTests: LoggedInXCTestCase {
                     return
                 }
                 
-                guard case .success(let text) = page.html(outletName, position: 0) else {
+                guard case .success(let text) = page.html(outletName, atPosition: 0) else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -231,7 +231,7 @@ class textContentTests: LoggedInXCTestCase {
                     return
                 }
                 
-                guard case .success(let text) = page.attributedString(outletName, position: 0) else {
+                guard case .success(let text) = page.attributedString(outletName, atPosition: 0) else {
                     XCTFail()
                     expectation.fulfill()
                     return
@@ -332,7 +332,7 @@ class textContentTests: LoggedInXCTestCase {
     func testWrongOutletText2() {
         let expectation = self.expectation(description: "testWrongOutlet2")
         
-        ION.collection("test").page("page_001").text("number", position: 1) { result in
+        ION.collection("test").page("page_001").text("number", atPosition: 1) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -359,7 +359,7 @@ class textContentTests: LoggedInXCTestCase {
     func testWrongOutletAttributedString2() {
         let expectation = self.expectation(description: "testWrongOutletAttributedString2")
         
-        ION.collection("test").page("page_001").attributedString("number", position: 1) { result in
+        ION.collection("test").page("page_001").attributedString("number", atPosition: 1) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -386,7 +386,7 @@ class textContentTests: LoggedInXCTestCase {
     func testWrongOutletHTML2() {
         let expectation = self.expectation(description: "testWrongOutletHTML2")
         
-        ION.collection("test").page("page_001").html("number", position: 1) { result in
+        ION.collection("test").page("page_001").html("number", atPosition: 1) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -490,7 +490,7 @@ class textContentTests: LoggedInXCTestCase {
                 return
             }
             
-            let htmlResult = page.html("number", position: 1)
+            let htmlResult = page.html("number", atPosition: 1)
             
             guard case .failure(let htmlError) = htmlResult else {
                 XCTFail()
@@ -505,7 +505,7 @@ class textContentTests: LoggedInXCTestCase {
             }
             
             
-            let textResult = page.text("number", position: 1)
+            let textResult = page.text("number", atPosition: 1)
             
             guard case .failure(let textError) = textResult else {
                 XCTFail()
@@ -520,7 +520,7 @@ class textContentTests: LoggedInXCTestCase {
             }
             
             
-            let attributedStringResult = page.attributedString("number", position: 1)
+            let attributedStringResult = page.attributedString("number", atPosition: 1)
             
             
             guard case .failure(let attributedStringError) = attributedStringResult else {

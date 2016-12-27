@@ -97,7 +97,7 @@ open class IONContent {
     ///                                      value types.
     ///           `IONError.UnknownContentType`: The provied `JSONObject` can not be initialized
     ///                                             with any of the registered content types.
-    open class func factory(_ json: JSONObject) throws -> IONContent {
+    open class func factory(json: JSONObject) throws -> IONContent {
         guard case .jsonDictionary(let dict) = json else {
             throw IONError.jsonObjectExpected(json)
         }

@@ -41,7 +41,7 @@ open class IONContainerContent: IONContent {
         self.children = []
         for child in children {
             do {
-                try self.children.append(IONContent.factory(child))
+                try self.children.append(IONContent.factory(json: child))
             } catch {
                 if ION.config.loggingEnabled {
                     print("ION: Deserialization failed")
@@ -73,7 +73,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an array of `IONContent` objects if the outlet is a container outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func children(_ name: String, position: Int = 0) -> Result<[IONContent]> {
+    public func children(_ name: String, atPosition position: Int = 0) -> Result<[IONContent]> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -96,9 +96,9 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func children(_ name: String, position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
+    @discardableResult public func children(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
         workQueue.async {
-            responseQueueCallback(callback, parameter: self.children(name, position: position))
+            responseQueueCallback(callback, parameter: self.children(name, atPosition: position))
         }
 
         return self

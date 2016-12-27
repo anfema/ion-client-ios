@@ -292,7 +292,7 @@ class imageContentTests: LoggedInXCTestCase {
     func testInvalidThumbnailOutlet() {
         let expectation = self.expectation(description: "testInvalidMediaDataOutlet")
         
-        ION.collection("test").page("page_001").thumbnail("number", size: CGSize(width: 100, height: 100)) { result in
+        ION.collection("test").page("page_001").thumbnail("number", withSize: CGSize(width: 100, height: 100)) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -319,7 +319,7 @@ class imageContentTests: LoggedInXCTestCase {
     func testWrongThumbnailOutlet() {
         let expectation = self.expectation(description: "testInvalidMediaDataOutlet")
         
-        ION.collection("test").page("page_001").thumbnail("wrong", size: CGSize(width: 100, height: 100)) { result in
+        ION.collection("test").page("page_001").thumbnail("wrong", withSize: CGSize(width: 100, height: 100)) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -379,7 +379,7 @@ class imageContentTests: LoggedInXCTestCase {
                 
                 XCTAssertTrue(max(w, h) == maxSize)
                 
-                ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
+                ION.collection("test").page("page_001").thumbnail("image", withSize: size, callback: { result in
                     guard case .success(let thumbnail) = result else {
                         XCTFail()
                         expectation.fulfill()
@@ -440,7 +440,7 @@ class imageContentTests: LoggedInXCTestCase {
                 XCTAssertTrue(w == Int(imageOutlet.originalSize.width))
                 XCTAssertTrue(h == Int(imageOutlet.originalSize.height))
                 
-                ION.collection("test").page("page_001").thumbnail("image", size: size, callback: { result in
+                ION.collection("test").page("page_001").thumbnail("image", withSize: size, callback: { result in
                     guard case .success(let thumbnail) = result else {
                         XCTFail()
                         expectation.fulfill()

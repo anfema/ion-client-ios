@@ -116,7 +116,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testOutletArrayValues() {
         for i in 0..<32 {
             let expectation = self.expectation(description: "testOutletArrayValues")
-            ION.collection("test").page("page_002").color("colorarray", position: i) { result in
+            ION.collection("test").page("page_002").color("colorarray", atPosition: i) { result in
                 
                 // Test if the correct response queue is used
                 XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -147,7 +147,7 @@ class contentBaseTests: LoggedInXCTestCase {
     /// Test if the IONContent.factory throws the correct error when provided with the wrong JSONObject type.
     func testFactoryErrorWrongJSONObject() {
         do {
-            _ = try IONContent.factory(JSONObject.jsonString("dummyString"))
+            _ = try IONContent.factory(json: JSONObject.jsonString("dummyString"))
             XCTFail()
         } catch let err {
             guard case IONError.jsonObjectExpected(_) = err else {
@@ -162,7 +162,7 @@ class contentBaseTests: LoggedInXCTestCase {
     func testFactoryErrorDictHasNoKeyType() {
         do {
             let jsonDict = ["dummyKey": JSONObject.jsonString("dummyValue")]
-            _ = try IONContent.factory(JSONObject.jsonDictionary(jsonDict))
+            _ = try IONContent.factory(json: JSONObject.jsonDictionary(jsonDict))
             XCTFail()
         } catch let err {
             guard case IONError.invalidJSON(_) = err else {
