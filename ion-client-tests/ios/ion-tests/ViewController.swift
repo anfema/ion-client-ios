@@ -20,7 +20,11 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let fontSize = CGFloat(10.0)
-        var style = AttributedStringStyling(font: UIFont(name: "Helvetica", size: fontSize)!, strongFont: UIFont(name: "Helvetica-Bold", size: fontSize)!, emphasizedFont: UIFont(name: "Helvetica-Oblique", size: fontSize)!, baseColor: UIColor.black, backgroundColor: UIColor.white)
+        var style = AttributedStringStyling(font: UIFont(name: "Helvetica", size: fontSize)!,
+                                            strongFont: UIFont(name: "Helvetica-Bold", size: fontSize)!,
+                                            emphasizedFont: UIFont(name: "Helvetica-Oblique", size: fontSize)!,
+                                            baseColor: UIColor.black,
+                                            backgroundColor: UIColor.white)
         
         style.unorderedListItem.textIndent = 0
         style.orderedListItem.textIndent = 0
