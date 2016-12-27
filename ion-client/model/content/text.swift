@@ -102,7 +102,7 @@ open class IONTextContent: IONContent {
         // TODO: Write tests for attributedString() function in TextContent
         switch self.mimeType {
         case "text/html":
-            return HTMLParser(html: self.text).renderAttributedString(ION.config.stringStyling)
+            return HTMLParser(html: self.text).renderAttributedString(using: ION.config.stringStyling)
         case "text/markdown":
             return MDParser(markdown: self.text).render().renderAttributedString(usingStyle: ION.config.stringStyling)
         case "text/plain":

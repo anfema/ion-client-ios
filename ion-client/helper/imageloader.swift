@@ -156,7 +156,7 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func cgImage(_ original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
+    public func cgImage(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
         dataProviderFunc() { result in
             guard case .success(let provider) = result else {
@@ -179,7 +179,7 @@ extension CanLoadImage {
     ///
     /// - parameter callback: block to execute when the image has been allocated
     public func originalCGImage(_ callback: @escaping ((Result<CGImage>) -> Void)) {
-        self.cgImage(true, callback: callback)
+        self.cgImage(usingOriginalDataProvider: true, callback: callback)
     }
 
 
@@ -190,7 +190,7 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the thumbnail image has been created.
     ///                       Provides `Result.Success` containing an `CGImageRef` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func thumbnail(withSize size: CGSize, original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
+    public func thumbnail(withSize size: CGSize, usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
 
         dataProviderFunc() { result in
@@ -231,8 +231,8 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(_ original: Bool = false, callback: @escaping ((Result<UIImage>) -> Void)) {
-        self.cgImage(original) { result in
+    public func image(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<UIImage>) -> Void)) {
+        self.cgImage(usingOriginalDataProvider: original) { result in
             guard case .success(let img) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -252,7 +252,7 @@ extension CanLoadImage {
     ///                       Provides `Result.Success` containing an `UIImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(_ callback: @escaping ((Result<UIImage>) -> Void)) {
-        self.image(true, callback: callback)
+        self.image(usingOriginalDataProvider: true, callback: callback)
     }
     #endif
 
@@ -263,8 +263,8 @@ extension CanLoadImage {
     /// - parameter callback: Block to call when the image has been allocated.
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(_ original: Bool = false, callback: @escaping ((Result<NSImage>) -> Void)) {
-        self.cgImage(original) { result in
+    public func image(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<NSImage>) -> Void)) {
+        self.cgImage(usingOriginalDataProvider: original) { result in
             guard case .success(let img) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -281,7 +281,7 @@ extension CanLoadImage {
     ///                       Provides `Result.Success` containing an `NSImage` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func originalImage(callback: @escaping ((Result<NSImage>) -> Void)) {
-        self.image(true, callback: callback)
+        self.image(usingOriginalDataProvider: true, callback: callback)
     }
     #endif
 }

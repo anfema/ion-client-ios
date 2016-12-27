@@ -221,7 +221,7 @@ extension IONPage {
                 return
             }
 
-            imageContent.thumbnail(withSize: size, original: false, callback: callback)
+            imageContent.thumbnail(withSize: size, usingOriginalDataProvider: false, callback: callback)
         }
 
         return self

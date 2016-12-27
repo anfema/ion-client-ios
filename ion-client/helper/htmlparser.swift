@@ -31,7 +31,7 @@ open class HTMLParser {
     ///
     /// - parameter style: Document style
     /// - returns: `NSAttributedString` for HTML
-    open func renderAttributedString(_ style: AttributedStringStyling) -> NSAttributedString {
+    open func renderAttributedString(using style: AttributedStringStyling) -> NSAttributedString {
         let result = NSMutableAttributedString()
         var counters = [Int]()
         var depth = 0
@@ -59,17 +59,17 @@ open class HTMLParser {
                 }
 
                 if name == "p" && lastStackItem.tagName == "blockquote" {
-                    self.pushFormat(style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
+                    self.pushFormat(using: style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
                 } else {
                     // Do not allow any formatting inside of heading tags
                     if lastStackItem.tagName.hasPrefix("h") && lastStackItem.tagName.characters.count == 2 {
                         // FIXME: remove this case when the desk editor behaves correctly again
                         continue
                     }
-                    self.pushFormat(style, tagName: name, attributes: attributes, nestingDepth: depth)
+                    self.pushFormat(using: style, tagName: name, attributes: attributes, nestingDepth: depth)
                 }
 
-                if self.isBlock(name) {
+                if self.isBlock(tagName: name) {
                     result.append(NSAttributedString(string: "\n", attributes: lastStackItem.styleDict))
                 }
                 if name == "p" || name == "pre" {
@@ -107,7 +107,7 @@ open class HTMLParser {
                     continue
                 }
 
-                let oldFormat = self.popFormat(name)
+                let oldFormat = self.popFormat(forTagName: name)
 
                 switch name {
                 case "ol", "ul":
@@ -236,7 +236,7 @@ open class HTMLParser {
                 default:
                     break
                 }
-                if result.characters.isEmpty == false && self.isBlock(name) {
+                if result.characters.isEmpty == false && self.isBlock(tagName: name) {
                     result.append("\n")
                 }
 
@@ -285,7 +285,7 @@ open class HTMLParser {
         return result
     }
 
-    fileprivate func pushFormat(_ style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
+    fileprivate func pushFormat(using style: AttributedStringStyling, tagName: String, attributes: [String: String]?, nestingDepth: Int) {
         switch tagName {
         case "h1":
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: style.heading[0].makeAttributeDict(nestingDepth: nestingDepth)))
@@ -341,7 +341,7 @@ open class HTMLParser {
         }
     }
 
-    fileprivate func popFormat(_ tagName: String) -> FormatStackItem? {
+    fileprivate func popFormat(forTagName tagName: String) -> FormatStackItem? {
         guard let lastStackItem = self.formatStack.last else {
             return nil
         }
@@ -349,7 +349,7 @@ open class HTMLParser {
         if lastStackItem.tagName == tagName {
             return self.formatStack.popLast()
         } else {
-            let tagIsBlock = self.isBlock(tagName)
+            let tagIsBlock = self.isBlock(tagName: tagName)
 
             guard tagIsBlock else {
                 return nil // ignore
@@ -373,7 +373,7 @@ open class HTMLParser {
         return nil
     }
 
-    fileprivate func isBlock(_ tagName: String) -> Bool {
+    fileprivate func isBlock(tagName: String) -> Bool {
         switch tagName {
         case "h1", "h2", "h3", "h4", "h5", "ul", "ol", "li", "pre", "p", "blockquote":
             return true

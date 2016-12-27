@@ -89,7 +89,7 @@ class ViewController: UIViewController {
             "<del>deleted</del> r sadipscing <em>emphasized</em> sadipscing elitr, <i>italic</i> sed lore <code>code</code> magna aliquyam</p>"
         )
         
-        self.textView.attributedText = parser.renderAttributedString(style)
+        self.textView.attributedText = parser.renderAttributedString(using: style)
         
         print(parser.renderText())
     }
