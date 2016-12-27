@@ -54,7 +54,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `Bool` if the outlet is a flag outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func isSet(_ name: String, position: Int = 0) -> Result<Bool> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

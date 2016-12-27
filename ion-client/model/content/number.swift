@@ -54,7 +54,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `Double` if the outlet is a number outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func number(_ name: String, position: Int = 0) -> Result<Double> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

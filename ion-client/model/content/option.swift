@@ -54,7 +54,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing a `String` if the outlet is an option outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func selectedOption(_ name: String, position: Int = 0) -> Result<String> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

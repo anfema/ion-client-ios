@@ -77,7 +77,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataListAsync() {
         let expectation = self.expectation(description: "testMetadataListAsync")
         
-        ION.collection("test").metadataList(nil) { result in
+        ION.collection("test").childMetadataList(forParent: nil) { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -104,7 +104,7 @@ class pageMetadataTests: LoggedInXCTestCase {
     func testMetadataListAsync2() {
         let expectation = self.expectation(description: "testMetadataListAsync2")
         
-        ION.collection("test").metadataList("page_002") { result in
+        ION.collection("test").childMetadataList(forParent: "page_002") { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)

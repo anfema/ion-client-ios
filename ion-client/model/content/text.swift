@@ -149,7 +149,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func text(_ name: String, position: Int = 0) -> Result<String> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)
@@ -191,7 +191,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func html(_ name: String, position: Int = 0) -> Result<String> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)
@@ -233,7 +233,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing a `NSAttributedString` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func attributedString(_ name: String, position: Int = 0) -> Result<NSAttributedString> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

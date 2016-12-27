@@ -81,7 +81,7 @@ open class ION {
         let newCollection = IONCollection(
             identifier: identifier,
             locale: ION.config.locale,
-            useCache: cache
+            cacheBehaviour: cache
         ) { result in
             guard let cachedCollection = cachedCollection, !cachedCollection.hasFailed,
                   case .success(let collection) = result else {
@@ -124,7 +124,7 @@ open class ION {
 
         // try an online update
         let cache = ION.config.cacheBehaviour((self.hasCacheTimedOut(identifier)) ? .ignore : .prefer)
-        let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, useCache: cache) { result in
+        let newCollection = IONCollection(identifier: identifier, locale: ION.config.locale, cacheBehaviour: cache) { result in
             guard case .success(let collection) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -202,7 +202,7 @@ open class ION {
     /// - parameter collection1: first collection
     /// - parameter collection2: second collection
     fileprivate class func notifyForUpdates(_ collection1: IONCollection, collection2: IONCollection) {
-        if collection1.equals(collection2) == false {
+        if collection1.equals(to: collection2) == false {
             // call change blocks
             ION.callUpdateBlocks(collection1.identifier)
         }

@@ -14,15 +14,15 @@ import Foundation
 
 extension IONCollection {
 
-    /// Fetch page count
+    /// Fetch child count for specific parent
     ///
-    /// - parameter parent: Parent to get page count for, nil == top level
+    /// - parameter parentIdentifier: Parent to get page count for, nil == top level
     /// - parameter callback: Block to call for page count return value
     /// - returns: self for chaining
-    @discardableResult public func pageCount(_ parent: String?, callback: @escaping ((Int) -> Void)) -> IONCollection {
+    @discardableResult public func childCount(forParent parentIdentifier: String?, callback: @escaping ((Int) -> Void)) -> IONCollection {
         // append page count to work queue
         self.workQueue.async {
-            if let result = self.pageCount(parent) {
+            if let result = self.childCount(forParent: parentIdentifier) {
                 responseQueueCallback(callback, parameter: result)
             }
         }
@@ -31,28 +31,28 @@ extension IONCollection {
     }
 
 
-    /// Fetch page count sync
+    /// Fetch child count for specific parent sync
     ///
-    /// - parameter parent: Parent to get page count for, nil == top level
+    /// - parameter parentIdentifier: Parent to get page count for, nil == top level
     /// - returns: Page count for parent or nil if collection is not ready
-    public func pageCount(_ parent: String?) -> Int? {
+    public func childCount(forParent parentIdentifier: String?) -> Int? {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return nil
         }
 
-        return self.pageMeta.filter({ $0.parent == parent }).count
+        return self.pageMeta.filter({ $0.parent == parentIdentifier }).count
     }
 
 
     /// Fetch metadata
     ///
-    /// - parameter identifier: Page identifier to get metadata for
+    /// - parameter pageIdentifier: Page identifier to get metadata for
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    @discardableResult public func metadata(_ identifier: String, callback: @escaping ((Result<IONPageMeta>) -> Void)) -> IONCollection {
+    @discardableResult public func metadata(_ pageIdentifier: String, callback: @escaping ((Result<IONPageMeta>) -> Void)) -> IONCollection {
         // this block fetches the page count after the collection is ready
         self.workQueue.async {
-            let result = self.metadata(identifier)
+            let result = self.metadata(pageIdentifier)
             responseQueueCallback(callback, parameter: result)
         }
 
@@ -62,15 +62,15 @@ extension IONCollection {
 
     /// Fetch metadata sync
     ///
-    /// - parameter identifier: Page identifier to get metadata for
+    /// - parameter pageIdentifier: Page identifier to get metadata for
     /// - returns: `IONPageMeta` object or nil if collection is not loaded
-    public func metadata(_ identifier: String) -> Result<IONPageMeta> {
+    public func metadata(_ pageIdentifier: String) -> Result<IONPageMeta> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .failure(IONError.didFail)
         }
 
         for meta in self.pageMeta {
-            if meta.identifier == identifier {
+            if meta.identifier == pageIdentifier {
                 return .success(meta)
             }
         }
@@ -79,31 +79,31 @@ extension IONCollection {
     }
 
 
-    /// Fetch metadata as list
+    /// Fetch metadata of chilren as list
     ///
-    /// - parameter parent: Parent to enumerate metadata for, nil == top level
+    /// - parameter parentIdentifier: Parent to enumerate metadata for, nil == top level
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    @discardableResult public func metadataList(_ parent: String?, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
+    @discardableResult public func childMetadataList(forParent parentIdentifier: String?, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         self.workQueue.async {
-            responseQueueCallback(callback, parameter: self.metadataList(parent))
+            responseQueueCallback(callback, parameter: self.childMetadataList(forParent: parentIdentifier))
         }
 
         return self
     }
 
 
-    /// Fetch metadata as list sync
+    /// Fetch metadata of chilren as list sync
     ///
-    /// - parameter parent: Parent to enumerate metadata for, nil == top level
+    /// - parameter parentIdentifier: Parent to enumerate metadata for, nil == top level
     /// - returns: Metadata or nil if collection is not ready yet
-    public func metadataList(_ parent: String?) -> Result<[IONPageMeta]> {
+    public func childMetadataList(forParent parentIdentifier: String?) -> Result<[IONPageMeta]> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .failure(IONError.didFail)
         }
 
-        var result = self.pageMeta.filter({ $0.parent == parent })
+        var result = self.pageMeta.filter({ $0.parent == parentIdentifier })
         result.sort(by: { (page1, page2) -> Bool in
             return page1.position < page2.position
         })
@@ -137,7 +137,7 @@ extension IONCollection {
     /// - returns: A list of metadata items (last item is requested page, first item is toplevel parent) or nil if collection not ready
     public func metaPath(_ pageIdentifier: String) -> [IONPageMeta]? {
         guard !self.hasFailed && self.lastUpdate != nil,
-            let pagemeta = self.getPageMetaForPage(pageIdentifier) else {
+            let pagemeta = self.getPageMeta(pageIdentifier) else {
                 return nil
         }
 
@@ -146,7 +146,7 @@ extension IONCollection {
 
         while parentID != nil {
             guard let p = parentID,
-                  let meta = self.getPageMetaForPage(p) else {
+                let meta = self.getPageMeta(p) else {
                 break
             }
 
@@ -160,11 +160,11 @@ extension IONCollection {
 
     /// Fetch page tree leaves from parent (walks down the page tree and returns all leaves at the end)
     ///
-    /// - parameter parent: Parent from where to start the leave search (nil for toplevel)
+    /// - parameter parentIdentifier: Parent from where to start the leave search (nil for toplevel)
     /// - parameter callback: Callback called with unrealized page objects
-    public func leaves(_ parent: String?, callback: @escaping (([IONPage]) -> Void)) {
+    public func leaves(forParent parentIdentifier: String?, callback: @escaping (([IONPage]) -> Void)) {
         self.workQueue.async {
-            let metaItems = self.metaLeaves(parent)
+            let metaItems = self.metaLeaves(forParent: parentIdentifier)
             let result: [IONPage] = metaItems.map({ self.page($0.identifier) })
 
             responseQueueCallback(callback, parameter: result)
@@ -174,10 +174,10 @@ extension IONCollection {
 
     /// Fetch page tree metadata leaves from parent (walks down the page tree and returns all leaves at the end)
     ///
-    /// - parameter parent: Parent from where to start the leave search (nil for toplevel)
+    /// - parameter parentIdentifier: Parent from where to start the leave search (nil for toplevel)
     /// - returns: Array of `IONPageMeta` objects
-    public func metaLeaves(_ parent: String?) -> [IONPageMeta] {
-        let toplevel = self.pageMeta.filter({ $0.parent == parent })
+    public func metaLeaves(forParent parentIdentifier: String?) -> [IONPageMeta] {
+        let toplevel = self.pageMeta.filter({ $0.parent == parentIdentifier })
         let result = self.leaveRecursive(toplevel)
 
         return result
@@ -186,9 +186,9 @@ extension IONCollection {
 
     // MARK: - Internal
 
-    internal func getChildIdentifiersForPage(_ parent: String, callback: @escaping (([String]) -> Void)) {
+    internal func getChildIdentifiers(forParent parentIdentifier: String, callback: @escaping (([String]) -> Void)) {
         self.workQueue.async {
-            var temp: [IONPageMeta] = self.pageMeta.filter({ $0.parent == parent })
+            var temp: [IONPageMeta] = self.pageMeta.filter({ $0.parent == parentIdentifier })
 
             temp.sort(by: { (page1, page2) -> Bool in
                 return page1.position < page2.position
@@ -201,9 +201,9 @@ extension IONCollection {
     }
 
 
-    internal func getPageMetaForPage(_ identifier: String) -> IONPageMeta? {
+    internal func getPageMeta(_ pageIdentifier: String) -> IONPageMeta? {
         for meta in self.pageMeta {
-            if meta.identifier == identifier {
+            if meta.identifier == pageIdentifier {
                 return meta
             }
         }

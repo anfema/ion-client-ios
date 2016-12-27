@@ -74,7 +74,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an array of `IONContent` objects if the outlet is a container outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func children(_ name: String, position: Int = 0) -> Result<[IONContent]> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

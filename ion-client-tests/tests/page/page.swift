@@ -222,7 +222,7 @@ class pageTests: LoggedInXCTestCase {
     }
 
     func testPageCount() {
-        ION.collection("test").pageCount(nil) { count in
+        ION.collection("test").childCount(forParent: nil) { count in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -230,7 +230,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssert(count == 2)
         }
         
-        ION.collection("test").pageCount("page_002") { count in
+        ION.collection("test").childCount(forParent: "page_002") { count in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)

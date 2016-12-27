@@ -40,7 +40,7 @@ open class IONPageMeta: CanLoadImage {
 
     /// Children
     open var children: [IONPageMeta]? {
-        return self.collection?.metadataList(self.identifier).optional()
+        return self.collection?.childMetadataList(forParent: self.identifier).optional()
     }
 
 

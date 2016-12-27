@@ -146,7 +146,7 @@ class collectionTests: LoggedInXCTestCase {
                 return
             }
 
-            guard case .success(let list) = collection.metadataList(nil) else {
+            guard case .success(let list) = collection.childMetadataList(forParent: nil) else {
                 XCTFail()
                 expectation.fulfill()
                 return
@@ -168,7 +168,7 @@ class collectionTests: LoggedInXCTestCase {
     func testLeavesList() {
         let expectation = self.expectation(description: "testLeavesList")
         
-        ION.collection("test").leaves(nil) { pages in
+        ION.collection("test").leaves(forParent: nil) { pages in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -430,19 +430,19 @@ class collectionTests: LoggedInXCTestCase {
                 return
             }
 
-            if let _ = collection.page(-1)
+            if let _ = collection.page(atPosition: -1)
             {
                 XCTFail()
                 return
             }
 
-            if let _ = collection.page(2)
+            if let _ = collection.page(atPosition: 2)
             {
                 XCTFail()
                 return
             }
             
-            guard let page = collection.page(1) else
+            guard let page = collection.page(atPosition: 1) else
             {
                 XCTFail()
                 return

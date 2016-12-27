@@ -78,7 +78,7 @@ extension IONCollection {
                 }
 
                 self.workQueue.async {
-                    let result = self.unpackToCache(filename)
+                    let result = self.unpackToCache(filename: filename)
                     ION.config.responseQueue.async {
                         if result == true {
                             self.lastCompleteUpdate = Date()
@@ -98,7 +98,7 @@ extension IONCollection {
     }
 
 
-    fileprivate func unpackToCache(_ filename: String) -> Bool {
+    fileprivate func unpackToCache(filename: String) -> Bool {
         var index = [JSONObject]()
 
         defer {

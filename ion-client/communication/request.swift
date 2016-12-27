@@ -58,7 +58,7 @@ open class IONRequest {
     ///
     /// - parameter endpoint: the API endpoint to query
     /// - parameter queryParameters: any query parameters to include in the query or nil
-    /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
+    /// - parameter cacheBehaviour: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`
     open class func fetchJSON(fromEndpoint endpoint: String, queryParameters: [String: String]?, cacheBehaviour: IONCacheBehaviour, callback: @escaping ((Result<JSONObject>) -> Date?)) {
         guard let urlString = self.buildURL(withEndpoint: endpoint, queryParameters: queryParameters),
@@ -168,7 +168,7 @@ open class IONRequest {
     ///
     /// - parameter urlString: the URL to fetch, has to be a complete and valid URL
     /// - parameter queryParameters: any query parameters to include in the query or nil
-    /// - parameter cached: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
+    /// - parameter cacheBehaviour: set to true if caching should be enabled (cached data is returned instantly, no query is sent)
     /// - parameter callback: a block to call when the request finishes, will be called in `ION.config.responseQueue`,
     ///                       Payload of response is the filename of the downloaded file on disk
     open class func fetchBinary(fromURL urlString: String, queryParameters: [String: String]?, cacheBehaviour: IONCacheBehaviour, checksumMethod: String, checksum: String, callback: @escaping ((Result<String>) -> Void)) {

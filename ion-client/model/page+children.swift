@@ -62,7 +62,7 @@ extension IONPage {
     ///
     /// - parameter callback: The callback to call for each child
     public func children(_ callback: @escaping ((Result<IONPage>) -> Void)) {
-        self.collection.getChildIdentifiersForPage(self.identifier) { children in
+        self.collection.getChildIdentifiers(forParent: self.identifier) { children in
             for child in children {
                 self.child(child, callback: callback)
             }
@@ -74,7 +74,7 @@ extension IONPage {
     ///
     /// - parameter callback: The callback to call for children list
     public func childrenList(_ callback: @escaping (([IONPage]) -> Void)) {
-        self.collection.getChildIdentifiersForPage(self.identifier) { children in
+        self.collection.getChildIdentifiers(forParent: self.identifier) { children in
             var result = [IONPage]()
 
             for child in children {

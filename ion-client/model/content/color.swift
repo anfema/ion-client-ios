@@ -102,7 +102,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `NSColor` if the outlet is a color outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func cachedColor(_ name: String, position: Int = 0) -> Result<NSColor> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)
@@ -145,7 +145,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing a `UIColor` if the outlet is a color outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func cachedColor(_ name: String, position: Int = 0) -> Result<UIColor> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

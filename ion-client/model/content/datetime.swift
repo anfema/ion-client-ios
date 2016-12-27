@@ -56,7 +56,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `NSDate` if the outlet is a datetime outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func date(_ name: String, position: Int = 0) -> Result<Date> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)

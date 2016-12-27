@@ -46,7 +46,7 @@ open class IONPage {
 
     /// Metadata of the page
     open var metadata: IONPageMeta? {
-        return self.collection.getPageMetaForPage(identifier)
+        return self.collection.getPageMeta(identifier)
     }
 
     /// Set to true to avoid fetching from cache
@@ -80,21 +80,21 @@ open class IONPage {
     /// - parameter collection: The collection this page belongs to
     /// - parameter identifier: The page identifier
     /// - parameter layout: The page layout
-    /// - parameter useCache: `.Prefer`: Loads the page from cache if no update is available.
-    ///                       `.Force`:  Loads the page from cache.
-    ///                       `.Ignore`: Loads the page from server.
+    /// - parameter cacheBehaviour: `.Prefer`: Loads the page from cache if no update is available.
+    ///                             `.Force`:  Loads the page from cache.
+    ///                             `.Ignore`: Loads the page from server.
     /// - parameter parent: The parent of the page (optional)
     /// - parameter callback: Block to call when the page becomes available.
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     ///
-    init(collection: IONCollection, identifier: String, layout: String?, useCache: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage>) -> Void)?) {
+    init(collection: IONCollection, identifier: String, layout: String?, cacheBehaviour: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage>) -> Void)?) {
         // Full asynchronous initializer, self will be populated asynchronously
         self.identifier = identifier
         self.workQueue = DispatchQueue(label: "com.anfema.ion.page.\(identifier)", attributes: [])
         self.layout = layout ?? "unknown"
         self.collection = collection
-        self.useCache = useCache
+        self.useCache = cacheBehaviour
         self.parent = parent
         self.locale = self.collection.locale
 
@@ -103,7 +103,7 @@ open class IONPage {
             self.parentLock.lock()
             let semaphore = DispatchSemaphore(value: 0)
 
-            self.fetch(identifier) { error in
+            self.fetch(usingPageIdentifier: identifier) { error in
                 if let error = error {
                     // set error state, this forces all blocks in the work queue to cancel themselves
                     self.hasFailed = true
@@ -117,7 +117,7 @@ open class IONPage {
                         }
                     }
 
-                    guard let pageMeta = self.collection.getPageMetaForPage(identifier) else {
+                    guard let pageMeta = self.collection.getPageMeta(identifier) else {
                         self.hasFailed = true
                         responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
                         semaphore.signal()
@@ -128,7 +128,7 @@ open class IONPage {
                         self.useCache = .ignore
                         self.content.removeAll()
 
-                        self.fetch(identifier) { error in
+                        self.fetch(usingPageIdentifier: identifier) { error in
                             if let error = error {
                                 self.hasFailed = true
                                 responseQueueCallback(callback, parameter: .failure(error))
@@ -211,7 +211,7 @@ open class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: Result.Success containing an `IONContent` if the outlet is valid
     ///            and the page was already cached, else an Result.Failure containing an `IONError`.
-    open func outlet(_ name: String, position: Int = 0) -> Result<IONContent> {
+    open func outlet(_ name: String, atPosition position: Int = 0) -> Result<IONContent> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
             return .failure(IONError.didFail)
@@ -234,9 +234,9 @@ open class IONPage {
     ///                       Provides `Result.Success` containing an `IONContent` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` to be able to chain another call
-    @discardableResult open func outlet(_ name: String, position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
+    @discardableResult open func outlet(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
         workQueue.async {
-            responseQueueCallback(callback, parameter: self.outlet(name, position: position))
+            responseQueueCallback(callback, parameter: self.outlet(name, atPosition: position))
         }
 
         return self
@@ -249,7 +249,7 @@ open class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the page becomes available
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    open func outletExists(_ name: String, position: Int = 0) -> Result<Bool> {
+    open func outletExists(_ name: String, atPosition position: Int = 0) -> Result<Bool> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
             return .failure(IONError.didFail)
@@ -274,9 +274,9 @@ open class IONPage {
     ///                       Provides `Result.Success` containing a `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` for chaining
-    @discardableResult open func outletExists(_ name: String, position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
+    @discardableResult open func outletExists(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
         workQueue.async {
-            responseQueueCallback(callback, parameter: self.outletExists(name, position: position))
+            responseQueueCallback(callback, parameter: self.outletExists(name, atPosition: position))
         }
 
         return self
@@ -330,7 +330,7 @@ open class IONPage {
     ///
     /// - parameter identifier: Page identifier to get
     /// - parameter callback: Block to call when the fetch finished
-    fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
+    fileprivate func fetch(usingPageIdentifier identifier: String, callback: @escaping ((IONError?) -> Void)) {
         IONRequest.fetchJSON(fromEndpoint: "\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cacheBehaviour: ION.config.cacheBehaviour(self.useCache)) { result in
 
             guard case .success(let resultValue) = result else {

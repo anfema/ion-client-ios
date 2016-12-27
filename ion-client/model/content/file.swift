@@ -173,7 +173,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
     @discardableResult public func fileData(_ name: String, position: Int = 0, callback: @escaping ((Result<Data>) -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
+        self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return

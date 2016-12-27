@@ -254,7 +254,7 @@ extension IONPage {
     /// - returns: `Result.Success` containing an `NSURL` if the outlet is a `URLProvider`
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
     public func mediaURL(_ name: String, position: Int = 0) -> Result<URL> {
-        let result = self.outlet(name, position: position)
+        let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
             return .failure(result.error ?? IONError.unknownError)
@@ -298,7 +298,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
     @discardableResult public func cachedMediaURL(_ name: String, position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
+        self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -327,7 +327,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
     @discardableResult public func temporaryURL(_ name: String, position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
+        self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -356,7 +356,7 @@ extension IONPage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
     @discardableResult public func mediaData(_ name: String, position: Int = 0, callback: @escaping ((Result<Data>) -> Void)) -> IONPage {
-        self.outlet(name, position: position) { result in
+        self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
