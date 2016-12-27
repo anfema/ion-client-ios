@@ -52,7 +52,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var checksumMethod: String {
         guard let thumbnail = self.imageURL,
-            let _ = IONRequest.cachedFile(thumbnail.absoluteString) else {
+            let _ = IONRequest.cachedData(forURL: thumbnail.absoluteString) else {
                 return "null"
         }
 
@@ -62,7 +62,7 @@ extension CanLoadImage {
     /// default implementation for checksum (returns "invalid" if url not cached)
     public var checksum: String {
         guard let thumbnail = self.imageURL,
-            let data = IONRequest.cachedFile(thumbnail.absoluteString) else {
+            let data = IONRequest.cachedData(forURL: thumbnail.absoluteString) else {
                 return "invalid"
         }
 
@@ -72,7 +72,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var originalChecksumMethod: String {
         guard let image = self.originalImageURL,
-            let _ = IONRequest.cachedFile(image.absoluteString) else {
+            let _ = IONRequest.cachedData(forURL: image.absoluteString) else {
                 return "null"
         }
 
@@ -82,7 +82,7 @@ extension CanLoadImage {
     /// default implementation for checksum (returns "invalid" if url not cached)
     public var originalChecksum: String {
         guard let image = self.originalImageURL,
-            let data = IONRequest.cachedFile(image.absoluteString) else {
+            let data = IONRequest.cachedData(forURL: image.absoluteString) else {
                 return "invalid"
         }
 
@@ -100,7 +100,7 @@ extension CanLoadImage {
             return
         }
 
-        IONRequest.fetchBinary(url.absoluteString, queryParameters: nil, cached: ION.config.cacheBehaviour(.prefer),
+        IONRequest.fetchBinary(fromURL: url.absoluteString, queryParameters: nil, cacheBehaviour: ION.config.cacheBehaviour(.prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
                 guard case .success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -130,7 +130,7 @@ extension CanLoadImage {
             return
         }
 
-        IONRequest.fetchBinary(url.absoluteString, queryParameters: nil, cached: ION.config.cacheBehaviour(.prefer),
+        IONRequest.fetchBinary(fromURL: url.absoluteString, queryParameters: nil, cacheBehaviour: ION.config.cacheBehaviour(.prefer),
             checksumMethod: self.originalChecksumMethod, checksum: self.originalChecksum) { result in
                 guard case .success(let filename) = result else {
                     responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))

@@ -408,7 +408,7 @@ open class IONCollection {
     /// - parameter identifier: collection identifier to get
     /// - parameter callback: block to call when the fetch finished
     fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
-        IONRequest.fetchJSON("\(self.locale)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: self.useCache) { result in
+        IONRequest.fetchJSON(fromEndpoint: "\(self.locale)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cacheBehaviour: self.useCache) { result in
 
             guard case .success(let resultValue) = result else {
                 if let error = result.error, case IONError.notAuthorized = error {

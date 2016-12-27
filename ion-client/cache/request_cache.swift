@@ -20,9 +20,9 @@ extension IONRequest {
     /// Reset complete ION cache for a specific language and all hosts
     ///
     /// - parameter locale: locale to clear cache for
-    public class func resetCache(_ locale: String) {
+    public class func resetCache(forLocale locale: String) {
         // remove complete cache dir for this host
-        let fileURL = self.cacheBaseDir(locale: locale)
+        let fileURL = self.cacheBaseDir(forLocale: locale)
 
         do {
             try FileManager.default.removeItem(atPath: fileURL.path)
@@ -43,12 +43,12 @@ extension IONRequest {
     ///
     /// - parameter url: the URL to find in the cache
     /// - returns: Path to the cache file (may not exist)
-    internal class func cacheName(_ url: URL) -> String? {
+    internal class func cachePath(forURL url: URL) -> String? {
         guard let host = url.host else {
             return nil
         }
 
-        let fileURL = self.cacheBaseDir(host, locale: ION.config.locale)
+        let fileURL = self.cacheBaseDir(forHost: host, locale: ION.config.locale)
 
         // try to create the path if it does not exist
         if !FileManager.default.fileExists(atPath: fileURL.path) {
@@ -69,7 +69,7 @@ extension IONRequest {
     ///
     /// - parameter urlString: the URL to find in the cache DB
     /// - returns: cache db entry (JSON dictionary unpacked into dictionary)
-    internal class func getCacheDBEntry(_ urlString: String) -> [String: JSONObject]? {
+    internal class func getCacheDBEntry(forURL urlString: String) -> [String: JSONObject]? {
         // load db if not already loaded
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -96,14 +96,14 @@ extension IONRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveToCache(_ request: URLRequest, _ result: Result<JSONResponse>) {
+    internal class func saveJSONToCache(using request: URLRequest, _ result: Result<JSONResponse>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
         guard result.isSuccess,
             case .success(let jsonResponse) = result else {
                 return
         }
-
+        
         if jsonResponse.statusCode == 200,
            let jsonObject = jsonResponse.json,
            let json = JSONEncoder(jsonObject).jsonString,
@@ -111,21 +111,21 @@ extension IONRequest {
 
             do {
                 // save object to disk
-                if let cacheName = self.cacheName(requestURL) {
+                if let cacheName = self.cachePath(forURL: requestURL) {
                     try json.write(toFile: cacheName, atomically: true, encoding: String.Encoding.utf8)
 
                     // save object to cache DB
-                    self.saveToCache(request, checksumMethod: "null", checksum: "")
+                    self.saveJSONToCache(using: request, checksumMethod: "null", checksum: "")
                 }
             } catch {
                 // do nothing, could not be saved to cache -> nonfatal
             }
         } else if jsonResponse.statusCode == 304 {
-            self.saveToCache(request, checksumMethod: "null", checksum: "")
+            self.saveJSONToCache(using: request, checksumMethod: "null", checksum: "")
         }
     }
 
-    internal class func saveToCache(_ data: Data, url: String, checksum: String?, lastUpdated: Date? = nil) {
+    internal class func saveJSONToCache(using data: Data, url: String, checksum: String?, lastUpdated: Date? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -138,7 +138,7 @@ extension IONRequest {
         let timestamp: Double = trunc(date.timeIntervalSince1970 * 1000.0) / 1000.0
 
         // pop current cache DB entry
-        var obj: [String: JSONObject] = self.getCacheDBEntry(url) ?? [:]
+        var obj: [String: JSONObject] = self.getCacheDBEntry(forURL: url) ?? [:]
         self.removeCacheDBEntries(withURL: url)
 
         guard let parsedURL = URL(string: url) else {
@@ -150,7 +150,7 @@ extension IONRequest {
             return
         }
 
-        let filename = self.cacheBaseDir(host, locale: ION.config.locale)
+        let filename = self.cacheBaseDir(forHost: host, locale: ION.config.locale)
 
         let path = filename.path
 
@@ -195,7 +195,7 @@ extension IONRequest {
     /// - parameter checksumMethod: the name of the used method used to create the `checksum`
     /// - parameter checksum: the checksum calculated by the `checksumMethod`
     /// - parameter lastUpdate: the date when the last update was performed or nil
-    internal class func saveToCache(_ request: URLRequest, checksumMethod: String, checksum: String, lastUpdate: Date? = nil) {
+    internal class func saveJSONToCache(using request: URLRequest, checksumMethod: String, checksum: String, lastUpdate: Date? = nil) {
         // load cache DB if not loaded yet
         if self.cacheDB == nil {
             self.loadCacheDB()
@@ -217,7 +217,7 @@ extension IONRequest {
         let urlString = requestURL.absoluteString
         
         // pop current cache DB entry
-        var obj: [String: JSONObject] = self.getCacheDBEntry(urlString) ?? [:]
+        var obj: [String: JSONObject] = self.getCacheDBEntry(forURL: urlString) ?? [:]
         self.removeCacheDBEntries(withURL: urlString)
 
         guard let requestHost = requestURL.host else {
@@ -240,8 +240,8 @@ extension IONRequest {
     // MARK: - Private API
 
     /// Private function to load cache DB from disk
-    fileprivate class func loadCacheDB(_ locale: String = ION.config.locale) {
-        let fileURL = self.cacheFile("cacheIndex.json", locale: locale)
+    fileprivate class func loadCacheDB(forLocale locale: String = ION.config.locale) {
+        let fileURL = self.cacheFileURL(forFilename: "cacheIndex.json", locale: locale)
 
         let cacheIndexPath = fileURL.path
 
@@ -257,7 +257,7 @@ extension IONRequest {
                 // invalid json, reset the cache db and remove disk cache completely
                 do {
                     
-                    let path = self.cacheBaseDir(locale: locale).path
+                    let path = self.cacheBaseDir(forLocale: locale).path
                     try FileManager.default.removeItem(atPath: path)
                     
                 } catch {
@@ -275,7 +275,7 @@ extension IONRequest {
     }
 
     /// Private function to save the cache DB to disk
-    internal class func saveCacheDB(_ locale: String = ION.config.locale) {
+    internal class func saveCacheDB(forLocale locale: String = ION.config.locale) {
         // can not save nothing
         guard let cacheDB = self.cacheDB else {
             return
@@ -288,10 +288,10 @@ extension IONRequest {
             return
         }
 
-        let basePath = self.cacheBaseDir(locale: locale).path
+        let basePath = self.cacheBaseDir(forLocale: locale).path
 
         do {
-            let file = self.cacheFile("cacheIndex.json", locale: locale).path
+            let file = self.cacheFileURL(forFilename: "cacheIndex.json", locale: locale).path
 
             // make sure the cache dir is there
             if !FileManager.default.fileExists(atPath: basePath) {
@@ -341,19 +341,19 @@ extension IONRequest {
     /// - parameter host: the API host to fetch the cache dir for
     /// - parameter locale: the locale of the language that should be used
     /// - returns: File URL to the cache dir
-    internal class func cacheBaseDir(_ host: String, locale: String) -> URL {
+    internal class func cacheBaseDir(forHost host: String, locale: String) -> URL {
         let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(host)")
         return fileURL
     }
 
-    fileprivate class func cacheBaseDir(locale: String) -> URL {
+    fileprivate class func cacheBaseDir(forLocale locale: String) -> URL {
         let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }
 
-    fileprivate class func cacheFile(_ filename: String, locale: String) -> URL {
+    fileprivate class func cacheFileURL(forFilename filename: String, locale: String) -> URL {
         let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL

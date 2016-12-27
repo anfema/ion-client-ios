@@ -66,7 +66,7 @@ extension IONCollection {
                 }
             }
 
-            IONRequest.fetchBinary(url, queryParameters: q, cached: ION.config.cacheBehaviour(.ignore), checksumMethod: "null", checksum: "") { result in
+            IONRequest.fetchBinary(fromURL: url, queryParameters: q, cacheBehaviour: ION.config.cacheBehaviour(.ignore), checksumMethod: "null", checksum: "") { result in
                 guard case .success(let filename) = result else {
                     responseQueueCallback(callback, parameter: false)
                     return
@@ -144,7 +144,7 @@ extension IONCollection {
                         }
 
                         if filename == file.filename {
-                            IONRequest.saveToCache(file.data, url: url, checksum: checksum, lastUpdated: file.mtime)
+                            IONRequest.saveJSONToCache(using: file.data, url: url, checksum: checksum, lastUpdated: file.mtime)
                             found = idx
                             break
                         }

@@ -29,7 +29,7 @@ internal extension ION {
             c.workQueue.async(flags: .barrier, execute: {
                 let sema = DispatchSemaphore(value: 0)
 
-                IONRequest.fetchBinary(ftsURL, queryParameters: nil, cached: ION.config.cacheBehaviour(.ignore), checksumMethod: "null", checksum: "") { result in
+                IONRequest.fetchBinary(fromURL: ftsURL, queryParameters: nil, cacheBehaviour: ION.config.cacheBehaviour(.ignore), checksumMethod: "null", checksum: "") { result in
                     defer {
                         sema.signal()
                     }

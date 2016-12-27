@@ -183,7 +183,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.fetchBinary(url.absoluteString, queryParameters: nil, cached: ION.config.cacheBehaviour(.prefer),
+        IONRequest.fetchBinary(fromURL: url.absoluteString, queryParameters: nil, cacheBehaviour: ION.config.cacheBehaviour(.prefer),
             checksumMethod: self.checksumMethod, checksum: self.checksum) { result in
             guard case .success(let filename) = result else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -206,7 +206,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,

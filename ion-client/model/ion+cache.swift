@@ -41,7 +41,7 @@ extension ION {
         for (_, collection) in self.collectionCache {
             collection.lastCompleteUpdate = nil
         }
-        IONRequest.resetCache(self.config.locale)
+        IONRequest.resetCache(forLocale: self.config.locale)
     }
 
     /// Clear disk cache for specific locale and all hosts
@@ -55,7 +55,7 @@ extension ION {
         let prefs = UserDefaults.standard
         prefs.removeObject(forKey: "ION.collection.lastUpdated")
         prefs.synchronize()
-        IONRequest.resetCache(locale)
+        IONRequest.resetCache(forLocale: locale)
     }
 
     /// Determine if collection cache has timed out

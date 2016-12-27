@@ -29,7 +29,7 @@ open class ION {
     /// - parameter password: the password to send
     /// - parameter callback: block to call when login request finished (Bool parameter is success flag)
     open class func login(_ username: String, password: String, callback: @escaping ((Bool) -> Void)) {
-        IONRequest.postJSON("login", queryParameters: nil, body: [
+        IONRequest.postJSON(toEndpoint: "login", queryParameters: nil, body: [
             "login": [
                 "username": username,
                 "password": password

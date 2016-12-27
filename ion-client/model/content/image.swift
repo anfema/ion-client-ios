@@ -163,7 +163,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.postJSON("tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,

@@ -229,7 +229,7 @@ class diskcacheTests: LoggedInXCTestCase {
             }
             
             if case let outlet as IONImageContent = po {
-                let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                let result = IONRequest.fetchFileFromCache(url: outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                 XCTAssertNotNil(result)
                 if case .success(let filename) = result {
                     print(filename)
@@ -274,7 +274,7 @@ class diskcacheTests: LoggedInXCTestCase {
                 }
 
                 if case let outlet as IONImageContent = po {
-                    let result = IONRequest.fetchFromCache(outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    let result = IONRequest.fetchFileFromCache(url: outlet.imageURL!.absoluteString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
                     if case .success(let filename) = result {
                         print(filename)
@@ -335,7 +335,7 @@ class diskcacheTests: LoggedInXCTestCase {
                     IONRequest.saveCacheDB()
                     
                     // now a cache lookup has to fail
-                    let result = IONRequest.fetchFromCache(urlString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
+                    let result = IONRequest.fetchFileFromCache(url: urlString, checksumMethod: outlet.checksumMethod, checksum: outlet.checksum)
                     XCTAssertNotNil(result)
                     if case .success(let filename) = result {
                         print(filename)

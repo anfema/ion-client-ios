@@ -331,7 +331,7 @@ open class IONPage {
     /// - parameter identifier: Page identifier to get
     /// - parameter callback: Block to call when the fetch finished
     fileprivate func fetch(_ identifier: String, callback: @escaping ((IONError?) -> Void)) {
-        IONRequest.fetchJSON("\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cached: ION.config.cacheBehaviour(self.useCache)) { result in
+        IONRequest.fetchJSON(fromEndpoint: "\(self.collection.locale)/\(self.collection.identifier)/\(identifier)", queryParameters: ["variation": ION.config.variation ], cacheBehaviour: ION.config.cacheBehaviour(self.useCache)) { result in
 
             guard case .success(let resultValue) = result else {
                 if let error = result.error, case IONError.notAuthorized = error {
