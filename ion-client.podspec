@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ion-client"
-  s.version      = "2.3.0"
+  s.version      = "3.0.0"
   s.summary      = "ION-Client for iOS and OS X clients."
   s.description  = <<-DESC
                    ION-Client for iOS and OS X clients
