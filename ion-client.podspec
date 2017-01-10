@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ion-client"
-  s.version      = "2.1.2"
+  s.version      = "4.0.0"
   s.summary      = "ION-Client for iOS and OS X clients."
   s.description  = <<-DESC
                    ION-Client for iOS and OS X clients
@@ -29,10 +29,10 @@ Pod::Spec.new do |s|
   s.module_map = "ion-client/cocoapods.modulemap"
 
   s.dependency "Alamofire", "~> 4.2"
-  s.dependency "DEjson", "~> 1.0"
-  s.dependency "Markdown", "~> 1.0"
+  s.dependency "DEjson", "~> 2.0"
+  s.dependency "Markdown", "~> 2.0"
   s.dependency "HashExtensions", "~> 2.0"
-  s.dependency "html5tokenizer", "~> 1.0"
-  s.dependency "Tarpit", "~> 1.0"
+  s.dependency "html5tokenizer", "~> 2.0"
+  s.dependency "Tarpit", "~> 2.0"
   s.dependency "iso-rfc822-date", "~> 1.0"
 end

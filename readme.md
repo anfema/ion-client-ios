@@ -1,3 +1,13 @@
+# ION Client
+
+ION-Client for iOS and OS X clients
+
+## Requirements:
+
+- iOS 8.4+ / macOS 10.10+
+- Xcode 8.2+
+- Swift 3.0+
+
 <!-- MarkdownTOC -->
 
 1. [Setup](#setup)
