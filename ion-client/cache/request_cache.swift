@@ -164,12 +164,17 @@ extension IONRequest {
 
         let filePath = filename.appendingPathComponent((hash.hexString())).path
 
-        guard let fileURL = URL(string: filePath) else
-        {
-            return
-        }
+        let fileURL = URL(fileURLWithPath: filePath)
         
-        try? data.write(to: fileURL)
+        do
+        {
+            try data.write(to: fileURL)
+        }
+        catch
+        {
+            //TODO: Handle error
+            print("An unexpected error occurred while trying to write file to disk: \(error)")
+        }
 
         // populate object with current data
         obj["url"]             = .jsonString(url)
