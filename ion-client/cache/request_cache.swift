@@ -168,7 +168,7 @@ extension IONRequest {
         
         do
         {
-            try data.write(to: fileURL)
+            try data.write(to: fileURL, options: .atomic)
         }
         catch
         {
