@@ -176,3 +176,11 @@ open class IONPageMeta: CanLoadImage {
         return "default"
     }
 }
+
+
+extension IONPageMeta: Equatable {
+    
+    public static func == (lhs: IONPageMeta, rhs: IONPageMeta) -> Bool {
+        return lhs.collection == rhs.collection && lhs.identifier == rhs.identifier
+    }
+}
