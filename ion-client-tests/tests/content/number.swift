@@ -22,6 +22,10 @@ class numberContentTests: LoggedInXCTestCase {
     override func tearDown() {
         super.tearDown()
     }
+
+
+    // TODO: add test data where "decimal_places" is set
+
     
     func testNumberOutletFetchSync() {
         let expectation = self.expectation(description: "testNumberOutletFetchSync")

@@ -37,7 +37,12 @@ open class IONNumberContent: IONContent {
                 throw IONError.invalidJSON(json)
         }
 
-        self.value = value
+        if let rawDecimalPlaces = dict["decimal_places"],
+            case .jsonNumber(let places) = rawDecimalPlaces {
+            self.value = value / pow(10, places)
+        } else {
+            self.value = value
+        }
 
         try super.init(json: json)
     }
