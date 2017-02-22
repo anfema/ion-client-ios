@@ -92,7 +92,30 @@ public enum Result<Value> {
 
         return ret
     }
+
+
+    /// Triggers the callback block when the result is `.success`
+    /// Returns `self` for chaining
+    @discardableResult public func onSuccess(_ callback: (_ value: Value) -> Void) -> Result<Value> {
+        if case .success(let v) = self {
+            callback(v)
+        }
+
+        return self
+    }
+
+
+    /// Triggers the callback block when the result is `.failure`
+    /// Returns `self` for chaining
+    @discardableResult public func onError(_ callback: (_ value: Error) -> Void) -> Result<Value> {
+        if case .failure(let v) = self {
+            callback(v)
+        }
+
+        return self
+    }
 }
+
 
 // MARK: - CustomStringConvertible
 
