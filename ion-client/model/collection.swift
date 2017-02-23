@@ -170,7 +170,7 @@ open class IONCollection {
                 }
             } else {
                 guard let meta = self.getPageMeta(identifier) else {
-                    responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: self.identifier, page: identifier)))
                     return
                 }
 

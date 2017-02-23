@@ -36,7 +36,7 @@ public enum IONError: Error {
     case collectionNotFound(String)
 
     /// Page with that name is not available
-    case pageNotFound(String)
+    case pageNotFound(collection: String, page: String)
 
     /// Page `child` is not a sub page of `parent`
     case invalidPageHierarchy(parent: String, child: String)

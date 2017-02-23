@@ -119,7 +119,7 @@ open class IONPage {
 
                     guard let pageMeta = self.collection.getPageMeta(identifier) else {
                         self.hasFailed = true
-                        responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
+                        responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: collection.identifier, page: identifier)))
                         semaphore.signal()
                         return
                     }
@@ -337,7 +337,7 @@ open class IONPage {
                 if let error = result.error, case IONError.notAuthorized = error {
                     callback(.notAuthorized)
                 } else {
-                    callback(.pageNotFound(identifier))
+                    callback(.pageNotFound(collection: self.collection.identifier, page: identifier))
                 }
 
                 return nil
