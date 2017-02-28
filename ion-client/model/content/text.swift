@@ -271,22 +271,22 @@ extension IONPage {
 
 public extension Page {
     
-    /// Provides a text content with the given identifier taking an optional position into account
-    /// - parameter identifier: The identifier of the content
-    /// - parameter position: The position within the content (optional)
+    /// Provides a text content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content
-    public func textContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONTextContent? {
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func textContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONTextContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func text(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> String? {
+    public func text(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> String? {
         return textContent(identifier)?.plainText()
     }
     
     
-    public func attributedText(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> NSAttributedString? {
+    public func attributedText(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> NSAttributedString? {
         return textContent(identifier)?.attributedString()
     }
 }

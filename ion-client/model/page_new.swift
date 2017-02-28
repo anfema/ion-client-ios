@@ -68,12 +68,13 @@ open class Page {
     }
     
     
-    /// Provides a string that was marked as the pages metainformation respecting a given position.
+    /// Provides a string value for a given outlet that was marked as "included into page-meta" on ion desk.
+    /// It also takes an optional position into account for outlets containing multiple contents.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// - parameter identifier: The identifier of the content that was marked as meta information
-    /// - parameter position: Position within the meta information value if the value is an array of strings
-    public func meta(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> String? {
+    /// - parameter identifier: The identifier of the outlet that was marked as "included into page-meta"
+    /// - parameter position: Position of the content within the related outlet
+    public func meta(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> String? {
         return metaData[identifier, position]
     }
     
@@ -163,7 +164,7 @@ public extension Page {
     
     /// Provides all available contents of a Page.
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content (except meta data)
+    /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
     public var contents: [IONContent] {
         guard let fullData = fullData else {
             assertionFailure("IONPage (\(identifier)) needs to be loaded first")
@@ -176,17 +177,17 @@ public extension Page {
     
     /// Provides all available contents of a specific type of a Page.
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content (except meta data)
+    /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
     public func typedContents<T: IONContent>() -> [T] {
         return (contents.filter({$0 is T})) as? [T] ?? []
     }
     
     
-    /// Provides a content of a specific type of a Page.
+    /// Provides typed content of a Page based on a given outlet identifier.
     /// Furthermore take a look at the content files for easier content access.
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content (except meta data)
-    public func content<T: IONContent>(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> T? {
+    /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
+    public func content<T: IONContent>(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> T? {
         guard let fullData = fullData else {
             assertionFailure("IONPage (\(metaData.identifier)) needs to be loaded first")
             return nil

@@ -88,17 +88,17 @@ extension IONPage {
 
 public extension Page {
     
-    /// Provides a flag content with the given identifier taking an optional position into account
-    /// - parameter identifier: The identifier of the content
-    /// - parameter position: The position within the content (optional)
+    /// Provides a flag content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content
-    public func flagContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONFlagContent? {
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func flagContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONFlagContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func flag(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> Bool {
+    public func flag(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Bool {
         guard let content = flagContent(identifier),
             content.isEnabled == true else {
                 return false

@@ -94,17 +94,17 @@ extension IONPage {
 
 public extension Page {
     
-    /// Provides a dateTime content with the given identifier taking an optional position into account
-    /// - parameter identifier: The identifier of the content
-    /// - parameter position: The position within the content (optional)
+    /// Provides a dateTime content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content
-    public func dateTimeContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONDateTimeContent? {
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func dateTimeContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONDateTimeContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func date(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> Date? {
+    public func date(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Date? {
         return dateTimeContent(identifier)?.date
     }
 }

@@ -93,17 +93,17 @@ extension IONPage {
 
 public extension Page {
     
-    /// Provides a number content with the given identifier taking an optional position into account
-    /// - parameter identifier: The identifier of the content
-    /// - parameter position: The position within the content (optional)
+    /// Provides a number content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content
-    public func numberContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONNumberContent? {
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func numberContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONNumberContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func number(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> Double? {
+    public func number(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Double? {
         return numberContent(identifier, at: position)?.value
     }
 }

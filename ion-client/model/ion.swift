@@ -225,14 +225,14 @@ public enum PageLoadingOption {
 
 public extension ION
 {
-    /// Represents a page identifier (should match an identifier defined in ion desk)
+    /// Represents a page identifier (should match a page defined in ion desk)
     public typealias PageIdentifier       = String
     
-    /// Represents a collection identifier (should match an identifier defined in ion desk)
+    /// Represents a collection identifier (should match a collection defined in ion desk)
     public typealias CollectionIdentifier = String
     
-    /// Represents a content identifier (should match an identifier defined in ion desk)
-    public typealias ContentIdentifier    = String
+    /// Represents an outlet identifier (should match an outlet defined in ion desk)
+    public typealias OutletIdentifier    = String
     
     /// Represents the position within content or page hierarchy
     public typealias Postion              = Int

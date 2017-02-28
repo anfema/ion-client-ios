@@ -113,17 +113,17 @@ public extension IONConnectionContent {
 
 public extension Page {
     
-    /// Provides a connection content with the given identifier taking an optional position into account
-    /// - parameter identifier: The identifier of the content
-    /// - parameter position: The position within the content (optional)
+    /// Provides a connection content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
-    /// __Warning:__ The page has to be full loaded before one can access an content
-    public func connectionContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONConnectionContent? {
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func connectionContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONConnectionContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func connection(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> (collectionIdentifier: ION.CollectionIdentifier, pageIdentifier: ION.PageIdentifier)? {
+    public func connection(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> (collectionIdentifier: ION.CollectionIdentifier, pageIdentifier: ION.PageIdentifier)? {
         guard let connectionContent = connectionContent(identifier),
             let collectionIdentifier = connectionContent.collectionIdentifier,
             let pageIdentifier = connectionContent.pageIdentifier else {
@@ -134,7 +134,7 @@ public extension Page {
     }
     
     
-    public func connectionPage(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+    public func connectionPage(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
         let asyncResult = AsyncResult<Page>()
         
         guard let connection = connection(identifier, at: position) else {
