@@ -32,12 +32,30 @@ open class Page {
     
     
     /// Provides a string that was marked as the pages metainformation respecting a given position.
-    /// Accessing meta data is also possible although page was not alreasy full loaded.
+    /// Accessing meta data is also possible although page was not already full loaded.
     ///
     /// - parameter identifier: The identifier of the content that was marked as meta information
     /// - parameter position: Position within the meta information value if the value is an array of strings
     public func meta(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> String? {
         return metaData[identifier, position]
+    }
+    
+    
+    /// Returns an optional url of the underlying meta thumbnail.
+    /// Accessing meta data is also possible although page was not already full loaded.
+    ///
+    /// __Note__: Works if a content on ION-Desk is called "thumbnail" and was marked as meta information.
+    public var metaThumbnailURL : URL? {
+        return metaData.imageURL
+    }
+    
+    
+    /// Returns an optional url of the underlying meta icon.
+    /// Accessing meta data is also possible although page was not already full loaded.
+    ///
+    /// __Note__: Works if a content on ION-Desk is called "icon" and was marked as meta information.
+    public var metaIconURL : URL? {
+        return metaData.imageURL
     }
     
     
