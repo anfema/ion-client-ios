@@ -293,4 +293,41 @@ public extension ION
         
         return asyncResult
     }
+    
+    
+    /// Creates an operation to request the top level pages (not full loaded) within the specified collection.
+    /// Add an onSuccess and/or an onFailure handler to the operation.
+    ///
+    /// __Warning__: The list of top level pages are not full loaded
+    ///
+    /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
+    /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
+    static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
+        
+        // Ensure that a collection identifier was specified
+        guard collectionIdentifier != nil || defaultCollectionIdentifier != "" else {
+            fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
+        }
+        
+        let asyncResult = AsyncResult<[Page]>()
+        
+        ION.collection(collectionIdentifier ?? ION.defaultCollectionIdentifier) { result in
+            guard case .success(let collection) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+            
+            let metaDataListResult = collection.childMetadataList(forParent: nil)
+            guard case .success(let metaDataList) = metaDataListResult else {
+                asyncResult.execute(result: .failure(metaDataListResult.error ?? IONError.didFail))
+                return
+            }
+            
+            asyncResult.execute(result: .success(metaDataList.map({Page(metaData: $0)})))
+            return
+        }
+        
+        return asyncResult
+        
+    }
 }
