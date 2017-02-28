@@ -47,7 +47,7 @@ extension IONPage {
         let page = self.collection.page(identifier)
 
         guard page.metadata != nil else {
-            return .failure(IONError.pageNotFound(identifier))
+            return .failure(IONError.pageNotFound(collection: collection.identifier, page: identifier))
         }
 
         guard page.parent == self.identifier else {

@@ -75,7 +75,7 @@ extension IONCollection {
             }
         }
 
-        return .failure(IONError.pageNotFound(identifier))
+        return .failure(IONError.pageNotFound(collection: identifier, page: pageIdentifier))
     }
 
 
@@ -120,7 +120,7 @@ extension IONCollection {
     @discardableResult public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard let result = self.metaPath(pageIdentifier) else {
-                responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(pageIdentifier)))
+                responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: self.identifier, page: pageIdentifier)))
                 return
             }
 
