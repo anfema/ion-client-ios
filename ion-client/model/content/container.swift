@@ -104,3 +104,16 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Page {
+    
+    /// Provides a container content with the given identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the content
+    /// - parameter position: The position within the content (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access an content
+    public func containerContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONContainerContent? {
+        return self.content(identifier, at: position)
+    }
+}

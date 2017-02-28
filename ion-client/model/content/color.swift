@@ -180,3 +180,29 @@ extension IONPage {
     }
     #endif
 }
+
+public extension Page {
+    
+    /// Provides a color content with the given identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the content
+    /// - parameter position: The position within the content (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access an content
+    public func colorContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONColorContent? {
+        return self.content(identifier, at: position)
+    }
+    
+    
+    #if os(iOS)
+    public func color(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> UIColor? {
+        return colorContent(identifier)?.color()
+    }
+    #endif
+    
+    
+    #if os(OSX)
+    public func color(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> NSColor? {
+        return colorContent(identifier)?.color()
+    }
+    #endif
+}

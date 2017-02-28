@@ -89,3 +89,21 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Page {
+    
+    /// Provides a number content with the given identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the content
+    /// - parameter position: The position within the content (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access an content
+    public func numberContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONNumberContent? {
+        return self.content(identifier, at: position)
+    }
+    
+    
+    public func number(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> Double? {
+        return numberContent(identifier, at: position)?.value
+    }
+}

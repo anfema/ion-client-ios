@@ -373,3 +373,21 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Page {
+    
+    /// Provides a media content with the given identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the content
+    /// - parameter position: The position within the content (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access an content
+    public func mediaContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONMediaContent? {
+        return self.content(identifier, at: position)
+    }
+    
+    
+    public func mediaURL(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> URL? {
+        return mediaContent(identifier, at: position)?.url
+    }
+}

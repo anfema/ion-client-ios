@@ -211,3 +211,85 @@ open class ION {
     /// Init is private because only class functions should be used
     fileprivate init() {}
 }
+
+
+/// The loading option when requesting Page objects
+public enum PageLoadingOption {
+    /// Only the metadata of a page will be loaded
+    case meta
+    
+    /// The full content of page will be loaded except media, files and images
+    case full
+}
+
+
+public extension ION
+{
+    /// Represents a page identifier (should match an identifier defined in ION-Desk)
+    public typealias PageIdentifier       = String
+    
+    /// Represents a collection identifier (should match an identifier defined in ION-Desk)
+    public typealias CollectionIdentifier = String
+    
+    /// Represents a content identifier (should match an identifier defined in ION-Desk)
+    public typealias ContentIdentifier    = String
+    
+    /// Represents the position within content or page hierarchy
+    public typealias Postion              = Int
+    
+    
+    /// The default identifier of a collection that should be used within the application.
+    /// If you define it, you can omit the collection identifier when requesting Pages.
+    static var defaultCollectionIdentifier: String = ""
+    
+    
+    /// Requests a Page based on a given identifier within the specified collection.
+    /// It also allows you to specify the loading option
+    /// - parameter pageIdentifier: The identifier of the page that should be requested
+    /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
+    /// - parameter option: The page loading option (full or meta)
+    /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
+    static public func page(pageIdentifier: PageIdentifier,
+                            in collectionIdentifier: CollectionIdentifier? = nil,
+                            option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+        
+        // Ensure that a collection identifier was specified
+        guard collectionIdentifier != nil || defaultCollectionIdentifier != "" else {
+            fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
+        }
+        
+        let asyncResult = AsyncResult<Page>()
+        
+        ION.collection(collectionIdentifier ?? ION.defaultCollectionIdentifier) { result in
+            guard case .success(let collection) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+            
+            let metaResult = collection.metadata(pageIdentifier)
+            guard case .success(let metaData) = metaResult else {
+                asyncResult.execute(result: .failure(metaResult.error ?? IONError.didFail))
+                return
+            }
+            
+            if option == .meta {
+                let page = Page(metaData: metaData, fullData: nil)
+                asyncResult.execute(result: .success(page))
+            } else if option == .full {
+                collection.page(pageIdentifier, callback: { result in
+                    guard case .success(let fullPage) = result else {
+                        asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                        return
+                    }
+                    
+                    let page = Page(metaData: metaData, fullData: fullPage)
+                    asyncResult.execute(result: .success(page))
+                })
+            } else {
+                fatalError("not implemented")
+            }
+        }
+        
+        return asyncResult
+    }
+}

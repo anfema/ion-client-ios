@@ -93,3 +93,61 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension IONConnectionContent {
+    
+    public var components: [String] {
+        return self.link.components(separatedBy: "/").filter({$0.isEmpty == false})
+    }
+    
+    public var collectionIdentifier: String? {
+        return components.first
+    }
+    
+    public var pageIdentifier: String? {
+        return components.last
+    }
+}
+
+
+public extension Page {
+    
+    /// Provides a connection content with the given identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the content
+    /// - parameter position: The position within the content (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access an content
+    public func connectionContent(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> IONConnectionContent? {
+        return self.content(identifier, at: position)
+    }
+    
+    
+    public func connection(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0) -> (collectionIdentifier: ION.CollectionIdentifier, pageIdentifier: ION.PageIdentifier)? {
+        guard let connectionContent = connectionContent(identifier),
+            let collectionIdentifier = connectionContent.collectionIdentifier,
+            let pageIdentifier = connectionContent.pageIdentifier else {
+                return nil
+        }
+        
+        return (collectionIdentifier: collectionIdentifier, pageIdentifier: pageIdentifier)
+    }
+    
+    
+    public func connectionPage(_ identifier: ION.ContentIdentifier, at position: ION.Postion = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+        let asyncResult = AsyncResult<Page>()
+        
+        guard let connection = connection(identifier, at: position) else {
+            asyncResult.execute(result: .failure(IONError.didFail))
+            return asyncResult
+        }
+        
+        ION.page(pageIdentifier: connection.pageIdentifier, in: connection.collectionIdentifier, option: option).onSuccess { (page) in
+            asyncResult.execute(result: .success(page))
+            }.onFailure { (error) in
+                asyncResult.execute(result: .failure(error))
+        }
+        
+        return asyncResult
+    }
+}

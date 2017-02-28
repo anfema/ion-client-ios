@@ -47,6 +47,8 @@
 		8F326B7A1CCFB10D0041FC40 /* ion+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B471CCFB0D30041FC40 /* ion+search.swift */; };
 		8F326B7B1CCFB10D0041FC40 /* notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B491CCFB0D30041FC40 /* notifications.swift */; };
 		8F326B7C1CCFB10D0041FC40 /* search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B4A1CCFB0D30041FC40 /* search.swift */; };
+		D6222EF21E6587A100C7C3DA /* page_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF11E6587A100C7C3DA /* page_new.swift */; };
+		D6222EF41E6587AC00C7C3DA /* AsyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF31E6587AC00C7C3DA /* AsyncResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,8 @@
 		8F326B501CCFB0F30041FC40 /* ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F326B521CCFB0F30041FC40 /* ion-client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ion-client.h"; sourceTree = "<group>"; };
 		8F326B541CCFB0F30041FC40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6222EF11E6587A100C7C3DA /* page_new.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_new.swift; sourceTree = "<group>"; };
+		D6222EF31E6587AC00C7C3DA /* AsyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncResult.swift; sourceTree = "<group>"; };
 		DDE09F13163B41C489B3012D /* Pods-ion_client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.debug.xcconfig"; sourceTree = "<group>"; };
 		E53026DF88A57C0D04D16D33 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -165,6 +169,7 @@
 		8F326B0D1CCFB0D30041FC40 /* communication */ = {
 			isa = PBXGroup;
 			children = (
+				D6222EF31E6587AC00C7C3DA /* AsyncResult.swift */,
 				8F326B0E1CCFB0D30041FC40 /* request.swift */,
 				8F326B0F1CCFB0D30041FC40 /* response_serializer.swift */,
 				8F326B101CCFB0D30041FC40 /* Result.swift */,
@@ -197,6 +202,7 @@
 				8F326B401CCFB0D30041FC40 /* ionconfig.swift */,
 				8F326B411CCFB0D30041FC40 /* page+children.swift */,
 				8F326B421CCFB0D30041FC40 /* page+native_extensions.swift */,
+				D6222EF11E6587A100C7C3DA /* page_new.swift */,
 				8F326B431CCFB0D30041FC40 /* page.swift */,
 				8F326B441CCFB0D30041FC40 /* page_metadata.swift */,
 			);
@@ -371,6 +377,7 @@
 				8F326B621CCFB10D0041FC40 /* collection+native_extensions.swift in Sources */,
 				8F326B631CCFB10D0041FC40 /* collection.swift in Sources */,
 				8F326B641CCFB10D0041FC40 /* color.swift in Sources */,
+				D6222EF41E6587AC00C7C3DA /* AsyncResult.swift in Sources */,
 				8F326B651CCFB10D0041FC40 /* connection.swift in Sources */,
 				8F326B661CCFB10D0041FC40 /* container.swift in Sources */,
 				8F326B671CCFB10D0041FC40 /* content.swift in Sources */,
@@ -389,6 +396,7 @@
 				8F326B741CCFB10D0041FC40 /* ionconfig.swift in Sources */,
 				8F326B751CCFB10D0041FC40 /* page+children.swift in Sources */,
 				8F326B761CCFB10D0041FC40 /* page+native_extensions.swift in Sources */,
+				D6222EF21E6587A100C7C3DA /* page_new.swift in Sources */,
 				8F326B771CCFB10D0041FC40 /* page.swift in Sources */,
 				8F326B781CCFB10D0041FC40 /* page_metadata.swift in Sources */,
 				8F326B791CCFB10D0041FC40 /* collection+search.swift in Sources */,
