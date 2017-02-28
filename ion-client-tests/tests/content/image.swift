@@ -23,55 +23,6 @@ class imageContentTests: LoggedInXCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-
-
-    func testImageOutletOnSuccessOnError() {
-        let expectation = self.expectation(description: "testImageOutletOnSuccessOnError")
-
-        ION.collection("test").page("page_001") { result in
-            result.onSuccess({ page in
-                page.outlet("image", atPosition: 0).onSuccess({ (image: IONImageContent) in
-                    // Test if the correct response queue is used
-                    XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
-
-                    XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
-
-                    expectation.fulfill()
-                }).onError({ error in
-                    XCTFail()
-                    expectation.fulfill()
-                })
-            }).onError({ error in
-                XCTFail()
-                expectation.fulfill()
-            })
-        }
-
-        self.waitForExpectations(timeout: 5.0, handler: nil)
-    }
-
-
-    func testImageOutletOnSuccessOnError2() {
-        let expectation = self.expectation(description: "testImageOutletOnSuccessOnError2")
-
-        ION.collection("test").page("page_001").image("image") { result in
-            result.onSuccess({ image in
-                // Test if the correct response queue is used
-                XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
-
-                XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
-
-                expectation.fulfill()
-            }).onError({ error in
-                XCTFail()
-                expectation.fulfill()
-            })
-        }
-
-        self.waitForExpectations(timeout: 5.0, handler: nil)
-    }
-
-
     
     func testImageOutletFetchAsyncCGImage() {
         let expectation = self.expectation(description: "testImageOutletFetchAsyncCGImage")
@@ -85,7 +36,7 @@ class imageContentTests: LoggedInXCTestCase {
                 XCTFail()
                 return
             }
-
+            
             XCTAssertNotNil(image)
             XCTAssertEqual(CGSize(width: 600, height: 400), image.size)
             expectation.fulfill()

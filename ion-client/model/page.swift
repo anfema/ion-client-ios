@@ -226,23 +226,6 @@ open class IONPage {
     }
 
 
-
-    open func outlet<T: IONContent>(_ name: String, atPosition position: Int = 0) -> Result<T> {
-        let result = outlet(name, atPosition: position)
-
-        guard case .success(let outlet) = result else {
-            return .failure(IONError.didFail)
-        }
-
-        guard let typedOutlet = outlet as? T else {
-            return .failure(IONError.didFail)
-        }
-
-        return .success(typedOutlet)
-    }
-    
-
-
     /// Fetch an outlet by name (probably deferred by page loading)
     ///
     /// - parameter name: Outlet name to fetch
