@@ -225,13 +225,13 @@ public enum PageLoadingOption {
 
 public extension ION
 {
-    /// Represents a page identifier (should match an identifier defined in ION-Desk)
+    /// Represents a page identifier (should match an identifier defined in ion desk)
     public typealias PageIdentifier       = String
     
-    /// Represents a collection identifier (should match an identifier defined in ION-Desk)
+    /// Represents a collection identifier (should match an identifier defined in ion desk)
     public typealias CollectionIdentifier = String
     
-    /// Represents a content identifier (should match an identifier defined in ION-Desk)
+    /// Represents a content identifier (should match an identifier defined in ion desk)
     public typealias ContentIdentifier    = String
     
     /// Represents the position within content or page hierarchy
@@ -243,8 +243,9 @@ public extension ION
     static var defaultCollectionIdentifier: String = ""
     
     
-    /// Requests a Page based on a given identifier within the specified collection.
-    /// It also allows you to specify the loading option
+    /// Creates an operation to request a Page based on a given identifier within the specified collection.
+    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// It also allows you to specify the loading option of the Page.
     /// - parameter pageIdentifier: The identifier of the page that should be requested
     /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
     /// - parameter option: The page loading option (full or meta)

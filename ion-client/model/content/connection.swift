@@ -138,7 +138,9 @@ public extension Page {
         let asyncResult = AsyncResult<Page>()
         
         guard let connection = connection(identifier, at: position) else {
-            asyncResult.execute(result: .failure(IONError.didFail))
+            ION.config.responseQueue.async(execute: { 
+                asyncResult.execute(result: .failure(IONError.didFail))
+            })
             return asyncResult
         }
         

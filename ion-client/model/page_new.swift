@@ -14,9 +14,46 @@ import Foundation
 /// Page class, contains functionaly to fetch outlet content
 open class Page {
     
-    private (set) var metaData: IONPageMeta
+    /// Page identifier
+    public var identifier: String {
+        return metaData.identifier
+    }
     
-    private (set) var fullData: IONPage?
+    /// Parent identifier, nil == top level
+    public var parent: String? {
+        return metaData.parent
+    }
+    
+    /// Page layout
+    public var layout: String {
+        return metaData.layout
+    }
+    
+    /// Page position (as defined in ion desk)
+    public var position: Int {
+        return metaData.position
+    }
+    
+    /// Determines if the page was already full loaded
+    public var isFullLoaded : Bool{
+        return fullData != nil
+    }
+    
+    /// Returns all (not full loaded) children of the Page.
+    ///
+    /// __Warning__: Each child page is not full loaded (can only access its meta information)
+    public var metaChildren: [Page] {
+        guard let _children = metaData.children else {
+            return []
+        }
+        
+        return _children.map({Page(metaData: $0)})
+    }
+    
+    
+    fileprivate (set) var metaData: IONPageMeta
+    
+    fileprivate (set) var fullData: IONPage?
     
     
     /// Initialize a page based on a IONPageMeta and an optional IONPage
@@ -25,7 +62,7 @@ open class Page {
     ///
     /// - parameter metaData: An IONPageMeta object
     /// - parameter fullData: An optional IONPage object
-    init(metaData: IONPageMeta, fullData: IONPage?) {
+    init(metaData: IONPageMeta, fullData: IONPage? = nil) {
         self.metaData = metaData
         self.fullData = fullData
     }
@@ -44,7 +81,7 @@ open class Page {
     /// Returns an optional url of the underlying meta thumbnail.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if a content on ION-Desk is called "thumbnail" and was marked as meta information.
+    /// __Note__: Works if a content on ion desk is called "thumbnail" and was marked as meta information.
     public var metaThumbnailURL : URL? {
         return metaData.imageURL
     }
@@ -53,7 +90,7 @@ open class Page {
     /// Returns an optional url of the underlying meta icon.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if a content on ION-Desk is called "icon" and was marked as meta information.
+    /// __Note__: Works if a content on ion desk is called "icon" and was marked as meta information.
     public var metaIconURL : URL? {
         return metaData.imageURL
     }
@@ -65,6 +102,63 @@ open class Page {
 }
 
 
+public extension Page
+{
+    /// Creates an operation to fetch all (full loaded) children sorted ascending by its position.
+    /// Add an onSuccess and/or an onFailure handler to the operation.
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access full loaded children
+    ///
+    /// __Note__: Each child page is fully loaded (can access all its content)
+    ///
+    /// __Note__: If you are only intereset in the child meta information simply call `metaChildren`.
+    public var children : AsyncResult<[Page]> {
+        
+        let asyncResult = AsyncResult<[Page]>()
+        let metas       = metaChildren
+        
+        // Ensure that we have children that have to be loaded
+        guard metas.isEmpty == false else{
+            ION.config.responseQueue.async(execute: { 
+                asyncResult.execute(result: .success([]))
+            })
+            return asyncResult
+        }
+        
+        // Ensure that the page
+        guard let fullData = fullData else{
+            assertionFailure("IONPage (\(identifier)) needs to be loaded first")
+            ION.config.responseQueue.async(execute: {
+                asyncResult.execute(result: .failure(IONError.didFail))
+            })
+            return asyncResult
+        }
+        
+        var children = [Page]()
+        var index    = 0
+        
+        fullData.children({ (result) in
+            guard let child = result.value,
+                  let page = metas.filter({$0.identifier == child.identifier}).first else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+            
+            page.fullData = child
+            children.append(page)
+            index += 1
+            
+            if index == metas.count {
+                children.sort(by: {$0.position < $1.position})
+                asyncResult.execute(result: .success(children))
+            }
+        })
+        
+        return asyncResult
+    }
+}
+
+
 public extension Page {
     
     /// Provides all available contents of a Page.
@@ -72,7 +166,7 @@ public extension Page {
     /// __Warning:__ The page has to be full loaded before one can access an content (except meta data)
     public var contents: [IONContent] {
         guard let fullData = fullData else {
-            assertionFailure("IONPage (\(metaData.identifier)) needs to be loaded first")
+            assertionFailure("IONPage (\(identifier)) needs to be loaded first")
             return []
         }
         
