@@ -314,7 +314,6 @@ public extension ION
             }
             
             asyncResult.execute(result: .success(metaDataList.map({Page(metaData: $0)})))
-            return
         }
         
         return asyncResult
@@ -335,7 +334,33 @@ public extension ION
             }
             
             asyncResult.execute(result: .success(true))
-            return
+        }
+        
+        return asyncResult
+    }
+    
+    
+    /// Get a fulltext search handle for a given collection identifier
+    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// - parameter collectionIdentifier: Identifier of the collection a search handle should be returned for
+    static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle>
+    {
+        let asyncResult = AsyncResult<IONSearchHandle>()
+        
+        ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { (result) in
+            guard case .success(let collection) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+            
+            collection.getSearchHandle({ (result) in
+                guard case .success(let searchHandle) = result else {
+                    asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                    return
+                }
+                
+                asyncResult.execute(result: .success(searchHandle))
+            })
         }
         
         return asyncResult
