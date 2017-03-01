@@ -240,7 +240,7 @@ public extension ION
     
     /// The default identifier of a collection that should be used within the application.
     /// If you define it, you can omit the collection identifier when requesting Pages.
-    static var defaultCollectionIdentifier: String = ""
+    static var defaultCollectionIdentifier: String?
     
     
     /// Creates an operation to request a Page based on a given identifier within the specified collection.
@@ -254,14 +254,9 @@ public extension ION
                             in collectionIdentifier: CollectionIdentifier? = nil,
                             option: PageLoadingOption = .meta) -> AsyncResult<Page> {
         
-        // Ensure that a collection identifier was specified
-        guard collectionIdentifier != nil || defaultCollectionIdentifier != "" else {
-            fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
-        }
-        
         let asyncResult = AsyncResult<Page>()
         
-        ION.collection(collectionIdentifier ?? ION.defaultCollectionIdentifier) { result in
+        ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { result in
             guard case .success(let collection) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
@@ -304,14 +299,9 @@ public extension ION
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
     static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
         
-        // Ensure that a collection identifier was specified
-        guard collectionIdentifier != nil || defaultCollectionIdentifier != "" else {
-            fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
-        }
-        
         let asyncResult = AsyncResult<[Page]>()
         
-        ION.collection(collectionIdentifier ?? ION.defaultCollectionIdentifier) { result in
+        ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { result in
             guard case .success(let collection) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
@@ -328,6 +318,39 @@ public extension ION
         }
         
         return asyncResult
+    }
+    
+    
+    /// Instantiates a collection download taking an optional collection identifier into account.
+    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded
+    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Bool>
+    {
+        let asyncResult = AsyncResult<Bool>()
         
+        ION.collection(validatedCollectionIdentifier(collectionIdentifier)).download { (success) in
+            guard success == true else {
+                asyncResult.execute(result: .failure(IONError.didFail))
+                return
+            }
+            
+            asyncResult.execute(result: .success(true))
+            return
+        }
+        
+        return asyncResult
+    }
+    
+    
+    static private func validatedCollectionIdentifier(_ collectionIdentifier: String?) -> String {
+        
+        if let collectionIdentifier = collectionIdentifier {
+            return collectionIdentifier
+        }
+        else if let collectionIdentifier = defaultCollectionIdentifier {
+            return collectionIdentifier
+        }
+        
+        fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
     }
 }
