@@ -244,7 +244,7 @@ public extension ION
     
     
     /// Creates an operation to request a Page based on a given identifier within the specified collection.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// It also allows you to specify the loading option of the Page.
     /// - parameter pageIdentifier: The identifier of the page that should be requested
     /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
@@ -291,7 +291,7 @@ public extension ION
     
     
     /// Creates an operation to request the top level pages (not full loaded) within the specified collection.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
     /// __Warning__: The list of top level pages are not full loaded
     ///
@@ -322,7 +322,7 @@ public extension ION
     
     /// Creates an operation to request a parent->child path for a given page identifier within a specific collection (optional).
     /// Requests a list of (not full loaded) page items (last item is current page, first item is toplevel parent).
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter pageIdentifier: The identifier of the page the path should be requested for
     /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
     ///
@@ -353,7 +353,7 @@ public extension ION
     
     
     /// Instantiates a collection download taking an optional collection identifier into account.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded
     static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Bool>
     {
@@ -373,7 +373,7 @@ public extension ION
     
     
     /// Requests a fulltext search handle for a given collection identifier
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection a search handle should be returned for
     static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle>
     {

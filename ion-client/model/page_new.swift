@@ -105,7 +105,7 @@ open class Page {
     
     #if os(iOS)
     /// Requests a thumbnail from the pages meta information.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
     /// __Note__: Works if an image content on ion desk is called "thumbnail" and was marked as meta information.
@@ -128,7 +128,7 @@ open class Page {
     
     
     /// Requests an icon from the pages meta information.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
     /// __Note__: Works if an image content on ion desk is called "icon" and was marked as meta information.
@@ -140,7 +140,7 @@ open class Page {
     
     #if os(OSX)
     /// Requests a thumbnail from the pages meta information.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
     /// __Note__: Works if an image content on ion desk is called "thumbnail" and was marked as meta information.
@@ -163,7 +163,7 @@ open class Page {
     
     
     /// Requests an icon from the pages meta information.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
     /// __Note__: Works if an image content on ion desk is called "icon" and was marked as meta information.
@@ -190,7 +190,7 @@ open class Page {
 public extension Page
 {
     /// Creates an operation to fetch all (full loaded) children sorted ascending by its position.
-    /// Add an onSuccess and/or an onFailure handler to the operation.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
     /// __Warning:__ The page has to be full loaded before one can access full loaded children
     ///
