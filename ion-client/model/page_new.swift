@@ -171,6 +171,14 @@ open class Page {
         return metaThumbnail()
     }
     #endif
+
+    
+    /// Returns a parent->child path of the current page
+    ///
+    /// - returns: A list of (not full loaded) page items (last item is current page, first item is toplevel parent)
+    var path : [Page] {
+        return metaData.collection?.metaPath(identifier)?.map({Page(metaData: $0)}) ?? []
+    }
     
     
     deinit {
@@ -263,7 +271,9 @@ public extension Page {
     /// Furthermore take a look at the content files for easier content access.
     ///
     /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
-    public func content<T: IONContent>(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> T? {
+    public func content<T: IONContent>(_ identifier: ION.OutletIdentifier,
+                        at position: ION.Postion = 0) -> T? {
+        
         guard let fullData = fullData else {
             assertionFailure("IONPage (\(metaData.identifier)) needs to be loaded first")
             return nil
