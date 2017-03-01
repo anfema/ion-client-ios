@@ -340,7 +340,7 @@ public extension ION
     }
     
     
-    /// Get a fulltext search handle for a given collection identifier
+    /// Requests a fulltext search handle for a given collection identifier
     /// Add an onSuccess and/or an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection a search handle should be returned for
     static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle>
