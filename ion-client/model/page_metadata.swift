@@ -13,7 +13,7 @@ import Foundation
 import DEjson
 
 /// Page metadata, used if only small parts of a page have to be used instead of downloading the whole thing
-open class IONPageMeta: CanLoadImage {
+internal class IONPageMeta: CanLoadImage {
     /// Flag if the date formatter has already been instantiated
     static var formatterInstantiated = false
 

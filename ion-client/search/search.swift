@@ -34,7 +34,7 @@ internal extension String {
 open class IONSearchResult {
 
     /// Page metadata object for search result
-    open var meta: IONPageMeta?
+    open var page: Page?
 
     /// Outlet name where the search hit
     open let outletName: String
@@ -45,10 +45,9 @@ open class IONSearchResult {
     internal init(collection: IONCollection, page: String, outlet: String, snippet: String) {
         self.outletName = outlet
         self.snippet = snippet
-        for meta in collection.pageMeta {
-            if meta.identifier == page {
-                self.meta = meta
-            }
+        
+        if let meta = collection.pageMeta.first(where: {$0.identifier == page}) {
+            self.page = Page(metaData: meta)
         }
     }
 
@@ -72,7 +71,7 @@ open class IONSearchResult {
 open class IONSearchHandle {
 
     /// Collection for this handle
-    open let collection: IONCollection
+    internal let collection: IONCollection
 
     /// SQLite DB handle
     fileprivate var dbHandle: OpaquePointer? = nil

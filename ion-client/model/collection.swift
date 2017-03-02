@@ -14,7 +14,7 @@ import DEjson
 
 
 /// Collection class, contains pages, has functionality to asynchronously fetch data
-open class IONCollection {
+internal class IONCollection {
 
     /// Identifier
     open var identifier: String
@@ -546,7 +546,7 @@ extension IONCollection {
 
 
 /// Cancelable collection, remove from memory by calling either `cancel()` or `finish()`. Will leak if not done!
-open class CancelableIONCollection: IONCollection {
+internal class CancelableIONCollection: IONCollection {
 
     init(collection: IONCollection) {
         super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)

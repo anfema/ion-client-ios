@@ -15,7 +15,7 @@ import iso_rfc822_date
 
 
 /// Page class, contains functionality to fetch outlet content
-open class IONPage {
+internal class IONPage {
 
     /// Page identifier
     open var identifier: String
@@ -426,7 +426,7 @@ open class IONPage {
 }
 
 /// Cancelable page, either finish processing with `finish()` or cancel with `cancel()`. Will leak if not done so.
-open class CancelableIONPage: IONPage {
+internal class CancelableIONPage: IONPage {
 
     init(page: IONPage) {
         super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)

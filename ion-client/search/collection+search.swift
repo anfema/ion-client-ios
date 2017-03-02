@@ -11,7 +11,7 @@
 
 import Foundation
 
-public extension IONCollection {
+extension IONCollection {
 
     /// Get a fulltext search handle
     ///

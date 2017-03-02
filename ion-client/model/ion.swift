@@ -81,7 +81,7 @@ open class ION {
     ///
     /// - parameter identifier: the identifier of the collection
     /// - returns: collection object from cache or empty collection object
-    open class func collection(_ identifier: String) -> IONCollection {
+    internal class func collection(_ identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
         
         // return memcache if not timed out
@@ -122,7 +122,7 @@ open class ION {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    @discardableResult open class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
+    @discardableResult internal class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out

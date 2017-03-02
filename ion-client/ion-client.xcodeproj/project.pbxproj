@@ -36,7 +36,6 @@
 		8F326B6F1CCFB10D0041FC40 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B3B1CCFB0D30041FC40 /* text.swift */; };
 		8F326B701CCFB10D0041FC40 /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B3C1CCFB0D30041FC40 /* error.swift */; };
 		8F326B711CCFB10D0041FC40 /* ion+cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B3D1CCFB0D30041FC40 /* ion+cache.swift */; };
-		8F326B721CCFB10D0041FC40 /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B3E1CCFB0D30041FC40 /* ion+connection.swift */; };
 		8F326B731CCFB10D0041FC40 /* ion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B3F1CCFB0D30041FC40 /* ion.swift */; };
 		8F326B741CCFB10D0041FC40 /* ionconfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B401CCFB0D30041FC40 /* ionconfig.swift */; };
 		8F326B751CCFB10D0041FC40 /* page+children.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B411CCFB0D30041FC40 /* page+children.swift */; };
@@ -84,7 +83,6 @@
 		8F326B3B1CCFB0D30041FC40 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		8F326B3C1CCFB0D30041FC40 /* error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = error.swift; sourceTree = "<group>"; };
 		8F326B3D1CCFB0D30041FC40 /* ion+cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ion+cache.swift"; sourceTree = "<group>"; };
-		8F326B3E1CCFB0D30041FC40 /* ion+connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
 		8F326B3F1CCFB0D30041FC40 /* ion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ion.swift; sourceTree = "<group>"; };
 		8F326B401CCFB0D30041FC40 /* ionconfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ionconfig.swift; sourceTree = "<group>"; };
 		8F326B411CCFB0D30041FC40 /* page+children.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "page+children.swift"; sourceTree = "<group>"; };
@@ -206,7 +204,6 @@
 				8F326B2F1CCFB0D30041FC40 /* content */,
 				8F326B3C1CCFB0D30041FC40 /* error.swift */,
 				8F326B3D1CCFB0D30041FC40 /* ion+cache.swift */,
-				8F326B3E1CCFB0D30041FC40 /* ion+connection.swift */,
 				8F326B3F1CCFB0D30041FC40 /* ion.swift */,
 				8F326B401CCFB0D30041FC40 /* ionconfig.swift */,
 				8F326B411CCFB0D30041FC40 /* page+children.swift */,
@@ -403,7 +400,6 @@
 				8F326B6F1CCFB10D0041FC40 /* text.swift in Sources */,
 				8F326B701CCFB10D0041FC40 /* error.swift in Sources */,
 				8F326B711CCFB10D0041FC40 /* ion+cache.swift in Sources */,
-				8F326B721CCFB10D0041FC40 /* ion+connection.swift in Sources */,
 				8F326B731CCFB10D0041FC40 /* ion.swift in Sources */,
 				8F326B741CCFB10D0041FC40 /* ionconfig.swift in Sources */,
 				8F326B751CCFB10D0041FC40 /* page+children.swift in Sources */,
@@ -527,7 +523,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -553,7 +549,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

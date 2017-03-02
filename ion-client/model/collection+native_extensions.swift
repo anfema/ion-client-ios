@@ -26,7 +26,7 @@ extension IONCollection: CustomStringConvertible {
 /// - returns: `true` if the collections have the same identifiers
 ///            `false` if not.
 ///
-public func == (lhs: IONCollection, rhs: IONCollection) -> Bool {
+internal func == (lhs: IONCollection, rhs: IONCollection) -> Bool {
     return (lhs.identifier == rhs.identifier)
 }
 
