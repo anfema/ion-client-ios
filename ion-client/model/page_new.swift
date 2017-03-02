@@ -88,7 +88,7 @@ open class Page {
     /// Returns an optional url of the underlying meta thumbnail.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "thumbnail" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "thumbnail" and was marked as meta information.
     public var metaThumbnailURL : URL? {
         return metaData.imageURL
     }
@@ -97,7 +97,7 @@ open class Page {
     /// Returns an optional url of the underlying meta icon.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "icon" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "icon" and was marked as meta information.
     public var metaIconURL : URL? {
         return metaData.imageURL
     }
@@ -108,7 +108,7 @@ open class Page {
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "thumbnail" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "thumbnail" and was marked as meta information.
     public func metaThumbnail() -> AsyncResult<UIImage> {
         
         let asyncResult = AsyncResult<UIImage>()
@@ -131,7 +131,7 @@ open class Page {
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "icon" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "icon" and was marked as meta information.
     public func metaIcon() -> AsyncResult<UIImage> {
         return metaThumbnail()
     }
@@ -143,7 +143,7 @@ open class Page {
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "thumbnail" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "thumbnail" and was marked as meta information.
     public func metaThumbnail() -> AsyncResult<NSImage> {
         
         let asyncResult = AsyncResult<NSImage>()
@@ -166,7 +166,7 @@ open class Page {
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// Accessing meta data is also possible although page was not already full loaded.
     ///
-    /// __Note__: Works if an image content on ion desk is called "icon" and was marked as meta information.
+    /// __Note__: Works if an image outlet on ion desk is called "icon" and was marked as meta information.
     public func metaIcon() -> AsyncResult<NSImage> {
         return metaThumbnail()
     }
@@ -196,7 +196,7 @@ public extension Page
     ///
     /// __Note__: Each child page is fully loaded (can access all its content)
     ///
-    /// __Note__: If you are only intereset in the child meta information simply call `metaChildren`.
+    /// __Note__: If you are only interested in the child meta information simply call `metaChildren`.
     public var children : AsyncResult<[Page]> {
         
         let asyncResult = AsyncResult<[Page]>()
