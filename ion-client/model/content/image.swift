@@ -152,7 +152,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         try super.init(json: json)
     }
 
-    init(url: URL, outletIdentifier : ION.OutletIdentifier) {
+    init(url: URL, outletIdentifier : OutletIdentifier) {
         super.init(outletIdentifier: outletIdentifier)
     }
     
@@ -352,13 +352,13 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func imageContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONImageContent? {
+    public func imageContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONImageContent? {
         return self.content(identifier, at: position)
     }
     
     
     #if os(iOS)
-    public func image(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<UIImage> {
+    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
         
         imageContent(identifier)?.image(callback: { (result) in
@@ -375,7 +375,7 @@ public extension Content {
     }
     
     
-    public func thumbnail(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
+    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
         
         imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
@@ -393,7 +393,7 @@ public extension Content {
     
     
     #if os(OSX)
-    public func image(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<NSImage> {
+    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
         
         imageContent(identifier)?.image(callback: { (result) in
@@ -410,7 +410,7 @@ public extension Content {
     }
     
     
-    public func thumbnail(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
+    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
         
         imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in

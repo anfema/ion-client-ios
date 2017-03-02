@@ -83,7 +83,7 @@ open class IONContent {
 	}
     
     
-    init(outletIdentifier : ION.OutletIdentifier) {
+    init(outletIdentifier : OutletIdentifier) {
         self.outlet = outletIdentifier
         self.variation = "default"
     }

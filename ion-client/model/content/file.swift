@@ -199,12 +199,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func fileContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONFileContent? {
+    public func fileContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFileContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func fileData(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<Data> {
+    public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
         let asyncResult = AsyncResult<Data>()
         
         self.fileContent(identifier, at: position)?.data({ (result) in

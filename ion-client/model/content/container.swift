@@ -113,7 +113,7 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func containerContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONContainerContent? {
+    public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
         return self.content(identifier, at: position)
     }
 }

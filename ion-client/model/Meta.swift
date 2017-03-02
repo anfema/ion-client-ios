@@ -50,7 +50,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
-    public func string(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> String? {
+    public func string(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> String? {
         return page.metaData[outletIdentifier, position]
     }
     
@@ -61,7 +61,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
-    public func url(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> URL? {
+    public func url(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> URL? {
         
         guard let urlString = page.metaData[outletIdentifier, position] else {
             return nil
@@ -79,7 +79,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
-    public func image(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<UIImage> {
+    public func image(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
         
         guard let imageURLString = string(outletIdentifier, at: position),
@@ -111,7 +111,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
-    public func image(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<NSImage> {
+    public func image(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
         
         guard let imageURLString = string(outletIdentifier, at: position),

@@ -382,12 +382,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func mediaContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONMediaContent? {
+    public func mediaContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONMediaContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func mediaURL(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> URL? {
+    public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
         return mediaContent(identifier, at: position)?.url
     }
 }

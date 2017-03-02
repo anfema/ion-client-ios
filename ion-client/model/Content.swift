@@ -33,8 +33,8 @@ public struct Content {
     /// Furthermore take a look at the content files for easier content access.
     ///
     /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
-    func content<T: IONContent>(_ identifier: ION.OutletIdentifier,
-                         at position: ION.Postion = 0) -> T? {
+    func content<T: IONContent>(_ identifier: OutletIdentifier,
+                         at position: Position = 0) -> T? {
         
         guard let fullData = page.fullData else {
             assertionFailure("IONPage (\(page.identifier)) needs to be loaded first")

@@ -98,12 +98,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func numberContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONNumberContent? {
+    public func numberContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONNumberContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func number(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Double? {
+    public func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
         return numberContent(identifier, at: position)?.value
     }
 }

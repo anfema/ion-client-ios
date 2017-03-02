@@ -93,12 +93,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func optionContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONOptionContent? {
+    public func optionContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONOptionContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func option(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> String? {
+    public func option(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
         return optionContent(identifier, at: position)?.value
     }
 }

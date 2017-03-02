@@ -99,12 +99,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func dateTimeContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONDateTimeContent? {
+    public func dateTimeContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONDateTimeContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func date(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Date? {
+    public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
         return dateTimeContent(identifier)?.date
     }
 }

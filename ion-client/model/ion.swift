@@ -12,22 +12,21 @@
 import Foundation
 import Markdown
 
+/// Represents a page identifier (should match a page defined in ion desk)
+public typealias PageIdentifier       = String
+
+/// Represents a collection identifier (should match a collection defined in ion desk)
+public typealias CollectionIdentifier = String
+
+/// Represents an outlet identifier (should match an outlet defined in ion desk)
+public typealias OutletIdentifier    = String
+
+/// Represents the position within content or page hierarchy
+public typealias Position              = Int
+
+
 /// ION base class, use all ION functionality by using this object's class methods
 open class ION {
-    
-    /// Represents a page identifier (should match a page defined in ion desk)
-    public typealias PageIdentifier       = String
-    
-    /// Represents a collection identifier (should match a collection defined in ion desk)
-    public typealias CollectionIdentifier = String
-    
-    /// Represents an outlet identifier (should match an outlet defined in ion desk)
-    public typealias OutletIdentifier    = String
-    
-    /// Represents the position within content or page hierarchy
-    public typealias Postion              = Int
-    
-    
     /// The default identifier of a collection that should be used within the application.
     /// If you define it, you can omit the collection identifier when requesting Pages.
     static var defaultCollectionIdentifier: String?

@@ -118,12 +118,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func connectionContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONConnectionContent? {
+    public func connectionContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONConnectionContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func connection(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> (collectionIdentifier: ION.CollectionIdentifier, pageIdentifier: ION.PageIdentifier)? {
+    public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
         guard let connectionContent = connectionContent(identifier),
             let collectionIdentifier = connectionContent.collectionIdentifier,
             let pageIdentifier = connectionContent.pageIdentifier else {
@@ -134,7 +134,7 @@ public extension Content {
     }
     
     
-    public func connectionPage(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+    public func connectionPage(_ identifier: OutletIdentifier, at position: Position = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
         let asyncResult = AsyncResult<Page>()
         
         guard let connection = connection(identifier, at: position) else {

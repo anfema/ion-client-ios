@@ -93,12 +93,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func flagContent(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> IONFlagContent? {
+    public func flagContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFlagContent? {
         return self.content(identifier, at: position)
     }
     
     
-    public func flag(_ identifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> Bool {
+    public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
         guard let content = flagContent(identifier),
             content.isEnabled == true else {
                 return false
