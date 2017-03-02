@@ -290,14 +290,14 @@ public extension ION
     }
     
     
-    /// Creates an operation to request the top level pages (not full loaded) within the specified collection.
+    /// Creates an operation to request the top level pages within the specified collection.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
-    /// __Warning__: The list of top level pages are not full loaded
-    ///
     /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
+    /// - parameter option: The pages loading option (full or meta)
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
-    static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
+    static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil,
+                                     option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
         
         let asyncResult = AsyncResult<[Page]>()
         
@@ -308,12 +308,33 @@ public extension ION
             }
             
             let metaDataListResult = collection.childMetadataList(forParent: nil)
+            
             guard case .success(let metaDataList) = metaDataListResult else {
                 asyncResult.execute(result: .failure(metaDataListResult.error ?? IONError.didFail))
                 return
             }
             
-            asyncResult.execute(result: .success(metaDataList.map({Page(metaData: $0)})))
+            let metaList = metaDataList.map({Page(metaData: $0)})
+            
+            guard option == .full else {
+                asyncResult.execute(result: .success(metaList))
+                return
+            }
+            
+            var children = [Page]()
+            
+            metaList.forEach { (meta) in
+                ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
+                    children.append(page)
+                    
+                    if children.count == metaList.count {
+                        children.sort(by: {$0.position < $1.position})
+                        asyncResult.execute(result: .success(children))
+                    }
+                }).onFailure({ (error) in
+                    asyncResult.execute(result: .failure(error))
+                })
+            }
         }
         
         return asyncResult

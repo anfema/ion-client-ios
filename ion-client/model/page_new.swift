@@ -21,6 +21,10 @@ import Foundation
 /// Page class, contains functionaly to fetch outlet content
 open class Page {
     
+    internal private (set) var metaData: IONPageMeta
+    
+    internal private (set) var fullData: IONPage?
+    
     public var meta : Meta {
         return Meta(page: self)
     }
@@ -55,11 +59,6 @@ open class Page {
     }
     
     
-    internal private (set) var metaData: IONPageMeta
-    
-    internal private (set) var fullData: IONPage?
-    
-    
     /// Initialize a page based on a IONPageMeta and an optional IONPage
     ///
     /// Use the `page` function from `ION`
@@ -75,11 +74,9 @@ open class Page {
     /// Creates an operation to fetch all (full loaded) children sorted ascending by its position.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
-    /// __Warning:__ The page has to be full loaded before one can access full loaded children
-    ///
     /// __Note__: Each child page is fully loaded (can access all its content)
     ///
-    /// __Note__: If you are only interested in the child meta information simply call `metaChildren`.
+    /// __Note__: If you are only interested in the child meta information simply call `.meta.children`.
     public var children : AsyncResult<[Page]> {
         
         let asyncResult = AsyncResult<[Page]>()
@@ -113,6 +110,5 @@ open class Page {
     
     
     deinit {
-        print("Page deinitialized")
     }
 }

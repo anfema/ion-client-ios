@@ -72,6 +72,13 @@ public struct Meta {
     
     
     #if os(iOS)
+    /// Requests an image for a given outlet that was marked as "included into page-meta" on ion desk.
+    /// It also takes an optional position into account for outlets containing multiple contents.
+    /// Accessing meta data is also possible although page was not already full loaded.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
+    ///
+    /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
+    /// - parameter position: Position of the content within the related outlet
     public func image(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
         
@@ -97,6 +104,13 @@ public struct Meta {
     
     
     #if os(OSX)
+    /// Requests an image for a given outlet that was marked as "included into page-meta" on ion desk.
+    /// It also takes an optional position into account for outlets containing multiple contents.
+    /// Accessing meta data is also possible although page was not already full loaded.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
+    ///
+    /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
+    /// - parameter position: Position of the content within the related outlet
     public func image(_ outletIdentifier: ION.OutletIdentifier, at position: ION.Postion = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
         
