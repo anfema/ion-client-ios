@@ -295,4 +295,9 @@ public extension Content {
     public func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
         return textContent(identifier)?.attributedString()
     }
+    
+    
+    public func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+        return textContent(identifier)?.htmlText()
+    }
 }
