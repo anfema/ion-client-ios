@@ -374,12 +374,8 @@ public extension ION {
             }
             
             collection.getSearchHandle({ (result) in
-                guard case .success(let searchHandle) = result else {
-                    asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
-                    return
-                }
                 
-                asyncResult.execute(result: .success(searchHandle))
+                asyncResult.execute(result: result)
             })
         }
         

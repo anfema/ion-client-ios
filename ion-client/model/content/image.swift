@@ -362,13 +362,7 @@ public extension Content {
         let asyncResult = AsyncResult<UIImage>()
         
         imageContent(identifier)?.image(callback: { (result) in
-            
-            guard case .success(let image) = result else {
-                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
-                return
-            }
-            
-            asyncResult.execute(result: .success(image))
+            asyncResult.execute(result: result)
         })
         
         return asyncResult
@@ -379,6 +373,7 @@ public extension Content {
         let asyncResult = AsyncResult<UIImage>()
         
         imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
+    
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
@@ -397,13 +392,7 @@ public extension Content {
         let asyncResult = AsyncResult<NSImage>()
         
         imageContent(identifier)?.image(callback: { (result) in
-            
-            guard case .success(let image) = result else {
-                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
-                return
-            }
-            
-            asyncResult.execute(result: .success(image))
+            asyncResult.execute(result: result)
         })
         
         return asyncResult
