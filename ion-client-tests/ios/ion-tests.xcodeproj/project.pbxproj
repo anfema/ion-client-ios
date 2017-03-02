@@ -86,6 +86,9 @@
 		A97B612FE864D439569A203F /* Pods_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D107902FA8D80223C9B52FB /* Pods_tests.framework */; };
 		D6222EEA1E657BEF00C7C3DA /* AsyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */; };
 		D6222EEC1E657CD100C7C3DA /* page_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EEB1E657CD100C7C3DA /* page_new.swift */; };
+		D6222EF71E68215F00C7C3DA /* deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF51E6820F700C7C3DA /* deprecated.swift */; };
+		D6222EF91E68255B00C7C3DA /* Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF81E68255B00C7C3DA /* Meta.swift */; };
+		D6222EFB1E68256400C7C3DA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EFA1E68256400C7C3DA /* Content.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +214,9 @@
 		D392DC9FB224EFE69858DEDD /* Pods-ion_client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.release.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig"; sourceTree = "<group>"; };
 		D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncResult.swift; sourceTree = "<group>"; };
 		D6222EEB1E657CD100C7C3DA /* page_new.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_new.swift; sourceTree = "<group>"; };
+		D6222EF51E6820F700C7C3DA /* deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deprecated.swift; sourceTree = "<group>"; };
+		D6222EF81E68255B00C7C3DA /* Meta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meta.swift; sourceTree = "<group>"; };
+		D6222EFA1E68256400C7C3DA /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		ECFBA7F53F943D9B31B6A14D /* Pods-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -501,9 +507,12 @@
 			children = (
 				8FCFADFC1BFCD7980051981F /* page.swift */,
 				D6222EEB1E657CD100C7C3DA /* page_new.swift */,
+				D6222EF51E6820F700C7C3DA /* deprecated.swift */,
 				8FCFADFA1BFCD7980051981F /* page+children.swift */,
 				8FCFADFD1BFCD7980051981F /* page_metadata.swift */,
 				8FCFADFB1BFCD7980051981F /* page+native_extensions.swift */,
+				D6222EF81E68255B00C7C3DA /* Meta.swift */,
+				D6222EFA1E68256400C7C3DA /* Content.swift */,
 			);
 			name = page;
 			sourceTree = "<group>";
@@ -867,6 +876,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6222EF91E68255B00C7C3DA /* Meta.swift in Sources */,
 				8FCFAE3B1BFCD7E40051981F /* error.swift in Sources */,
 				8FCFAE321BFCD7E40051981F /* datetime.swift in Sources */,
 				8FCFAE3D1BFCD7E40051981F /* collection+search.swift in Sources */,
@@ -889,12 +899,14 @@
 				8FCFAE331BFCD7E40051981F /* file.swift in Sources */,
 				8FCFAE2A1BFCD7E40051981F /* collection+metadata.swift in Sources */,
 				8F58727C1C89A5AE005567E1 /* notifications.swift in Sources */,
+				D6222EFB1E68256400C7C3DA /* Content.swift in Sources */,
 				8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */,
 				8FCFAE401BFCD7E90051981F /* request.swift in Sources */,
 				8FCFAE291BFCD7E40051981F /* collection.swift in Sources */,
 				8FCFAE2F1BFCD7E40051981F /* color.swift in Sources */,
 				8FCFAE2E1BFCD7E40051981F /* ion+cache.swift in Sources */,
 				8FCFAE311BFCD7E40051981F /* content.swift in Sources */,
+				D6222EF71E68215F00C7C3DA /* deprecated.swift in Sources */,
 				8F114C6C1C10829B00977640 /* nsurlcache.swift in Sources */,
 				8FCFAE371BFCD7E40051981F /* media.swift in Sources */,
 				8FCFAE381BFCD7E40051981F /* number.swift in Sources */,

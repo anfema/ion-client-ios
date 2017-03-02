@@ -181,7 +181,7 @@ extension IONPage {
     #endif
 }
 
-public extension Page {
+public extension Content {
     
     /// Provides a color content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)

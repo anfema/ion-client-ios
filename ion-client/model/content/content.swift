@@ -45,7 +45,7 @@ open class IONContent {
 	open var isSearchable = false
 
     /// Array position
-    open var position: Int
+    open var position: Int = 0
 
 
     /// Initialize content object from JSON
@@ -79,10 +79,14 @@ open class IONContent {
 
         if let p = dict["position"], case .jsonNumber(let pos) = p {
             self.position = Int(pos)
-        } else {
-            self.position = 0
         }
 	}
+    
+    
+    init(outletIdentifier : ION.OutletIdentifier) {
+        self.outlet = outletIdentifier
+        self.variation = "default"
+    }
 
 
     /// Initialize a content object from JSON

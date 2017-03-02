@@ -320,38 +320,6 @@ public extension ION
     }
     
     
-    /// Creates an operation to request a parent->child path for a given page identifier within a specific collection (optional).
-    /// Requests a list of (not full loaded) page items (last item is current page, first item is toplevel parent).
-    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
-    /// - parameter pageIdentifier: The identifier of the page the path should be requested for
-    /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
-    ///
-    /// __Warning__: The list of pages within the path are not full loaded
-    static public func path(for pageIdentifier: PageIdentifier,
-                            in collectionIdentifier : CollectionIdentifier) -> AsyncResult<[Page]> {
-        
-        let asyncResult = AsyncResult<[Page]>()
-        
-        let validCollection = validatedCollectionIdentifier(collectionIdentifier)
-        ION.collection(validCollection) { result in
-            guard case .success(let collection) = result else {
-                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
-                return
-            }
-            
-            guard let path = collection.metaPath(pageIdentifier) else {
-                asyncResult.execute(result: .failure(IONError.pageNotFound(collection: validCollection, page: pageIdentifier)))
-                return
-            }
-            
-            
-            asyncResult.execute(result: .success(path.map({Page(metaData: $0)})))
-        }
-        
-        return asyncResult
-    }
-    
-    
     /// Instantiates a collection download taking an optional collection identifier into account.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded

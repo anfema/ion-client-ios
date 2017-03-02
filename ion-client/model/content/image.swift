@@ -23,7 +23,7 @@ import DEjson
 open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
 
     /// MIME type of the image
-    open var mimeType: String
+    open var mimeType: String?
 
     /// Dimensions of the image
     open var size: CGSize = CGSize.zero
@@ -35,7 +35,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     open var url: URL?
 
     /// Original image mime type
-    open var originalMimeType: String
+    open var originalMimeType: String?
 
     /// Original image dimensions
     open var originalSize: CGSize = CGSize.zero
@@ -151,6 +151,9 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         try super.init(json: json)
     }
 
+    init(url: URL, outletIdentifier : ION.OutletIdentifier) {
+        super.init(outletIdentifier: outletIdentifier)
+    }
     
     /// Get a temporary valid url for this image file
     ///
@@ -341,7 +344,7 @@ extension IONPage {
 }
 
 
-public extension Page {
+public extension Content {
     
     /// Provides a image content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
