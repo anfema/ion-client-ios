@@ -122,6 +122,11 @@ public extension Content {
         return self.content(identifier, at: position)
     }
     
+    public func connectionContents(_ identifier: OutletIdentifier) -> [IONConnectionContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONConnectionContent] ?? nil)
+    }
+    
     
     public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
         guard let connectionContent = connectionContent(identifier),

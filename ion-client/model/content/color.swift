@@ -193,6 +193,12 @@ public extension Content {
     }
     
     
+    public func colorContents(_ identifier: OutletIdentifier) -> [IONColorContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONColorContent] ?? nil)
+    }
+    
+    
     #if os(iOS)
     public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
         return colorContent(identifier)?.color()

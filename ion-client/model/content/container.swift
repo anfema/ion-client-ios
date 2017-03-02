@@ -116,4 +116,10 @@ public extension Content {
     public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
         return self.content(identifier, at: position)
     }
+    
+    
+    public func containerContents(_ identifier: OutletIdentifier) -> [IONContainerContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONContainerContent] ?? nil)
+    }
 }

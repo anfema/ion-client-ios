@@ -98,6 +98,12 @@ public extension Content {
     }
     
     
+    public func flagContents(_ identifier: OutletIdentifier) -> [IONFlagContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONFlagContent] ?? nil)
+    }
+    
+    
     public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
         guard let content = flagContent(identifier),
             content.isEnabled == true else {

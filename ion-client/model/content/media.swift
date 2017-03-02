@@ -387,6 +387,12 @@ public extension Content {
     }
     
     
+    public func mediaContents(_ identifier: OutletIdentifier) -> [IONMediaContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONMediaContent] ?? nil)
+    }
+    
+    
     public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
         return mediaContent(identifier, at: position)?.url
     }

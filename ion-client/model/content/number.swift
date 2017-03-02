@@ -103,6 +103,12 @@ public extension Content {
     }
     
     
+    public func numberContents(_ identifier: OutletIdentifier) -> [IONNumberContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONNumberContent] ?? nil)
+    }
+    
+    
     public func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
         return numberContent(identifier, at: position)?.value
     }

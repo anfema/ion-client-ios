@@ -357,6 +357,12 @@ public extension Content {
     }
     
     
+    public func imageContents(_ identifier: OutletIdentifier) -> [IONImageContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONImageContent] ?? nil)
+    }
+    
+    
     #if os(iOS)
     public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()

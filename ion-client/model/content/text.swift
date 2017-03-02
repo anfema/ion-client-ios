@@ -281,6 +281,12 @@ public extension Content {
     }
     
     
+    public func textContents(_ identifier: OutletIdentifier) -> [IONTextContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONTextContent] ?? nil)
+    }
+    
+    
     public func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
         return textContent(identifier)?.plainText()
     }

@@ -204,6 +204,12 @@ public extension Content {
     }
     
     
+    public func fileContents(_ identifier: OutletIdentifier) -> [IONFileContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONFileContent] ?? nil)
+    }
+    
+    
     public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
         let asyncResult = AsyncResult<Data>()
         
