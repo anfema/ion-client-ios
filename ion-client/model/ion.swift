@@ -14,6 +14,25 @@ import Markdown
 
 /// ION base class, use all ION functionality by using this object's class methods
 open class ION {
+    
+    /// Represents a page identifier (should match a page defined in ion desk)
+    public typealias PageIdentifier       = String
+    
+    /// Represents a collection identifier (should match a collection defined in ion desk)
+    public typealias CollectionIdentifier = String
+    
+    /// Represents an outlet identifier (should match an outlet defined in ion desk)
+    public typealias OutletIdentifier    = String
+    
+    /// Represents the position within content or page hierarchy
+    public typealias Postion              = Int
+    
+    
+    /// The default identifier of a collection that should be used within the application.
+    /// If you define it, you can omit the collection identifier when requesting Pages.
+    static var defaultCollectionIdentifier: String?
+    
+    
     /// ION configuration, be sure to set up before using any ION calls or risk a crash!
     static open var config = IONConfig()
 
@@ -223,26 +242,7 @@ public enum PageLoadingOption {
 }
 
 
-public extension ION
-{
-    /// Represents a page identifier (should match a page defined in ion desk)
-    public typealias PageIdentifier       = String
-    
-    /// Represents a collection identifier (should match a collection defined in ion desk)
-    public typealias CollectionIdentifier = String
-    
-    /// Represents an outlet identifier (should match an outlet defined in ion desk)
-    public typealias OutletIdentifier    = String
-    
-    /// Represents the position within content or page hierarchy
-    public typealias Postion              = Int
-    
-    
-    /// The default identifier of a collection that should be used within the application.
-    /// If you define it, you can omit the collection identifier when requesting Pages.
-    static var defaultCollectionIdentifier: String?
-    
-    
+public extension ION {
     /// Creates an operation to request a Page based on a given identifier within the specified collection.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// It also allows you to specify the loading option of the Page.
