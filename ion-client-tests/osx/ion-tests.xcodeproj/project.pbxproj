@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		50F81A353147AABC1F68E2C4 /* Pods_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C96867CF56F1F2F808B8005 /* Pods_tests.framework */; };
 		6A15DFC11C8F20A800932077 /* ion_client.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A15DFC01C8F207700932077 /* ion_client.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6A8626C41CC7AC7C00B9F8DD /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */; };
 		6AAA551F1CCE004900738B4B /* result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA551E1CCE004900738B4B /* result.swift */; };
 		6AD50C4B1C8ED0CC00A05C20 /* callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD50C481C8ED0CC00A05C20 /* callback.swift */; };
 		8F0D4FC81C905D12003E59CE /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0D4FC71C905D12003E59CE /* Result.swift */; };
@@ -126,7 +125,6 @@
 		4C96867CF56F1F2F808B8005 /* Pods_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A15DFBF1C8F207700932077 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ion-client/Info.plist"; sourceTree = "<group>"; };
 		6A15DFC01C8F207700932077 /* ion_client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ion_client.h; path = "ion-client/ion_client.h"; sourceTree = "<group>"; };
-		6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
 		6AAA551E1CCE004900738B4B /* result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = result.swift; sourceTree = "<group>"; };
 		6AD50C481C8ED0CC00A05C20 /* callback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = callback.swift; sourceTree = "<group>"; };
 		84C5F81A940CAE21C579A116 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -526,7 +524,6 @@
 				8F78B2F41BF363AA009D4B67 /* ion.swift */,
 				8FF9DB7E1BF9E7EA00935748 /* ionconfig.swift */,
 				8FF9DB7C1BF9E7D600935748 /* ion+cache.swift */,
-				6A8626C31CC7AC7C00B9F8DD /* ion+connection.swift */,
 			);
 			name = ion;
 			sourceTree = "<group>";
@@ -881,7 +878,6 @@
 				8F78B30E1BF363AA009D4B67 /* datetime.swift in Sources */,
 				D6222EFF1E682A6F00C7C3DA /* Content.swift in Sources */,
 				8F78B30D1BF363AA009D4B67 /* content.swift in Sources */,
-				6A8626C41CC7AC7C00B9F8DD /* ion+connection.swift in Sources */,
 				8F78B30B1BF363AA009D4B67 /* color.swift in Sources */,
 				8F78B3161BF363AA009D4B67 /* text.swift in Sources */,
 				8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */,
