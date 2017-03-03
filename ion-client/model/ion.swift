@@ -392,6 +392,6 @@ public extension ION {
             return collectionIdentifier
         }
         
-        fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaltCollectionIdentifier` for ION")
+        fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaultCollectionIdentifier` for ION")
     }
 }
