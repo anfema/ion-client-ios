@@ -54,7 +54,7 @@ open class Page {
     }
     
     /// Determines if the page was already full loaded
-    public var isFullLoaded : Bool{
+    public var isFullyLoaded : Bool{
         return fullData != nil
     }
     
@@ -118,12 +118,12 @@ extension Page: CustomDebugStringConvertible {
     public var debugDescription: String {
         let parentInfo = self.parent ?? "none"
         let collectionInfo = self.metaData.collection?.identifier ?? "unknown"
-        let outletsInfo = self.isFullLoaded ? "\(self.content.all.count)" : "unknown"
+        let outletsInfo = self.isFullyLoaded ? "\(self.content.all.count)" : "unknown"
 
         return "Page (\(self.identifier))\n" +
             " • parent: \(parentInfo)\n" +
             " • collection: \(collectionInfo)\n" +
-            " • data: \(self.isFullLoaded ? "full" : "meta")\n" +
+            " • data: \(self.isFullyLoaded ? "full" : "meta")\n" +
             " • outlets: \(outletsInfo)\n" +
         " • children: \(self.meta.children.count)\n"
     }
