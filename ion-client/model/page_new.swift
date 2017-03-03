@@ -107,6 +107,34 @@ open class Page {
         
         return asyncResult
     }
+
+
+    /// Loads the current page fully.
+    /// Add an `onSuccess` and (if needed) an `onFailure` handler to the operation.
+    ///
+    public func load() -> AsyncResult<Page> {
+        guard isFullyLoaded == false else {
+            let asyncResult = AsyncResult<Page>()
+
+            ION.config.responseQueue.async(execute: {
+                asyncResult.execute(result: .success(self))
+            })
+
+            return asyncResult
+        }
+
+        guard let collectionIdentifier = metaData.collection?.identifier else {
+            let asyncResult = AsyncResult<Page>()
+
+            ION.config.responseQueue.async(execute: {
+                asyncResult.execute(result: .failure(IONError.didFail))
+            })
+
+            return asyncResult
+        }
+
+        return ION.page(pageIdentifier: identifier, in: collectionIdentifier, option: .full)
+    }
     
     
     deinit {
