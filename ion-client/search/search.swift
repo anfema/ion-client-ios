@@ -11,18 +11,8 @@
 
 import Foundation
 import Markdown
-
 import SQLite
 
-// TODO: Update sqlite calls using SQLite framework
-
-let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
-
-internal extension String {
-    var byteLength: Int32 {
-        return Int32(self.lengthOfBytes(using: String.Encoding.utf8))
-    }
-}
 
 /// Full text search result item
 open class IONSearchResult {
@@ -36,10 +26,11 @@ open class IONSearchResult {
     /// Text snippet of hit
     fileprivate let snippet: String
 
+
     internal init(collection: IONCollection, page: String, outlet: String, snippet: String) {
         self.outletName = outlet
         self.snippet = snippet
-        
+
         if let meta = collection.pageMeta.first(where: {$0.identifier == page}) {
             self.page = Page(metaData: meta)
         }
@@ -67,11 +58,11 @@ open class IONSearchHandle {
     /// Collection for this handle
     internal let collection: IONCollection
 
-    /// SQLite DB handle
-    fileprivate var dbHandle: OpaquePointer? = nil
+    /// Connection to the SQLite Database
+    fileprivate var connection: Connection?
 
-    /// SQLite prepared statement for searching
-    fileprivate var stmt: OpaquePointer? = nil
+    /// Query statement for search
+    private let sql = "SELECT page, outlet, text FROM (\n\n    SELECT c.page, c.outlet, snippet(s.search, \'**\', \'**\', \'[...]\') as text, offsets(s.search) as off\n    FROM search s\n    JOIN contents c ON s.docid = c.rowid\n    WHERE\n        s.search MATCH :searchTerm AND\n        c.locale = :locale\n\n) ORDER BY length(text) ASC, (length(off) - length(replace(off, \' \', \'\')) - 1) / 2 DESC"
 
     /// Search for a text
     ///
@@ -82,29 +73,26 @@ open class IONSearchHandle {
     /// - parameter text: text to search for
     /// - returns: list with search results, may be an empty list
     open func search(for text: String) -> [IONSearchResult] {
+        guard let connection = self.connection else {
+            return []
+        }
+
         let searchTerm = text.fixedSearchTerm
 
-        sqlite3_bind_text(self.stmt, sqlite3_bind_parameter_index(self.stmt, ":locale"), ION.config.locale, ION.config.locale.byteLength, sqliteTransient)
-        sqlite3_bind_text(stmt, sqlite3_bind_parameter_index(stmt, ":searchTerm"), searchTerm, searchTerm.byteLength, sqliteTransient)
+        guard let statement = try? connection.prepare(sql, [":locale": ION.config.locale, ":searchTerm": searchTerm]) else {
+            return []
+        }
 
         var items = [IONSearchResult]()
-        var finished = false
-        while !finished {
-            let result = sqlite3_step(stmt)
-            switch result {
-            case SQLITE_ROW:
-                // TODO: Check if this is safe??
-                let pageIdentifier = String(cString: sqlite3_column_text(stmt, 0))
-                let outletName     = String(cString: sqlite3_column_text(stmt, 1))
-                let snippet        = String(cString: sqlite3_column_text(stmt, 2))
-                items.append(IONSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
-            case SQLITE_DONE:
-                finished = true
-            default:
-                finished = true
-            }
+
+        for item in statement {
+            guard let pageIdentifier = item[0] as? String else { continue }
+            guard let outletName = item[1] as? String else { continue }
+            guard let snippet = item[2] as? String else { continue }
+
+            items.append(IONSearchResult(collection: self.collection, page: pageIdentifier, outlet: outletName, snippet: snippet))
         }
-        sqlite3_reset(self.stmt)
+
         return items
     }
 
@@ -139,37 +127,32 @@ open class IONSearchHandle {
 
 
     internal func setupSqliteConnection() -> Bool {
-        guard let searchIndex = ION.searchIndex(forCollection: self.collection.identifier), sqlite3_open_v2(searchIndex, &self.dbHandle, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+        guard let searchIndex = ION.searchIndex(forCollection: self.collection.identifier) else {
             return false
         }
 
-        let sql = "SELECT page, outlet, text FROM (\n\n    SELECT c.page, c.outlet, snippet(s.search, \'**\', \'**\', \'[...]\') as text, offsets(s.search) as off\n    FROM search s\n    JOIN contents c ON s.docid = c.rowid\n    WHERE\n        s.search MATCH :searchTerm AND\n        c.locale = :locale\n\n) ORDER BY length(text) ASC, (length(off) - length(replace(off, \' \', \'\')) - 1) / 2 DESC"
-        guard sqlite3_prepare_v2(self.dbHandle, sql, sql.byteLength, &self.stmt, nil) == SQLITE_OK else {
-            sqlite3_close(dbHandle)
+        guard let db = try? Connection(searchIndex, readonly: true) else {
             return false
         }
+
+        self.connection = db
 
         return true
     }
-    
+
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-
-        sqlite3_finalize(self.stmt)
-        sqlite3_close(self.dbHandle)
     }
 }
 
 
-fileprivate extension String
-{
-    fileprivate var fixedSearchTerm : String
-    {
+fileprivate extension String {
+    fileprivate var fixedSearchTerm: String {
         if range(of: "\"") != nil {
             return self
         }
-        
+
         var result = self
         result = result.replacingOccurrences(of: " ", with: "* ")
         result = result.replacingOccurrences(of: " -", with: " NOT ")
