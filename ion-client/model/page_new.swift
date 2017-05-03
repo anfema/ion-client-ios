@@ -20,45 +20,45 @@ import Foundation
 
 /// Page class, contains functionaly to fetch outlet content
 open class Page {
-    
+
     internal private (set) var metaData: IONPageMeta
-    
+
     internal private (set) var fullData: IONPage?
-    
-    public var meta : Meta {
+
+    public var meta: Meta {
         return Meta(page: self)
     }
-    
-    public var content : Content {
+
+    public var content: Content {
         return Content(page: self)
     }
-    
+
     /// Page identifier
     public var identifier: String {
         return metaData.identifier
     }
-    
+
     /// Parent identifier, nil == top level
     public var parent: String? {
         return metaData.parent
     }
-    
+
     /// Page layout
     public var layout: String {
         return metaData.layout
     }
-    
+
     /// Page position (as defined in ion desk)
     public var position: Int {
         return metaData.position
     }
-    
+
     /// Determines if the page was already full loaded
-    public var isFullyLoaded : Bool{
+    public var isFullyLoaded: Bool {
         return fullData != nil
     }
-    
-    
+
+
     /// Initialize a page based on a IONPageMeta and an optional IONPage
     ///
     /// Use the `page` function from `ION`
@@ -69,21 +69,21 @@ open class Page {
         self.metaData = metaData
         self.fullData = fullData
     }
-    
-    
+
+
     /// Creates an operation to fetch all (full loaded) children sorted ascending by its position.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
     /// __Note__: Each child page is fully loaded (can access all its content)
     ///
     /// __Note__: If you are only interested in the child meta information simply call `.meta.children`.
-    public var children : AsyncResult<[Page]> {
-        
+    public var children: AsyncResult<[Page]> {
+
         let asyncResult = AsyncResult<[Page]>()
         let metas       = meta.children
-        
+
         // Ensure that we have children that have to be loaded
-        guard metas.isEmpty == false else{
+        guard metas.isEmpty == false else {
             ION.config.responseQueue.async(execute: {
                 asyncResult.execute(result: .success([]))
             })
@@ -91,11 +91,11 @@ open class Page {
         }
 
         var children = [Page]()
-        
+
         metas.forEach { (meta) in
             ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
                 children.append(page)
-                
+
                 if children.count == metas.count {
                     children.sort(by: {$0.position < $1.position})
                     asyncResult.execute(result: .success(children))
@@ -104,7 +104,7 @@ open class Page {
                 asyncResult.execute(result: .failure(error))
             })
         }
-        
+
         return asyncResult
     }
 
@@ -135,8 +135,8 @@ open class Page {
 
         return ION.page(pageIdentifier: identifier, in: collectionIdentifier, option: .full)
     }
-    
-    
+
+
     deinit {
     }
 }

@@ -108,7 +108,7 @@ internal class IONCollection {
 
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }) 
+        })
     }
 
 
@@ -146,7 +146,7 @@ internal class IONCollection {
 
                             self.workQueue.async(flags: .barrier, execute: {
                                 self.checkCompleted()
-                            }) 
+                            })
                         }
                     }
                 } else {
@@ -163,7 +163,7 @@ internal class IONCollection {
 
                                 self.workQueue.async(flags: .barrier, execute: {
                                     self.checkCompleted()
-                                }) 
+                                })
                             }
                         }
                     }
@@ -230,7 +230,7 @@ internal class IONCollection {
         let page = IONPage(collection: self, identifier: identifier, layout: layout, cacheBehaviour: .prefer, parent: parent) { page in
             self.workQueue.async(flags: .barrier, execute: {
                 self.checkCompleted()
-            }) 
+            })
         }
 
         page.position = position
@@ -318,7 +318,7 @@ internal class IONCollection {
     @discardableResult open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
-        }) 
+        })
 
         return self
     }
@@ -388,7 +388,7 @@ internal class IONCollection {
             ION.config.responseQueue.async {
                 completionBlock(.success(self), !self.hasFailed)
             }
-        }) 
+        })
     }
 
 
@@ -565,7 +565,7 @@ internal class CancelableIONCollection: IONCollection {
             collection.parentLock.unlock()
 
             self.checkCompleted()
-        }) 
+        })
     }
 
     /// Cancel all requests queued for a collection
@@ -585,7 +585,7 @@ internal class CancelableIONCollection: IONCollection {
 
             // remove self from cache
             self.finish()
-        }) 
+        })
     }
 
     /// Finish the processing and discard the collection
@@ -593,6 +593,6 @@ internal class CancelableIONCollection: IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.pageCache.removeAll() // break cycle
             ION.collectionCache.removeValue(forKey: self.forkedIdentifier)
-        }) 
+        })
     }
 }

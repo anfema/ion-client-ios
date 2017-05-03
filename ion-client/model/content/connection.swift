@@ -96,15 +96,15 @@ extension IONPage {
 
 
 public extension IONConnectionContent {
-    
+
     public var components: [String] {
         return self.link.components(separatedBy: "/").filter({$0.isEmpty == false})
     }
-    
+
     public var collectionIdentifier: String? {
         return components.first
     }
-    
+
     public var pageIdentifier: String? {
         return components.last
     }
@@ -112,7 +112,7 @@ public extension IONConnectionContent {
 
 
 public extension Content {
-    
+
     /// Provides a connection content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
@@ -121,40 +121,40 @@ public extension Content {
     public func connectionContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONConnectionContent? {
         return self.content(identifier, at: position)
     }
-    
+
     public func connectionContents(_ identifier: OutletIdentifier) -> [IONConnectionContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONConnectionContent] ?? nil)
     }
-    
-    
+
+
     public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
         guard let connectionContent = connectionContent(identifier),
             let collectionIdentifier = connectionContent.collectionIdentifier,
             let pageIdentifier = connectionContent.pageIdentifier else {
                 return nil
         }
-        
+
         return (collectionIdentifier: collectionIdentifier, pageIdentifier: pageIdentifier)
     }
-    
-    
+
+
     public func connectionPage(_ identifier: OutletIdentifier, at position: Position = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
         let asyncResult = AsyncResult<Page>()
-        
+
         guard let connection = connection(identifier, at: position) else {
-            ION.config.responseQueue.async(execute: { 
+            ION.config.responseQueue.async(execute: {
                 asyncResult.execute(result: .failure(IONError.didFail))
             })
             return asyncResult
         }
-        
+
         ION.page(pageIdentifier: connection.pageIdentifier, in: connection.collectionIdentifier, option: option).onSuccess { (page) in
             asyncResult.execute(result: .success(page))
             }.onFailure { (error) in
                 asyncResult.execute(result: .failure(error))
         }
-        
+
         return asyncResult
     }
 }

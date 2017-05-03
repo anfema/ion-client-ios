@@ -131,7 +131,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         }
 
         if case .jsonString(let checksum)  = rawChecksum {
-            
+
             let checksumParts = checksum.components(separatedBy: ":")
 
             if checksumParts.count > 1 {
@@ -152,10 +152,10 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         try super.init(json: json)
     }
 
-    init(url: URL, outletIdentifier : OutletIdentifier) {
+    init(url: URL, outletIdentifier: OutletIdentifier) {
         super.init(outletIdentifier: outletIdentifier)
     }
-    
+
     /// Get a temporary valid url for this image file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
@@ -167,7 +167,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url": urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -346,7 +346,7 @@ extension IONPage {
 
 
 public extension Content {
-    
+
     /// Provides a image content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
@@ -355,68 +355,68 @@ public extension Content {
     public func imageContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONImageContent? {
         return self.content(identifier, at: position)
     }
-    
-    
+
+
     public func imageContents(_ identifier: OutletIdentifier) -> [IONImageContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONImageContent] ?? nil)
     }
-    
-    
+
+
     #if os(iOS)
     public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
-        
+
         imageContent(identifier)?.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
-        
+
         return asyncResult
     }
-    
-    
+
+
     public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
-        
+
         imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
-    
+
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
+
             asyncResult.execute(result: .success(UIImage(cgImage: image)))
         })
-        
+
         return asyncResult
     }
     #endif
-    
-    
+
+
     #if os(OSX)
     public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
-        
+
         imageContent(identifier)?.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
-        
+
         return asyncResult
     }
-    
-    
+
+
     public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
-        
+
         imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
-            asyncResult.execute(result: .success(NSImage(cgImage: image, size: NSZeroSize)))
+
+            asyncResult.execute(result: .success(NSImage(cgImage: image, size: NSSize.zero)))
         })
-        
+
         return asyncResult
     }
     #endif

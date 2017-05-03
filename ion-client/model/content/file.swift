@@ -100,7 +100,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
-                
+
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filename), options: .mappedIfSafe)
                 responseQueueCallback(callback, parameter: .success(data))
@@ -122,7 +122,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
             return
         }
 
-        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url": urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -193,7 +193,7 @@ extension IONPage {
 
 
 public extension Content {
-    
+
     /// Provides a file content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
@@ -202,26 +202,26 @@ public extension Content {
     public func fileContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFileContent? {
         return self.content(identifier, at: position)
     }
-    
-    
+
+
     public func fileContents(_ identifier: OutletIdentifier) -> [IONFileContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONFileContent] ?? nil)
     }
-    
-    
+
+
     public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
         let asyncResult = AsyncResult<Data>()
-        
+
         self.fileContent(identifier, at: position)?.data({ (result) in
             guard case .success(let data) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
+
             asyncResult.execute(result: .success(data))
         })
-        
+
         return asyncResult
     }
 }

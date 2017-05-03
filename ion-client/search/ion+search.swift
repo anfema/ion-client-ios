@@ -63,12 +63,10 @@ internal extension ION {
                 // Send notification that the fts db did change so that the search handlers can update their sqlite connection.
                 NotificationCenter.default.post(name: Notification.ftsDatabaseDidUpdate, object: collection)
 
-                if let callback = callback {
-                    ION.config.responseQueue.async {
-                        callback()
-                    }
+                ION.config.responseQueue.async {
+                    callback?()
                 }
-            }) 
+            })
         }
     }
 }

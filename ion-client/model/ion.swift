@@ -30,8 +30,8 @@ open class ION {
     /// The default identifier of a collection that should be used within the application.
     /// If you define it, you can omit the collection identifier when requesting Pages.
     static open var defaultCollectionIdentifier: String?
-    
-    
+
+
     /// ION configuration, be sure to set up before using any ION calls or risk a crash!
     static open var config = IONConfig()
 
@@ -83,7 +83,7 @@ open class ION {
     /// - returns: collection object from cache or empty collection object
     internal class func collection(_ identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
-        
+
         // return memcache if not timed out
         if !self.hasCacheTimedOut(collection: identifier) {
             if let cachedCollection = cachedCollection {
@@ -235,7 +235,7 @@ open class ION {
 public enum PageLoadingOption {
     /// Only the metadata of a page will be loaded
     case meta
-    
+
     /// The full content of page will be loaded except media, files and images
     case full
 }
@@ -252,21 +252,21 @@ public extension ION {
     static public func page(pageIdentifier: PageIdentifier,
                             in collectionIdentifier: CollectionIdentifier? = nil,
                             option: PageLoadingOption = .meta) -> AsyncResult<Page> {
-        
+
         let asyncResult = AsyncResult<Page>()
-        
+
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { result in
             guard case .success(let collection) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
+
             let metaResult = collection.metadata(pageIdentifier)
             guard case .success(let metaData) = metaResult else {
                 asyncResult.execute(result: .failure(metaResult.error ?? IONError.didFail))
                 return
             }
-            
+
             if option == .meta {
                 let page = Page(metaData: metaData, fullData: nil)
                 asyncResult.execute(result: .success(page))
@@ -276,7 +276,7 @@ public extension ION {
                         asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                         return
                     }
-                    
+
                     let page = Page(metaData: metaData, fullData: fullPage)
                     asyncResult.execute(result: .success(page))
                 })
@@ -284,11 +284,11 @@ public extension ION {
                 fatalError("not implemented")
             }
         }
-        
+
         return asyncResult
     }
-    
-    
+
+
     /// Creates an operation to request the top level pages within the specified collection.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
@@ -297,35 +297,35 @@ public extension ION {
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
     static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil,
                                      option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
-        
+
         let asyncResult = AsyncResult<[Page]>()
-        
+
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { result in
             guard case .success(let collection) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
+
             let metaDataListResult = collection.childMetadataList(forParent: nil)
-            
+
             guard case .success(let metaDataList) = metaDataListResult else {
                 asyncResult.execute(result: .failure(metaDataListResult.error ?? IONError.didFail))
                 return
             }
-            
+
             let metaList = metaDataList.map({Page(metaData: $0)})
-            
+
             guard option == .full else {
                 asyncResult.execute(result: .success(metaList))
                 return
             }
-            
+
             var children = [Page]()
-            
+
             metaList.forEach { (meta) in
                 ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
                     children.append(page)
-                    
+
                     if children.count == metaList.count {
                         children.sort(by: {$0.position < $1.position})
                         asyncResult.execute(result: .success(children))
@@ -335,63 +335,60 @@ public extension ION {
                 })
             }
         }
-        
+
         return asyncResult
     }
-    
-    
+
+
     /// Instantiates a collection download taking an optional collection identifier into account.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded
-    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Bool>
-    {
+    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Bool> {
         let asyncResult = AsyncResult<Bool>()
-        
+
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)).download { (success) in
             guard success == true else {
                 asyncResult.execute(result: .failure(IONError.didFail))
                 return
             }
-            
+
             asyncResult.execute(result: .success(true))
         }
-        
+
         return asyncResult
     }
-    
-    
+
+
     /// Requests a fulltext search handle for a given collection identifier
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection a search handle should be returned for
-    static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle>
-    {
+    static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle> {
         let asyncResult = AsyncResult<IONSearchHandle>()
-        
+
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { (result) in
             guard case .success(let collection) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
             }
-            
+
             collection.getSearchHandle({ (result) in
-                
+
                 asyncResult.execute(result: result)
             })
         }
-        
+
         return asyncResult
     }
-    
-    
+
+
     static private func validatedCollectionIdentifier(_ collectionIdentifier: String?) -> String {
-        
+
         if let collectionIdentifier = collectionIdentifier {
             return collectionIdentifier
-        }
-        else if let collectionIdentifier = defaultCollectionIdentifier {
+        } else if let collectionIdentifier = defaultCollectionIdentifier {
             return collectionIdentifier
         }
-        
+
         fatalError("A collection identifier has to provided!. Add a collection identifier as parameter or provide a `defaultCollectionIdentifier` for ION")
     }
 }

@@ -158,7 +158,7 @@ extension CanLoadImage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func cgImage(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
-        dataProviderFunc() { result in
+        dataProviderFunc { result in
             guard case .success(let provider) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
@@ -193,7 +193,7 @@ extension CanLoadImage {
     public func thumbnail(withSize size: CGSize, usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
 
-        dataProviderFunc() { result in
+        dataProviderFunc { result in
             guard case .success(let provider) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return

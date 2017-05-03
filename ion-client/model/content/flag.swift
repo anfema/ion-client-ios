@@ -87,7 +87,7 @@ extension IONPage {
 
 
 public extension Content {
-    
+
     /// Provides a flag content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
@@ -96,20 +96,20 @@ public extension Content {
     public func flagContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFlagContent? {
         return self.content(identifier, at: position)
     }
-    
-    
+
+
     public func flagContents(_ identifier: OutletIdentifier) -> [IONFlagContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONFlagContent] ?? nil)
     }
-    
-    
+
+
     public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
         guard let content = flagContent(identifier),
             content.isEnabled == true else {
                 return false
         }
-        
+
         return true
     }
 }

@@ -18,7 +18,7 @@ import iso_rfc822_date
 open class IONDateTimeContent: IONContent {
 
     /// Parsed date
-    open var date: Date? = nil
+    open var date: Date?
 
 
     /// Initialize datetime content object from JSON
@@ -93,7 +93,7 @@ extension IONPage {
 
 
 public extension Content {
-    
+
     /// Provides a dateTime content for a specific outlet identifier taking an optional position into account
     /// - parameter identifier: The identifier of the outlet (defined in ion desk)
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
@@ -102,14 +102,14 @@ public extension Content {
     public func dateTimeContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONDateTimeContent? {
         return self.content(identifier, at: position)
     }
-    
-    
+
+
     public func dateTimeContents(_ identifier: OutletIdentifier) -> [IONDateTimeContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONDateTimeContent] ?? nil)
     }
-    
-    
+
+
     public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
         return dateTimeContent(identifier)?.date
     }

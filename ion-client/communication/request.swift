@@ -196,8 +196,8 @@ open class IONRequest {
             // TODO: Check if correct options were set here
             return (destinationURL, [.createIntermediateDirectories, .removePreviousFile])
         }
-        
-        
+
+
         // Start download task
         let downloadTask = alamofire.download(urlString,
                                               method: .get,
@@ -205,7 +205,7 @@ open class IONRequest {
                                               encoding: URLEncoding.default,
                                               headers: headers,
                                               to: destination)
-        
+
         downloadTask.downloadProgress { (progress) in
             if progress.totalUnitCount < 0 {
                 // server sent no content-length header, we expect one byte more than we got
@@ -215,36 +215,36 @@ open class IONRequest {
                 ION.registerProgress(bytesReceived: progress.completedUnitCount, bytesExpected: progress.totalUnitCount, urlString: urlString)
             }
         }
-        
+
 
         downloadTask.response { (response) in
             // check for download errors
             if response.error != nil || response.response?.statusCode != 200 {
                 // TODO: Request bogus binary to test error case
-                
+
                 // remove temp file
                 do {
                     try FileManager.default.removeItem(atPath: cacheName + ".tmp")
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
-                
+
                 guard let response = response.response else {
                     responseQueueCallback(callback, parameter: .failure(IONError.serverUnreachable))
                     return
                 }
-                
+
                 if response.statusCode == 401 || response.statusCode == 403 {
                     responseQueueCallback(callback, parameter: .failure(IONError.notAuthorized))
                     return
                 }
-                
+
                 // call final update for progress, we're using 1 here because the user likely wants to
                 // calculate a percentage and thus divides those numbers
                 if response.allHeaderFields["Content-Length"] == nil {
                     ION.registerProgress(bytesReceived: 1, bytesExpected: 1, urlString: urlString)
                 }
-                
+
                 // try falling back to cache
                 ION.config.responseQueue.async {
                     let result = fetchFileFromCache(url: urlString, checksumMethod: checksumMethod, checksum: checksum)
@@ -270,12 +270,12 @@ open class IONRequest {
                     responseQueueCallback(callback, parameter: .failure(IONError.noData(error)))
                     return
                 }
-                
+
                 guard let request = response.request else {
                     responseQueueCallback(callback, parameter: .failure(IONError.didFail))
                     return
                 }
-                
+
                 // no error, save file to cache db
                 var ckSumMethod = checksumMethod
                 var ckSum = checksum
@@ -288,16 +288,16 @@ open class IONRequest {
                         // TODO: return error or do nothing when checksum could not be updated?
                     }
                 }
-                
+
                 // finish up progress reporting
                 if let unwrapped = response.response, unwrapped.allHeaderFields["Content-Length"] == nil,
                     let cachedFileData = self.cachedData(forURL: urlString) {
                     let bytes: Int64 = Int64(cachedFileData.count)
                     ION.registerProgress(bytesReceived: bytes, bytesExpected: bytes, urlString: urlString)
                 }
-                
+
                 self.saveJSONToCache(using: request, checksumMethod: ckSumMethod, checksum: ckSum)
-                
+
                 // call callback in correct queue
                 responseQueueCallback(callback, parameter: .success(cacheName))
             }
@@ -343,7 +343,7 @@ open class IONRequest {
         headers["Accept"] = "application/json"
         headers["Content-Type"] = "application/json"
 
-        
+
         let request = alamofire.request(urlString, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue

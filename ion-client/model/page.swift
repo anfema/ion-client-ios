@@ -155,7 +155,7 @@ internal class IONPage {
 
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }) 
+        })
 
         self.collection.pageCache[identifier] = self
     }
@@ -199,7 +199,7 @@ internal class IONPage {
     @discardableResult open func onCompletion(_ callback: @escaping ((_ page: IONPage, _ completed: Bool) -> Void)) -> IONPage {
         workQueue.async(flags: .barrier, execute: {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
-        }) 
+        })
 
         return self
     }
@@ -446,7 +446,7 @@ internal class CancelableIONPage: IONPage {
             self.isReady = true
 
             page.parentLock.unlock()
-        }) 
+        })
     }
 
     /// Cancel all pending requests for this page
@@ -454,13 +454,13 @@ internal class CancelableIONPage: IONPage {
         self.workQueue.async(flags: .barrier, execute: {
             self.hasFailed = true
             self.finish()
-        }) 
+        })
     }
 
     /// Finish all requests and discard page
     open func finish() {
         self.workQueue.async(flags: .barrier, execute: {
             self.collection.pageCache.removeValue(forKey: self.forkedIdentifier)
-        }) 
+        })
     }
 }

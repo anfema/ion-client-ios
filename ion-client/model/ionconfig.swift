@@ -74,7 +74,7 @@ public struct IONConfig {
     public typealias ContentTypeLambda = ((JSONObject) throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    var alamofire: Alamofire.SessionManager? = nil
+    var alamofire: Alamofire.SessionManager?
 
     /// update detected blocks
     var updateBlocks: [String: ((String) -> Void)]
@@ -109,7 +109,7 @@ public struct IONConfig {
         #else
             self.variation = "default"
         #endif
-        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
+        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x": CGFloat(1.0), "@2x": CGFloat(2.0), "@3x": CGFloat(3.0) ]
 
         for (header, value) in Alamofire.SessionManager.defaultHTTPHeaders {
             self.additionalHeaders[header] = value

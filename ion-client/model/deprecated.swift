@@ -9,7 +9,7 @@
 import Foundation
 
 extension ION {
-    
+
     /// Tries to fetch the associated collection
     ///
     /// - parameter url: The URL the collection identifier should be extracted from to request the collection.
@@ -21,11 +21,11 @@ extension ION {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
-        
+
         collection(identifier, callback: callback)
     }
-    
-    
+
+
     /// Tries to fetch the associated page
     ///
     /// - parameter url: The URL the page identifier should be extracted from to request the page.
@@ -38,18 +38,18 @@ extension ION {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
-        
+
         resolve(url) { (result: Result<IONCollection>) in
             guard case .success(let collection) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
-            
+
             collection.page(identifier, callback: callback)
         }
     }
-    
-    
+
+
     /// Tries to fetch the associated outlet
     ///
     /// - parameter url: The URL the outlet name should be extracted from to request the outlet.
@@ -61,17 +61,17 @@ extension ION {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
-        
+
         resolve(url) { (result: Result<IONPage>) in
             guard case .success(let page) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
-            
+
             page.outlet(name, callback: callback)
         }
     }
-    
+
     /// Creates an operation to request a parent->child path for a given page identifier within a specific collection (optional).
     /// Requests a list of (not full loaded) page items (last item is current page, first item is toplevel parent).
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
@@ -105,7 +105,7 @@ extension ION {
 }
 
 extension Page {
-    
+
     /// Provides all available contents of a specific type of a Page.
     ///
     /// __Warning:__ The page has to be full loaded before one can access content (except meta data)
