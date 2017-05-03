@@ -71,7 +71,7 @@ internal class IONPageMeta: CanLoadImage {
                 throw IONError.invalidJSON(json)
         }
 
-        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date ?? Date.distantPast
+        self.lastChanged = (NSDate(isoDateString: lastChanged) as Date?) ?? Date.distantPast
         self.identifier  = identifier
         self.layout = layout
         self.position = position

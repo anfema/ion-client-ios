@@ -76,14 +76,17 @@ public struct IONConfig {
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
     var alamofire: Alamofire.SessionManager?
 
+    typealias UpdateBlock = (String) -> Void
+
     /// update detected blocks
-    var updateBlocks: [String: ((String) -> Void)]
+    var updateBlocks: [String: UpdateBlock]
 
     /// Registered content types
     var registeredContentTypes = [String: ContentTypeLambda]()
 
     /// full text search settings
     fileprivate var ftsEnabled: [String: Bool]
+
 
     /// only the ION class may init this
     internal init() {
@@ -102,7 +105,8 @@ public struct IONConfig {
             self.loggingEnabled = false
         #endif
 
-        self.updateBlocks = Dictionary<String, ((String) -> Void)>()
+        self.updateBlocks = [:]
+
         self.ftsEnabled = [String: Bool]()
         #if os(iOS)
             self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String

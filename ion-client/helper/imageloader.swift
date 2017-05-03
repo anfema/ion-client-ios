@@ -164,7 +164,7 @@ extension CanLoadImage {
                 return
             }
 
-            let options = Dictionary<String, AnyObject>()
+            let options: [String: AnyObject] = [:]
             guard let src = CGImageSourceCreateWithDataProvider(provider, options as CFDictionary?),
                 let img = CGImageSourceCreateImageAtIndex(src, 0, options as CFDictionary?) else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))

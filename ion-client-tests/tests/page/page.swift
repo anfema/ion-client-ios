@@ -183,7 +183,7 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             guard case .success = result else {
-                if case IONError.pageNotFound(let _, let page) = result.error! {
+                if case IONError.pageNotFound(_, let page) = result.error! {
                     XCTAssertEqual(page, "unknown_page")
                 } else {
                     XCTFail()
