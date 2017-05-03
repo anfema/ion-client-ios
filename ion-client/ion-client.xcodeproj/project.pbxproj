@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		049429E1277A9F4C7EABD64F /* Pods_ion_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */; };
-		8F32628C1CCFB38500A787BC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F32628B1CCFB38500A787BC /* libsqlite3.tbd */; };
 		8F326B531CCFB0F30041FC40 /* ion-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F326B521CCFB0F30041FC40 /* ion-client.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8F326B581CCFB10D0041FC40 /* nsurlcache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B0B1CCFB0D30041FC40 /* nsurlcache.swift */; };
 		8F326B591CCFB10D0041FC40 /* request_cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F326B0C1CCFB0D30041FC40 /* request_cache.swift */; };
@@ -56,7 +55,6 @@
 /* Begin PBXFileReference section */
 		22EDEA0642F1815FE1E26E94 /* Pods-ion_client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.release.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig"; sourceTree = "<group>"; };
 		3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F32628B1CCFB38500A787BC /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8F326B0B1CCFB0D30041FC40 /* nsurlcache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nsurlcache.swift; sourceTree = "<group>"; };
 		8F326B0C1CCFB0D30041FC40 /* request_cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = request_cache.swift; sourceTree = "<group>"; };
 		8F326B0E1CCFB0D30041FC40 /* request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F32628C1CCFB38500A787BC /* libsqlite3.tbd in Frameworks */,
 				049429E1277A9F4C7EABD64F /* Pods_ion_client.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,7 +128,6 @@
 		8CC9F298B2CD7606BEF23CC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8F32628B1CCFB38500A787BC /* libsqlite3.tbd */,
 				E53026DF88A57C0D04D16D33 /* Pods.framework */,
 				3F1D1D2579D05F4EBD155104 /* Pods_ion_client.framework */,
 			);
@@ -518,7 +514,7 @@
 				INFOPLIST_FILE = "ion-client/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/search/module.modulemap";
+				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -544,7 +540,7 @@
 				INFOPLIST_FILE = "ion-client/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/search/module.modulemap";
+				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";

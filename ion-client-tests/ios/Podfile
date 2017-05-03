@@ -2,7 +2,7 @@ source 'git@git.assembla.com:anfema-intern.cocoapods.git'
 source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
-platform :ios, '8.4'
+platform :ios, '9.0'
 
 def shared_pods
   pod 'Alamofire', '~> 4.2'
