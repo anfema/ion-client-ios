@@ -66,8 +66,6 @@
 		8F78B3821BF36428009D4B67 /* Markdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F78B37D1BF36428009D4B67 /* Markdown.framework */; };
 		8FAD5CC51BF4EFFA000C3119 /* search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC41BF4EFFA000C3119 /* search.swift */; };
 		8FAD5CC81BF4F019000C3119 /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FAD5CC71BF4F019000C3119 /* fts.swift */; };
-		8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
-		8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */; };
 		8FB149B11C493DE400441F82 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB149B01C493DE400441F82 /* NSDate+ISODate.swift */; };
 		8FCFAECF1C08B5D30051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAECE1C08B5D30051981F /* htmlparser.swift */; };
 		8FCFAED11C08B83D0051981F /* collection+download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFAED01C08B83D0051981F /* collection+download.swift */; };
@@ -187,7 +185,6 @@
 		8F78B37E1BF36428009D4B67 /* Pods.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods.framework; path = "Pods/../build/Debug-iphoneos/Pods.framework"; sourceTree = "<group>"; };
 		8FAD5CC41BF4EFFA000C3119 /* search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
 		8FAD5CC71BF4F019000C3119 /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
-		8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8FAD5CD11BF503B2000C3119 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8FB149B01C493DE400441F82 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		8FCFAECE1C08B5D30051981F /* htmlparser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = htmlparser.swift; sourceTree = "<group>"; };
@@ -220,7 +217,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FAD5CCB1BF4FFB5000C3119 /* libsqlite3.tbd in Frameworks */,
 				8F78B2E61BF36392009D4B67 /* ion_client.framework in Frameworks */,
 				CDA7D2CBE0C7960CD0426BDF /* Pods_ion_tests.framework in Frameworks */,
 			);
@@ -238,7 +234,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FAD5CCA1BF4FFAD000C3119 /* libsqlite3.tbd in Frameworks */,
 				8F78B37F1BF36428009D4B67 /* Alamofire.framework in Frameworks */,
 				8F78B3801BF36428009D4B67 /* DEjson.framework in Frameworks */,
 				8F78B3811BF36428009D4B67 /* HashExtensions.framework in Frameworks */,
@@ -253,7 +248,6 @@
 		000E41D712322764CEB95A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8FAD5CC91BF4FFAD000C3119 /* libsqlite3.tbd */,
 				8F78B37A1BF36428009D4B67 /* Alamofire.framework */,
 				8F78B37B1BF36428009D4B67 /* DEjson.framework */,
 				8F78B37C1BF36428009D4B67 /* HashExtensions.framework */,
@@ -551,7 +545,7 @@
 				8F78B2B81BF36216009D4B67 /* Frameworks */,
 				8F78B2B91BF36216009D4B67 /* Resources */,
 				8F78B2EB1BF36392009D4B67 /* Embed Frameworks */,
-				6A544F3F1CEDB33F0047A612 /* ShellScript */,
+				6A544F3F1CEDB33F0047A612 /* swiftlint */,
 				A466726C8D937A4E299E218A /* [CP] Embed Pods Frameworks */,
 				A25212361E43484197F2E5EB /* [CP] Copy Pods Resources */,
 			);
@@ -695,18 +689,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6A544F3F1CEDB33F0047A612 /* ShellScript */ = {
+		6A544F3F1CEDB33F0047A612 /* swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = swiftlint;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nswiftlint autocorrect\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		73D290092579C49C80924C77 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

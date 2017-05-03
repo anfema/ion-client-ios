@@ -7,6 +7,7 @@ platform :osx, '10.10'
 
 def shared_pods
     pod 'Alamofire', '~> 4.2'
+    pod 'SQLite.swift', '~> 0.11'
     pod 'HashExtensions', '~> 2.0'
     pod 'DEjson', '~> 2.0'
     pod 'Markdown', '~> 2.0'
