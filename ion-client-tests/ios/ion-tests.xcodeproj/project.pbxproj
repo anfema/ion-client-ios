@@ -81,7 +81,6 @@
 		8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE11BFCD7980051981F /* response_serializer.swift */; };
 		8FCFAE421BFCD7E90051981F /* imageloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE31BFCD7980051981F /* imageloader.swift */; };
 		8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE41BFCD7980051981F /* htmlparser.swift */; };
-		8FCFAE451BFCDA0F0051981F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */; };
 		A97B612FE864D439569A203F /* Pods_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D107902FA8D80223C9B52FB /* Pods_tests.framework */; };
 		D6222EEA1E657BEF00C7C3DA /* AsyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */; };
 		D6222EEC1E657CD100C7C3DA /* page_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EEB1E657CD100C7C3DA /* page_new.swift */; };
@@ -204,9 +203,7 @@
 		8FCFADFD1BFCD7980051981F /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8FCFADFF1BFCD7980051981F /* ion+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+search.swift"; sourceTree = "<group>"; };
 		8FCFAE001BFCD7980051981F /* collection+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
-		8FCFAE011BFCD7980051981F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8FCFAE021BFCD7980051981F /* search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
-		8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A1DAE85453513E51EB006B1B /* Pods-ion-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AF3FC49FCB454A4ECF6A1179 /* Pods-ion_client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.debug.xcconfig"; sourceTree = "<group>"; };
 		D392DC9FB224EFE69858DEDD /* Pods-ion_client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.release.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig"; sourceTree = "<group>"; };
@@ -240,7 +237,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FCFAE451BFCDA0F0051981F /* libsqlite3.tbd in Frameworks */,
 				8F78B2AD1BF36163009D4B67 /* Alamofire.framework in Frameworks */,
 				8F78B2AE1BF36163009D4B67 /* DEjson.framework in Frameworks */,
 				8F78B2AF1BF36163009D4B67 /* HashExtensions.framework in Frameworks */,
@@ -271,7 +267,6 @@
 		7A4D5D6A0BACFF1E75491607 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */,
 				8F78B2A81BF36163009D4B67 /* Alamofire.framework */,
 				8F78B2A91BF36163009D4B67 /* DEjson.framework */,
 				8F78B2AA1BF36163009D4B67 /* HashExtensions.framework */,
@@ -471,7 +466,6 @@
 				8F58727B1C89A5AE005567E1 /* notifications.swift */,
 				8FCFADFF1BFCD7980051981F /* ion+search.swift */,
 				8FCFAE001BFCD7980051981F /* collection+search.swift */,
-				8FCFAE011BFCD7980051981F /* module.modulemap */,
 				8FCFAE021BFCD7980051981F /* search.swift */,
 			);
 			name = search;
@@ -1048,6 +1042,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ion-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
 				SWIFT_VERSION = 3.0;
@@ -1062,6 +1075,25 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ion-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
 				SWIFT_VERSION = 3.0;
@@ -1116,6 +1148,25 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1143,6 +1194,25 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

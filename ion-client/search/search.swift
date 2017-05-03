@@ -12,15 +12,9 @@
 import Foundation
 import Markdown
 
-#if os(OSX)
-    import sqlite_MacOSX
-#elseif os(iOS)
-#if (arch(i386) || arch(x86_64))
-    import sqlite_iPhoneSimulator
-    #else
-    import sqlite_iPhoneOS
-#endif
-#endif
+import SQLite
+
+// TODO: Update sqlite calls using SQLite framework
 
 let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
