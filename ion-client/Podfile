@@ -5,7 +5,7 @@ use_frameworks!
 platform :osx, '10.10'
 
 target 'ion_client' do
-  pod 'Alamofire', '~> 4.2'
+  pod 'Alamofire', '~> 4.5.1'
   pod 'SQLite.swift', '~> 0.11'
   pod 'HashExtensions', '~> 2.0'
   pod 'DEjson', '~> 2.0'
