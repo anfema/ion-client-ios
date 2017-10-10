@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.author             = { "Johannes Schriewer" => "j.schriewer@anfe.ma" }
   s.social_media_url   = "http://twitter.com/dunkelstern"
 
-  s.ios.deployment_target = "8.4"
+  s.ios.deployment_target = "9.0"
   s.osx.deployment_target = "10.10"
 
   s.source       = { :git => "git@github.com:anfema/ion-client-ios.git", :tag => "4.0.2" }

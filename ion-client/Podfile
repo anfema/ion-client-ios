@@ -13,4 +13,5 @@ target 'ion_client' do
   pod 'Tarpit', :git => 'https://github.com/anfema/Tarpit', :branch => 'swift_3'
   pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_3'
   pod 'iso-rfc822-date', '~> 1.0'
+  pod 'SQLite.swift', '~> 0.11'
 end
