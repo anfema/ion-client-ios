@@ -467,7 +467,7 @@ open class IONCollection {
 
                 if let rawLastChanged = dict["last_changed"] {
                     if case .jsonString(let lastChanged) = rawLastChanged {
-                        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date
+                        self.lastChanged = NSDate(isoDateString: lastChanged) as Date?
                         self.lastUpdate = self.lastChanged
                     }
                 }

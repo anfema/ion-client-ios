@@ -8,6 +8,9 @@ PODS:
   - html5tokenizer (1.0.0)
   - iso-rfc822-date (1.0.1)
   - Markdown (1.0.9)
+  - SQLite.swift (0.11.4):
+    - SQLite.swift/standard (= 0.11.4)
+  - SQLite.swift/standard (0.11.4)
   - Tarpit (1.0.3)
 
 DEPENDENCIES:
@@ -18,6 +21,7 @@ DEPENDENCIES:
   - html5tokenizer (from `https://github.com/anfema/HTML5Tokenizer`, branch `swift_3`)
   - iso-rfc822-date (~> 1.0)
   - Markdown (from `https://github.com/anfema/ion-client-ios`, branch `swift_3`)
+  - SQLite.swift (~> 0.11)
   - Tarpit (from `https://github.com/anfema/Tarpit`, branch `swift_3`)
 
 EXTERNAL SOURCES:
@@ -62,8 +66,9 @@ SPEC CHECKSUMS:
   html5tokenizer: 0fddd66c19cd772c02deee357992b743e1f21c25
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
   Markdown: c8f26ecd6aeb09e160986ddc7269b30244841646
+  SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
   Tarpit: 82cd81b3c6b9c53581498f16b9b685919313f0f4
 
-PODFILE CHECKSUM: 9c3b2e3854e04cb2f6fb46a9ac2b0e0557e09bc6
+PODFILE CHECKSUM: 0617989821b66a812fc57ab28097923e1e79fc72
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.3.1

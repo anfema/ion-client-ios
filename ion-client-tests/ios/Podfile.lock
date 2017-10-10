@@ -8,6 +8,9 @@ PODS:
   - html5tokenizer (2.0.0)
   - iso-rfc822-date (1.0.1)
   - Markdown (2.0.0)
+  - SQLite.swift (0.11.4):
+    - SQLite.swift/standard (= 0.11.4)
+  - SQLite.swift/standard (0.11.4)
   - Tarpit (2.0.0)
 
 DEPENDENCIES:
@@ -18,6 +21,7 @@ DEPENDENCIES:
   - html5tokenizer (~> 2.0)
   - iso-rfc822-date (~> 1.0)
   - Markdown (~> 2.0)
+  - SQLite.swift (~> 0.11)
   - Tarpit (~> 2.0)
 
 EXTERNAL SOURCES:
@@ -38,8 +42,9 @@ SPEC CHECKSUMS:
   html5tokenizer: 923d6731ef1db320b92e2b6757ae2951898eacc2
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
   Markdown: 03b73e13360c7ac73d1a9250cf8f38431515a7f6
+  SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
   Tarpit: fe3d890b1cf846e8c0146f6a793abcab78a22277
 
-PODFILE CHECKSUM: 5cfae57bb7df4a5b4a82cf9ae05288b8af96bb8d
+PODFILE CHECKSUM: 8f1b6bb6120f93507e9a6a2511629b1d2307dda2
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.3.1

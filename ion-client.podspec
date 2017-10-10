@@ -25,8 +25,6 @@ Pod::Spec.new do |s|
   s.source_files  = "ion-client/cache/*.swift", "ion-client/communication/*.swift", "ion-client/helper/*.swift", "ion-client/model/**/*.swift", "ion-client/search/*.swift"
 
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions", "html5tokenizer", "Tarpit"
-  s.libraries  = "sqlite3"
-  s.module_map = "ion-client/cocoapods.modulemap"
 
   s.dependency "Alamofire", "~> 4.2"
   s.dependency "DEjson", "~> 2.0"

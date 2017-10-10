@@ -18,7 +18,7 @@ internal extension ION {
         return directoryURLs[0].appendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
     }
 
-    internal class func downloadFTSDB(forCollection collection: String, callback: ((Void) -> Void)? = nil) {
+    internal class func downloadFTSDB(forCollection collection: String, callback: (() -> Void)? = nil) {
         ION.collection(collection) { result in
             guard case .success(let c) = result,
                   let ftsURL = c.ftsDownloadURL else {
