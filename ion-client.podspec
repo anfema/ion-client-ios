@@ -26,7 +26,8 @@ Pod::Spec.new do |s|
 
   s.framework  = "Alamofire", "DEjson", "Markdown", "HashExtensions", "html5tokenizer", "Tarpit"
 
-  s.dependency "Alamofire", "~> 4.2"
+  s.dependency "Alamofire", "~> 4.5.1"
+  s.dependency "SQLite.swift", "~> 0.11"
   s.dependency "DEjson", "~> 2.0"
   s.dependency "Markdown", "~> 2.0"
   s.dependency "HashExtensions", "~> 2.0"
