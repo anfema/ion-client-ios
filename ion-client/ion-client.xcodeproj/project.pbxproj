@@ -88,7 +88,6 @@
 		8F326B441CCFB0D30041FC40 /* page_metadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8F326B461CCFB0D30041FC40 /* collection+search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
 		8F326B471CCFB0D30041FC40 /* ion+search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ion+search.swift"; sourceTree = "<group>"; };
-		8F326B481CCFB0D30041FC40 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8F326B491CCFB0D30041FC40 /* notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notifications.swift; sourceTree = "<group>"; };
 		8F326B4A1CCFB0D30041FC40 /* search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
 		8F326B501CCFB0F30041FC40 /* ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,7 +226,6 @@
 			children = (
 				8F326B461CCFB0D30041FC40 /* collection+search.swift */,
 				8F326B471CCFB0D30041FC40 /* ion+search.swift */,
-				8F326B481CCFB0D30041FC40 /* module.modulemap */,
 				8F326B491CCFB0D30041FC40 /* notifications.swift */,
 				8F326B4A1CCFB0D30041FC40 /* search.swift */,
 			);
@@ -505,7 +503,6 @@
 				INFOPLIST_FILE = "ion-client/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/search/module.modulemap";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -531,7 +528,6 @@
 				INFOPLIST_FILE = "ion-client/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "$(SRCROOT)/search/module.modulemap";
 				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
