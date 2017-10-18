@@ -173,17 +173,23 @@ public struct IONConfig {
         self.updateBlocks.removeValue(forKey: identifier)
     }
 
-    /// Enable Full text search for a collection (fetches additional data from server)
+    /// Enable and prepare for Full text search for a collection (fetches additional data from server)
     ///
     /// - parameter collectionIdentifier: collection identifier
-    public mutating func enableFTS(forCollection collectionIdentifier: String) {
+    public func prepareFTS(forCollection collectionIdentifier: String) {
         guard let searchIndex = ION.searchIndex(forCollection: collectionIdentifier) else {
             return
         }
-        self.ftsEnabled[collectionIdentifier] = true
+        
+        ION.config.enableFTS(forCollection: collectionIdentifier)
+        
         if !FileManager.default.fileExists(atPath: searchIndex) {
             ION.downloadFTSDB(forCollection: collectionIdentifier)
         }
+    }
+    
+    private mutating func enableFTS(forCollection collectionIdentifier: String) {
+        self.ftsEnabled[collectionIdentifier] = true
     }
 
     /// Disable Full text search for a collection

@@ -16,7 +16,7 @@ class ftsTests: LoggedInXCTestCase {
     
     override func setUp() {
         super.setUp()
-        ION.config.enableFTS(forCollection: "test")
+        ION.config.prepareFTS(forCollection: "test")
     }
     
     override func tearDown() {
@@ -130,7 +130,7 @@ class ftsTests: LoggedInXCTestCase {
         XCTAssertFalse(consumer.notificationWasReceived)
         XCTAssertNil(consumer.notificationObject)
         
-        ION.config.enableFTS(forCollection: "test")
+        ION.config.prepareFTS(forCollection: "test")
         XCTAssertTrue(ION.config.isFTSEnabled(forCollection: "test"))
         
         ION.downloadFTSDB(forCollection: "test") {
@@ -161,7 +161,7 @@ class ftsTests: LoggedInXCTestCase {
     
     func testEnableDisableSearchHandle()
     {
-        ION.config.enableFTS(forCollection: "test")
+        ION.config.prepareFTS(forCollection: "test")
         XCTAssertTrue(ION.config.isFTSEnabled(forCollection: "test"))
         
         ION.config.disableFTS(forCollection: "test")
