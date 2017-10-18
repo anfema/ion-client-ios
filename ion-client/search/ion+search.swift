@@ -68,7 +68,7 @@ internal extension ION {
                         callback()
                     }
                 }
-            }) 
+            })
         }
     }
 }

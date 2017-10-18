@@ -130,7 +130,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         }
 
         if case .jsonString(let checksum)  = rawChecksum {
-            
+
             let checksumParts = checksum.components(separatedBy: ":")
 
             if checksumParts.count > 1 {
@@ -151,7 +151,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         try super.init(json: json)
     }
 
-    
+
     /// Get a temporary valid url for this image file
     ///
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
@@ -163,7 +163,7 @@ open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url": urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,

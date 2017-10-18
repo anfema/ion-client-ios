@@ -18,7 +18,7 @@ import iso_rfc822_date
 open class IONDateTimeContent: IONContent {
 
     /// Parsed date
-    open var date: Date? = nil
+    open var date: Date?
 
 
     /// Initialize datetime content object from JSON

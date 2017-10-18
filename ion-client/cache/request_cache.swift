@@ -103,7 +103,7 @@ extension IONRequest {
             case .success(let jsonResponse) = result else {
                 return
         }
-        
+
         if jsonResponse.statusCode == 200,
            let jsonObject = jsonResponse.json,
            let json = JSONEncoder(jsonObject).jsonString,
@@ -165,13 +165,10 @@ extension IONRequest {
         let filePath = filename.appendingPathComponent((hash.hexString())).path
 
         let fileURL = URL(fileURLWithPath: filePath)
-        
-        do
-        {
+
+        do {
             try data.write(to: fileURL, options: .atomic)
-        }
-        catch
-        {
+        } catch {
             //TODO: Handle error
             print("An unexpected error occurred while trying to write file to disk: \(error)")
         }
@@ -214,13 +211,12 @@ extension IONRequest {
             timestamp = trunc(Date().timeIntervalSince1970 * 1000.0) / 1000.0
         }
 
-        guard let requestURL = request.url else
-        {
+        guard let requestURL = request.url else {
             return
         }
-        
+
         let urlString = requestURL.absoluteString
-        
+
         // pop current cache DB entry
         var obj: [String: JSONObject] = self.getCacheDBEntry(forURL: urlString) ?? [:]
         self.removeCacheDBEntries(withURL: urlString)
@@ -261,10 +257,10 @@ extension IONRequest {
             } else {
                 // invalid json, reset the cache db and remove disk cache completely
                 do {
-                    
+
                     let path = self.cacheBaseDir(forLocale: locale).path
                     try FileManager.default.removeItem(atPath: path)
-                    
+
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }

@@ -14,9 +14,9 @@ disabled_rules: # rule identifiers to exclude from running
 # - return_arrow_whitespace
 # - statement_position
 - todo
-#- trailing_newline
+# - trailing_newline
 # - trailing_semicolon
-- trailing_whitespace
+# - trailing_whitespace
 - type_body_length
 # - type_name
 - variable_name_max_length
@@ -24,9 +24,12 @@ disabled_rules: # rule identifiers to exclude from running
 - variable_name
 - conditional_binding_cascade
 - cyclomatic_complexity
+- function_parameter_count
+# - valid_docs
 opt_in_rules: # some rules are only opt-in
-  # - empty_count
-  # - missing_docs
+- empty_count
+- missing_docs
+- force_unwrapping  
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
@@ -43,5 +46,7 @@ vertical_whitespace:
 force_cast: warning # implicitly
 force_try:
   severity: warning # explicitly
+vertical_whitespace: 
+  max_empty_lines: 2
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

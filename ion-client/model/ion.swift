@@ -65,7 +65,7 @@ open class ION {
     /// - returns: collection object from cache or empty collection object
     open class func collection(_ identifier: String) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
-        
+
         // return memcache if not timed out
         if !self.hasCacheTimedOut(collection: identifier) {
             if let cachedCollection = cachedCollection {

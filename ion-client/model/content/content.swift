@@ -111,10 +111,8 @@ open class IONContent {
         if contentType == "containercontent" {
             return try IONContainerContent(json: json)
         } else {
-            for (type, lambda) in ION.config.registeredContentTypes {
-                if contentType == type {
-                    return try lambda(json)
-                }
+            for (type, lambda) in ION.config.registeredContentTypes where contentType == type {
+                return try lambda(json)
             }
 
             throw IONError.unknownContentType(contentType)

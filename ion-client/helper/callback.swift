@@ -19,7 +19,6 @@ func responseQueueCallback <T, U> (_ callback: @escaping (T) -> U, parameter: T)
 }
 
 
-
 /// Performs the callback in the responseQueue defined in ION.config.responseQueue
 ///
 /// - parameter callback:  The callback that will be called if not nil.

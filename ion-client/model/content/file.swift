@@ -100,7 +100,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
-                
+
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: filename), options: .mappedIfSafe)
                 responseQueueCallback(callback, parameter: .success(data))
@@ -122,7 +122,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
             return
         }
 
-        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url": urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,

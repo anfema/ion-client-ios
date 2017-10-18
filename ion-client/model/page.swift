@@ -155,7 +155,7 @@ open class IONPage {
 
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }) 
+        })
 
         self.collection.pageCache[identifier] = self
     }
@@ -199,7 +199,7 @@ open class IONPage {
     @discardableResult open func onCompletion(_ callback: @escaping ((_ page: IONPage, _ completed: Bool) -> Void)) -> IONPage {
         workQueue.async(flags: .barrier, execute: {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
-        }) 
+        })
 
         return self
     }
@@ -256,10 +256,8 @@ open class IONPage {
         }
 
         // search first occurrence of content with the named outlet and specified position
-        for content in self.content where content.outlet == name {
-            if content.position == position {
-                return .success(true)
-            }
+        if self.content.first(where: { $0.outlet == name && $0.position == position }) != nil {
+            return .success(true)
         }
 
         return .success(false)
@@ -446,7 +444,7 @@ open class CancelableIONPage: IONPage {
             self.isReady = true
 
             page.parentLock.unlock()
-        }) 
+        })
     }
 
     /// Cancel all pending requests for this page
@@ -454,13 +452,13 @@ open class CancelableIONPage: IONPage {
         self.workQueue.async(flags: .barrier, execute: {
             self.hasFailed = true
             self.finish()
-        }) 
+        })
     }
 
     /// Finish all requests and discard page
     open func finish() {
         self.workQueue.async(flags: .barrier, execute: {
             self.collection.pageCache.removeValue(forKey: self.forkedIdentifier)
-        }) 
+        })
     }
 }

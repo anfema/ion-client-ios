@@ -74,7 +74,7 @@ public struct IONConfig {
     public typealias ContentTypeLambda = ((JSONObject) throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    var alamofire: Alamofire.SessionManager? = nil
+    var alamofire: Alamofire.SessionManager?
 
     /// update detected blocks
     var updateBlocks: [String: ((String) -> Void)]
@@ -102,14 +102,14 @@ public struct IONConfig {
             self.loggingEnabled = false
         #endif
 
-        self.updateBlocks = Dictionary<String, ((String) -> Void)>()
+        self.updateBlocks = [String: ((String) -> Void)]()
         self.ftsEnabled = [String: Bool]()
         #if os(iOS)
             self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String
         #else
             self.variation = "default"
         #endif
-        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
+        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x": CGFloat(1.0), "@2x": CGFloat(2.0), "@3x": CGFloat(3.0) ]
 
         for (header, value) in Alamofire.SessionManager.defaultHTTPHeaders {
             self.additionalHeaders[header] = value
@@ -180,14 +180,14 @@ public struct IONConfig {
         guard let searchIndex = ION.searchIndex(forCollection: collectionIdentifier) else {
             return
         }
-        
+
         ION.config.enableFTS(forCollection: collectionIdentifier)
-        
+
         if !FileManager.default.fileExists(atPath: searchIndex) {
             ION.downloadFTSDB(forCollection: collectionIdentifier)
         }
     }
-    
+
     private mutating func enableFTS(forCollection collectionIdentifier: String) {
         self.ftsEnabled[collectionIdentifier] = true
     }

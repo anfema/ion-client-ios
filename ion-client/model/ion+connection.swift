@@ -21,7 +21,7 @@ extension ION {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
         }
-        
+
         collection(identifier, callback: callback)
     }
 
