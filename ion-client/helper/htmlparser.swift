@@ -357,10 +357,8 @@ open class HTMLParser {
 
             // search upwards in stack
             var lastFound = 0
-            for (index, item) in self.formatStack.enumerated() {
-                if item.tagName == tagName {
-                    lastFound = index
-                }
+            for (index, item) in self.formatStack.enumerated() where item.tagName == tagName {
+                lastFound = index
             }
 
             if lastFound > 0 {

@@ -227,7 +227,7 @@ internal class IONCollection {
         }
 
         // not cached, fetch from web and add it to the cache
-        let page = IONPage(collection: self, identifier: identifier, layout: layout, cacheBehaviour: .prefer, parent: parent) { page in
+        let page = IONPage(collection: self, identifier: identifier, layout: layout, cacheBehaviour: .prefer, parent: parent) { _ in
             self.workQueue.async(flags: .barrier, execute: {
                 self.checkCompleted()
             })
@@ -480,10 +480,8 @@ internal class IONCollection {
                         // find max position for current parent
                         var position = -1
 
-                        for page in self.pageMeta where page.parent == obj.parent {
-                            if page.position > position {
-                                position = page.position
-                            }
+                        for page in self.pageMeta where page.parent == obj.parent && page.position > position {
+                            position = page.position
                         }
 
                         obj.position = position + 1

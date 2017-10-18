@@ -52,7 +52,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var checksumMethod: String {
         guard let thumbnail = self.imageURL,
-            let _ = IONRequest.cachedData(forURL: thumbnail.absoluteString) else {
+            IONRequest.cachedData(forURL: thumbnail.absoluteString) != nil else {
                 return "null"
         }
 
@@ -72,7 +72,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var originalChecksumMethod: String {
         guard let image = self.originalImageURL,
-            let _ = IONRequest.cachedData(forURL: image.absoluteString) else {
+            IONRequest.cachedData(forURL: image.absoluteString) != nil else {
                 return "null"
         }
 

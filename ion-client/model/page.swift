@@ -256,10 +256,8 @@ internal class IONPage {
         }
 
         // search first occurrence of content with the named outlet and specified position
-        for content in self.content where content.outlet == name {
-            if content.position == position {
-                return .success(true)
-            }
+        if self.content.first(where: { $0.outlet == name && $0.position == position }) != nil {
+            return .success(true)
         }
 
         return .success(false)

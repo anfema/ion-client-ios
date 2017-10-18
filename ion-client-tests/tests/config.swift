@@ -26,7 +26,7 @@ struct DefaultConfig {
 class DefaultXCTestCase: XCTestCase {
     let mock = true
     
-    func configure(_ callback: @escaping ((Void) -> Void)) {
+    func configure(_ callback: @escaping (() -> Void)) {
         ION.config.serverURL = URL(string: DefaultConfig.serverURL)
         ION.config.locale = DefaultConfig.locale
         ION.config.responseQueue = DispatchQueue(label: "com.anfema.ion.responsequeue.test", attributes: [])
@@ -72,7 +72,7 @@ var currentQueueLabel : String?{
 
 
 class LoggedInXCTestCase: DefaultXCTestCase {
-    override func configure(_ callback: @escaping ((Void) -> Void)) {
+    override func configure(_ callback: @escaping (() -> Void)) {
         ION.config.serverURL = URL(string: DefaultConfig.serverURL)
         ION.config.locale = DefaultConfig.locale
         
