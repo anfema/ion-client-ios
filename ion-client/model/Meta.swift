@@ -36,6 +36,27 @@ public struct Meta {
     }
 
 
+    /// Returns `true` if page has no children
+    public var isLeaf: Bool {
+        return children.isEmpty
+    }
+
+
+    /// Returns all (not full loaded) leaves of the Page.
+    ///
+    /// __Warning__: Each leaf page is not full loaded (can only access its meta information)
+    public var leaves: [Page] {
+        var leaves = [Page]()
+
+        for child in children {
+            let childMeta = child.meta
+            leaves.append(contentsOf: childMeta.isLeaf ? [child] : childMeta.leaves)
+        }
+
+        return leaves
+    }
+
+
     /// Returns a parent->child path of the current page
     ///
     /// - returns: A list of (not full loaded) page items (last item is current page, first item is toplevel parent)
