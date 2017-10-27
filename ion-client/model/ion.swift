@@ -343,8 +343,8 @@ public extension ION {
     /// Instantiates a collection download taking an optional collection identifier into account.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded
-    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Bool> {
-        let asyncResult = AsyncResult<Bool>()
+    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Void> {
+        let asyncResult = AsyncResult<Void>()
 
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)).download { (success) in
             guard success == true else {
@@ -352,7 +352,7 @@ public extension ION {
                 return
             }
 
-            asyncResult.execute(result: .success(true))
+            asyncResult.execute(result: .success())
         }
 
         return asyncResult
