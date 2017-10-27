@@ -93,6 +93,7 @@ public struct Meta {
 
 
     #if os(iOS)
+    // TODO: This is currently not working. Feature request to add as many image urls as required to page meta
     /// Requests an image for a given outlet that was marked as "included into page-meta" on ion desk.
     /// It also takes an optional position into account for outlets containing multiple contents.
     /// Accessing meta data is also possible although page was not already full loaded.
@@ -100,6 +101,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
+    /*
     public func image(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
@@ -120,11 +122,30 @@ public struct Meta {
         }
 
         return asyncResult
+    }*/
+
+
+    /// Requests the thumbnail shipped with the pages meta information.
+    /// The identifier of the thumbnail in meta information on ION Desk has to be set to "thumbnail" or "icon".
+    /// Accessing meta data is also possible although page was not already full loaded.
+    public func thumbnail(ofSize size: CGSize) -> AsyncResult<UIImage> {
+        let asyncResult = AsyncResult<UIImage>()
+
+        page.metaData.thumbnail(withSize: size) { (result) in
+            guard case .success(let image) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+            asyncResult.execute(result: .success(UIImage(cgImage: image)))
+        }
+
+        return asyncResult
     }
     #endif
 
 
     #if os(OSX)
+    // TODO: This is currently not working. Feature request to add as many image urls as required to page meta
     /// Requests an image for a given outlet that was marked as "included into page-meta" on ion desk.
     /// It also takes an optional position into account for outlets containing multiple contents.
     /// Accessing meta data is also possible although page was not already full loaded.
@@ -132,6 +153,7 @@ public struct Meta {
     ///
     /// - parameter outletIdentifier: The identifier of the image outlet that was marked as "included into page-meta"
     /// - parameter position: Position of the content within the related outlet
+    /*
     public func image(_ outletIdentifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
@@ -149,6 +171,26 @@ public struct Meta {
 
         imageContent.image { (result) in
             asyncResult.execute(result: result)
+        }
+
+        return asyncResult
+    }*/
+
+
+    /// Requests the thumbnail shipped with the pages meta information.
+    /// The identifier of the thumbnail in meta information on ION Desk has to be set to "thumbnail" or "icon".
+    /// Accessing meta data is also possible although page was not already full loaded.
+    public func thumbnail(ofSize size: CGSize) -> AsyncResult<NSImage> {
+        let asyncResult = AsyncResult<NSImage>()
+
+        page.metaData.thumbnail(withSize: size) { (result) in
+            guard case .success(let image) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+
+            let nsImage = NSImage(cgImage: image, size: CGSize(width: CGFloat(image.width), height: CGFloat(image.height)))
+            asyncResult.execute(result: .success(nsImage))
         }
 
         return asyncResult
