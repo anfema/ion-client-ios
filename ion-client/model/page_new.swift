@@ -141,6 +141,18 @@ open class Page {
     }
 }
 
+extension Page: Equatable {
+    public static func == (lhs: Page, rhs: Page) -> Bool {
+        return lhs.identifier == rhs.identifier && lhs.metaData.collection?.identifier == rhs.metaData.collection?.identifier
+    }
+}
+
+extension Page: Hashable {
+    public var hashValue: Int {
+        return identifier.hashValue ^ (metaData.collection?.identifier.hashValue ?? 0)
+    }
+}
+
 
 extension Page: CustomDebugStringConvertible {
     public var debugDescription: String {
@@ -153,6 +165,6 @@ extension Page: CustomDebugStringConvertible {
             " • collection: \(collectionInfo)\n" +
             " • data: \(self.isFullyLoaded ? "full" : "meta")\n" +
             " • outlets: \(outletsInfo)\n" +
-        " • children: \(self.meta.children.count)\n"
+            " • children: \(self.meta.children.count)\n"
     }
 }
