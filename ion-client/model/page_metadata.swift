@@ -140,6 +140,15 @@ internal class IONPageMeta: CanLoadImage {
     }
 
 
+    /// Returns metadata as a list of strings
+    ///
+    /// - parameter identifier: Outlet identifier to return values for
+    /// - returns: List of strings or nil
+    open func strings(_ identifier: String) -> [String]? {
+        return self.metaData[identifier]
+    }
+
+
     /// Retrieve IONPage from metadata
     ///
     /// - parameter callback: Block to call when the page becomes available.

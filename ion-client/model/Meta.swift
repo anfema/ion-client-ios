@@ -76,6 +76,15 @@ public struct Meta {
     }
 
 
+    /// Provides a list of string values for a given outlet that was marked as "included into page-meta" on ion desk.
+    /// Accessing meta data is also possible although page was not already full loaded.
+    ///
+    /// - parameter outletIdentifier: The identifier of the outlet that was marked as "included into page-meta"
+    public func strings(_ outletIdentifier: OutletIdentifier) -> [String]? {
+        return page.metaData.strings(outletIdentifier)
+    }
+
+
     /// Provides a url for a given outlet that was marked as "included into page-meta" on ion desk.
     /// It also takes an optional position into account for outlets containing multiple contents.
     /// Accessing meta data is also possible although page was not already full loaded.
