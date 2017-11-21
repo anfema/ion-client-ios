@@ -32,8 +32,12 @@ internal class IONPageMeta: CanLoadImage {
     /// Page position
     open var position: Int
 
+    open let collectionIdentifier: String
+
     /// Collection of this meta item
-    open weak var collection: IONCollection?
+    open var collection: IONCollection? {
+        return ION.collection(collectionIdentifier)
+    }
 
     /// Meta data attached to page
     fileprivate var metaData = [String: [String]]()
@@ -55,7 +59,8 @@ internal class IONPageMeta: CanLoadImage {
     ///                                 value types.
     ///
     internal init(json: JSONObject, position: Int, collection: IONCollection) throws {
-        self.collection = collection
+
+        self.collectionIdentifier = collection.identifier
 
         guard case .jsonDictionary(let dict) = json else {
             throw IONError.jsonObjectExpected(json)

@@ -93,7 +93,7 @@ open class Page {
         var children = [Page]()
 
         metas.forEach { (meta) in
-            ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
+            ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collectionIdentifier, option: .full).onSuccess({ (page) in
                 children.append(page)
 
                 if children.count == metas.count {
@@ -111,10 +111,13 @@ open class Page {
 
     /// Loads the current page fully.
     /// Add an `onSuccess` and (if needed) an `onFailure` handler to the operation.
+    /// The result on success references self while self is now fully loaded.
     ///
     public func load() -> AsyncResult<Page> {
+
+        let asyncResult = AsyncResult<Page>()
+
         guard isFullyLoaded == false else {
-            let asyncResult = AsyncResult<Page>()
 
             ION.config.responseQueue.async(execute: {
                 asyncResult.execute(result: .success(self))
@@ -123,17 +126,26 @@ open class Page {
             return asyncResult
         }
 
-        guard let collectionIdentifier = metaData.collection?.identifier else {
-            let asyncResult = AsyncResult<Page>()
+        ION.page(pageIdentifier: identifier, in: metaData.collectionIdentifier, option: .full).onSuccess({ [weak self] (fullPage) in
+
+            guard let strongSelf = self else {
+                return
+            }
+
+            strongSelf.fullData = fullPage.fullData
 
             ION.config.responseQueue.async(execute: {
-                asyncResult.execute(result: .failure(IONError.didFail))
+                asyncResult.execute(result: .success(strongSelf))
             })
 
-            return asyncResult
-        }
+        }).onFailure({ (error) in
 
-        return ION.page(pageIdentifier: identifier, in: collectionIdentifier, option: .full)
+            ION.config.responseQueue.async(execute: {
+                asyncResult.execute(result: .failure(error))
+            })
+        })
+
+        return asyncResult
     }
 
 
@@ -143,13 +155,13 @@ open class Page {
 
 extension Page: Equatable {
     public static func == (lhs: Page, rhs: Page) -> Bool {
-        return lhs.identifier == rhs.identifier && lhs.metaData.collection?.identifier == rhs.metaData.collection?.identifier
+        return lhs.identifier == rhs.identifier && lhs.metaData.collectionIdentifier == rhs.metaData.collectionIdentifier
     }
 }
 
 extension Page: Hashable {
     public var hashValue: Int {
-        return identifier.hashValue ^ (metaData.collection?.identifier.hashValue ?? 0)
+        return identifier.hashValue ^ metaData.collectionIdentifier.hashValue
     }
 }
 
@@ -157,7 +169,7 @@ extension Page: Hashable {
 extension Page: CustomDebugStringConvertible {
     public var debugDescription: String {
         let parentInfo = self.parent ?? "none"
-        let collectionInfo = self.metaData.collection?.identifier ?? "unknown"
+        let collectionInfo = self.metaData.collectionIdentifier
         let outletsInfo = self.isFullyLoaded ? "\(self.content.all.count)" : "unknown"
 
         return "Page (\(self.identifier))\n" +
