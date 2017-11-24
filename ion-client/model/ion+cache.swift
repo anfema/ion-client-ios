@@ -68,7 +68,7 @@ extension ION {
         var timeout = false
         if let lastUpdate = self.config.lastOnlineUpdate[collectionIdentifier] {
             let currentDate = Date()
-            if lastUpdate.addingTimeInterval(self.config.cacheTimeout).compare(currentDate) == ComparisonResult.orderedAscending {
+            if lastUpdate.addingTimeInterval(self.config.caching.cacheTimeout).compare(currentDate) == ComparisonResult.orderedAscending {
                 timeout = true
             }
         } else {

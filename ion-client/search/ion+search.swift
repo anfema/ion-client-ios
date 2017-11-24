@@ -14,7 +14,7 @@ import Foundation
 internal extension ION {
 
     internal class func searchIndex(forCollection collection: String) -> String? {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         return directoryURLs[0].appendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
     }
 
@@ -51,6 +51,7 @@ internal extension ION {
 
                     do {
                         try FileManager.default.moveItem(atPath: filename, toPath: searchIndex)
+                        try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: searchIndex)
                     } catch {
                         if ION.config.loggingEnabled {
                             print("ION: Could not save FTS db at '\(searchIndex)'")

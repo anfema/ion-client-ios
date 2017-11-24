@@ -11,10 +11,69 @@ import Alamofire
 import Markdown
 import DEjson
 
+/// ION caching object
+///
+/// access with `ION.config.caching`
+public struct IONCaching {
+
+    /// Directory that will be used for caching. Default is set to `cachesDirectory`.
+    public var cacheDirectory: FileManager.SearchPathDirectory = .cachesDirectory
+
+    /// FileProtectionLevel that will be used. Default is set to `none`.
+    public var protectionLevel: FileProtectionType = .none
+
+    /// Collection cache timeout. Default is set to `600`.
+    public var cacheTimeout: TimeInterval = 600
+
+    /// Determines if cache should be excluded from backup. Default is set to `false`.
+    public var excludeFromBackup: Bool = false
+
+    /// Generates file attributes based on specified file protection level.
+    private var fileAttributes: [String: Any]? {
+
+        guard protectionLevel != .none else { return nil }
+
+        return [FileAttributeKey.protectionKey.rawValue: protectionLevel]
+    }
+
+
+    /// Only the ION class may init this.
+    internal init() {
+    }
+
+
+    /// Creates a directory if required taking protection level and backup strategy into account.
+    internal func createDirectoryIfNecessary(atPath path: String) throws {
+
+        if !FileManager.default.fileExists(atPath: path) {
+            try FileManager.default.createDirectory(atPath: path,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: ION.config.caching.fileAttributes)
+
+            try excludeFileFromBackupIfNecessary(filePath: path)
+        }
+    }
+
+
+    /// Marks a file or directory as excluded from backup if required.
+    internal func excludeFileFromBackupIfNecessary(filePath path: String) throws {
+
+        guard excludeFromBackup == true else { return }
+
+        var url = URL(fileURLWithPath: path)
+        var resourceValues = URLResourceValues()
+        resourceValues.isExcludedFromBackup = true
+        try url.setResourceValues(resourceValues)
+    }
+}
+
 /// ION configuration object
 ///
 /// access with `ION.config`
 public struct IONConfig {
+
+    /// Caching preferences
+    public var caching: IONCaching = IONCaching()
 
     /// The scheme used to create the URLs provided by IONConnectionContent outlets
     public var connectionScheme = "ion"
@@ -48,9 +107,6 @@ public struct IONConfig {
 
     /// last collection fetch, delete entry from dictionary to force a collection reload from server
     public var lastOnlineUpdate: [String: Date] = [:]
-
-    /// collection cache timeout
-    public var cacheTimeout: TimeInterval = 600
 
     /// offline mode: do not send any request
     public var offlineMode = false

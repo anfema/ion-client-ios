@@ -856,9 +856,7 @@ class pageTests: LoggedInXCTestCase {
             
             do {
                 // make sure the cache dir is there
-                if !FileManager.default.fileExists(atPath: basePath) {
-                    try FileManager.default.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
-                }
+                try ION.config.caching.createDirectoryIfNecessary(atPath: basePath)
                 
                 // try saving to disk
                 try invalidJsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
@@ -957,13 +955,13 @@ class pageTests: LoggedInXCTestCase {
     
     /// Helper Functions
     fileprivate func cacheFile(_ filename: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }
     
     fileprivate func cacheBaseDir(locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }

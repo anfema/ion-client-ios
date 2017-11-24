@@ -58,7 +58,7 @@ class autoCacheTests: LoggedInXCTestCase {
 
     func testCollectionFetchWithTimeout() {
         let expectation = self.expectation(description: "testCollectionFetchWithTimeout")
-        ION.config.cacheTimeout = 1
+        ION.config.caching.cacheTimeout = 1
         ION.config.lastOnlineUpdate = [String:Date]()
         ION.collection("test") { result in
             
@@ -89,7 +89,7 @@ class autoCacheTests: LoggedInXCTestCase {
             }
         }
         self.waitForExpectations(timeout: 5.0, handler: nil)
-        ION.config.cacheTimeout = 600
+        ION.config.caching.cacheTimeout = 600
     }
 
     

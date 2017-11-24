@@ -51,13 +51,11 @@ extension IONRequest {
         let fileURL = self.cacheBaseDir(forHost: host, locale: ION.config.locale)
 
         // try to create the path if it does not exist
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            do {
-                try FileManager.default.createDirectory(atPath: fileURL.path, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                if ION.config.loggingEnabled {
-                    print("ION: Could not create cache dir!")
-                }
+        do {
+            try ION.config.caching.createDirectoryIfNecessary(atPath: fileURL.path)
+        } catch {
+            if ION.config.loggingEnabled {
+                print("ION: Could not create cache dir!")
             }
         }
 
@@ -154,11 +152,11 @@ extension IONRequest {
 
         let path = filename.path
 
-        if !FileManager.default.fileExists(atPath: path) {
-            do {
-                try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                return
+        do {
+            try ION.config.caching.createDirectoryIfNecessary(atPath: path)
+        } catch {
+            if ION.config.loggingEnabled {
+                print("ION: Could not create cache dir!")
             }
         }
 
@@ -295,9 +293,7 @@ extension IONRequest {
             let file = self.cacheFileURL(forFilename: "cacheIndex.json", locale: locale).path
 
             // make sure the cache dir is there
-            if !FileManager.default.fileExists(atPath: basePath) {
-                try FileManager.default.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
-            }
+            try ION.config.caching.createDirectoryIfNecessary(atPath: basePath)
 
             // try saving to disk
             try jsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
@@ -343,19 +339,20 @@ extension IONRequest {
     /// - parameter locale: the locale of the language that should be used
     /// - returns: File URL to the cache dir
     internal class func cacheBaseDir(forHost host: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(host)")
         return fileURL
     }
 
     fileprivate class func cacheBaseDir(forLocale locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }
 
     fileprivate class func cacheFileURL(forFilename filename: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }
