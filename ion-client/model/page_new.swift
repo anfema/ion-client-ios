@@ -112,7 +112,6 @@ open class Page {
     /// Loads the current page fully.
     /// Add an `onSuccess` and (if needed) an `onFailure` handler to the operation.
     /// The result on success references self while self is now fully loaded.
-    ///
     public func load() -> AsyncResult<Page> {
 
         let asyncResult = AsyncResult<Page>()
@@ -152,6 +151,44 @@ open class Page {
     deinit {
     }
 }
+
+
+extension Array where Element : Page {
+
+    /// Loads a list of pages fully.
+    /// Add an `onSuccess` and (if needed) an `onFailure` handler to the operation.
+    /// The result on success references self while all page in self are now fully loaded.
+    public func load() -> AsyncResult<[Page]> {
+
+        let asyncResult = AsyncResult<[Page]>()
+        let group = DispatchGroup()
+        var error: Error?
+
+        forEach { (page) in
+
+            group.enter()
+
+            page.load().onSuccess({ (_) in
+                group.leave()
+            }).onFailure({ (_error) in
+                error = _error
+                group.leave()
+            })
+        }
+
+        group.notify(queue: ION.config.responseQueue) {
+
+            if let error = error {
+                asyncResult.execute(result: .failure(error))
+            } else {
+                asyncResult.execute(result: .success(self))
+            }
+        }
+
+        return asyncResult
+    }
+}
+
 
 extension Page: Equatable {
     public static func == (lhs: Page, rhs: Page) -> Bool {
