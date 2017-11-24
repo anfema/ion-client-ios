@@ -289,6 +289,50 @@ public extension ION {
     }
 
 
+    /// Creates an operation to request a list of Pages based on given identifiers within the specified collection.
+    /// Add an onSuccess and (if needed) an onFailure handler to the operation.
+    /// It also allows you to specify the loading option of the Pages.
+    /// - parameter pageIdentifiers: The identifiers of the pages that should be requested
+    /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
+    /// - parameter option: The pages loading option (full or meta)
+    /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
+    static public func pages(pageIdentifiers: [PageIdentifier],
+                             in collectionIdentifier: CollectionIdentifier? = nil,
+                             option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
+
+        let asyncResult = AsyncResult<[Page]>()
+
+        var pages = [Page]()
+
+        let group = DispatchGroup()
+        var error: Error?
+
+        pageIdentifiers.forEach { (pageIdentifier) in
+
+            group.enter()
+
+            ION.page(pageIdentifier: pageIdentifier, in: collectionIdentifier, option: option).onSuccess({ (page) in
+                pages.append(page)
+                group.leave()
+            }).onFailure({ (_error) in
+                error = _error
+                group.leave()
+            })
+        }
+
+        group.notify(queue: ION.config.responseQueue) {
+            if let error = error {
+                asyncResult.execute(result: .failure(error))
+            } else {
+                pages.sort(by: {$0.position < $1.position})
+                asyncResult.execute(result: .success(pages))
+            }
+        }
+
+        return asyncResult
+    }
+
+
     /// Creates an operation to request the top level pages within the specified collection.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
