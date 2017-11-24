@@ -322,18 +322,30 @@ public extension ION {
 
             var children = [Page]()
 
+            let group = DispatchGroup()
+            var error: Error?
+
             metaList.forEach { (meta) in
+
+                group.enter()
+
                 ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
                     children.append(page)
-
-                    if children.count == metaList.count {
-                        children.sort(by: {$0.position < $1.position})
-                        asyncResult.execute(result: .success(children))
-                    }
-                }).onFailure({ (error) in
-                    asyncResult.execute(result: .failure(error))
+                    group.leave()
+                }).onFailure({ (_error) in
+                    error = _error
+                    group.leave()
                 })
             }
+
+            group.notify(queue: ION.config.responseQueue, execute: {
+                if let error = error {
+                    asyncResult.execute(result: .failure(error))
+                } else {
+                    children.sort(by: {$0.position < $1.position})
+                    asyncResult.execute(result: .success(children))
+                }
+            })
         }
 
         return asyncResult

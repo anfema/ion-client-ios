@@ -92,17 +92,33 @@ open class Page {
 
         var children = [Page]()
 
-        metas.forEach { (meta) in
-            ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collectionIdentifier, option: .full).onSuccess({ (page) in
-                children.append(page)
+        let group = DispatchGroup()
+        var error: Error?
 
-                if children.count == metas.count {
-                    children.sort(by: {$0.position < $1.position})
-                    asyncResult.execute(result: .success(children))
-                }
-            }).onFailure({ (error) in
-                asyncResult.execute(result: .failure(error))
+        metas.forEach { (meta) in
+
+            group.enter()
+
+            ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collectionIdentifier, option: .full).onSuccess({ (page) in
+
+                children.append(page)
+                group.leave()
+
+            }).onFailure({ (_error) in
+
+                error = _error
+                group.leave()
             })
+        }
+
+        group.notify(queue: ION.config.responseQueue) {
+
+            if let error = error {
+                asyncResult.execute(result: .failure(error))
+            } else {
+                children.sort(by: {$0.position < $1.position})
+                asyncResult.execute(result: .success(children))
+            }
         }
 
         return asyncResult
