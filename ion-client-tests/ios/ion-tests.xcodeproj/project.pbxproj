@@ -87,6 +87,7 @@
 		D6222EF71E68215F00C7C3DA /* deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF51E6820F700C7C3DA /* deprecated.swift */; };
 		D6222EF91E68255B00C7C3DA /* Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF81E68255B00C7C3DA /* Meta.swift */; };
 		D6222EFB1E68256400C7C3DA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EFA1E68256400C7C3DA /* Content.swift */; };
+		D647B4261FC8448800758DB5 /* table.swift in Sources */ = {isa = PBXBuildFile; fileRef = D647B4241FC8445300758DB5 /* table.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +213,7 @@
 		D6222EF51E6820F700C7C3DA /* deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deprecated.swift; sourceTree = "<group>"; };
 		D6222EF81E68255B00C7C3DA /* Meta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meta.swift; sourceTree = "<group>"; };
 		D6222EFA1E68256400C7C3DA /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		D647B4241FC8445300758DB5 /* table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = table.swift; sourceTree = "<group>"; };
 		ECFBA7F53F943D9B31B6A14D /* Pods-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -456,6 +458,7 @@
 				8FCFADF61BFCD7980051981F /* number.swift */,
 				8FCFADF71BFCD7980051981F /* option.swift */,
 				8FCFADF81BFCD7980051981F /* text.swift */,
+				D647B4241FC8445300758DB5 /* table.swift */,
 			);
 			path = content;
 			sourceTree = "<group>";
@@ -933,6 +936,7 @@
 				8FCFAE3C1BFCD7E40051981F /* ion+search.swift in Sources */,
 				8FCFAE421BFCD7E90051981F /* imageloader.swift in Sources */,
 				8FCFAE3F1BFCD7E90051981F /* request_cache.swift in Sources */,
+				D647B4261FC8448800758DB5 /* table.swift in Sources */,
 				8FCFAE301BFCD7E40051981F /* container.swift in Sources */,
 				8FCFAE331BFCD7E40051981F /* file.swift in Sources */,
 				8FCFAE2A1BFCD7E40051981F /* collection+metadata.swift in Sources */,

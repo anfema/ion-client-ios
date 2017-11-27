@@ -17,15 +17,18 @@ import DEjson
 public struct IONCaching {
 
     /// Directory that will be used for caching. Default is set to `cachesDirectory`.
+    /// If `cacheDirectory` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
     public var cacheDirectory: FileManager.SearchPathDirectory = .cachesDirectory
 
     /// FileProtectionLevel that will be used. Default is set to `none`.
+    /// If `protectionLevel` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
     public var protectionLevel: FileProtectionType = .none
 
     /// Collection cache timeout. Default is set to `600`.
     public var cacheTimeout: TimeInterval = 600
 
     /// Determines if cache should be excluded from backup. Default is set to `false`.
+    /// If `excludeFromBackup` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
     public var excludeFromBackup: Bool = false
 
     /// Generates file attributes based on specified file protection level.
@@ -209,6 +212,10 @@ public struct IONConfig {
         }
         self.registerContentType(named: "textcontent") { json in
             return try IONTextContent(json: json)
+        }
+
+        self.registerContentType(named: "tablecontent") { json in
+            return try IONTableContent(json: json)
         }
 
         self.registerUpdateBlock(identifier: "fts") { collectionIdentifier in
