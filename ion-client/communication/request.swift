@@ -40,8 +40,8 @@ internal extension Data {
         let convert_table = "0123456789abcdef"
         var s = ""
         for byte in bytes {
-            s.append(convert_table.characters[convert_table.characters.index(convert_table.startIndex, offsetBy: Int(byte >> 4))])
-            s.append(convert_table.characters[convert_table.characters.index(convert_table.startIndex, offsetBy: Int(byte & 0x0f))])
+            s.append(convert_table[convert_table.index(convert_table.startIndex, offsetBy: Int(byte >> 4))])
+            s.append(convert_table[convert_table.index(convert_table.startIndex, offsetBy: Int(byte & 0x0f))])
         }
         return s
     }

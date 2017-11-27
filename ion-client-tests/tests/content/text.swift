@@ -102,11 +102,11 @@ class textContentTests: LoggedInXCTestCase {
                 XCTAssert(text.hasPrefix(prefix) == true)
                 XCTAssert(text.hasSuffix(suffix) == true)
                 
-                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.characters.count - suffix.characters.count))
-                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.characters.count))
+                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.count - suffix.count))
+                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.count))
                 newString = newString.replacingOccurrences(of: "<br>", with: "")
                 
-                XCTAssertEqual(plainText.characters.count, newString.characters.count)
+                XCTAssertEqual(plainText.count, newString.count)
                 
                 expectation.fulfill()
             }
@@ -155,11 +155,11 @@ class textContentTests: LoggedInXCTestCase {
                 XCTAssert(text.hasPrefix(prefix) == true)
                 XCTAssert(text.hasSuffix(suffix) == true)
                 
-                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.characters.count - suffix.characters.count))
-                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.characters.count))
+                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.count - suffix.count))
+                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.count))
                 newString = newString.replacingOccurrences(of: "<br>", with: "")
                 
-                XCTAssertEqual(plainText.characters.count, newString.characters.count)
+                XCTAssertEqual(plainText.count, newString.count)
                 
                 expectation.fulfill()
             }
@@ -195,7 +195,7 @@ class textContentTests: LoggedInXCTestCase {
                     return
                 }
 
-                XCTAssertEqual(plainText.characters.count, text.string.characters.count)
+                XCTAssertEqual(plainText.count, text.string.count)
                 
                 expectation.fulfill()
             }
@@ -238,7 +238,7 @@ class textContentTests: LoggedInXCTestCase {
                 }
 
                 XCTAssertNotNil(text)
-                XCTAssertEqual(plainText.characters.count, text.string.characters.count)
+                XCTAssertEqual(plainText.count, text.string.count)
                 
                 expectation.fulfill()
             }

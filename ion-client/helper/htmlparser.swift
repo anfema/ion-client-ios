@@ -62,7 +62,7 @@ open class HTMLParser {
                     self.pushFormat(using: style, tagName: "blockquote", attributes: attributes, nestingDepth: depth)
                 } else {
                     // Do not allow any formatting inside of heading tags
-                    if lastStackItem.tagName.hasPrefix("h") && lastStackItem.tagName.characters.count == 2 {
+                    if lastStackItem.tagName.hasPrefix("h") && lastStackItem.tagName.count == 2 {
                         // FIXME: remove this case when the desk editor behaves correctly again
                         continue
                     }
@@ -136,10 +136,10 @@ open class HTMLParser {
                     stripped = stripped.replacingOccurrences(of: "\u{2028}", with: " ")
                     stripped = stripped.replacingOccurrences(of: "\u{2029}", with: " ")
                 }
-                if stripped.characters.isEmpty {
+                if stripped.isEmpty {
                     continue
                 }
-                if result.string.characters.isEmpty == false && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
+                if result.string.isEmpty == false && !result.string.hasSuffix(" ") && !result.string.hasSuffix("\n")  && !result.string.hasSuffix("\t") && !result.string.hasSuffix("\u{2028}") && !result.string.hasSuffix("\u{2029}") {
                     stripped = " \(stripped)"
                 }
                 let string = NSAttributedString(string: stripped, attributes: attribs)
@@ -163,7 +163,7 @@ open class HTMLParser {
 
         while true {
             if let rng = result.string.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines, options: NSString.CompareOptions()), rng.lowerBound == result.string.startIndex {
-                let start = result.string.characters.distance(from: result.string.startIndex, to: rng.lowerBound)
+                let start = result.string.distance(from: result.string.startIndex, to: rng.lowerBound)
                 let len = result.string.distance(from: rng.lowerBound, to: rng.upperBound)
                 let range = NSRange(location: start, length: len)
                 result.replaceCharacters(in: range, with: NSAttributedString())
@@ -236,7 +236,7 @@ open class HTMLParser {
                 default:
                     break
                 }
-                if result.characters.isEmpty == false && self.isBlock(tagName: name) {
+                if result.isEmpty == false && self.isBlock(tagName: name) {
                     result.append("\n")
                 }
 
@@ -272,7 +272,7 @@ open class HTMLParser {
                     stripped = data.trimmingCharacters(in: .whitespacesAndNewlines)
                     stripped = stripped.replacingOccurrences(of: "\n", with: " ")
                 }
-                if result.characters.isEmpty == false && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
+                if result.isEmpty == false && !result.hasSuffix(" ") && !result.hasSuffix("\n") {
                     result.append(" ")
                 }
                 result.append(stripped)

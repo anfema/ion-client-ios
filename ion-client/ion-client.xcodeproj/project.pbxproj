@@ -50,6 +50,7 @@
 		D6222F051E68325000C7C3DA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222F021E68325000C7C3DA /* Content.swift */; };
 		D6222F061E68325000C7C3DA /* deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222F031E68325000C7C3DA /* deprecated.swift */; };
 		D6222F071E68325000C7C3DA /* Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222F041E68325000C7C3DA /* Meta.swift */; };
+		D690E0011FCC765000912776 /* table.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690E0001FCC765000912776 /* table.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		D6222F021E68325000C7C3DA /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		D6222F031E68325000C7C3DA /* deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deprecated.swift; sourceTree = "<group>"; };
 		D6222F041E68325000C7C3DA /* Meta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meta.swift; sourceTree = "<group>"; };
+		D690E0001FCC765000912776 /* table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = table.swift; sourceTree = "<group>"; };
 		DDE09F13163B41C489B3012D /* Pods-ion_client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.debug.xcconfig"; sourceTree = "<group>"; };
 		E53026DF88A57C0D04D16D33 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -225,6 +227,7 @@
 				8F326B381CCFB0D30041FC40 /* media.swift */,
 				8F326B391CCFB0D30041FC40 /* number.swift */,
 				8F326B3A1CCFB0D30041FC40 /* option.swift */,
+				D690E0001FCC765000912776 /* table.swift */,
 				8F326B3B1CCFB0D30041FC40 /* text.swift */,
 			);
 			path = content;
@@ -387,6 +390,7 @@
 				8F326B651CCFB10D0041FC40 /* connection.swift in Sources */,
 				8F326B661CCFB10D0041FC40 /* container.swift in Sources */,
 				8F326B671CCFB10D0041FC40 /* content.swift in Sources */,
+				D690E0011FCC765000912776 /* table.swift in Sources */,
 				8F326B681CCFB10D0041FC40 /* datetime.swift in Sources */,
 				8F326B691CCFB10D0041FC40 /* file.swift in Sources */,
 				8F326B6A1CCFB10D0041FC40 /* flag.swift in Sources */,
