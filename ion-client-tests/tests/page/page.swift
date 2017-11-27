@@ -860,6 +860,7 @@ class pageTests: LoggedInXCTestCase {
                 
                 // try saving to disk
                 try invalidJsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
+                try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: file)
             } catch {
                 // saving failed, remove disk cache completely because we don't have a clue what's in it
                 do {

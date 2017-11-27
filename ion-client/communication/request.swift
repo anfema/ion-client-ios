@@ -265,6 +265,7 @@ open class IONRequest {
                 }
                 do {
                     try FileManager.default.moveItem(atPath: cacheName + ".tmp", toPath: cacheName)
+                    try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: cacheName)
                 } catch {
                     // ok moving failed
                     responseQueueCallback(callback, parameter: .failure(IONError.noData(error)))

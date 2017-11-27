@@ -111,6 +111,7 @@ extension IONRequest {
                 // save object to disk
                 if let cacheName = self.cachePath(forURL: requestURL) {
                     try json.write(toFile: cacheName, atomically: true, encoding: String.Encoding.utf8)
+                    try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: cacheName)
 
                     // save object to cache DB
                     self.saveJSONToCache(using: request, checksumMethod: "null", checksum: "")
@@ -166,6 +167,7 @@ extension IONRequest {
 
         do {
             try data.write(to: fileURL, options: .atomic)
+            try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: filePath)
         } catch {
             //TODO: Handle error
             print("An unexpected error occurred while trying to write file to disk: \(error)")
@@ -297,6 +299,7 @@ extension IONRequest {
 
             // try saving to disk
             try jsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
+            try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: file)
         } catch {
             // saving failed, remove disk cache completely because we don't have a clue what's in it
             do {
