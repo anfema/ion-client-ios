@@ -12,6 +12,29 @@
 import Foundation
 
 extension String {
+
+    subscript (bounds: CountableClosedRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start...end])
+    }
+
+    subscript (bounds: CountableRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: bounds.lowerBound)
+        let end = index(startIndex, offsetBy: bounds.upperBound)
+        return String(self[start..<end])
+    }
+
+    subscript (range: NSRange) -> String? {
+        if let rng = self.rangeFromNSRange(range) {
+            return String(self[rng])
+        }
+        return nil
+    }
+}
+
+extension String {
+
     func rangeFromNSRange(_ nsRange : NSRange) -> Range<String.Index>? {
         guard let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
             let to16 = utf16.index(from16, offsetBy: nsRange.length, limitedBy: utf16.endIndex) else
@@ -21,40 +44,6 @@ extension String {
         if let from = String.Index(from16, within: self),
             let to = String.Index(to16, within: self) {
                 return from ..< to
-        }
-        return nil
-    }
-    
-    // FIXME: Is this dead code?
-    func range(_ start: Int, length: Int) -> Range<String.Index>? {
-        guard let from16 = utf16.index(utf16.startIndex, offsetBy: start, limitedBy: utf16.endIndex),
-            let to16 = utf16.index(from16, offsetBy: length, limitedBy: utf16.endIndex) else
-        {
-            return nil
-        }
-        if let from = String.Index(from16, within: self),
-            let to = String.Index(to16, within: self) {
-                return from ..< to
-        }
-        return nil
-    }
-
-    func range(_ start: Int, end: Int) -> Range<String.Index>? {
-        guard let from16 = utf16.index(utf16.startIndex, offsetBy: start, limitedBy: utf16.endIndex),
-            let to16 = utf16.index(from16, offsetBy: end - start, limitedBy: utf16.endIndex) else
-        {
-            return nil
-        }
-        if let from = String.Index(from16, within: self),
-            let to = String.Index(to16, within: self) {
-                return from ..< to
-        }
-        return nil
-    }
-    
-    func substringWithRange(_ range: NSRange) -> String? {
-        if let rng = self.rangeFromNSRange(range) {
-            return self.substring(with: rng)
         }
         return nil
     }
@@ -74,17 +63,17 @@ extension NSRegularExpression {
                     lastSplitPoint = lastMatch.range.location + lastMatch.range.length
                 }
                 // text from last match to this match
-                let t = string.substring(with: string.range(lastSplitPoint, end:match.range.location)!)
+                let t = string[lastSplitPoint..<match.range.location]
                 if t.count > 0 {
                     callback(t, false)
                 }
                 // the token match
-                callback(string.substringWithRange(match.rangeAt(1))!, true)
+                callback(string[match.range(at: 1)]!, true)
             }
 
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substring(with: string.range(lastSplitPoint, end:string.count)!)
+            let t = string[lastSplitPoint..<string.count]
             if t.count > 0 {
                 callback(t, false)
             }
