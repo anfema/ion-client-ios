@@ -34,13 +34,13 @@ public struct IONCaching {
     public var excludeFromBackup: Bool = false
 
     /// Generates file attributes based on specified file protection level.
-    private var fileAttributes: [String: Any]? {
+    private var fileAttributes: [FileAttributeKey: Any]? {
 
         #if os(iOS)
 
         guard protectionLevel != .none else { return nil }
 
-        return [FileAttributeKey.protectionKey.rawValue: protectionLevel]
+        return [FileAttributeKey.protectionKey: protectionLevel]
 
         #else
 

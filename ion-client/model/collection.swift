@@ -252,7 +252,7 @@ internal class IONCollection {
             return nil
         }
 
-        let pages = self.pageMeta.filter({ $0.parent == nil }).sorted(by: { $0.0.position < $0.1.position })
+        let pages = self.pageMeta.filter({ $0.parent == nil }).sorted(by: { $0.position < $1.position })
 
         guard pages.isEmpty == false && index < pages.count else {
             return nil

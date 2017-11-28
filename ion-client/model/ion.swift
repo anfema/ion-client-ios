@@ -408,7 +408,7 @@ public extension ION {
                 return
             }
 
-            asyncResult.execute(result: .success())
+            asyncResult.execute(result: .success(Void()))
         }
 
         return asyncResult

@@ -101,10 +101,8 @@ class textContentTests: LoggedInXCTestCase {
                 XCTAssertNotNil(text)
                 XCTAssert(text.hasPrefix(prefix) == true)
                 XCTAssert(text.hasSuffix(suffix) == true)
-                
-                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.count - suffix.count))
-                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.count))
-                newString = newString.replacingOccurrences(of: "<br>", with: "")
+
+                let newString = String(String(text.dropLast(suffix.count)).dropFirst(prefix.count)).replacingOccurrences(of: "<br>", with: "")
                 
                 XCTAssertEqual(plainText.count, newString.count)
                 
@@ -154,10 +152,8 @@ class textContentTests: LoggedInXCTestCase {
                 XCTAssertNotNil(text)
                 XCTAssert(text.hasPrefix(prefix) == true)
                 XCTAssert(text.hasSuffix(suffix) == true)
-                
-                var newString = text.substring(to: text.index(text.startIndex, offsetBy: text.count - suffix.count))
-                newString = newString.substring(from: text.index(text.startIndex, offsetBy: prefix.count))
-                newString = newString.replacingOccurrences(of: "<br>", with: "")
+
+                let newString = String(String(text.dropLast(suffix.count)).dropFirst(prefix.count)).replacingOccurrences(of: "<br>", with: "")
                 
                 XCTAssertEqual(plainText.count, newString.count)
                 
