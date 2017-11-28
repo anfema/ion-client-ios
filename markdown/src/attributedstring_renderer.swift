@@ -35,7 +35,13 @@ public struct AttributedStringStyle {
     public var alignment:NSTextAlignment?
     public var textIndent:Int?
     public var lineHeightMultiplier:Float?
+
+#if os(iOS)
     public var lineBreakMode: NSLineBreakMode?
+#else
+    public var lineBreakMode: NSParagraphStyle.LineBreakMode?
+#endif
+
     
     public var marginTop:Float?
     public var marginBottom:Float?
@@ -43,24 +49,24 @@ public struct AttributedStringStyle {
     public var writingDirection:NSWritingDirection?
     public var tabStops = [Float]()
     
-    public func makeAttributeDict(nestingDepth: Int = 0, renderMode: RenderMode = .normal) -> Dictionary<String, Any> {
-        var result = Dictionary<String, Any>()
+    public func makeAttributeDict(nestingDepth: Int = 0, renderMode: RenderMode = .normal) -> [NSAttributedStringKey: Any] {
+        var result = [NSAttributedStringKey: Any]()
         
         if let font = self.font, renderMode != .excludeFont {
-            result[NSFontAttributeName] = font
+            result[NSAttributedStringKey.font] = font
         }
         
         if let foregroundColor = self.foregroundColor {
-            result[NSForegroundColorAttributeName] = foregroundColor
+            result[NSAttributedStringKey.foregroundColor] = foregroundColor
         }
         if let backgroundColor = self.backgroundColor {
-            result[NSBackgroundColorAttributeName] = backgroundColor
+            result[NSAttributedStringKey.backgroundColor] = backgroundColor
         }
         if let underline = self.underline {
-            result[NSUnderlineStyleAttributeName] = (underline ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
+            result[NSAttributedStringKey.underlineStyle] = (underline ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
         }
         if let strikeThrough = self.strikeThrough {
-            result[NSStrikethroughStyleAttributeName] = (strikeThrough ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
+            result[NSAttributedStringKey.strikethroughStyle] = (strikeThrough ? NSUnderlineStyle.styleSingle.rawValue : NSUnderlineStyle.styleNone.rawValue)
         }
         
         if renderMode == .fontOnly {
@@ -68,13 +74,8 @@ public struct AttributedStringStyle {
         }
         
         var useParagraphStyle = false
-        
-        #if os(iOS)
+
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        #else
-        let paragraphStyle = NSParagraphStyle.default().mutableCopy() as! NSMutableParagraphStyle
-        #endif
-        
         
         if let alignment = self.alignment {
             useParagraphStyle = true
@@ -125,13 +126,13 @@ public struct AttributedStringStyle {
             }
             var stops = [NSTextTab]()
             for stop in self.tabStops {
-                stops.append(NSTextTab(textAlignment: align!, location: CGFloat(stop), options: [String:Any]()))
+                stops.append(NSTextTab(textAlignment: align!, location: CGFloat(stop), options: [NSTextTab.OptionKey: Any]()))
             }
             paragraphStyle.tabStops = stops
         }
         
         if useParagraphStyle {
-            result[NSParagraphStyleAttributeName] = paragraphStyle
+            result[NSAttributedStringKey.paragraphStyle] = paragraphStyle
         }
         
         return result
@@ -306,7 +307,7 @@ extension ContentNode {
             result.addAttributes(style.unorderedListItem.makeAttributeDict(renderMode: .fontOnly), range: NSMakeRange(0, 2))
             var startIndex:Int? = nil
             // find first attribute with different indent
-            result.enumerateAttribute(NSParagraphStyleAttributeName, in: NSMakeRange(2, result.length - 2), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
+            result.enumerateAttribute(NSAttributedStringKey.paragraphStyle, in: NSMakeRange(2, result.length - 2), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
                 if startIndex == nil {
                     startIndex = range.location
                 }
@@ -333,7 +334,7 @@ extension ContentNode {
             
             var startIndex:Int? = nil
             // find first attribute with different indent
-            result.enumerateAttribute(NSParagraphStyleAttributeName, in: NSMakeRange(indexLabel.length, result.length - indexLabel.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
+            result.enumerateAttribute(NSAttributedStringKey.paragraphStyle, in: NSMakeRange(indexLabel.length, result.length - indexLabel.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) { (value, range, stop) in
                 if startIndex == nil && range.location > 0 {
                     startIndex = range.location
                 }
@@ -388,7 +389,7 @@ extension ContentNode {
             
         case .link(let location):
             var attribs = style.strongText.makeAttributeDict()
-            attribs[NSLinkAttributeName] = location
+            attribs[NSAttributedStringKey.link] = location
             content.addAttributes(attribs, range: NSMakeRange(0, content.length))
             return content
             

@@ -140,7 +140,7 @@ open class MDParser {
         let blockRegex = try! NSRegularExpression(pattern: "(\\n[^\\n]+)+", options: self.regexOptions)
         blockRegex.enumerateMatches(in: string, options: [], range: NSMakeRange(0, string.unicodeScalars.count)) { (result, _, _) in
             if let result = result {
-                blocks.append(self.identifyBlock(string.substringWithRange(result.range)!, nestingDepth: nestingDepth))
+                blocks.append(self.identifyBlock(string[result.range]!, nestingDepth: nestingDepth))
             }
         }
         return blocks
@@ -154,7 +154,7 @@ open class MDParser {
         let blockRegex = try! NSRegularExpression(pattern: "(\\n[ ]{0,3}([^ ][^\\n]+))+|((\\n([ ]{4}|\\t)[^\\n]+)+)", options: self.regexOptions)
         blockRegex.enumerateMatches(in: paddedString, options: [], range: fullString) { (result, _, _) in
             if let result = result {
-                let s = ("\n" + string).substringWithRange(result.range)!.replacingOccurrences(of: "\n    ", with: "\n")
+                let s = ("\n" + string)[result.range]!.replacingOccurrences(of: "\n    ", with: "\n")
                 blocks.append(self.identifyBlock(s, nestingDepth: nestingDepth))
             }
         }
@@ -181,11 +181,11 @@ open class MDParser {
         for regex in headingRegexes {
             regex.enumerateMatches(in: hString, options: [], range: hStringRange) { (result, _, _) in
                 if let result = result {
-                    if result.rangeAt(2).location != NSNotFound {
-                        resultBlock = Block.heading(level: level, content: hString.substringWithRange(result.rangeAt(2))!)
+                    if result.range(at: 2).location != NSNotFound {
+                        resultBlock = Block.heading(level: level, content: hString[result.range(at: 2)]!)
                     }
-                    if result.rangeAt(4).location != NSNotFound {
-                        resultBlock = Block.heading(level: level, content: hString.substringWithRange(result.rangeAt(4))!)
+                    if result.range(at: 4).location != NSNotFound {
+                        resultBlock = Block.heading(level: level, content: hString[result.range(at: 4)]!)
                     }
                 }
             }
@@ -222,11 +222,11 @@ open class MDParser {
         }
         codeRegexFences.enumerateMatches(in: stripped, options: [], range: fullString) { (result, _, _) in
             if let result = result {
-                if ((result.rangeAt(2).location != NSNotFound) && (result.rangeAt(2).length > 0)) {
-                    language = stripped.substringWithRange(result.rangeAt(2))!
+                if ((result.range(at: 2).location != NSNotFound) && (result.range(at: 2).length > 0)) {
+                    language = stripped[result.range(at: 2)]!
                 }
-                if result.rangeAt(3).location != NSNotFound {
-                    resultBlock = Block.code(content: stripped.substringWithRange(result.rangeAt(3))!, language: language, nestingDepth: nestingDepth + 1)
+                if result.range(at: 3).location != NSNotFound {
+                    resultBlock = Block.code(content: stripped[result.range(at: 3)]!, language: language, nestingDepth: nestingDepth + 1)
                 }
             }
         }
@@ -324,7 +324,7 @@ open class MDParser {
         for index in 0..<matches.count {
             let match = matches[index]
             
-            if let multilineItem = paddedString.substringWithRange(match.rangeAt(2)), multilineItem.count > 0 {
+            if let multilineItem = paddedString[match.range(at: 2)], multilineItem.count > 0 {
                 var result:[ContentNode] = []
                 
                 for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
@@ -333,7 +333,7 @@ open class MDParser {
                 
                 tokens.append(ContentNode.init(children: result, type: .unorderedListItem(nestingDepth: nestingDepth)))
             }
-            if let singleLineItem = paddedString.substringWithRange(match.rangeAt(5)), singleLineItem.count > 0 {
+            if let singleLineItem = paddedString[match.range(at: 5)], singleLineItem.count > 0 {
                 let node = self.parseContent(singleLineItem)
                 tokens.append(ContentNode.init(children: node, type: .unorderedListItem(nestingDepth: nestingDepth)))
             }
@@ -351,7 +351,7 @@ open class MDParser {
         for index in 0..<matches.count {
             let match = matches[index]
             
-            if let multilineItem = paddedString.substringWithRange(match.rangeAt(2)), multilineItem.count > 0 {
+            if let multilineItem = paddedString[match.range(at: 2)], multilineItem.count > 0 {
                 var result:[ContentNode] = []
                 
                 for block in self.splitBlocksByIndent(multilineItem, nestingDepth: nestingDepth + 1) {
@@ -360,7 +360,7 @@ open class MDParser {
                 
                 tokens.append(ContentNode.init(children: result, type: .orderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
-            if let singleLineItem = paddedString.substringWithRange(match.rangeAt(5)), singleLineItem.count > 0 {
+            if let singleLineItem = paddedString[match.range(at: 5)], singleLineItem.count > 0 {
                 let node = self.parseContent(singleLineItem)
                 tokens.append(ContentNode.init(children: node, type: .orderedListItem(index: index + 1, nestingDepth: nestingDepth)))
             }
@@ -466,18 +466,18 @@ open class MDParser {
                     lastSplitPoint = lastMatch.range.location + lastMatch.range.length
                 }
                 // text from last match to this match
-                let t = string.substring(with: string.range(lastSplitPoint, end:match.range.location)!)
+                let t = string[lastSplitPoint..<match.range.location]
                 if t.count > 0 {
                     tokens.append(ContentNode.init(text: t))
                 }
                 // the token match
-                let textNode = ContentNode.init(text: string.substringWithRange(match.rangeAt(1))!)
-                tokens.append(ContentNode.init(children: [textNode], type: .link(location: string.substringWithRange(match.rangeAt(2))!)))
+                let textNode = ContentNode.init(text: string[match.range(at: 1)]!)
+                tokens.append(ContentNode.init(children: [textNode], type: .link(location: string[match.range(at: 2)]!)))
             }
             
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substring(with: string.range(lastSplitPoint, end:string.count)!)
+            let t = string[lastSplitPoint..<string.count]
             if t.count > 0 {
                 tokens.append(ContentNode.init(text: t))
             }
@@ -505,18 +505,18 @@ open class MDParser {
                     lastSplitPoint = lastMatch.range.location + lastMatch.range.length
                 }
                 // text from last match to this match
-                let t = string.substring(with: string.range(lastSplitPoint, end:match.range.location)!)
+                let t = string[lastSplitPoint..<match.range.location]
                 if t.count > 0 {
                     tokens.append(ContentNode.init(text: t))
                 }
                 // the token match
-                let textNode = ContentNode.init(text: string.substringWithRange(match.rangeAt(1))!)
-                tokens.append(ContentNode.init(children: [textNode], type: .image(location: string.substringWithRange(match.rangeAt(2))!)))
+                let textNode = ContentNode.init(text: string[match.range(at: 1)]!)
+                tokens.append(ContentNode.init(children: [textNode], type: .image(location: string[match.range(at: 2)]!)))
             }
             
             // remaining text
             let lastSplitPoint = matches.last!.range.location + matches.last!.range.length
-            let t = string.substring(with: string.range(lastSplitPoint, end:string.count)!)
+            let t = string[lastSplitPoint..<string.count]
             if t.count > 0 {
                 tokens.append(ContentNode.init(text: t))
             }
