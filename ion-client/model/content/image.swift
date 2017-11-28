@@ -378,7 +378,7 @@ public extension Content {
     public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
-        imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
+        imageContent(identifier, at: position)?.thumbnail(withSize: size, callback: { (result) in
 
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
@@ -408,7 +408,7 @@ public extension Content {
     public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
-        imageContent(identifier)?.thumbnail(withSize: size, callback: { (result) in
+        imageContent(identifier, at: position)?.thumbnail(withSize: size, callback: { (result) in
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
