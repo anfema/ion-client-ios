@@ -17,7 +17,7 @@ import DEjson
 open class IONTableContent: IONContent {
 
     /// Underlying table containing a string array per row
-    open var table: [[String]]
+    open var table: [[String?]]
 
 
     /// Initialize table content object from JSON
@@ -34,29 +34,33 @@ open class IONTableContent: IONContent {
             throw IONError.jsonObjectExpected(json)
         }
 
-        guard let rawTable = dict["table"],
-            case .jsonArray(let tableArray) = rawTable else {
+        guard let rawTableRows = dict["rows"],
+            case .jsonArray(let tableRowsArray) = rawTableRows else {
 
                 throw IONError.invalidJSON(json)
         }
 
-        var tableRows = [[String]]()
+        var tableRows = [[String?]]()
 
-        for rawRow in tableArray {
+        for rawRow in tableRowsArray {
 
             guard case .jsonArray(let rowArray) = rawRow else {
                 throw IONError.invalidJSON(json)
             }
 
-            var rowValues = [String]()
+            var rowValues = [String?]()
 
             for rawValue in rowArray {
 
-                guard case .jsonString(let value) = rawValue else {
-                    throw IONError.invalidJSON(json)
+                if case .jsonString(let value) = rawValue {
+                    rowValues.append(value)
+                    continue
+                } else if case .jsonNull = rawValue {
+                    rowValues.append(nil)
+                    continue
                 }
 
-                rowValues.append(value)
+                throw IONError.invalidJSON(json)
             }
 
             tableRows.append(rowValues)
@@ -134,7 +138,7 @@ public extension Content {
     }
 
 
-    public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String]]? {
+    public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
         guard let content = tableContent(identifier) else {
             return nil
         }
