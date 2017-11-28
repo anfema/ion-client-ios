@@ -367,7 +367,7 @@ public extension Content {
     public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
-        imageContent(identifier)?.image(callback: { (result) in
+        imageContent(identifier, at: position)?.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
 
@@ -397,7 +397,7 @@ public extension Content {
     public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
-        imageContent(identifier)?.image(callback: { (result) in
+        imageContent(identifier, at: position)?.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
 
