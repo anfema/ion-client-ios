@@ -206,7 +206,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             return
         }
 
-        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url" : urlString as AnyObject]) { result in
+        IONRequest.postJSON(toEndpoint: "tokenize", queryParameters: nil, body: ["url": urlString as AnyObject]) { result in
             guard result.isSuccess,
                 let jsonResponse = result.value,
                 let json = jsonResponse.json,
@@ -371,5 +371,29 @@ extension IONPage {
         }
 
         return self
+    }
+}
+
+
+public extension Content {
+
+    /// Provides a media content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func mediaContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONMediaContent? {
+        return self.content(identifier, at: position)
+    }
+
+
+    public func mediaContents(_ identifier: OutletIdentifier) -> [IONMediaContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONMediaContent] ?? nil)
+    }
+
+
+    public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
+        return mediaContent(identifier, at: position)?.url
     }
 }

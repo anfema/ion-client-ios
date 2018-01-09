@@ -13,7 +13,7 @@ import Foundation
 import DEjson
 
 /// Page metadata, used if only small parts of a page have to be used instead of downloading the whole thing
-open class IONPageMeta: CanLoadImage {
+internal class IONPageMeta: CanLoadImage {
     /// Flag if the date formatter has already been instantiated
     static var formatterInstantiated = false
 
@@ -32,8 +32,12 @@ open class IONPageMeta: CanLoadImage {
     /// Page position
     open var position: Int
 
+    open let collectionIdentifier: String
+
     /// Collection of this meta item
-    open weak var collection: IONCollection?
+    open var collection: IONCollection? {
+        return ION.collection(collectionIdentifier)
+    }
 
     /// Meta data attached to page
     fileprivate var metaData = [String: [String]]()
@@ -55,7 +59,8 @@ open class IONPageMeta: CanLoadImage {
     ///                                 value types.
     ///
     internal init(json: JSONObject, position: Int, collection: IONCollection) throws {
-        self.collection = collection
+
+        self.collectionIdentifier = collection.identifier
 
         guard case .jsonDictionary(let dict) = json else {
             throw IONError.jsonObjectExpected(json)
@@ -71,7 +76,7 @@ open class IONPageMeta: CanLoadImage {
                 throw IONError.invalidJSON(json)
         }
 
-        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date ?? Date.distantPast
+        self.lastChanged = (NSDate(isoDateString: lastChanged) as Date?) ?? Date.distantPast
         self.identifier  = identifier
         self.layout = layout
         self.position = position
@@ -137,6 +142,15 @@ open class IONPageMeta: CanLoadImage {
         }
 
         return nil
+    }
+
+
+    /// Returns metadata as a list of strings
+    ///
+    /// - parameter identifier: Outlet identifier to return values for
+    /// - returns: List of strings or nil
+    open func strings(_ identifier: String) -> [String]? {
+        return self.metaData[identifier]
     }
 
 

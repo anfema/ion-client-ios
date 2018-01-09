@@ -2,15 +2,16 @@ source 'git@git.assembla.com:anfema-intern.cocoapods.git'
 source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
-platform :osx, '10.10'
+platform :osx, '10.12'
 
 target 'ion_client' do
-  pod 'Alamofire', '~> 4.2'
-  pod 'HashExtensions', '~> 2.0'
-  pod 'DEjson', :git => 'https://github.com/anfema/DEjson', :branch => 'swift_3'
-  pod 'Markdown', :git => 'https://github.com/anfema/ion-client-ios', :branch => 'swift_3'
-  pod 'html5tokenizer', :git => 'https://github.com/anfema/HTML5Tokenizer', :branch => 'swift_3'
-  pod 'Tarpit', :git => 'https://github.com/anfema/Tarpit', :branch => 'swift_3'
-  pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_3'
-  pod 'iso-rfc822-date', '~> 1.0'
+    pod 'Alamofire', '~> 4.2'
+    pod 'SQLite.swift', '~> 0.11'
+    pod 'HashExtensions', '~> 2.0'
+    pod 'DEjson', '~> 3.0'
+    pod 'Markdown', '~> 3.0'
+    pod 'html5tokenizer', '~> 3.0'
+    pod 'Tarpit', '~> 2.0'
+    pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_4'
+    pod 'iso-rfc822-date', '~> 1.0'
 end

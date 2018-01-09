@@ -89,3 +89,27 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Content {
+
+    /// Provides a number content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func numberContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONNumberContent? {
+        return self.content(identifier, at: position)
+    }
+
+
+    public func numberContents(_ identifier: OutletIdentifier) -> [IONNumberContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONNumberContent] ?? nil)
+    }
+
+
+    public func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
+        return numberContent(identifier, at: position)?.value
+    }
+}

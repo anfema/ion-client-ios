@@ -69,13 +69,11 @@ extension IONCollection {
             return .failure(IONError.didFail)
         }
 
-        for meta in self.pageMeta {
-            if meta.identifier == pageIdentifier {
-                return .success(meta)
-            }
+        if let meta = self.pageMeta.first(where: { $0.identifier == pageIdentifier }) {
+            return .success(meta)
         }
 
-        return .failure(IONError.pageNotFound(identifier))
+        return .failure(IONError.pageNotFound(collection: identifier, page: pageIdentifier))
     }
 
 
@@ -120,7 +118,7 @@ extension IONCollection {
     @discardableResult public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard let result = self.metaPath(pageIdentifier) else {
-                responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(pageIdentifier)))
+                responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: self.identifier, page: pageIdentifier)))
                 return
             }
 
@@ -202,13 +200,7 @@ extension IONCollection {
 
 
     internal func getPageMeta(_ pageIdentifier: String) -> IONPageMeta? {
-        for meta in self.pageMeta {
-            if meta.identifier == pageIdentifier {
-                return meta
-            }
-        }
-
-        return nil
+        return self.pageMeta.first(where: { $0.identifier == pageIdentifier })
     }
 
 
@@ -220,11 +212,9 @@ extension IONCollection {
         for page in pages {
             var is_leaf = true
 
-            for meta in self.pageMeta {
-                if meta.parent == page.identifier {
-                    is_leaf = false
-                    check.append(meta)
-                }
+            for meta in self.pageMeta where meta.parent == page.identifier {
+                is_leaf = false
+                check.append(meta)
             }
 
             if is_leaf {

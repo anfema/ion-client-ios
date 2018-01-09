@@ -15,7 +15,7 @@ import iso_rfc822_date
 
 
 /// Page class, contains functionality to fetch outlet content
-open class IONPage {
+internal class IONPage {
 
     /// Page identifier
     open var identifier: String
@@ -119,7 +119,7 @@ open class IONPage {
 
                     guard let pageMeta = self.collection.getPageMeta(identifier) else {
                         self.hasFailed = true
-                        responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
+                        responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: collection.identifier, page: identifier)))
                         semaphore.signal()
                         return
                     }
@@ -155,7 +155,7 @@ open class IONPage {
 
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }) 
+        })
 
         self.collection.pageCache[identifier] = self
     }
@@ -199,7 +199,7 @@ open class IONPage {
     @discardableResult open func onCompletion(_ callback: @escaping ((_ page: IONPage, _ completed: Bool) -> Void)) -> IONPage {
         workQueue.async(flags: .barrier, execute: {
             responseQueueCallback(callback, parameter: (page: self, completed: !self.hasFailed))
-        }) 
+        })
 
         return self
     }
@@ -256,10 +256,8 @@ open class IONPage {
         }
 
         // search first occurrence of content with the named outlet and specified position
-        for content in self.content where content.outlet == name {
-            if content.position == position {
-                return .success(true)
-            }
+        if self.content.first(where: { $0.outlet == name && $0.position == position }) != nil {
+            return .success(true)
         }
 
         return .success(false)
@@ -337,7 +335,7 @@ open class IONPage {
                 if let error = result.error, case IONError.notAuthorized = error {
                     callback(.notAuthorized)
                 } else {
-                    callback(.pageNotFound(identifier))
+                    callback(.pageNotFound(collection: self.collection.identifier, page: identifier))
                 }
 
                 return nil
@@ -426,7 +424,7 @@ open class IONPage {
 }
 
 /// Cancelable page, either finish processing with `finish()` or cancel with `cancel()`. Will leak if not done so.
-open class CancelableIONPage: IONPage {
+internal class CancelableIONPage: IONPage {
 
     init(page: IONPage) {
         super.init(forkedWorkQueueWithCollection: page.collection, identifier: page.identifier, locale: page.locale)
@@ -446,7 +444,7 @@ open class CancelableIONPage: IONPage {
             self.isReady = true
 
             page.parentLock.unlock()
-        }) 
+        })
     }
 
     /// Cancel all pending requests for this page
@@ -454,13 +452,13 @@ open class CancelableIONPage: IONPage {
         self.workQueue.async(flags: .barrier, execute: {
             self.hasFailed = true
             self.finish()
-        }) 
+        })
     }
 
     /// Finish all requests and discard page
     open func finish() {
         self.workQueue.async(flags: .barrier, execute: {
             self.collection.pageCache.removeValue(forKey: self.forkedIdentifier)
-        }) 
+        })
     }
 }

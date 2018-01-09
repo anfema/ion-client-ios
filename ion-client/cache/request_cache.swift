@@ -51,13 +51,11 @@ extension IONRequest {
         let fileURL = self.cacheBaseDir(forHost: host, locale: ION.config.locale)
 
         // try to create the path if it does not exist
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            do {
-                try FileManager.default.createDirectory(atPath: fileURL.path, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                if ION.config.loggingEnabled {
-                    print("ION: Could not create cache dir!")
-                }
+        do {
+            try ION.config.caching.createDirectoryIfNecessary(atPath: fileURL.path)
+        } catch {
+            if ION.config.loggingEnabled {
+                print("ION: Could not create cache dir!")
             }
         }
 
@@ -103,7 +101,7 @@ extension IONRequest {
             case .success(let jsonResponse) = result else {
                 return
         }
-        
+
         if jsonResponse.statusCode == 200,
            let jsonObject = jsonResponse.json,
            let json = JSONEncoder(jsonObject).jsonString,
@@ -113,6 +111,7 @@ extension IONRequest {
                 // save object to disk
                 if let cacheName = self.cachePath(forURL: requestURL) {
                     try json.write(toFile: cacheName, atomically: true, encoding: String.Encoding.utf8)
+                    try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: cacheName)
 
                     // save object to cache DB
                     self.saveJSONToCache(using: request, checksumMethod: "null", checksum: "")
@@ -154,24 +153,22 @@ extension IONRequest {
 
         let path = filename.path
 
-        if !FileManager.default.fileExists(atPath: path) {
-            do {
-                try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                return
+        do {
+            try ION.config.caching.createDirectoryIfNecessary(atPath: path)
+        } catch {
+            if ION.config.loggingEnabled {
+                print("ION: Could not create cache dir!")
             }
         }
 
         let filePath = filename.appendingPathComponent((hash.hexString())).path
 
         let fileURL = URL(fileURLWithPath: filePath)
-        
-        do
-        {
+
+        do {
             try data.write(to: fileURL, options: .atomic)
-        }
-        catch
-        {
+            try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: filePath)
+        } catch {
             //TODO: Handle error
             print("An unexpected error occurred while trying to write file to disk: \(error)")
         }
@@ -214,13 +211,12 @@ extension IONRequest {
             timestamp = trunc(Date().timeIntervalSince1970 * 1000.0) / 1000.0
         }
 
-        guard let requestURL = request.url else
-        {
+        guard let requestURL = request.url else {
             return
         }
-        
+
         let urlString = requestURL.absoluteString
-        
+
         // pop current cache DB entry
         var obj: [String: JSONObject] = self.getCacheDBEntry(forURL: urlString) ?? [:]
         self.removeCacheDBEntries(withURL: urlString)
@@ -261,10 +257,10 @@ extension IONRequest {
             } else {
                 // invalid json, reset the cache db and remove disk cache completely
                 do {
-                    
+
                     let path = self.cacheBaseDir(forLocale: locale).path
                     try FileManager.default.removeItem(atPath: path)
-                    
+
                 } catch {
                     // ok nothing fatal could happen, do nothing
                 }
@@ -299,12 +295,11 @@ extension IONRequest {
             let file = self.cacheFileURL(forFilename: "cacheIndex.json", locale: locale).path
 
             // make sure the cache dir is there
-            if !FileManager.default.fileExists(atPath: basePath) {
-                try FileManager.default.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
-            }
+            try ION.config.caching.createDirectoryIfNecessary(atPath: basePath)
 
             // try saving to disk
             try jsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
+            try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: file)
         } catch {
             // saving failed, remove disk cache completely because we don't have a clue what's in it
             do {
@@ -347,19 +342,20 @@ extension IONRequest {
     /// - parameter locale: the locale of the language that should be used
     /// - returns: File URL to the cache dir
     internal class func cacheBaseDir(forHost host: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(host)")
         return fileURL
     }
 
     fileprivate class func cacheBaseDir(forLocale locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }
 
     fileprivate class func cacheFileURL(forFilename filename: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }

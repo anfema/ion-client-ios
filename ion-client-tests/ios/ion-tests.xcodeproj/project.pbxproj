@@ -10,7 +10,6 @@
 		4293713014EAA2CC2BD6F361 /* Pods_ion_client.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60186993775AD70A206DE645 /* Pods_ion_client.framework */; };
 		5CF806F15A35F48DB105A897 /* Pods_ion_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C573FF63ECE1B60B0B2EA5 /* Pods_ion_tests.framework */; };
 		6A0EC1311CC7C86D000038EB /* connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1301CC7C86D000038EB /* connection.swift */; };
-		6A0EC1331CC7CA66000038EB /* ion+connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1321CC7CA66000038EB /* ion+connection.swift */; };
 		6A0EC1371CC8F49E000038EB /* fts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC1351CC8F497000038EB /* fts.swift */; };
 		6A3E67411C8F0A6600DE99B4 /* callback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD50C4C1C8ED95C00A05C20 /* callback.swift */; };
 		6A4B8FF71C469BE90024D319 /* NSDate+ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */; };
@@ -82,8 +81,13 @@
 		8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE11BFCD7980051981F /* response_serializer.swift */; };
 		8FCFAE421BFCD7E90051981F /* imageloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE31BFCD7980051981F /* imageloader.swift */; };
 		8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FCFADE41BFCD7980051981F /* htmlparser.swift */; };
-		8FCFAE451BFCDA0F0051981F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */; };
 		A97B612FE864D439569A203F /* Pods_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D107902FA8D80223C9B52FB /* Pods_tests.framework */; };
+		D6222EEA1E657BEF00C7C3DA /* AsyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */; };
+		D6222EEC1E657CD100C7C3DA /* page_new.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EEB1E657CD100C7C3DA /* page_new.swift */; };
+		D6222EF71E68215F00C7C3DA /* deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF51E6820F700C7C3DA /* deprecated.swift */; };
+		D6222EF91E68255B00C7C3DA /* Meta.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EF81E68255B00C7C3DA /* Meta.swift */; };
+		D6222EFB1E68256400C7C3DA /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222EFA1E68256400C7C3DA /* Content.swift */; };
+		D647B4261FC8448800758DB5 /* table.swift in Sources */ = {isa = PBXBuildFile; fileRef = D647B4241FC8445300758DB5 /* table.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,7 +128,6 @@
 		60186993775AD70A206DE645 /* Pods_ion_client.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ion_client.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66C573FF63ECE1B60B0B2EA5 /* Pods_ion_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ion_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A0EC1301CC7C86D000038EB /* connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = connection.swift; sourceTree = "<group>"; };
-		6A0EC1321CC7CA66000038EB /* ion+connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+connection.swift"; sourceTree = "<group>"; };
 		6A0EC1351CC8F497000038EB /* fts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fts.swift; sourceTree = "<group>"; };
 		6A4B8FF61C469BE90024D319 /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		6AAA551C1CCDFFB600738B4B /* result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = result.swift; sourceTree = "<group>"; };
@@ -201,12 +204,16 @@
 		8FCFADFD1BFCD7980051981F /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		8FCFADFF1BFCD7980051981F /* ion+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ion+search.swift"; sourceTree = "<group>"; };
 		8FCFAE001BFCD7980051981F /* collection+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
-		8FCFAE011BFCD7980051981F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8FCFAE021BFCD7980051981F /* search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
-		8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A1DAE85453513E51EB006B1B /* Pods-ion-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AF3FC49FCB454A4ECF6A1179 /* Pods-ion_client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.debug.xcconfig"; sourceTree = "<group>"; };
 		D392DC9FB224EFE69858DEDD /* Pods-ion_client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ion_client.release.xcconfig"; path = "Pods/Target Support Files/Pods-ion_client/Pods-ion_client.release.xcconfig"; sourceTree = "<group>"; };
+		D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncResult.swift; sourceTree = "<group>"; };
+		D6222EEB1E657CD100C7C3DA /* page_new.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_new.swift; sourceTree = "<group>"; };
+		D6222EF51E6820F700C7C3DA /* deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deprecated.swift; sourceTree = "<group>"; };
+		D6222EF81E68255B00C7C3DA /* Meta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meta.swift; sourceTree = "<group>"; };
+		D6222EFA1E68256400C7C3DA /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		D647B4241FC8445300758DB5 /* table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = table.swift; sourceTree = "<group>"; };
 		ECFBA7F53F943D9B31B6A14D /* Pods-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -232,7 +239,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FCFAE451BFCDA0F0051981F /* libsqlite3.tbd in Frameworks */,
 				8F78B2AD1BF36163009D4B67 /* Alamofire.framework in Frameworks */,
 				8F78B2AE1BF36163009D4B67 /* DEjson.framework in Frameworks */,
 				8F78B2AF1BF36163009D4B67 /* HashExtensions.framework in Frameworks */,
@@ -263,7 +269,6 @@
 		7A4D5D6A0BACFF1E75491607 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8FCFAE441BFCDA0F0051981F /* libsqlite3.tbd */,
 				8F78B2A81BF36163009D4B67 /* Alamofire.framework */,
 				8F78B2A91BF36163009D4B67 /* DEjson.framework */,
 				8F78B2AA1BF36163009D4B67 /* HashExtensions.framework */,
@@ -405,6 +410,7 @@
 		8FCFADDF1BFCD7980051981F /* communication */ = {
 			isa = PBXGroup;
 			children = (
+				D6222EE81E657BEF00C7C3DA /* AsyncResult.swift */,
 				8FCFADE01BFCD7980051981F /* request.swift */,
 				8FCFADE11BFCD7980051981F /* response_serializer.swift */,
 				8F0D4FC91C905D33003E59CE /* Result.swift */,
@@ -452,6 +458,7 @@
 				8FCFADF61BFCD7980051981F /* number.swift */,
 				8FCFADF71BFCD7980051981F /* option.swift */,
 				8FCFADF81BFCD7980051981F /* text.swift */,
+				D647B4241FC8445300758DB5 /* table.swift */,
 			);
 			path = content;
 			sourceTree = "<group>";
@@ -462,7 +469,6 @@
 				8F58727B1C89A5AE005567E1 /* notifications.swift */,
 				8FCFADFF1BFCD7980051981F /* ion+search.swift */,
 				8FCFAE001BFCD7980051981F /* collection+search.swift */,
-				8FCFAE011BFCD7980051981F /* module.modulemap */,
 				8FCFAE021BFCD7980051981F /* search.swift */,
 			);
 			name = search;
@@ -475,7 +481,6 @@
 				8FCFADE71BFCD7980051981F /* ion.swift */,
 				8FCFADE81BFCD7980051981F /* ionconfig.swift */,
 				8FCFADE61BFCD7980051981F /* ion+cache.swift */,
-				6A0EC1321CC7CA66000038EB /* ion+connection.swift */,
 			);
 			name = ion;
 			sourceTree = "<group>";
@@ -495,9 +500,13 @@
 			isa = PBXGroup;
 			children = (
 				8FCFADFC1BFCD7980051981F /* page.swift */,
+				D6222EEB1E657CD100C7C3DA /* page_new.swift */,
+				D6222EF51E6820F700C7C3DA /* deprecated.swift */,
 				8FCFADFA1BFCD7980051981F /* page+children.swift */,
 				8FCFADFD1BFCD7980051981F /* page_metadata.swift */,
 				8FCFADFB1BFCD7980051981F /* page+native_extensions.swift */,
+				D6222EF81E68255B00C7C3DA /* Meta.swift */,
+				D6222EFA1E68256400C7C3DA /* Content.swift */,
 			);
 			name = page;
 			sourceTree = "<group>";
@@ -538,7 +547,7 @@
 				8F78B1E11BF35689009D4B67 /* Frameworks */,
 				8F78B1E21BF35689009D4B67 /* Resources */,
 				8F78B2911BF35A9E009D4B67 /* Embed Frameworks */,
-				6A7965471CEDA3A500C00AD6 /* ShellScript */,
+				6A7965471CEDA3A500C00AD6 /* Swiftlint */,
 				434392B39FC02E1EA9530DE4 /* [CP] Embed Pods Frameworks */,
 				C43D1AFE67DCA4E1CB471F29 /* [CP] Copy Pods Resources */,
 			);
@@ -601,7 +610,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "anfema GmbH";
 				TargetAttributes = {
 					8F78B1E31BF35689009D4B67 = {
@@ -689,9 +698,28 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/DEjson/DEjson.framework",
+				"${BUILT_PRODUCTS_DIR}/HashExtensions/HashExtensions.framework",
+				"${BUILT_PRODUCTS_DIR}/Markdown/Markdown.framework",
+				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/Tarpit/Tarpit.framework",
+				"${BUILT_PRODUCTS_DIR}/anfema-mockingbird/anfema_mockingbird.framework",
+				"${BUILT_PRODUCTS_DIR}/html5tokenizer/html5tokenizer.framework",
+				"${BUILT_PRODUCTS_DIR}/iso-rfc822-date/iso_rfc822_date.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DEjson.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HashExtensions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Markdown.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tarpit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/anfema_mockingbird.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/html5tokenizer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/iso_rfc822_date.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -704,27 +732,47 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/DEjson/DEjson.framework",
+				"${BUILT_PRODUCTS_DIR}/HashExtensions/HashExtensions.framework",
+				"${BUILT_PRODUCTS_DIR}/Markdown/Markdown.framework",
+				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/Tarpit/Tarpit.framework",
+				"${BUILT_PRODUCTS_DIR}/anfema-mockingbird/anfema_mockingbird.framework",
+				"${BUILT_PRODUCTS_DIR}/html5tokenizer/html5tokenizer.framework",
+				"${BUILT_PRODUCTS_DIR}/iso-rfc822-date/iso_rfc822_date.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DEjson.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HashExtensions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Markdown.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tarpit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/anfema_mockingbird.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/html5tokenizer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/iso_rfc822_date.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6A7965471CEDA3A500C00AD6 /* ShellScript */ = {
+		6A7965471CEDA3A500C00AD6 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = Swiftlint;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\n    swiftlint autocorrect\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		86C50D3BEB9F1F50EEDADC37 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -732,13 +780,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ion_client-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8FB149B31C493FFD00441F82 /* TODOs as Warnings */ = {
@@ -753,7 +804,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/../../ion-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
+			shellScript = "TAGS=\"TODO:|FIXME:|@todo|@fixme|HACK:|@hack\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}/../../ion-client\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" -type f \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | sed -e 's/\\([^ ]*[0-9][0-9]*:\\)\\(.*\\)/\\1 warning: \\2/'";
 		};
 		B0B7629220973691CE4ABF24 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -761,13 +812,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ion-tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BED64CD1421D935C15A2AE69 /* [CP] Check Pods Manifest.lock */ = {
@@ -776,13 +830,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C43D1AFE67DCA4E1CB471F29 /* [CP] Copy Pods Resources */ = {
@@ -861,11 +918,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6222EF91E68255B00C7C3DA /* Meta.swift in Sources */,
 				8FCFAE3B1BFCD7E40051981F /* error.swift in Sources */,
 				8FCFAE321BFCD7E40051981F /* datetime.swift in Sources */,
 				8FCFAE3D1BFCD7E40051981F /* collection+search.swift in Sources */,
 				8FCFAE391BFCD7E40051981F /* option.swift in Sources */,
-				6A0EC1331CC7CA66000038EB /* ion+connection.swift in Sources */,
 				8FCFAE351BFCD7E40051981F /* image.swift in Sources */,
 				8FCFAE411BFCD7E90051981F /* response_serializer.swift in Sources */,
 				8F0DACC21C0C9A6300193E8C /* collection+download.swift in Sources */,
@@ -879,23 +936,28 @@
 				8FCFAE3C1BFCD7E40051981F /* ion+search.swift in Sources */,
 				8FCFAE421BFCD7E90051981F /* imageloader.swift in Sources */,
 				8FCFAE3F1BFCD7E90051981F /* request_cache.swift in Sources */,
+				D647B4261FC8448800758DB5 /* table.swift in Sources */,
 				8FCFAE301BFCD7E40051981F /* container.swift in Sources */,
 				8FCFAE331BFCD7E40051981F /* file.swift in Sources */,
 				8FCFAE2A1BFCD7E40051981F /* collection+metadata.swift in Sources */,
 				8F58727C1C89A5AE005567E1 /* notifications.swift in Sources */,
+				D6222EFB1E68256400C7C3DA /* Content.swift in Sources */,
 				8FCFAE431BFCD7E90051981F /* htmlparser.swift in Sources */,
 				8FCFAE401BFCD7E90051981F /* request.swift in Sources */,
 				8FCFAE291BFCD7E40051981F /* collection.swift in Sources */,
 				8FCFAE2F1BFCD7E40051981F /* color.swift in Sources */,
 				8FCFAE2E1BFCD7E40051981F /* ion+cache.swift in Sources */,
 				8FCFAE311BFCD7E40051981F /* content.swift in Sources */,
+				D6222EF71E68215F00C7C3DA /* deprecated.swift in Sources */,
 				8F114C6C1C10829B00977640 /* nsurlcache.swift in Sources */,
 				8FCFAE371BFCD7E40051981F /* media.swift in Sources */,
 				8FCFAE381BFCD7E40051981F /* number.swift in Sources */,
 				6A3E67411C8F0A6600DE99B4 /* callback.swift in Sources */,
 				8F114C6A1C10828900977640 /* connection.swift in Sources */,
+				D6222EEC1E657CD100C7C3DA /* page_new.swift in Sources */,
 				8FCFAE271BFCD7E40051981F /* page_metadata.swift in Sources */,
 				8FCFAE3E1BFCD7E40051981F /* search.swift in Sources */,
+				D6222EEA1E657BEF00C7C3DA /* AsyncResult.swift in Sources */,
 				8FCFAE261BFCD7E40051981F /* page+children.swift in Sources */,
 				8FCFAE341BFCD7E40051981F /* flag.swift in Sources */,
 			);
@@ -944,14 +1006,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -974,7 +1042,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -991,14 +1059,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1015,7 +1089,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1028,13 +1102,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1DAE85453513E51EB006B1B /* Pods-ion-tests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ion-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1042,13 +1134,31 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1E98C8282ACB7CCE10A96175 /* Pods-ion-tests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ion-tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1063,7 +1173,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/ion-tests";
 			};
 			name = Debug;
@@ -1078,7 +1188,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/ion-tests";
 			};
 			name = Release;
@@ -1100,11 +1210,30 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1127,11 +1256,30 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_PRIVATE_FILE = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"DEjson\"",
+					"-framework",
+					"\"HashExtensions\"",
+					"-framework",
+					"\"Markdown\"",
+					"-framework",
+					"\"Tarpit\"",
+					"-framework",
+					"\"anfema_mockingbird\"",
+					"-framework",
+					"\"html5tokenizer\"",
+					"-framework",
+					"\"iso_rfc822_date\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

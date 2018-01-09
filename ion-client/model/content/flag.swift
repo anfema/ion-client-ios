@@ -17,7 +17,7 @@ import DEjson
 open class IONFlagContent: IONContent {
 
     /// Status of the flag
-    open var enabled: Bool
+    open var isEnabled: Bool
 
 
     /// Initialize flag content object from JSON
@@ -37,7 +37,7 @@ open class IONFlagContent: IONContent {
                 throw IONError.invalidJSON(json)
         }
 
-        self.enabled = enabled
+        self.isEnabled = enabled
 
         try super.init(json: json)
     }
@@ -64,7 +64,7 @@ extension IONPage {
             return .failure(IONError.outletIncompatible)
         }
 
-        return .success(flagContent.enabled)
+        return .success(flagContent.isEnabled)
     }
 
 
@@ -82,5 +82,34 @@ extension IONPage {
         }
 
         return self
+    }
+}
+
+
+public extension Content {
+
+    /// Provides a flag content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func flagContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFlagContent? {
+        return self.content(identifier, at: position)
+    }
+
+
+    public func flagContents(_ identifier: OutletIdentifier) -> [IONFlagContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONFlagContent] ?? nil)
+    }
+
+
+    public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
+        guard let content = flagContent(identifier),
+            content.isEnabled == true else {
+                return false
+        }
+
+        return true
     }
 }

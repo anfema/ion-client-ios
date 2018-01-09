@@ -104,3 +104,22 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Content {
+
+    /// Provides a container content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
+        return self.content(identifier, at: position)
+    }
+
+
+    public func containerContents(_ identifier: OutletIdentifier) -> [IONContainerContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONContainerContent] ?? nil)
+    }
+}

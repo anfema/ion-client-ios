@@ -183,8 +183,8 @@ class pageTests: LoggedInXCTestCase {
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
             
             guard case .success = result else {
-                if case IONError.pageNotFound(let name) = result.error! {
-                    XCTAssertEqual(name, "unknown_page")
+                if case IONError.pageNotFound(_, let page) = result.error! {
+                    XCTAssertEqual(page, "unknown_page")
                 } else {
                     XCTFail()
                 }
@@ -856,12 +856,11 @@ class pageTests: LoggedInXCTestCase {
             
             do {
                 // make sure the cache dir is there
-                if !FileManager.default.fileExists(atPath: basePath) {
-                    try FileManager.default.createDirectory(atPath: basePath, withIntermediateDirectories: true, attributes: nil)
-                }
+                try ION.config.caching.createDirectoryIfNecessary(atPath: basePath)
                 
                 // try saving to disk
                 try invalidJsonString.write(toFile: file, atomically: true, encoding: String.Encoding.utf8)
+                try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: file)
             } catch {
                 // saving failed, remove disk cache completely because we don't have a clue what's in it
                 do {
@@ -957,13 +956,13 @@ class pageTests: LoggedInXCTestCase {
     
     /// Helper Functions
     fileprivate func cacheFile(_ filename: String, locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)/\(filename)")
         return fileURL
     }
     
     fileprivate func cacheBaseDir(locale: String) -> URL {
-        let directoryURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         let fileURL = directoryURLs[0].appendingPathComponent("com.anfema.ion/\(locale)")
         return fileURL
     }

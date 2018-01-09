@@ -14,7 +14,7 @@ import DEjson
 
 
 /// Collection class, contains pages, has functionality to asynchronously fetch data
-open class IONCollection {
+internal class IONCollection {
 
     /// Identifier
     open var identifier: String
@@ -108,7 +108,7 @@ open class IONCollection {
 
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             self.parentLock.unlock()
-        }) 
+        })
     }
 
 
@@ -146,7 +146,7 @@ open class IONCollection {
 
                             self.workQueue.async(flags: .barrier, execute: {
                                 self.checkCompleted()
-                            }) 
+                            })
                         }
                     }
                 } else {
@@ -163,14 +163,14 @@ open class IONCollection {
 
                                 self.workQueue.async(flags: .barrier, execute: {
                                     self.checkCompleted()
-                                }) 
+                                })
                             }
                         }
                     }
                 }
             } else {
                 guard let meta = self.getPageMeta(identifier) else {
-                    responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(identifier)))
+                    responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: self.identifier, page: identifier)))
                     return
                 }
 
@@ -227,10 +227,10 @@ open class IONCollection {
         }
 
         // not cached, fetch from web and add it to the cache
-        let page = IONPage(collection: self, identifier: identifier, layout: layout, cacheBehaviour: .prefer, parent: parent) { page in
+        let page = IONPage(collection: self, identifier: identifier, layout: layout, cacheBehaviour: .prefer, parent: parent) { _ in
             self.workQueue.async(flags: .barrier, execute: {
                 self.checkCompleted()
-            }) 
+            })
         }
 
         page.position = position
@@ -252,7 +252,7 @@ open class IONCollection {
             return nil
         }
 
-        let pages = self.pageMeta.filter({ $0.parent == nil }).sorted(by: { $0.0.position < $0.1.position })
+        let pages = self.pageMeta.filter({ $0.parent == nil }).sorted(by: { $0.position < $1.position })
 
         guard pages.isEmpty == false && index < pages.count else {
             return nil
@@ -318,7 +318,7 @@ open class IONCollection {
     @discardableResult open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
-        }) 
+        })
 
         return self
     }
@@ -388,7 +388,7 @@ open class IONCollection {
             ION.config.responseQueue.async {
                 completionBlock(.success(self), !self.hasFailed)
             }
-        }) 
+        })
     }
 
 
@@ -467,7 +467,7 @@ open class IONCollection {
 
                 if let rawLastChanged = dict["last_changed"] {
                     if case .jsonString(let lastChanged) = rawLastChanged {
-                        self.lastChanged = NSDate(isoDateString: lastChanged) as? Date
+                        self.lastChanged = NSDate(isoDateString: lastChanged) as Date?
                         self.lastUpdate = self.lastChanged
                     }
                 }
@@ -480,10 +480,8 @@ open class IONCollection {
                         // find max position for current parent
                         var position = -1
 
-                        for page in self.pageMeta where page.parent == obj.parent {
-                            if page.position > position {
-                                position = page.position
-                            }
+                        for page in self.pageMeta where page.parent == obj.parent && page.position > position {
+                            position = page.position
                         }
 
                         obj.position = position + 1
@@ -546,7 +544,7 @@ extension IONCollection {
 
 
 /// Cancelable collection, remove from memory by calling either `cancel()` or `finish()`. Will leak if not done!
-open class CancelableIONCollection: IONCollection {
+internal class CancelableIONCollection: IONCollection {
 
     init(collection: IONCollection) {
         super.init(forkedWorkQueueWithIdentifier: collection.identifier, locale: collection.locale)
@@ -565,7 +563,7 @@ open class CancelableIONCollection: IONCollection {
             collection.parentLock.unlock()
 
             self.checkCompleted()
-        }) 
+        })
     }
 
     /// Cancel all requests queued for a collection
@@ -585,7 +583,7 @@ open class CancelableIONCollection: IONCollection {
 
             // remove self from cache
             self.finish()
-        }) 
+        })
     }
 
     /// Finish the processing and discard the collection
@@ -593,6 +591,6 @@ open class CancelableIONCollection: IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.pageCache.removeAll() // break cycle
             ION.collectionCache.removeValue(forKey: self.forkedIdentifier)
-        }) 
+        })
     }
 }

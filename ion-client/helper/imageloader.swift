@@ -52,7 +52,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var checksumMethod: String {
         guard let thumbnail = self.imageURL,
-            let _ = IONRequest.cachedData(forURL: thumbnail.absoluteString) else {
+            IONRequest.cachedData(forURL: thumbnail.absoluteString) != nil else {
                 return "null"
         }
 
@@ -72,7 +72,7 @@ extension CanLoadImage {
     /// default implementation for checksum method (returns "null" if url not cached)
     public var originalChecksumMethod: String {
         guard let image = self.originalImageURL,
-            let _ = IONRequest.cachedData(forURL: image.absoluteString) else {
+            IONRequest.cachedData(forURL: image.absoluteString) != nil else {
                 return "null"
         }
 
@@ -158,13 +158,13 @@ extension CanLoadImage {
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     public func cgImage(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
-        dataProviderFunc() { result in
+        dataProviderFunc { result in
             guard case .success(let provider) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return
             }
 
-            let options = Dictionary<String, AnyObject>()
+            let options: [String: AnyObject] = [:]
             guard let src = CGImageSourceCreateWithDataProvider(provider, options as CFDictionary?),
                 let img = CGImageSourceCreateImageAtIndex(src, 0, options as CFDictionary?) else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -193,7 +193,7 @@ extension CanLoadImage {
     public func thumbnail(withSize size: CGSize, usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<CGImage>) -> Void)) {
         let dataProviderFunc = ((original == true) ? self.originalDataProvider : self.dataProvider)
 
-        dataProviderFunc() { result in
+        dataProviderFunc { result in
             guard case .success(let provider) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
                 return

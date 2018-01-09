@@ -11,10 +11,82 @@ import Alamofire
 import Markdown
 import DEjson
 
+/// ION caching object
+///
+/// access with `ION.config.caching`
+public struct IONCaching {
+
+    /// Directory that will be used for caching. Default is set to `cachesDirectory`.
+    /// If `cacheDirectory` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
+    public var cacheDirectory: FileManager.SearchPathDirectory = .cachesDirectory
+
+    #if os(iOS)
+    /// FileProtectionLevel that will be used. Default is set to `none`.
+    /// If `protectionLevel` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
+    public var protectionLevel: FileProtectionType = .none
+    #endif
+
+    /// Collection cache timeout. Default is set to `600`.
+    public var cacheTimeout: TimeInterval = 600
+
+    /// Determines if cache should be excluded from backup. Default is set to `false`.
+    /// If `excludeFromBackup` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
+    public var excludeFromBackup: Bool = false
+
+    /// Generates file attributes based on specified file protection level.
+    private var fileAttributes: [FileAttributeKey: Any]? {
+
+        #if os(iOS)
+
+        guard protectionLevel != .none else { return nil }
+
+        return [FileAttributeKey.protectionKey: protectionLevel]
+
+        #else
+
+        return nil
+
+        #endif
+    }
+
+
+    /// Only the ION class may init this.
+    internal init() {
+    }
+
+
+    /// Creates a directory if required taking protection level and backup strategy into account.
+    internal func createDirectoryIfNecessary(atPath path: String) throws {
+
+        if !FileManager.default.fileExists(atPath: path) {
+            try FileManager.default.createDirectory(atPath: path,
+                                                    withIntermediateDirectories: true,
+                                                    attributes: ION.config.caching.fileAttributes)
+
+            try excludeFileFromBackupIfNecessary(filePath: path)
+        }
+    }
+
+
+    /// Marks a file or directory as excluded from backup if required.
+    internal func excludeFileFromBackupIfNecessary(filePath path: String) throws {
+
+        guard excludeFromBackup == true else { return }
+
+        var url = URL(fileURLWithPath: path)
+        var resourceValues = URLResourceValues()
+        resourceValues.isExcludedFromBackup = true
+        try url.setResourceValues(resourceValues)
+    }
+}
+
 /// ION configuration object
 ///
 /// access with `ION.config`
 public struct IONConfig {
+
+    /// Caching preferences
+    public var caching: IONCaching = IONCaching()
 
     /// The scheme used to create the URLs provided by IONConnectionContent outlets
     public var connectionScheme = "ion"
@@ -49,9 +121,6 @@ public struct IONConfig {
     /// last collection fetch, delete entry from dictionary to force a collection reload from server
     public var lastOnlineUpdate: [String: Date] = [:]
 
-    /// collection cache timeout
-    public var cacheTimeout: TimeInterval = 600
-
     /// offline mode: do not send any request
     public var offlineMode = false
 
@@ -74,16 +143,19 @@ public struct IONConfig {
     public typealias ContentTypeLambda = ((JSONObject) throws -> IONContent)
 
     /// the alamofire manager to use for all calls, initialized to accept no cookies by default
-    var alamofire: Alamofire.SessionManager? = nil
+    var alamofire: Alamofire.SessionManager?
+
+    typealias UpdateBlock = (String) -> Void
 
     /// update detected blocks
-    var updateBlocks: [String: ((String) -> Void)]
+    var updateBlocks: [String: UpdateBlock]
 
     /// Registered content types
     var registeredContentTypes = [String: ContentTypeLambda]()
 
     /// full text search settings
     fileprivate var ftsEnabled: [String: Bool]
+
 
     /// only the ION class may init this
     internal init() {
@@ -102,14 +174,15 @@ public struct IONConfig {
             self.loggingEnabled = false
         #endif
 
-        self.updateBlocks = Dictionary<String, ((String) -> Void)>()
+        self.updateBlocks = [:]
+
         self.ftsEnabled = [String: Bool]()
         #if os(iOS)
             self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String
         #else
             self.variation = "default"
         #endif
-        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x" : CGFloat(1.0), "@2x" : CGFloat(2.0), "@3x" : CGFloat(3.0) ]
+        self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x": CGFloat(1.0), "@2x": CGFloat(2.0), "@3x": CGFloat(3.0) ]
 
         for (header, value) in Alamofire.SessionManager.defaultHTTPHeaders {
             self.additionalHeaders[header] = value
@@ -151,6 +224,10 @@ public struct IONConfig {
             return try IONTextContent(json: json)
         }
 
+        self.registerContentType(named: "tablecontent") { json in
+            return try IONTableContent(json: json)
+        }
+
         self.registerUpdateBlock(identifier: "fts") { collectionIdentifier in
             if ION.config.isFTSEnabled(forCollection: collectionIdentifier) {
                 ION.downloadFTSDB(forCollection: collectionIdentifier)
@@ -173,17 +250,23 @@ public struct IONConfig {
         self.updateBlocks.removeValue(forKey: identifier)
     }
 
-    /// Enable Full text search for a collection (fetches additional data from server)
+    /// Enable and prepare for Full text search for a collection (fetches additional data from server)
     ///
     /// - parameter collectionIdentifier: collection identifier
-    public mutating func enableFTS(forCollection collectionIdentifier: String) {
+    public func prepareFTS(forCollection collectionIdentifier: String) {
         guard let searchIndex = ION.searchIndex(forCollection: collectionIdentifier) else {
             return
         }
-        self.ftsEnabled[collectionIdentifier] = true
+
+        ION.config.enableFTS(forCollection: collectionIdentifier)
+
         if !FileManager.default.fileExists(atPath: searchIndex) {
             ION.downloadFTSDB(forCollection: collectionIdentifier)
         }
+    }
+
+    private mutating func enableFTS(forCollection collectionIdentifier: String) {
+        self.ftsEnabled[collectionIdentifier] = true
     }
 
     /// Disable Full text search for a collection

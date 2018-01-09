@@ -267,3 +267,37 @@ extension IONPage {
         return self
     }
 }
+
+
+public extension Content {
+
+    /// Provides a text content for a specific outlet identifier taking an optional position into account
+    /// - parameter identifier: The identifier of the outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    ///
+    /// __Warning:__ The page has to be full loaded before one can access content
+    public func textContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONTextContent? {
+        return self.content(identifier, at: position)
+    }
+
+
+    public func textContents(_ identifier: OutletIdentifier) -> [IONTextContent]? {
+        let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
+        return contents.isEmpty ? nil : (contents as? [IONTextContent] ?? nil)
+    }
+
+
+    public func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+        return textContent(identifier)?.plainText()
+    }
+
+
+    public func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
+        return textContent(identifier)?.attributedString()
+    }
+
+
+    public func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+        return textContent(identifier)?.htmlText()
+    }
+}
