@@ -38,10 +38,10 @@ class containerContentTests: LoggedInXCTestCase {
                 return
             }
 
-            if case .success(let children) = page.children("layout-001") {
-                XCTAssertEqual(children.count, 10)
+            if case .success(let children) = page.children("container-001") {
+                XCTAssertEqual(children.count, 2)
             } else {
-                XCTFail("container content 'Layout 001' returned nil")
+                XCTFail("container content 'Container 001' returned nil")
             }
             expectation.fulfill()
         }
@@ -53,7 +53,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletFetchAsync() {
         let expectation = self.expectation(description: "testContainerOutletFetchAsync")
         
-        ION.collection("test").page("page_001").children("layout-001") { result in
+        ION.collection("test").page("page_001").children("container-001") { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -64,7 +64,7 @@ class containerContentTests: LoggedInXCTestCase {
                 return
             }
 
-            XCTAssertEqual(children.count, 10)
+            XCTAssertEqual(children.count, 2)
             expectation.fulfill()
         }
         
@@ -75,7 +75,7 @@ class containerContentTests: LoggedInXCTestCase {
     func testContainerOutletSubscripting() {
         let expectation = self.expectation(description: "fetch outlet")
         
-        ION.collection("test").page("page_001").outlet("layout-001") { result in
+        ION.collection("test").page("page_001").outlet("container-001") { result in
             
             // Test if the correct response queue is used
             XCTAssertTrue(currentQueueLabel == ION.config.responseQueue.label)
@@ -87,9 +87,9 @@ class containerContentTests: LoggedInXCTestCase {
             }
 
             if case let container as IONContainerContent = outlet {
-                XCTAssertEqual(container.children.count, 10)
+                XCTAssertEqual(container.children.count, 2)
                 XCTAssertNotNil(container[0])
-                XCTAssertNil(container[10])
+                XCTAssertNil(container[2])
             } else {
                 XCTFail("container content 'Layout 001' returned nil")
             }

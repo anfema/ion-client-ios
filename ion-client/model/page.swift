@@ -111,12 +111,6 @@ internal class IONPage {
                     semaphore.signal()
 
                 } else {
-                    if self.content.isEmpty == false {
-                        if case let container as IONContainerContent = self.content.first {
-                            self.layout = container.outlet
-                        }
-                    }
-
                     guard let pageMeta = self.collection.getPageMeta(identifier) else {
                         self.hasFailed = true
                         responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: collection.identifier, page: identifier)))
@@ -134,12 +128,6 @@ internal class IONPage {
                                 responseQueueCallback(callback, parameter: .failure(error))
                                 semaphore.signal()
                             } else {
-                                if self.content.isEmpty == false {
-                                    if case let container as IONContainerContent = self.content.first {
-                                        self.layout = container.outlet
-                                    }
-                                }
-
                                 self.isReady = true
                                 responseQueueCallback(callback, parameter: .success(self))
                                 semaphore.signal()
@@ -380,16 +368,27 @@ internal class IONPage {
                 self.locale = locale
                 self.lastUpdate = NSDate(isoDateString: last_changed) as Date?
 
-                // Parse and append content to this page
-                for c in contents {
-                    do {
-                        let obj = try IONContent.factory(json: c)
-                        self.appendContent(obj)
-                    } catch {
-                        // Content could not be deserialized, do not add to page
+                for contentJSON in contents {
+
+                    guard let content = try? IONContent.factory(json: contentJSON) else {
                         if ION.config.loggingEnabled {
-                            print("ION: Deserialization failed")
+                            print("ION: Skipping content due to failed deserialization: \(contentJSON)")
                         }
+                        continue
+                    }
+
+                    // By default ION wrapps all content in a single container at root level
+                    // The content is a container and number of contents is 1
+                    if case let container as IONContainerContent = content, contents.count == 1 {
+                        // Append all toplevel content of the container
+                        for child in container.children {
+                            self.content.append(child)
+                        }
+                    }
+                    // In all other cases append content directly
+                    // Should not occur in default ION environments
+                    else {
+                        self.content.append(content)
                     }
                 }
             }
@@ -401,24 +400,6 @@ internal class IONPage {
             callback(nil)
 
             return self.lastUpdate
-        }
-    }
-
-
-    /// Recursively append all content
-    ///
-    /// - parameter obj: The content object to append including it's children
-    fileprivate func appendContent(_ obj: IONContent) {
-        self.content.append(obj)
-
-        guard case let container as IONContainerContent = obj else {
-            return
-        }
-
-        // Append all toplevel content
-        for child in container.children {
-            // Container's children are appended on base level to be able to find them quicker
-            self.content.append(child)
         }
     }
 }
