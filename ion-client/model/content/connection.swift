@@ -129,7 +129,7 @@ public extension Content {
 
 
     public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
-        guard let connectionContent = connectionContent(identifier),
+        guard let connectionContent = connectionContent(identifier, at: position),
             let collectionIdentifier = connectionContent.collectionIdentifier,
             let pageIdentifier = connectionContent.pageIdentifier else {
                 return nil

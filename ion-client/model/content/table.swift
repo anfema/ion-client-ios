@@ -139,10 +139,6 @@ public extension Content {
 
 
     public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
-        guard let content = tableContent(identifier) else {
-            return nil
-        }
-
-        return content.table
+        return tableContent(identifier, at: position)?.table
     }
 }

@@ -123,3 +123,264 @@ public extension Content {
         return contents.isEmpty ? nil : (contents as? [IONContainerContent] ?? nil)
     }
 }
+
+
+public extension IONContainerContent {
+
+    /// Provides typed content of a container content based on a given outlet identifier.
+    /// - parameter identifier: The identifier of the child outlet (defined in ion desk)
+    /// - parameter position: The content position within an outlet containing multiple contents (optional)
+    func content<T: IONContent>(_ identifier: OutletIdentifier, at position: Position = 0) -> T? {
+
+        guard let content = children.first(where: { $0.outlet == identifier && $0.position == position }) else {
+            return nil
+        }
+
+        guard let typedContent = content as? T else {
+            assertionFailure("Invalid content type requested (\(content.outlet))")
+            return nil
+        }
+
+        return typedContent
+    }
+}
+
+
+public extension IONContainerContent {
+
+    #if os(iOS)
+    public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
+        let colorContent: IONColorContent? = content(identifier, at: position)
+        return colorContent?.color()
+    }
+    #endif
+
+
+    #if os(OSX)
+    public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> NSColor? {
+        let colorContent: IONColorContent? = content(identifier, at: position)
+        return colorContent?.color()
+    }
+    #endif
+}
+
+
+public extension IONContainerContent {
+
+    public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
+        let containerContent: IONContainerContent? = content(identifier, at: position)
+        return containerContent
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
+
+        let dateTimeContent: IONDateTimeContent? = content(identifier, at: position)
+        return dateTimeContent?.date
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
+        let asyncResult = AsyncResult<Data>()
+
+        let fileContent: IONFileContent? = content(identifier, at: position)
+
+        fileContent?.data({ (result) in
+            guard case .success(let data) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+
+            asyncResult.execute(result: .success(data))
+        })
+
+        return asyncResult
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
+
+        guard let flagContent: IONFlagContent = content(identifier, at: position) else {
+            return false
+        }
+
+        return flagContent.isEnabled
+    }
+}
+
+
+public extension IONContainerContent {
+
+    #if os(iOS)
+    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
+        let asyncResult = AsyncResult<UIImage>()
+
+        let imageContent: IONImageContent? = content(identifier, at: position)
+        imageContent?.image(callback: { (result) in
+            asyncResult.execute(result: result)
+        })
+
+        return asyncResult
+    }
+
+
+    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
+        let asyncResult = AsyncResult<UIImage>()
+
+        let imageContent: IONImageContent? = content(identifier, at: position)
+        imageContent?.image(callback: { (result) in
+            asyncResult.execute(result: result)
+        })
+
+        imageContent?.thumbnail(withSize: size, callback: { (result) in
+
+            guard case .success(let image) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+
+            asyncResult.execute(result: .success(UIImage(cgImage: image)))
+        })
+
+        return asyncResult
+    }
+    #endif
+
+
+    #if os(OSX)
+    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
+        let asyncResult = AsyncResult<NSImage>()
+
+        let imageContent: IONImageContent? = content(identifier, at: position)
+
+        imageContent?.image(callback: { (result) in
+            asyncResult.execute(result: result)
+        })
+
+        return asyncResult
+    }
+
+
+    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
+        let asyncResult = AsyncResult<NSImage>()
+
+        let imageContent: IONImageContent? = content(identifier, at: position)
+
+        imageContent?.thumbnail(withSize: size, callback: { (result) in
+            guard case .success(let image) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+
+            asyncResult.execute(result: .success(NSImage(cgImage: image, size: NSSize.zero)))
+        })
+
+        return asyncResult
+    }
+    #endif
+}
+
+
+public extension IONContainerContent {
+
+    public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
+
+        let mediaContent: IONMediaContent? = content(identifier, at: position)
+        return mediaContent?.url
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
+
+        let numberContent: IONNumberContent? = content(identifier, at: position)
+        return numberContent?.value
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func option(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+
+        let optionContent: IONOptionContent? = content(identifier, at: position)
+        return optionContent?.value
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+
+        let textContent: IONTextContent? = content(identifier, at: position)
+        return textContent?.plainText()
+    }
+
+
+    public func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
+        let textContent: IONTextContent? = content(identifier, at: position)
+        return textContent?.attributedString()
+    }
+
+
+    public func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+        let textContent: IONTextContent? = content(identifier, at: position)
+        return textContent?.htmlText()
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
+
+        let tableContent: IONTableContent? = content(identifier, at: position)
+        return tableContent?.table
+    }
+}
+
+
+public extension IONContainerContent {
+
+    public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
+        guard let connectionContent: IONConnectionContent = content(identifier, at: position),
+            let collectionIdentifier = connectionContent.collectionIdentifier,
+            let pageIdentifier = connectionContent.pageIdentifier else {
+                return nil
+        }
+
+        return (collectionIdentifier: collectionIdentifier, pageIdentifier: pageIdentifier)
+    }
+
+
+    public func connectionPage(_ identifier: OutletIdentifier, at position: Position = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+        let asyncResult = AsyncResult<Page>()
+
+        guard let connection = connection(identifier, at: position) else {
+            ION.config.responseQueue.async(execute: {
+                asyncResult.execute(result: .failure(IONError.didFail))
+            })
+            return asyncResult
+        }
+
+        ION.page(pageIdentifier: connection.pageIdentifier, in: connection.collectionIdentifier, option: option).onSuccess { (page) in
+            asyncResult.execute(result: .success(page))
+            }.onFailure { (error) in
+                asyncResult.execute(result: .failure(error))
+        }
+
+        return asyncResult
+    }
+}

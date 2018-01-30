@@ -111,6 +111,6 @@ public extension Content {
 
 
     public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
-        return dateTimeContent(identifier)?.date
+        return dateTimeContent(identifier, at: position)?.date
     }
 }

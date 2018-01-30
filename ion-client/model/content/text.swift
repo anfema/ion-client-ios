@@ -288,16 +288,16 @@ public extension Content {
 
 
     public func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
-        return textContent(identifier)?.plainText()
+        return textContent(identifier, at: position)?.plainText()
     }
 
 
     public func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
-        return textContent(identifier)?.attributedString()
+        return textContent(identifier, at: position)?.attributedString()
     }
 
 
     public func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
-        return textContent(identifier)?.htmlText()
+        return textContent(identifier, at: position)?.htmlText()
     }
 }
