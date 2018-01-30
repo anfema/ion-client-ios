@@ -112,8 +112,13 @@ public struct IONConfig {
     /// global request progress handler (will be called periodically when progress updates)
     public var progressHandler: ((_ totalBytes: Int64, _ downloadedBytes: Int64, _ numberOfPendingDownloads: Int) -> Void)?
 
-    /// the session token usually set by `ION.login` but may be overridden for custom login functionality
+    /// the session token usually set by `ION.login` but may be overridden for custom login functionality.
+    /// Take a look at `authorizationHeaderValue` when a more custom auth method is required.
     public var sessionToken: String?
+
+    /// a custom authorization header value that can be used for custom login functionality
+    /// - warning: sessionToken will be ignored if set
+    public var authorizationHeaderValue: String?
 
     /// Additional Headers that should be added to the requests
     fileprivate (set) var additionalHeaders: [String: String] = [:]

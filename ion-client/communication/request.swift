@@ -392,7 +392,9 @@ open class IONRequest {
     fileprivate class func headers() -> [String: String] {
         var headers = ION.config.additionalHeaders
 
-        if let token = ION.config.sessionToken {
+        if let authHeader = ION.config.authorizationHeaderValue {
+            headers["Authorization"] = authHeader
+        } else if let token = ION.config.sessionToken {
             headers["Authorization"] = "Token " + token
         }
 
