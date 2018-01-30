@@ -34,12 +34,12 @@ open class Page {
     }
 
     /// Page identifier
-    public var identifier: String {
+    public var identifier: PageIdentifier {
         return metaData.identifier
     }
 
     /// Parent identifier, nil == top level
-    public var parent: String? {
+    public var parent: PageIdentifier? {
         return metaData.parent
     }
 
