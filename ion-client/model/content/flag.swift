@@ -105,11 +105,10 @@ public extension Content {
 
 
     public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
-        guard let content = flagContent(identifier),
-            content.isEnabled == true else {
+        guard let content = flagContent(identifier, at: position) else {
                 return false
         }
 
-        return true
+        return content.isEnabled
     }
 }

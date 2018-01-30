@@ -201,14 +201,14 @@ public extension Content {
 
     #if os(iOS)
     public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
-        return colorContent(identifier)?.color()
+        return colorContent(identifier, at: position)?.color()
     }
     #endif
 
 
     #if os(OSX)
     public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> NSColor? {
-        return colorContent(identifier)?.color()
+        return colorContent(identifier, at: position)?.color()
     }
     #endif
 }
