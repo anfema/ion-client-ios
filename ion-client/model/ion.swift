@@ -304,6 +304,11 @@ public extension ION {
                 return
             }
 
+            guard collection.hasFailed == false && collection.lastUpdate != nil else {
+                asyncResult.execute(result: .failure(IONError.didFail))
+                return
+            }
+
             let pages = collection.pageMeta.map({Page(metaData: $0)})
             asyncResult.execute(result: .success(pages))
         }
