@@ -289,6 +289,28 @@ public extension ION {
     }
 
 
+    /// Creates an operation to request a list of all meta pages within the specified collection.
+    /// The returned pages are not fully loaded.
+    ///
+    /// - Parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
+    /// - Returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
+    static public func pages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
+
+        let asyncResult = AsyncResult<[Page]>()
+
+        ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { result in
+            guard case .success(let collection) = result else {
+                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
+                return
+            }
+
+            let pages = collection.pageMeta.map({Page(metaData: $0)})
+            asyncResult.execute(result: .success(pages))
+        }
+
+        return asyncResult
+    }
+
     /// Creates an operation to request a list of Pages based on given identifiers within the specified collection.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// It also allows you to specify the loading option of the Pages.
