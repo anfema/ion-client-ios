@@ -126,7 +126,7 @@ open class IONTextContent: IONContent {
         // TODO: Write tests for plainText() function in TextContent (probably we need more test-data for this)
         switch self.mimeType {
         case "text/plain":
-            return HTMLParser(html: self.text).renderText()
+            return self.text
         case "text/html":
             return HTMLParser(html: self.text).renderText()
         case "text/markdown":
