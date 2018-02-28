@@ -58,6 +58,11 @@ open class Page {
         return fullData != nil
     }
 
+    // Last change date
+    public var lastChanged: Date {
+        return metaData.lastChanged
+    }
+
 
     /// Initialize a page based on a IONPageMeta and an optional IONPage
     ///
