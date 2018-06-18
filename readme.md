@@ -6,7 +6,7 @@ ION-Client for iOS and OS X clients
 
 - iOS 9.0+ / macOS 10.10+
 - Xcode 9.2+
-- Swift 4.0+
+- Swift 4.1+
 
 <!-- MarkdownTOC -->
 
