@@ -5,8 +5,8 @@ use_frameworks!
 platform :ios, '9.0'
 
 def shared_pods
-    pod 'Alamofire', '~> 4.2'
-    pod 'SQLite.swift', '~> 0.11'
+    pod 'Alamofire', '~> 4.7'
+    pod 'SQLite.swift', '~> 0.11.5'
     pod 'HashExtensions', '~> 2.0'
     pod 'DEjson', '~> 3.0'
     pod 'Markdown', '~> 3.0'

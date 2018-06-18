@@ -192,7 +192,7 @@ extension IONCollection {
                 return page1.position < page2.position
             })
 
-            let result: [String] = temp.flatMap({ $0.identifier })
+            let result: [String] = temp.compactMap({ $0.identifier })
 
             responseQueueCallback(callback, parameter: result)
         }

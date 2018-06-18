@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.5.1)
+  - Alamofire (4.7.2)
   - anfema-mockingbird (3.0.0):
     - Alamofire (~> 4.2)
     - DEjson (~> 3.0)
@@ -8,20 +8,20 @@ PODS:
   - html5tokenizer (3.0.0)
   - iso-rfc822-date (1.0.1)
   - Markdown (3.0.0)
-  - SQLite.swift (0.11.4):
-    - SQLite.swift/standard (= 0.11.4)
-  - SQLite.swift/standard (0.11.4)
+  - SQLite.swift (0.11.5):
+    - SQLite.swift/standard (= 0.11.5)
+  - SQLite.swift/standard (0.11.5)
   - Tarpit (2.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.2)
+  - Alamofire (~> 4.7)
   - anfema-mockingbird (from `https://github.com/anfema/Mockingbird`, branch `swift_4`)
   - DEjson (~> 3.0)
   - HashExtensions (~> 2.0)
   - html5tokenizer (~> 3.0)
   - iso-rfc822-date (~> 1.0)
   - Markdown (~> 3.0)
-  - SQLite.swift (~> 0.11)
+  - SQLite.swift (~> 0.11.5)
   - Tarpit (~> 2.0)
 
 SPEC REPOS:
@@ -47,16 +47,16 @@ CHECKOUT OPTIONS:
     :git: https://github.com/anfema/Mockingbird
 
 SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   anfema-mockingbird: c13545530e79da9e0543163245bd911628878961
   DEjson: 5e28de17065ec72b372fb15a23ed7b2c833c90ae
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 166c1b891cac817a6b4469e0ae4eaad7a19181de
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
   Markdown: 2480e2a14727c68bb155d7c3eb9d0974fe38b093
-  SQLite.swift: 3e3bee21da701b5b9f87c4a672cb54f233505692
+  SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
   Tarpit: fe3d890b1cf846e8c0146f6a793abcab78a22277
 
-PODFILE CHECKSUM: 7546d44a2b2c6ef7151a4d9c71378bd60ab9c076
+PODFILE CHECKSUM: baa6b194d62eef24d37080531cf87fab4bc795bb
 
 COCOAPODS: 1.5.3
