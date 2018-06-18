@@ -174,7 +174,7 @@ open class Page {
 }
 
 
-extension Array where Element : Page {
+extension Array where Element: Page {
 
     /// Loads a list of pages fully.
     /// Add an `onSuccess` and (if needed) an `onFailure` handler to the operation.

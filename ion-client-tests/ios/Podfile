@@ -1,4 +1,4 @@
-source 'git@git.assembla.com:anfema-intern.cocoapods.git'
+source 'git@github.com:anfema/anfema-pod-specs.git'
 source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!

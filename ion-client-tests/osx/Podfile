@@ -1,4 +1,4 @@
-source 'git@git.assembla.com:anfema-intern.cocoapods.git'
+source 'git@github.com:anfema/anfema-pod-specs.git'
 source 'https://github.com/CocoaPods/Specs'
 
 use_frameworks!
@@ -13,6 +13,7 @@ def shared_pods
     pod 'Markdown', '~> 3.0'
     pod 'html5tokenizer', '~> 3.0'
     pod 'Tarpit', '~> 2.0'
+    
     pod 'anfema-mockingbird', :git => 'https://github.com/anfema/Mockingbird', :branch => 'swift_4'
     pod 'iso-rfc822-date', '~> 1.0'
 end
