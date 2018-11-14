@@ -612,16 +612,16 @@
 				TargetAttributes = {
 					8F78B1E31BF35689009D4B67 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 					8F78B2171BF35945009D4B67 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 						TestTargetID = 8F78B1E31BF35689009D4B67;
 					};
 					8F78B2841BF35A9E009D4B67 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -1082,7 +1082,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1114,7 +1114,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-tests";
 				PRODUCT_NAME = "ion-tests";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1129,7 +1129,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/ion-tests";
 			};
 			name = Debug;
@@ -1144,7 +1144,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ion-tests.app/ion-tests";
 			};
 			name = Release;
@@ -1189,7 +1189,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1235,7 +1235,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../../ion-client/search";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
