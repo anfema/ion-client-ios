@@ -135,7 +135,7 @@ open class IONRequest {
             self.saveJSONToCache(using: request, ion_client.Result(result: response.result))
 
             // object can only be saved if there is a request url and the status code of the response is a 200
-            var jsonObject: JSONObject? = nil
+            var jsonObject: JSONObject?
             if response.result.isSuccess,
                let jsonResponse = response.result.value,
                let json = jsonResponse.json {
@@ -317,7 +317,7 @@ open class IONRequest {
             return nil
         }
 
-        var data: Data? = nil
+        var data: Data?
         if FileManager.default.fileExists(atPath: cacheName) {
             do {
                 data = try Data(contentsOf: URL(fileURLWithPath: cacheName), options: NSData.ReadingOptions.mappedIfSafe)

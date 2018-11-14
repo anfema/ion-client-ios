@@ -122,7 +122,7 @@ extension IONCollection {
 
                     index = i
                 } else {
-                    var found: Int? = nil
+                    var found: Int?
 
                     for (idx, item) in index.enumerated() {
                         guard case .jsonDictionary(let dict) = item else {
@@ -135,7 +135,7 @@ extension IONCollection {
                                 return false
                         }
 
-                        var checksum: String? = nil
+                        var checksum: String?
 
                         if let dictChecksum = dict["checksum"] {
                             if case .jsonString(let ck) = dictChecksum {
