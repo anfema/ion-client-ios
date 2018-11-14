@@ -680,7 +680,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DEjson/DEjson.framework",
 				"${BUILT_PRODUCTS_DIR}/HashExtensions/HashExtensions.framework",
@@ -705,7 +705,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ion-tests/Pods-ion-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		482C08F60D0CFEDA8D741596 /* [CP] Embed Pods Frameworks */ = {
@@ -714,7 +714,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-tests/Pods-tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/DEjson/DEjson.framework",
 				"${BUILT_PRODUCTS_DIR}/HashExtensions/HashExtensions.framework",
@@ -739,7 +739,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-tests/Pods-tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-tests/Pods-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6A7965471CEDA3A500C00AD6 /* Swiftlint */ = {
