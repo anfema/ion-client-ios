@@ -7,7 +7,7 @@ PODS:
   - HashExtensions (2.0.0)
   - html5tokenizer (3.0.0)
   - iso-rfc822-date (1.0.1)
-  - Markdown (3.0.0)
+  - Markdown (4.0.0)
   - SQLite.swift (0.12.0):
     - SQLite.swift/standard (= 0.12.0)
   - SQLite.swift/standard (0.12.0)
@@ -20,7 +20,7 @@ DEPENDENCIES:
   - HashExtensions (~> 2.0)
   - html5tokenizer (~> 3.0)
   - iso-rfc822-date (~> 1.0)
-  - Markdown (from `../../`)
+  - Markdown (~> 4.0)
   - SQLite.swift (~> 0.12)
   - Tarpit (~> 3.0)
 
@@ -29,16 +29,13 @@ SPEC REPOS:
     - anfema-mockingbird
     - DEjson
     - html5tokenizer
+    - Markdown
     - Tarpit
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - HashExtensions
     - iso-rfc822-date
     - SQLite.swift
-
-EXTERNAL SOURCES:
-  Markdown:
-    :path: "../../"
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
@@ -47,10 +44,10 @@ SPEC CHECKSUMS:
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 166c1b891cac817a6b4469e0ae4eaad7a19181de
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 9b0f0ce058cb2551b8046db54ce253577b6cf39c
+  Markdown: 4534213b99c4f954dc7f420aee0c26749b817e23
   SQLite.swift: 7cad9db150a03716336e69469ec9559c85aece5b
   Tarpit: a46575231c7a0c18b6da0be88dcc95eb22421e10
 
-PODFILE CHECKSUM: 606853de71c17382e1363b27b4563bda50ef4870
+PODFILE CHECKSUM: 02c9683c4fbd16476e579f4efc9425d65519b4a3
 
 COCOAPODS: 1.6.1
