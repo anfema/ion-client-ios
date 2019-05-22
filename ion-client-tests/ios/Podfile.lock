@@ -1,34 +1,34 @@
 PODS:
   - Alamofire (4.7.2)
-  - anfema-mockingbird (3.0.0):
+  - anfema-mockingbird (4.0.0):
     - Alamofire (~> 4.2)
-    - DEjson (~> 3.0)
-  - DEjson (3.0.0)
+    - DEjson (~> 4.0)
+  - DEjson (4.0.0)
   - HashExtensions (2.0.0)
   - html5tokenizer (3.0.0)
   - iso-rfc822-date (1.0.1)
   - Markdown (3.0.0)
-  - SQLite.swift (0.11.5):
-    - SQLite.swift/standard (= 0.11.5)
-  - SQLite.swift/standard (0.11.5)
-  - Tarpit (2.0.0)
+  - SQLite.swift (0.12.0):
+    - SQLite.swift/standard (= 0.12.0)
+  - SQLite.swift/standard (0.12.0)
+  - Tarpit (3.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
-  - anfema-mockingbird (from `https://github.com/anfema/Mockingbird`, branch `swift_4`)
-  - DEjson (~> 3.0)
+  - anfema-mockingbird (~> 4.0)
+  - DEjson (~> 4.0)
   - HashExtensions (~> 2.0)
   - html5tokenizer (~> 3.0)
   - iso-rfc822-date (~> 1.0)
-  - Markdown (~> 3.0)
-  - SQLite.swift (~> 0.11.5)
-  - Tarpit (~> 2.0)
+  - Markdown (from `../../`)
+  - SQLite.swift (~> 0.12)
+  - Tarpit (~> 3.0)
 
 SPEC REPOS:
   "git@github.com:anfema/anfema-pod-specs.git":
+    - anfema-mockingbird
     - DEjson
     - html5tokenizer
-    - Markdown
     - Tarpit
   https://github.com/cocoapods/specs.git:
     - Alamofire
@@ -37,26 +37,20 @@ SPEC REPOS:
     - SQLite.swift
 
 EXTERNAL SOURCES:
-  anfema-mockingbird:
-    :branch: swift_4
-    :git: https://github.com/anfema/Mockingbird
-
-CHECKOUT OPTIONS:
-  anfema-mockingbird:
-    :commit: 3cc86063f075291524d11bd48ba6d1e95f1855b4
-    :git: https://github.com/anfema/Mockingbird
+  Markdown:
+    :path: "../../"
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
-  anfema-mockingbird: c13545530e79da9e0543163245bd911628878961
-  DEjson: 5e28de17065ec72b372fb15a23ed7b2c833c90ae
+  anfema-mockingbird: 441d7b91cd2583a86241a6c667a1e83c92f6ee2d
+  DEjson: 0fd43df22e2265b4c586f722b01d799d52061080
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
   html5tokenizer: 166c1b891cac817a6b4469e0ae4eaad7a19181de
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 2480e2a14727c68bb155d7c3eb9d0974fe38b093
-  SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
-  Tarpit: fe3d890b1cf846e8c0146f6a793abcab78a22277
+  Markdown: 9b0f0ce058cb2551b8046db54ce253577b6cf39c
+  SQLite.swift: 7cad9db150a03716336e69469ec9559c85aece5b
+  Tarpit: a46575231c7a0c18b6da0be88dcc95eb22421e10
 
-PODFILE CHECKSUM: baa6b194d62eef24d37080531cf87fab4bc795bb
+PODFILE CHECKSUM: 117c6f751a2c7e051ab5b0c75ec9f5719d860a68
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.6.1

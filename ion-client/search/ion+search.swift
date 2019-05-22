@@ -13,12 +13,12 @@ import Foundation
 
 internal extension ION {
 
-    internal class func searchIndex(forCollection collection: String) -> String? {
+    class func searchIndex(forCollection collection: String) -> String? {
         let directoryURLs = FileManager.default.urls(for: ION.config.caching.cacheDirectory, in: .userDomainMask)
         return directoryURLs[0].appendingPathComponent("com.anfema.ion/fts-\(collection).sqlite3").path
     }
 
-    internal class func downloadFTSDB(forCollection collection: String, callback: (() -> Void)? = nil) {
+    class func downloadFTSDB(forCollection collection: String, callback: (() -> Void)? = nil) {
         ION.collection(collection) { result in
             guard case .success(let c) = result,
                   let ftsURL = c.ftsDownloadURL else {

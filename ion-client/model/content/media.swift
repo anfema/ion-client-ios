@@ -382,18 +382,18 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func mediaContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONMediaContent? {
+    func mediaContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONMediaContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func mediaContents(_ identifier: OutletIdentifier) -> [IONMediaContent]? {
+    func mediaContents(_ identifier: OutletIdentifier) -> [IONMediaContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONMediaContent] ?? nil)
     }
 
 
-    public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
+    func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
         return mediaContent(identifier, at: position)?.url
     }
 }

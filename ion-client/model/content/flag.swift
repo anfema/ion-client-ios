@@ -93,18 +93,18 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func flagContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFlagContent? {
+    func flagContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFlagContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func flagContents(_ identifier: OutletIdentifier) -> [IONFlagContent]? {
+    func flagContents(_ identifier: OutletIdentifier) -> [IONFlagContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONFlagContent] ?? nil)
     }
 
 
-    public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
+    func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
         guard let content = flagContent(identifier, at: position) else {
                 return false
         }

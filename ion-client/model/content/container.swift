@@ -73,7 +73,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an array of `IONContent` objects if the outlet is a container outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func children(_ name: String, atPosition position: Int = 0) -> Result<[IONContent]> {
+    func children(_ name: String, atPosition position: Int = 0) -> Result<[IONContent]> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -96,7 +96,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an array of `IONContent` objects when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func children(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
+    @discardableResult func children(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<[IONContent]>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.children(name, atPosition: position))
         }
@@ -113,12 +113,12 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
+    func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func containerContents(_ identifier: OutletIdentifier) -> [IONContainerContent]? {
+    func containerContents(_ identifier: OutletIdentifier) -> [IONContainerContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONContainerContent] ?? nil)
     }
@@ -149,7 +149,7 @@ public extension IONContainerContent {
 public extension IONContainerContent {
 
     #if os(iOS)
-    public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
+    func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
         let colorContent: IONColorContent? = content(identifier, at: position)
         return colorContent?.color()
     }
@@ -157,7 +157,7 @@ public extension IONContainerContent {
 
 
     #if os(OSX)
-    public func color(_ identifier: OutletIdentifier, at position: Position = 0) -> NSColor? {
+    func color(_ identifier: OutletIdentifier, at position: Position = 0) -> NSColor? {
         let colorContent: IONColorContent? = content(identifier, at: position)
         return colorContent?.color()
     }
@@ -167,7 +167,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
+    func containerContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONContainerContent? {
         let containerContent: IONContainerContent? = content(identifier, at: position)
         return containerContent
     }
@@ -176,7 +176,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
+    func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
 
         let dateTimeContent: IONDateTimeContent? = content(identifier, at: position)
         return dateTimeContent?.date
@@ -186,7 +186,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
+    func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
         let asyncResult = AsyncResult<Data>()
 
         let fileContent: IONFileContent? = content(identifier, at: position)
@@ -207,7 +207,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
+    func flag(_ identifier: OutletIdentifier, at position: Position = 0) -> Bool {
 
         guard let flagContent: IONFlagContent = content(identifier, at: position) else {
             return false
@@ -221,7 +221,7 @@ public extension IONContainerContent {
 public extension IONContainerContent {
 
     #if os(iOS)
-    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
+    func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
         let imageContent: IONImageContent? = content(identifier, at: position)
@@ -233,7 +233,7 @@ public extension IONContainerContent {
     }
 
 
-    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
+    func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
         let imageContent: IONImageContent? = content(identifier, at: position)
@@ -257,7 +257,7 @@ public extension IONContainerContent {
 
 
     #if os(OSX)
-    public func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
+    func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
         let imageContent: IONImageContent? = content(identifier, at: position)
@@ -270,7 +270,7 @@ public extension IONContainerContent {
     }
 
 
-    public func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
+    func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
         let imageContent: IONImageContent? = content(identifier, at: position)
@@ -292,7 +292,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
+    func mediaURL(_ identifier: OutletIdentifier, at position: Position = 0) -> URL? {
 
         let mediaContent: IONMediaContent? = content(identifier, at: position)
         return mediaContent?.url
@@ -302,7 +302,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
+    func number(_ identifier: OutletIdentifier, at position: Position = 0) -> Double? {
 
         let numberContent: IONNumberContent? = content(identifier, at: position)
         return numberContent?.value
@@ -312,7 +312,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func option(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+    func option(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
 
         let optionContent: IONOptionContent? = content(identifier, at: position)
         return optionContent?.value
@@ -322,20 +322,20 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+    func text(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
 
         let textContent: IONTextContent? = content(identifier, at: position)
         return textContent?.plainText()
     }
 
 
-    public func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
+    func attributedText(_ identifier: OutletIdentifier, at position: Position = 0) -> NSAttributedString? {
         let textContent: IONTextContent? = content(identifier, at: position)
         return textContent?.attributedString()
     }
 
 
-    public func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
+    func htmlText(_ identifier: OutletIdentifier, at position: Position = 0) -> String? {
         let textContent: IONTextContent? = content(identifier, at: position)
         return textContent?.htmlText()
     }
@@ -344,7 +344,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
+    func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
 
         let tableContent: IONTableContent? = content(identifier, at: position)
         return tableContent?.table
@@ -354,7 +354,7 @@ public extension IONContainerContent {
 
 public extension IONContainerContent {
 
-    public func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
+    func connection(_ identifier: OutletIdentifier, at position: Position = 0) -> (collectionIdentifier: CollectionIdentifier, pageIdentifier: PageIdentifier)? {
         guard let connectionContent: IONConnectionContent = content(identifier, at: position),
             let collectionIdentifier = connectionContent.collectionIdentifier,
             let pageIdentifier = connectionContent.pageIdentifier else {
@@ -365,7 +365,7 @@ public extension IONContainerContent {
     }
 
 
-    public func connectionPage(_ identifier: OutletIdentifier, at position: Position = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+    func connectionPage(_ identifier: OutletIdentifier, at position: Position = 0, option: PageLoadingOption = .meta) -> AsyncResult<Page> {
         let asyncResult = AsyncResult<Page>()
 
         guard let connection = connection(identifier, at: position) else {

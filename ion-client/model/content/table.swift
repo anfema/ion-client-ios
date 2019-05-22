@@ -127,18 +127,18 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func tableContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONTableContent? {
+    func tableContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONTableContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func tableContents(_ identifier: OutletIdentifier) -> [IONTableContent]? {
+    func tableContents(_ identifier: OutletIdentifier) -> [IONTableContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONTableContent] ?? nil)
     }
 
 
-    public func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
+    func table(_ identifier: OutletIdentifier, at position: Position = 0) -> [[String?]]? {
         return tableContent(identifier, at: position)?.table
     }
 }

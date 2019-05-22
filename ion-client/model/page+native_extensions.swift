@@ -34,7 +34,8 @@ internal func == (lhs: IONPage, rhs: IONPage) -> Bool {
 
 extension IONPage: Hashable {
     /// Combine collection hash value with self identifier hash value to get somewhat unique hash
-    public var hashValue: Int {
-        return self.collection.hashValue + self.identifier.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.collection)
+        hasher.combine(self.identifier)
     }
 }

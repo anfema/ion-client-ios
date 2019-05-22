@@ -199,18 +199,18 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func fileContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFileContent? {
+    func fileContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONFileContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func fileContents(_ identifier: OutletIdentifier) -> [IONFileContent]? {
+    func fileContents(_ identifier: OutletIdentifier) -> [IONFileContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONFileContent] ?? nil)
     }
 
 
-    public func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
+    func fileData(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<Data> {
         let asyncResult = AsyncResult<Data>()
 
         self.fileContent(identifier, at: position)?.data({ (result) in

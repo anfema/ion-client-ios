@@ -33,7 +33,7 @@ internal func == (lhs: IONCollection, rhs: IONCollection) -> Bool {
 
 extension IONCollection: Hashable {
     /// As we use the identifier for equality checks we just reuse it's hash-value for the Hashable protocol
-    public var hashValue: Int {
-        return identifier.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.identifier)
     }
 }
