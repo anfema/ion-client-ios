@@ -99,18 +99,18 @@ public extension Content {
     /// - parameter position: The content position within an outlet containing multiple contents (optional)
     ///
     /// __Warning:__ The page has to be full loaded before one can access content
-    public func dateTimeContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONDateTimeContent? {
+    func dateTimeContent(_ identifier: OutletIdentifier, at position: Position = 0) -> IONDateTimeContent? {
         return self.content(identifier, at: position)
     }
 
 
-    public func dateTimeContents(_ identifier: OutletIdentifier) -> [IONDateTimeContent]? {
+    func dateTimeContents(_ identifier: OutletIdentifier) -> [IONDateTimeContent]? {
         let contents = self.all.filter({$0.outlet == identifier}).sorted(by: {$0.position < $1.position})
         return contents.isEmpty ? nil : (contents as? [IONDateTimeContent] ?? nil)
     }
 
 
-    public func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
+    func date(_ identifier: OutletIdentifier, at position: Position = 0) -> Date? {
         return dateTimeContent(identifier, at: position)?.date
     }
 }

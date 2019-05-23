@@ -32,7 +32,7 @@ internal class IONPageMeta: CanLoadImage {
     /// Page position
     open var position: Int
 
-    open let collectionIdentifier: String
+    public let collectionIdentifier: String
 
     /// Collection of this meta item
     open var collection: IONCollection? {

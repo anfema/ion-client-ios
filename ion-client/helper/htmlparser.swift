@@ -17,7 +17,7 @@ open class HTMLParser {
 
     fileprivate struct FormatStackItem {
         var tagName: String
-        var styleDict: [NSAttributedStringKey: Any]
+        var styleDict: [NSAttributedString.Key: Any]
     }
 
     /// Initialize with HTML string, instantly runs the tokenizer
@@ -334,7 +334,7 @@ open class HTMLParser {
                 break
             }
             var linkStyle = style.link.makeAttributeDict(nestingDepth: nestingDepth)
-            linkStyle[NSAttributedStringKey.link] = href
+            linkStyle[NSAttributedString.Key.link] = href
             self.formatStack.append(FormatStackItem(tagName: tagName, styleDict: linkStyle))
         default:
             break

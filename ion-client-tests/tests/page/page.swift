@@ -38,7 +38,12 @@ class pageTests: LoggedInXCTestCase {
             }
             
             XCTAssertNotNil(page.collection)
-            XCTAssertEqual(page.hashValue, page.collection.hashValue + page.identifier.hashValue)
+
+            var hasher = Hasher()
+            hasher.combine(page.collection)
+            hasher.combine(page.identifier)
+
+            XCTAssertEqual(page.hashValue, hasher.finalize())
             expectation.fulfill()
         }
         

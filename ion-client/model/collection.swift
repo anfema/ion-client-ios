@@ -216,8 +216,8 @@ internal class IONCollection {
         }
 
         // search metadata
-        var layout: String? = nil
-        var parent: String? = nil
+        var layout: String?
+        var parent: String?
         var position: Int = 0
 
         if let meta = self.getPageMeta(identifier) {

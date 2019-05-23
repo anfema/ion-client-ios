@@ -299,7 +299,7 @@
 				TargetAttributes = {
 					8F326B4F1CCFB0F30041FC40 = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -527,7 +527,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -553,7 +553,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anfema.ion-client";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

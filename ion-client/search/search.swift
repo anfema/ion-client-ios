@@ -21,7 +21,7 @@ open class IONSearchResult {
     open var page: Page?
 
     /// Outlet name where the search hit
-    open let outletName: String
+    public let outletName: String
 
     /// Text snippet of hit
     fileprivate let snippet: String
@@ -148,7 +148,7 @@ open class IONSearchHandle {
 
 
 fileprivate extension String {
-    fileprivate var fixedSearchTerm: String {
+    var fixedSearchTerm: String {
         if range(of: "\"") != nil {
             return self
         }

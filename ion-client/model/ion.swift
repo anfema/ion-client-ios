@@ -29,11 +29,11 @@ public typealias Position              = Int
 open class ION {
     /// The default identifier of a collection that should be used within the application.
     /// If you define it, you can omit the collection identifier when requesting Pages.
-    static open var defaultCollectionIdentifier: String?
+    static public var defaultCollectionIdentifier: String?
 
 
     /// ION configuration, be sure to set up before using any ION calls or risk a crash!
-    static open var config = IONConfig()
+    static public var config = IONConfig()
 
     /// Internal cache for collections
     static internal var collectionCache = [String: IONCollection]()
@@ -249,9 +249,9 @@ public extension ION {
     /// - parameter collectionIdentifier: The identifier of the collection the page is contained in (optional)
     /// - parameter option: The page loading option (full or meta)
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
-    static public func page(pageIdentifier: PageIdentifier,
-                            in collectionIdentifier: CollectionIdentifier? = nil,
-                            option: PageLoadingOption = .meta) -> AsyncResult<Page> {
+    static func page(pageIdentifier: PageIdentifier,
+                     in collectionIdentifier: CollectionIdentifier? = nil,
+                     option: PageLoadingOption = .meta) -> AsyncResult<Page> {
 
         let asyncResult = AsyncResult<Page>()
 
@@ -294,7 +294,7 @@ public extension ION {
     ///
     /// - Parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
     /// - Returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
-    static public func pages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
+    static func pages(in collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<[Page]> {
 
         let asyncResult = AsyncResult<[Page]>()
 
@@ -323,9 +323,9 @@ public extension ION {
     /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
     /// - parameter option: The pages loading option (full or meta)
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
-    static public func pages(pageIdentifiers: [PageIdentifier],
-                             in collectionIdentifier: CollectionIdentifier? = nil,
-                             option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
+    static func pages(pageIdentifiers: [PageIdentifier],
+                      in collectionIdentifier: CollectionIdentifier? = nil,
+                      option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
 
         let asyncResult = AsyncResult<[Page]>()
 
@@ -366,8 +366,8 @@ public extension ION {
     /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
     /// - parameter option: The pages loading option (full or meta)
     /// - returns: A AsyncResult object you can attach a success handler (.onSuccess) and optional a failure handler (.onFailure) to
-    static public func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil,
-                                     option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
+    static func topLevelPages(in collectionIdentifier: CollectionIdentifier? = nil,
+                              option: PageLoadingOption = .meta) -> AsyncResult<[Page]> {
 
         let asyncResult = AsyncResult<[Page]>()
 
@@ -426,7 +426,7 @@ public extension ION {
     /// Instantiates a collection download taking an optional collection identifier into account.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection that should be downloaded
-    static public func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Void> {
+    static func downloadCollection(_ collectionIdentifier: CollectionIdentifier? = nil) -> AsyncResult<Void> {
         let asyncResult = AsyncResult<Void>()
 
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)).download { (success) in
@@ -445,7 +445,7 @@ public extension ION {
     /// Requests a fulltext search handle for a given collection identifier
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     /// - parameter collectionIdentifier: Identifier of the collection a search handle should be returned for
-    static public func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle> {
+    static func searchHandle(for collectionIdentifier: CollectionIdentifier) -> AsyncResult<IONSearchHandle> {
         let asyncResult = AsyncResult<IONSearchHandle>()
 
         ION.collection(validatedCollectionIdentifier(collectionIdentifier)) { (result) in

@@ -218,8 +218,9 @@ extension Page: Equatable {
 }
 
 extension Page: Hashable {
-    public var hashValue: Int {
-        return identifier.hashValue ^ metaData.collectionIdentifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.identifier)
+        hasher.combine(self.metaData.collectionIdentifier)
     }
 }
 
