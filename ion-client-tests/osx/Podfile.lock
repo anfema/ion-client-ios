@@ -31,7 +31,7 @@ SPEC REPOS:
     - html5tokenizer
     - Markdown
     - Tarpit
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - HashExtensions
     - iso-rfc822-date
@@ -50,4 +50,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d114cd68d471095003e9a3d183dc4db4a8bafd88
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.9.3
