@@ -189,9 +189,8 @@ public struct IONConfig {
         #endif
         self.variationScaleFactors = [ "default": CGFloat(1.0), "@1x": CGFloat(1.0), "@2x": CGFloat(2.0), "@3x": CGFloat(3.0) ]
 
-        for (header, value) in Alamofire.SessionManager.defaultHTTPHeaders {
-            self.additionalHeaders[header] = value
-        }
+        Alamofire.SessionManager.defaultHTTPHeaders
+            .forEach({ self.additionalHeaders[$0.key] = $0.value })
         self.additionalHeaders["X-DeviceID"] = self.deviceID
         self.alamofire = Alamofire.SessionManager(configuration: configuration)
         if let alamofire = self.alamofire {
@@ -324,6 +323,14 @@ public struct IONConfig {
         }
 
         self.additionalHeaders["Authorization"] = "Basic " + authData.base64EncodedString(options: NSData.Base64EncodingOptions())
+    }
+
+
+    /// Sets custom headers that should be added to each ion request.
+    /// E.g. to implement killswitch functionalitly.
+    /// - Parameter headers: The dictionary of custom headers.
+    public mutating func setCustomHeaders(_ headers: [String: String]) {
+        headers.forEach({ self.additionalHeaders[$0.key] = $0.value })
     }
 
     internal func cacheBehaviour(_ requestedBehaviour: IONCacheBehaviour) -> IONCacheBehaviour {
