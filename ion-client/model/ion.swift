@@ -329,17 +329,17 @@ public extension ION {
 
         let asyncResult = AsyncResult<[Page]>()
 
-        var pages = [Page]()
+        var pages = [Page?](repeating: nil, count: pageIdentifiers.count)
 
         let group = DispatchGroup()
         var error: Error?
 
-        pageIdentifiers.forEach { (pageIdentifier) in
+        pageIdentifiers.enumerated().forEach { (index, pageIdentifier) in
 
             group.enter()
 
             ION.page(pageIdentifier: pageIdentifier, in: collectionIdentifier, option: option).onSuccess({ (page) in
-                pages.append(page)
+                pages[index] = page
                 group.leave()
             }).onFailure({ (_error) in
                 error = _error
@@ -351,8 +351,7 @@ public extension ION {
             if let error = error {
                 asyncResult.execute(result: .failure(error))
             } else {
-                pages.sort(by: {$0.position < $1.position})
-                asyncResult.execute(result: .success(pages))
+                asyncResult.execute(result: .success(pages.compactMap { $0 }))
             }
         }
 
@@ -360,7 +359,7 @@ public extension ION {
     }
 
 
-    /// Creates an operation to request the top level pages within the specified collection.
+    /// Creates an operation to request the top level pages within the specified collection sorted ascending by its position.
     /// Add an onSuccess and (if needed) an onFailure handler to the operation.
     ///
     /// - parameter collectionIdentifier: The identifier of the collection the pages are contained in (optional)
@@ -391,17 +390,17 @@ public extension ION {
                 return
             }
 
-            var children = [Page]()
+            var children = [Page?](repeating: nil, count: metaList.count)
 
             let group = DispatchGroup()
             var error: Error?
 
-            metaList.forEach { (meta) in
+            metaList.enumerated().forEach { (index, meta) in
 
                 group.enter()
 
                 ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collection?.identifier, option: .full).onSuccess({ (page) in
-                    children.append(page)
+                    children[index] = page
                     group.leave()
                 }).onFailure({ (_error) in
                     error = _error
@@ -413,8 +412,10 @@ public extension ION {
                 if let error = error {
                     asyncResult.execute(result: .failure(error))
                 } else {
-                    children.sort(by: {$0.position < $1.position})
-                    asyncResult.execute(result: .success(children))
+                    let sortedChildren = children
+                        .compactMap { $0 }
+                        .sorted(by: { $0.position < $1.position })
+                    asyncResult.execute(result: .success(sortedChildren))
                 }
             })
         }
