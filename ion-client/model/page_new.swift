@@ -95,18 +95,18 @@ open class Page {
             return asyncResult
         }
 
-        var children = [Page]()
+        var children = [Page?](repeating: nil, count: metas.count)
 
         let group = DispatchGroup()
         var error: Error?
 
-        metas.forEach { (meta) in
+        metas.enumerated().forEach { (index, meta) in
 
             group.enter()
 
             ION.page(pageIdentifier: meta.identifier, in: meta.metaData.collectionIdentifier, option: .full).onSuccess({ (page) in
 
-                children.append(page)
+                children[index] = page
                 group.leave()
 
             }).onFailure({ (_error) in
@@ -121,8 +121,10 @@ open class Page {
             if let error = error {
                 asyncResult.execute(result: .failure(error))
             } else {
-                children.sort(by: {$0.position < $1.position})
-                asyncResult.execute(result: .success(children))
+                let sortedChildren = children
+                    .compactMap { $0 }
+                    .sorted(by: { $0.position < $1.position })
+                asyncResult.execute(result: .success(sortedChildren))
             }
         }
 
