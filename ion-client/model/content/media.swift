@@ -23,7 +23,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     open var mimeType: String
 
     /// Dimensions of the media file if applicable
-    open var size = CGSize.zero
+    open var size: CGSize?
 
     /// File size in bytes
     open var fileSize = 0
@@ -44,7 +44,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     open var originalMimeType: String
 
     /// Dimensions of the original media file if applicable
-    open var originalSize = CGSize.zero
+    open var originalSize: CGSize?
 
     /// Original media file size in bytes
     open var originalFileSize = 0
@@ -95,10 +95,6 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             case .jsonString(let name)      = rawName,
             case .jsonString(let mimeType)  = rawMimeType,
             case .jsonString(let oMimeType) = rawOriginalMimeType,
-            case .jsonNumber(let width)     = rawWidth,
-            case .jsonNumber(let height)    = rawHeight,
-            case .jsonNumber(let oWidth)    = rawOriginalWidth,
-            case .jsonNumber(let oHeight)   = rawOriginalHeight,
             case .jsonNumber(let fileSize)  = rawFileSize,
             case .jsonNumber(let oFileSize) = rawOriginalFileSize,
             case .jsonNumber(let length)    = rawLength,
@@ -108,8 +104,12 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
 
         self.filename = name
         self.mimeType = mimeType
-        self.size     = CGSize(width: CGFloat(width), height: CGFloat(height))
         self.fileSize = Int(fileSize)
+
+        if case .jsonNumber(let width) = rawWidth,
+           case .jsonNumber(let height) = rawHeight {
+            self.size = CGSize(width: CGFloat(width), height: CGFloat(height))
+        }
 
         if case .jsonString(let fileUrl) = rawFile {
             self.url     = URL(string: fileUrl)
@@ -128,8 +128,12 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         self.length = Float(length)
 
         self.originalMimeType = oMimeType
-        self.originalSize     = CGSize(width: CGFloat(oWidth), height: CGFloat(oHeight))
         self.originalFileSize = Int(oFileSize)
+
+        if case .jsonNumber(let width) = rawOriginalWidth,
+           case .jsonNumber(let height) = rawOriginalHeight {
+            self.originalSize     = CGSize(width: CGFloat(width), height: CGFloat(height))
+        }
 
         if case .jsonString(let oFileUrl) = rawOriginalFile {
             self.originalURL = URL(string: oFileUrl)

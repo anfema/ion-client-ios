@@ -297,6 +297,14 @@ public extension IONContainerContent {
         let mediaContent: IONMediaContent? = content(identifier, at: position)
         return mediaContent?.url
     }
+
+    func mediaLength(_ identifier: OutletIdentifier, at position: Position = 0) -> TimeInterval? {
+
+        let mediaContent: IONMediaContent? = content(identifier, at: position)
+        return mediaContent
+            .flatMap({ $0.length })
+            .flatMap({ TimeInterval($0) }) ?? nil
+    }
 }
 
 
