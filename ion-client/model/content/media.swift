@@ -82,10 +82,6 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
             let rawOriginalMimeType = dict["original_mime_type"],
             let rawFile             = dict["file"],
             let rawOriginalFile     = dict["original_file"],
-            let rawWidth            = dict["width"],
-            let rawHeight           = dict["height"],
-            let rawOriginalWidth    = dict["original_width"],
-            let rawOriginalHeight   = dict["original_height"],
             let rawFileSize         = dict["file_size"],
             let rawOriginalFileSize = dict["original_file_size"],
             let rawChecksum         = dict["checksum"],
@@ -106,8 +102,10 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         self.mimeType = mimeType
         self.fileSize = Int(fileSize)
 
-        if case .jsonNumber(let width) = rawWidth,
-           case .jsonNumber(let height) = rawHeight {
+        if  let rawWidth = dict["width"],
+            let rawHeight = dict["height"],
+            case .jsonNumber(let width) = rawWidth,
+            case .jsonNumber(let height) = rawHeight {
             self.size = CGSize(width: CGFloat(width), height: CGFloat(height))
         }
 
@@ -130,9 +128,11 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
         self.originalMimeType = oMimeType
         self.originalFileSize = Int(oFileSize)
 
-        if case .jsonNumber(let width) = rawOriginalWidth,
+        if let rawOriginalWidth = dict["original_width"],
+           let rawOriginalHeight = dict["original_height"],
+           case .jsonNumber(let width) = rawOriginalWidth,
            case .jsonNumber(let height) = rawOriginalHeight {
-            self.originalSize     = CGSize(width: CGFloat(width), height: CGFloat(height))
+            self.originalSize = CGSize(width: CGFloat(width), height: CGFloat(height))
         }
 
         if case .jsonString(let oFileUrl) = rawOriginalFile {
