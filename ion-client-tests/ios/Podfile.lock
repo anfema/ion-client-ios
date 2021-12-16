@@ -1,28 +1,28 @@
 PODS:
   - Alamofire (4.7.2)
-  - anfema-mockingbird (4.0.0):
+  - anfema-mockingbird (5.0.0):
     - Alamofire (~> 4.2)
-    - DEjson (~> 4.0)
-  - DEjson (4.0.0)
+    - DEjson (~> 5.0)
+  - DEjson (5.0.0)
   - HashExtensions (2.0.0)
-  - html5tokenizer (3.0.0)
+  - html5tokenizer (4.0.0)
   - iso-rfc822-date (1.0.1)
-  - Markdown (4.0.0)
+  - Markdown (5.0.0)
   - SQLite.swift (0.12.0):
     - SQLite.swift/standard (= 0.12.0)
   - SQLite.swift/standard (0.12.0)
-  - Tarpit (3.0.0)
+  - Tarpit (4.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
-  - anfema-mockingbird (~> 4.0)
-  - DEjson (~> 4.0)
+  - anfema-mockingbird (~> 5.0)
+  - DEjson (~> 5.0)
   - HashExtensions (~> 2.0)
-  - html5tokenizer (~> 3.0)
+  - html5tokenizer (~> 4.0)
   - iso-rfc822-date (~> 1.0)
-  - Markdown (~> 4.0)
+  - Markdown (~> 5.0)
   - SQLite.swift (~> 0.12)
-  - Tarpit (~> 3.0)
+  - Tarpit (~> 4.0)
 
 SPEC REPOS:
   "git@github.com:anfema/anfema-pod-specs.git":
@@ -31,7 +31,7 @@ SPEC REPOS:
     - html5tokenizer
     - Markdown
     - Tarpit
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Alamofire
     - HashExtensions
     - iso-rfc822-date
@@ -39,15 +39,15 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
-  anfema-mockingbird: 441d7b91cd2583a86241a6c667a1e83c92f6ee2d
-  DEjson: 0fd43df22e2265b4c586f722b01d799d52061080
+  anfema-mockingbird: ebb7ea7d9b01a0638c8822ab8cdba25b4eb9a830
+  DEjson: 480faeb146c91123b9721dddb775112f36e8787d
   HashExtensions: f7a7a9c2c318a48a3546eafef32ce3cd210bf2a3
-  html5tokenizer: 166c1b891cac817a6b4469e0ae4eaad7a19181de
+  html5tokenizer: a5fa78faa8ea4603a19580f513f092a5bc5665ab
   iso-rfc822-date: e10feac94cb97cfba1768762786cb772a020343f
-  Markdown: 4534213b99c4f954dc7f420aee0c26749b817e23
+  Markdown: 7549e9ab489475efa70d22d7c0624e50b2a3d716
   SQLite.swift: 7cad9db150a03716336e69469ec9559c85aece5b
-  Tarpit: a46575231c7a0c18b6da0be88dcc95eb22421e10
+  Tarpit: ec174b6a319cd63f1ce6b7331b5aaa68b66f40f2
 
-PODFILE CHECKSUM: 02c9683c4fbd16476e579f4efc9425d65519b4a3
+PODFILE CHECKSUM: 6e30c285364126a20d73a097df6697794695b81c
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.2
