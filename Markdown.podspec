@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Markdown"
-  s.version      = "4.0.0"
+  s.version      = "5.0.0"
   s.summary      = "Markdown parser in swift."
   s.description  = <<-DESC
                    Markdown parser in swift.
@@ -18,11 +18,11 @@ Pod::Spec.new do |s|
   s.author             = { "Johannes Schriewer" => "j.schriewer@anfe.ma" }
   s.social_media_url   = "http://twitter.com/dunkelstern"
 
-  s.ios.deployment_target = "8.4"
-  s.osx.deployment_target = "10.10"
-
-  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-4.0.0" }
-  s.source_files  = "Markdown/src/*.swift"  
-
-  s.swift_version = '5.0'
+  s.ios.deployment_target = "13.0"
+  s.osx.deployment_target = "11.0"
+  s.swift_version = '5.5'
+  
+  s.source       = { :git => "git@github.com:anfema/amp-ios-client.git", :tag => "markdown-5.0.0" }
+  s.source_files  = "Markdown/src/*.swift"
+  
 end
