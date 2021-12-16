@@ -367,7 +367,12 @@ public extension Content {
     func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
-        imageContent(identifier, at: position)?.image(callback: { (result) in
+        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
+            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
+            return asyncResult
+        }
+
+        imageContent.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
 
@@ -378,7 +383,12 @@ public extension Content {
     func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
-        imageContent(identifier, at: position)?.thumbnail(withSize: size, callback: { (result) in
+        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
+            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
+            return asyncResult
+        }
+
+        imageContent.thumbnail(withSize: size, callback: { (result) in
 
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
@@ -397,7 +407,12 @@ public extension Content {
     func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
-        imageContent(identifier, at: position)?.image(callback: { (result) in
+        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
+            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
+            return asyncResult
+        }
+
+        imageContent.image(callback: { (result) in
             asyncResult.execute(result: result)
         })
 
@@ -408,7 +423,12 @@ public extension Content {
     func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
         let asyncResult = AsyncResult<NSImage>()
 
-        imageContent(identifier, at: position)?.thumbnail(withSize: size, callback: { (result) in
+        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
+            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
+            return asyncResult
+        }
+
+        imageContent.thumbnail(withSize: size, callback: { (result) in
             guard case .success(let image) = result else {
                 asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
                 return
