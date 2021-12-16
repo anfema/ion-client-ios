@@ -191,7 +191,8 @@ open class IONRequest {
             }
         }
 
-        let destinationURL = URL(fileURLWithPath: cacheName + ".tmp")
+        let destinationPath = cacheName + "-" + UUID().uuidString + ".tmp"
+        let destinationURL = URL(fileURLWithPath: destinationPath)
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             // TODO: Check if correct options were set here
             return (destinationURL, [.createIntermediateDirectories, .removePreviousFile])
@@ -224,7 +225,7 @@ open class IONRequest {
 
                 // remove temp file
                 do {
-                    try FileManager.default.removeItem(atPath: cacheName + ".tmp")
+                    try FileManager.default.removeItem(atPath: destinationPath)
                 } catch {
                     // do nothing, perhaps the file did not exist
                 }
@@ -264,7 +265,7 @@ open class IONRequest {
                     // do nothing, perhaps the file did not exist
                 }
                 do {
-                    try FileManager.default.moveItem(atPath: cacheName + ".tmp", toPath: cacheName)
+                    try FileManager.default.moveItem(atPath: destinationPath, toPath: cacheName)
                     try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: cacheName)
                 } catch {
                     // ok moving failed
