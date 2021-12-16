@@ -1,18 +1,18 @@
 source 'git@github.com:anfema/anfema-pod-specs.git'
-source 'https://github.com/CocoaPods/Specs'
+source 'https://cdn.cocoapods.org/'
 
 use_frameworks!
-platform :ios, '9.0'
+platform :ios, '13.0'
 
 def shared_pods
     pod 'Alamofire', '~> 4.7'
     pod 'SQLite.swift', '~> 0.12'
     pod 'HashExtensions', '~> 2.0'
-    pod 'DEjson', '~> 4.0'
-    pod 'Markdown', '~> 4.0'
-    pod 'html5tokenizer', '~> 3.0'
-    pod 'Tarpit', '~> 3.0'
-    pod 'anfema-mockingbird', '~> 4.0'
+    pod 'DEjson', '~> 5.0'
+    pod 'Markdown', '~> 5.0'
+    pod 'html5tokenizer', '~> 4.0'
+    pod 'Tarpit', '~> 4.0'
+    pod 'anfema-mockingbird', '~> 5.0'
     pod 'iso-rfc822-date', '~> 1.0'
 end
 
@@ -30,8 +30,9 @@ end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if target.name == 'Alamofire'
-      target.build_configurations.each do |config|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      if target.name == 'Alamofire'
         config.build_settings['SWIFT_VERSION'] = '4.2'
       end
     end

@@ -1,18 +1,18 @@
 source 'git@github.com:anfema/anfema-pod-specs.git'
-source 'https://github.com/CocoaPods/Specs'
+source 'https://cdn.cocoapods.org/'
 
 use_frameworks!
-platform :osx, '10.12'
+platform :osx, '11.0'
 
 target 'ion_client' do
     pod 'Alamofire', '~> 4.7'
     pod 'SQLite.swift', '~> 0.12'
     pod 'HashExtensions', '~> 2.0'
-    pod 'DEjson', '~> 4.0'
-    pod 'Markdown', '~> 4.0'
-    pod 'html5tokenizer', '~> 3.0'
-    pod 'Tarpit', '~> 3.0'
-    pod 'anfema-mockingbird', '~> 4.0'
+    pod 'DEjson', '~> 5.0'
+    pod 'Markdown', '~> 5.0'
+    pod 'html5tokenizer', '~> 4.0'
+    pod 'Tarpit', '~> 4.0'
+    pod 'anfema-mockingbird', '~> 5.0'
     pod 'iso-rfc822-date', '~> 1.0'
 end
 

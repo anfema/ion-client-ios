@@ -169,7 +169,7 @@ extension IONRequest {
             try data.write(to: fileURL, options: .atomic)
             try ION.config.caching.excludeFileFromBackupIfNecessary(filePath: filePath)
         } catch {
-            //TODO: Handle error
+            // TODO: Handle error
             print("An unexpected error occurred while trying to write file to disk: \(error)")
         }
 
