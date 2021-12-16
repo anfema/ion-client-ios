@@ -46,8 +46,8 @@ public enum NodeType {
             return "UnorderedListItem-Node"
         case .orderedList(let nestingDepth):
             return "OrderedList-Node (depth \(nestingDepth))"
-        case .orderedListItem(let index):
-            return "OrderedListItem(\(index))-Node"
+        case .orderedListItem(let index, let nestingDepth):
+            return "OrderedListItem(\(index))-Node (depth \(nestingDepth))"
         case .codeBlock(let language, let nestingDepth):
             return "CodeBlock-Node (lang: \(language), depth \(nestingDepth))"
         case .paragraph(let nestingDepth):
