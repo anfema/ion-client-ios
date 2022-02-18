@@ -133,6 +133,13 @@ open class IONTextContent: IONContent {
             return self.text
         }
     }
+    
+    /// Returns the raw stored text for custom text processing.
+    /// E.g. To use a custom html parser for example.
+    open func rawText() -> String
+    {
+        return text
+    }
 }
 
 
