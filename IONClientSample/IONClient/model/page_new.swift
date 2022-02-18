@@ -11,13 +11,6 @@
 
 import Foundation
 
-#if os(OSX)
-    import AppKit
-#elseif os(iOS)
-    import UIKit
-#endif
-
-
 /// Page class, contains functionaly to fetch outlet content
 open class Page {
 

@@ -19,11 +19,9 @@ public struct IONCaching {
     /// If `cacheDirectory` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
     public var cacheDirectory: FileManager.SearchPathDirectory = .cachesDirectory
 
-    #if os(iOS)
     /// FileProtectionLevel that will be used. Default is set to `none`.
     /// If `protectionLevel` changed by host-app, app has to be re-installed or at least the ION-Client data has to be cleared completely.
     public var protectionLevel: FileProtectionType = .none
-    #endif
 
     /// Collection cache timeout. Default is set to `600`.
     public var cacheTimeout: TimeInterval = 600
@@ -35,17 +33,9 @@ public struct IONCaching {
     /// Generates file attributes based on specified file protection level.
     private var fileAttributes: [FileAttributeKey: Any]? {
 
-        #if os(iOS)
-
         guard protectionLevel != .none else { return nil }
 
         return [FileAttributeKey.protectionKey: protectionLevel]
-
-        #else
-
-        return nil
-
-        #endif
     }
 
 
@@ -181,11 +171,7 @@ public struct IONConfig {
         self.updateBlocks = [:]
 
         self.ftsEnabled = [String: Bool]()
-        #if os(iOS)
-            self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String
-        #else
-            self.variation = "default"
-        #endif
+        self.variation = NSString(format: "@%dx", Int(UIScreen.main.scale)) as String
         self.variationScaleFactors = [ "default": 1.0, "@1x": 1.0, "@2x": 2.0, "@3x": 3.0 ]
 
         Alamofire.SessionManager.defaultHTTPHeaders

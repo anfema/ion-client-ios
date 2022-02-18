@@ -12,14 +12,6 @@
 import Foundation
 import UIKit
 
-#if os(iOS)
-    public typealias Font = UIFont
-    public typealias Color = UIColor
-#else
-    public typealias Font = NSFont
-    public typealias Color = NSColor
-#endif
-
 public enum RenderMode {
     case normal
     case excludeFont
@@ -27,9 +19,9 @@ public enum RenderMode {
 }
 
 public struct AttributedStringStyle {
-    public var font: Font?
-    public var foregroundColor: Color?
-    public var backgroundColor: Color?
+    public var font: UIFont?
+    public var foregroundColor: UIColor?
+    public var backgroundColor: UIColor?
     public var underline:Bool?
     public var strikeThrough:Bool?
     
@@ -156,22 +148,14 @@ public struct AttributedStringStyling {
     public var embedImages:Bool
     
     public init() {
-        #if os(iOS)
-            self.init(font: UIFont.systemFont(ofSize: 17.0),
-                strongFont: UIFont.boldSystemFont(ofSize: 17.0),
-                emphasizedFont: UIFont.italicSystemFont(ofSize: 17.0),
-                baseColor: UIColor.black,
-                backgroundColor: UIColor.white)
-        #else
-            self.init(font: NSFont(name: "Helvetica", size: 16.0)!,
-                strongFont: NSFont(name: "Helvetica-Bold", size: 16.0)!,
-                emphasizedFont: NSFont(name: "Helvetica-Oblique", size: 16.0)!,
-                baseColor: NSColor.black,
-                backgroundColor: NSColor.white)
-        #endif
+        self.init(font: UIFont.systemFont(ofSize: 17.0),
+            strongFont: UIFont.boldSystemFont(ofSize: 17.0),
+            emphasizedFont: UIFont.italicSystemFont(ofSize: 17.0),
+            baseColor: UIColor.black,
+            backgroundColor: UIColor.white)
     }
     
-    public init(font: Font, strongFont: Font, emphasizedFont: Font, baseColor: Color, backgroundColor: Color) {
+    public init(font: UIFont, strongFont: UIFont, emphasizedFont: UIFont, baseColor: UIColor, backgroundColor: UIColor) {
         let list = AttributedStringStyle()
         self.unorderedList = list
         self.orderedList = list
@@ -190,11 +174,7 @@ public struct AttributedStringStyling {
         
         var codeBlock = AttributedStringStyle()
         codeBlock.textIndent = Int(font.pointSize)
-        #if os(iOS)
-            codeBlock.font = UIFont(name: "Courier", size: font.pointSize)
-        #else
-            codeBlock.font = NSFont(name: "Courier", size: font.pointSize)
-        #endif
+        codeBlock.font = UIFont(name: "Courier", size: font.pointSize)
         self.codeBlock = codeBlock
         
         var paragraph = AttributedStringStyle()
@@ -239,11 +219,7 @@ public struct AttributedStringStyling {
         var link = AttributedStringStyle()
         link.font = font
         link.underline = true
-        #if os(iOS)
-            link.foregroundColor = UIColor.blue
-        #else
-            link.foregroundColor = NSColor.blue
-        #endif
+        link.foregroundColor = UIColor.blue
         self.link = link
         
         self.embedImages = false
@@ -252,17 +228,13 @@ public struct AttributedStringStyling {
         self.calculateHeadingSizes(1.1, font: strongFont, baseColor: baseColor, backgroundColor: backgroundColor)
     }
     
-    public mutating func calculateHeadingSizes(_ multiplier: Float, font: Font, baseColor: Color, backgroundColor: Color) {
+    public mutating func calculateHeadingSizes(_ multiplier: Float, font: UIFont, baseColor: UIColor, backgroundColor: UIColor) {
         self.heading.removeAll()
         for i in 0...4 {
             let fontSize = Float(font.pointSize) * powf(1.1, Float(5 - i))
-            #if os(iOS)
-                let f = UIFont(name:font.fontName, size: CGFloat(fontSize))
-            #else
-                let f = NSFont(name:font.fontName, size: CGFloat(fontSize))
-            #endif
+            let font = UIFont(name:font.fontName, size: CGFloat(fontSize))
             var settings = AttributedStringStyle()
-            settings.font = f
+            settings.font = font
             settings.marginTop = fontSize / 4.0
             settings.marginBottom = fontSize / 2.0
             settings.foregroundColor = baseColor

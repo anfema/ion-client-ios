@@ -10,12 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-#if os(OSX)
-    import AppKit
-#elseif os(iOS)
-    import UIKit
-#endif
-
+import UIKit.UIColor
 
 /// Color content
 open class IONColorContent: IONContent {
@@ -68,75 +63,18 @@ open class IONColorContent: IONContent {
         try super.init(json: json)
     }
 
-
-    #if os(iOS)
     /// Create an `UIColor` instance from the color object
     ///
     /// - returns: `UIColor` instance with values from color object
     open func color() -> UIColor? {
         return UIColor(red: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
     }
-    #endif
-
-
-    #if os(OSX)
-    /// Create an `NSColor` instance from the color object
-    ///
-    /// - returns: `NSColor` instance with values from color object
-    public func color() -> NSColor? {
-        return NSColor(deviceRed: CGFloat(self.r) / 255.0, green: CGFloat(self.g) / 255.0, blue: CGFloat(self.b) / 255.0, alpha: CGFloat(self.alpha) / 255.0)
-    }
-    #endif
 }
 
 
 /// Color extension to IONPage
 extension IONPage {
-
-    #if os(OSX)
-    /// Fetch `NSColor` object for named outlet
-    ///
-    /// - parameter name: The name of the outlet
-    /// - parameter position: Position in the array (optional)
-    /// - returns: `Result.Success` containing an `NSColor` if the outlet is a color outlet
-    ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func cachedColor(_ name: String, atPosition position: Int = 0) -> Result<NSColor> {
-        let result = self.outlet(name, atPosition: position)
-
-        guard case .success(let content) = result else {
-            return .failure(result.error ?? IONError.unknownError)
-        }
-
-        guard case let colorContent as IONColorContent = content else {
-            return .failure(IONError.outletIncompatible)
-        }
-
-        guard let color = colorContent.color() else {
-            return .failure(IONError.outletEmpty)
-        }
-
-        return .success(color)
-    }
-
-
-    /// Fetch `NSColor` object for named outlet asynchronously
-    ///
-    /// - parameter name: The name of the outlet
-    /// - parameter position: Position in the array (optional)
-    /// - parameter callback: Block to call when the color outlet becomes available.
-    ///                       Provides `Result.Success` containing an `NSColor` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    /// - returns: self for chaining
-    @discardableResult public func color(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<NSColor>) -> Void)) -> IONPage {
-        workQueue.async {
-            responseQueueCallback(callback, parameter: self.cachedColor(name, atPosition: position))
-        }
-        return self
-    }
-    #endif
-
-
-    #if os(iOS)
+    
     /// Fetch `UIColor` object for named outlet
     ///
     /// - parameter name: The name of the outlet
@@ -177,7 +115,6 @@ extension IONPage {
 
         return self
     }
-    #endif
 }
 
 public extension Content {
@@ -197,17 +134,7 @@ public extension Content {
         return contents.isEmpty ? nil : (contents as? [IONColorContent] ?? nil)
     }
 
-
-    #if os(iOS)
     func color(_ identifier: OutletIdentifier, at position: Position = 0) -> UIColor? {
         return colorContent(identifier, at: position)?.color()
     }
-    #endif
-
-
-    #if os(OSX)
-    func color(_ identifier: OutletIdentifier, at position: Position = 0) -> NSColor? {
-        return colorContent(identifier, at: position)?.color()
-    }
-    #endif
 }

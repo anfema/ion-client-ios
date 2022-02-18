@@ -10,14 +10,7 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-
-#if os(OSX)
-    import AppKit
-#elseif os(iOS)
-    import UIKit
-#endif
-
-
+import UIKit.UIImage
 
 /// Image content, has OS specific image loading functionality
 open class IONImageContent: IONContent, CanLoadImage, URLProvider, TemporaryURLProvider {
@@ -230,8 +223,6 @@ extension IONPage {
         return self
     }
 
-
-    #if os(iOS)
     /// Allocate `UIImage` for named outlet asynchronously
     ///
     /// - parameter name: The name of the outlet
@@ -284,63 +275,6 @@ extension IONPage {
 
         return self
     }
-    #endif
-
-
-    #if os(OSX)
-    /// Allocate `NSImage` for named outlet asynchronously
-    ///
-    /// - parameter name: The name of the outlet
-    /// - parameter position: Position in the array (optional)
-    /// - parameter callback: Block to call when the original images was loaded.
-    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    /// - returns: self for chaining
-    @discardableResult public func image(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
-        self.outlet(name, atPosition: position) { result in
-            guard case .success(let content) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
-                return
-            }
-
-            guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .failure(IONError.outletIncompatible))
-                return
-            }
-
-            imageContent.image(callback: callback)
-        }
-
-        return self
-    }
-
-
-    /// Allocate `NSImage` for named outlet asynchronously
-    ///
-    /// - parameter name: The name of the outlet
-    /// - parameter position: Position in the array (optional)
-    /// - parameter callback: Block to call when the original images was loaded.
-    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    /// - returns: self for chaining
-    @discardableResult public func originalImage(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<NSImage>) -> Void)) -> IONPage {
-        self.outlet(name, atPosition: position) { result in
-            guard case .success(let content) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
-                return
-            }
-
-            guard case let imageContent as IONImageContent = content else {
-                responseQueueCallback(callback, parameter: .failure(IONError.outletIncompatible))
-                return
-            }
-
-            imageContent.originalImage(callback: callback)
-        }
-
-        return self
-    }
-    #endif
 }
 
 
@@ -361,8 +295,6 @@ public extension Content {
         return contents.isEmpty ? nil : (contents as? [IONImageContent] ?? nil)
     }
 
-
-    #if os(iOS)
     func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<UIImage> {
         let asyncResult = AsyncResult<UIImage>()
 
@@ -399,44 +331,4 @@ public extension Content {
 
         return asyncResult
     }
-    #endif
-
-
-    #if os(OSX)
-    func image(_ identifier: OutletIdentifier, at position: Position = 0) -> AsyncResult<NSImage> {
-        let asyncResult = AsyncResult<NSImage>()
-
-        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
-            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
-            return asyncResult
-        }
-
-        imageContent.image(callback: { (result) in
-            asyncResult.execute(result: result)
-        })
-
-        return asyncResult
-    }
-
-
-    func thumbnail(_ identifier: OutletIdentifier, at position: Position = 0, ofSize size: CGSize) -> AsyncResult<NSImage> {
-        let asyncResult = AsyncResult<NSImage>()
-
-        guard let imageContent: IONImageContent = imageContent(identifier, at: position) else {
-            ION.config.responseQueue.async { asyncResult.execute(result: .failure(IONError.noData(nil))) }
-            return asyncResult
-        }
-
-        imageContent.thumbnail(withSize: size, callback: { (result) in
-            guard case .success(let image) = result else {
-                asyncResult.execute(result: .failure(result.error ?? IONError.didFail))
-                return
-            }
-
-            asyncResult.execute(result: .success(NSImage(cgImage: image, size: NSSize.zero)))
-        })
-
-        return asyncResult
-    }
-    #endif
 }

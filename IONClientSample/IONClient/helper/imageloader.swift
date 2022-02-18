@@ -10,14 +10,10 @@
 // BSD license (see LICENSE.txt for full license text)
 
 import Foundation
-
-#if os(OSX)
-    import AppKit
-#elseif os(iOS)
-    import UIKit
-#endif
-import ImageIO
 import CryptoKit
+import CoreGraphics.CGDataProvider
+import CoreGraphics.CGImage
+import UIKit.UIImage
 
 /// Implement this protocol to gain `dataProvider`, `cgImage` and `image` functionality for a image URL
 public protocol CanLoadImage {
@@ -223,8 +219,6 @@ extension CanLoadImage {
         }
     }
 
-
-    #if os(iOS)
     /// create `UIImage` from the image data
     ///
     /// - parameter original: Whether to use the original or the processed data provider.
@@ -254,34 +248,4 @@ extension CanLoadImage {
     public func originalImage(_ callback: @escaping ((Result<UIImage>) -> Void)) {
         self.image(usingOriginalDataProvider: true, callback: callback)
     }
-    #endif
-
-    #if os(OSX)
-    /// create `NSImage` from the image data
-    ///
-    /// - parameter original: Whether to use the original or the processed data provider.
-    /// - parameter callback: Block to call when the image has been allocated.
-    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func image(usingOriginalDataProvider original: Bool = false, callback: @escaping ((Result<NSImage>) -> Void)) {
-        self.cgImage(usingOriginalDataProvider: original) { result in
-            guard case .success(let img) = result else {
-                responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
-                return
-            }
-
-            let nsImage = NSImage(cgImage: img, size: CGSize(width: CGFloat(img.width), height: CGFloat(img.height)))
-            responseQueueCallback(callback, parameter: .success(nsImage))
-        }
-    }
-
-    /// create `NSImage` from the original image data
-    ///
-    /// - parameter callback: Block to call when the image has been allocated.
-    ///                       Provides `Result.Success` containing an `NSImage` when successful, or
-    ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    public func originalImage(callback: @escaping ((Result<NSImage>) -> Void)) {
-        self.image(usingOriginalDataProvider: true, callback: callback)
-    }
-    #endif
 }
