@@ -19,29 +19,32 @@ extension Swift.Result
     
     func optional() -> Success?
     {
-        guard case .success(let value) = self else {
+        guard case let .success(value) = self else {
             return nil
         }
         return value
     }
+    
+    var isFailure: Bool
+    {
+        return error != nil
+    }
+    
+    var isSuccess: Bool
+    {
+        guard case .success = self else {
+            return false
+        }
+        
+        return true
+    }
+    
+    var value: Success?
+    {
+        guard case let .success(value) = self else {
+            return nil
+        }
+        
+        return value
+    }
 }
-
-//extension Swift.Result
-//{
-//    static func makeFrom(result: Alamofire.Result<Value>)
-//    {
-//        switch result
-//        {
-//        case
-//        }
-//    }
-//    init(result: Alamofire.Result<Success>)
-//    {
-//        switch result {
-//        case .success(let data):
-//            self = .success(data)
-//        case .failure(let error):
-//            self = .failure(error as! Failure)
-//        }
-//    }
-//}

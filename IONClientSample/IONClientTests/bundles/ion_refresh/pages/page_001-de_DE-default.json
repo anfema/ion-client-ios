@@ -1,0 +1,139 @@
+{
+  "page": [
+    {
+      "parent": null,
+      "identifier": "page_001",
+      "collection": "test",
+      "last_changed": "2016-03-02T15:25:44Z",
+      "archive": "http://127.0.0.1:8000/client/v1/de_DE/test/page_001.tar",
+      "contents": [
+        {
+          "type": "containercontent",
+          "variation": "default",
+          "children": [
+            {
+              "chart_data": "data123",
+              "is_searchable": false,
+              "variation": "default",
+              "chart_config": "config123",
+              "svg_data": "svg123",
+              "outlet": "chart",
+              "type": "chartcontent"
+            },
+            {
+              "is_searchable": false,
+              "variation": "default",
+              "outlet": "connection",
+              "type": "connectioncontent",
+              "connection_string": "//test/page_001#number"
+            },
+            {
+              "is_searchable": false,
+              "value": 123456,
+              "variation": "default",
+              "outlet": "number",
+              "type": "numbercontent"
+            },
+            {
+              "is_searchable": false,
+              "image": "http://127.0.0.1:8000/protected_media/images/994f6c8c-5144-496b-ad1c-86b358607d72/placeholder.jpeg",
+              "original_checksum": "sha256:d8b358afb51ed64c2a9abdaf874b1cd0ab35dd20744b84d502ba3172b49ddc56",
+              "original_mime_type": "image/jpeg",
+              "width": 600,
+              "original_height": 400,
+              "translation_x": 0,
+              "type": "imagecontent",
+              "height": 400,
+              "checksum": "sha256:d8b358afb51ed64c2a9abdaf874b1cd0ab35dd20744b84d502ba3172b49ddc56",
+              "original_image": "http://127.0.0.1:8000/protected_media/images/994f6c8c-5144-496b-ad1c-86b358607d72/placeholder.jpeg",
+              "file_size": 9040,
+              "mime_type": "image/jpeg",
+              "variation": "default",
+              "outlet": "image",
+              "original_file_size": 9040,
+              "translation_y": 0,
+              "original_width": 600,
+              "scale": 0.0
+            },
+            {
+              "is_searchable": false,
+              "original_file": "http://127.0.0.1:8000/protected_media/files/994f6c8c-5144-496b-ad1c-86b358607d72/media.jpeg",
+              "original_checksum": "sha256:a0f52c3c038069ad31186f6da5b2dc7ec46b0e275273a192f79b419f3d3b23a0",
+              "original_mime_type": "image/jpeg",
+              "width": 600,
+              "original_height": 400,
+              "type": "mediacontent",
+              "length": 0,
+              "height": 400,
+              "checksum": "sha256:a0f52c3c038069ad31186f6da5b2dc7ec46b0e275273a192f79b419f3d3b23a0",
+              "original_width": 600,
+              "file_size": 9091,
+              "original_length": 0,
+              "variation": "default",
+              "file": "http://127.0.0.1:8000/protected_media/files/994f6c8c-5144-496b-ad1c-86b358607d72/media.jpeg",
+              "outlet": "media",
+              "original_file_size": 9091,
+              "name": "media.jpeg",
+              "mime_type": "image/jpeg"
+            },
+            {
+              "is_searchable": false,
+              "name": "test.txt",
+              "variation": "default",
+              "file": "http://127.0.0.1:8000/protected_media/files/994f6c8c-5144-496b-ad1c-86b358607d72/test.txt",
+              "outlet": "file",
+              "type": "filecontent",
+              "checksum": "sha256:dcc7f4be538540c0c84b34488cfd8806779b984491d0e3557a540f3d131d832b",
+              "mime_type": "application/octet-stream",
+              "file_size": 245
+            },
+            {
+              "value": "2",
+              "variation": "default",
+              "outlet": "option",
+              "type": "optioncontent"
+            },
+            {
+              "is_searchable": false,
+              "variation": "default",
+              "outlet": "flag",
+              "is_enabled": false,
+              "type": "flagcontent"
+            },
+            {
+              "is_searchable": false,
+              "variation": "default",
+              "datetime": "1984-01-24T12:34:56Z",
+              "type": "datetimecontent",
+              "outlet": "datetime"
+            },
+            {
+              "is_searchable": false,
+              "b": 255,
+              "variation": "default",
+              "g": 0,
+              "outlet": "color",
+              "type": "colorcontent",
+              "r": 0,
+              "a": 255
+            },
+            {
+              "is_searchable": true,
+              "variation": "default",
+              "text": "Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat\n\t\t\tporttitor ligula, eget lacinia odio sem nec elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus\n\t\t\tdolor auctor. Donec sed odio dui.",
+              "outlet": "text",
+              "type": "textcontent",
+              "is_multiline": true,
+              "mime_type": "text/plain"
+            }
+          ],
+          "outlet": "new-layout-001"
+        }
+      ],
+      "children": [],
+      "locale": "de_DE",
+      "layout": "new-layout-001",
+      "position": 0
+    }
+  ]
+}

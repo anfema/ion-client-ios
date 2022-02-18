@@ -10,7 +10,7 @@ import Foundation
 
 extension DateFormatter
 {
-    fileprivate static let isoToDateFormatter: DateFormatter = {
+    fileprivate static let isoDateFormatter1: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSSSSS'Z'"
         formatter.timeZone = .init(secondsFromGMT: 0)
@@ -18,7 +18,7 @@ extension DateFormatter
         return formatter
     }()
     
-    fileprivate static let isoToStringFormatter: DateFormatter = {
+    fileprivate static let isoDateFormatter2: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
         formatter.timeZone = .init(secondsFromGMT: 0)
@@ -39,7 +39,7 @@ extension Date
 {
     func toISODateString() -> String
     {
-        return DateFormatter.isoToStringFormatter.string(from: self)
+        return DateFormatter.isoDateFormatter2.string(from: self)
     }
     
     func toRFC822DateString() -> String
@@ -52,7 +52,10 @@ extension Date
 {
     static func makeFrom(isoDateString: String) -> Date?
     {
-        return DateFormatter.isoToDateFormatter.date(from: isoDateString)
+        let date = DateFormatter.isoDateFormatter1.date(from: isoDateString)
+        ?? DateFormatter.isoDateFormatter2.date(from: isoDateString)
+        
+        return date
             .map { .init(timeIntervalSinceReferenceDate: $0.timeIntervalSinceReferenceDate) }
     }
 
