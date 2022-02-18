@@ -213,7 +213,7 @@
 		5C3245A427BF91B400EFB5CA /* HashExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
 		5C3245A727BF9BA300EFB5CA /* tarfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tarfile.swift; sourceTree = "<group>"; };
 		5C3245AA27BF9DB900EFB5CA /* ISODate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISODate.swift; sourceTree = "<group>"; };
-		5C3245AF27BFB32700EFB5CA /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		5C3245AF27BFB32700EFB5CA /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		5C3245D327BFDA1900EFB5CA /* resultextensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resultextensions.swift; sourceTree = "<group>"; };
 		5C3245D627BFF24D00EFB5CA /* page_metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page_metadata.swift; sourceTree = "<group>"; };
 		5C3245D727BFF24D00EFB5CA /* page.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = page.swift; sourceTree = "<group>"; };
@@ -240,6 +240,9 @@
 		5C32466127BFF24E00EFB5CA /* NSDate+ISODate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+ISODate.swift"; sourceTree = "<group>"; };
 		5C3246DB27BFF32500EFB5CA /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundles; sourceTree = "<group>"; };
 		5C3246E427BFF4F900EFB5CA /* mockingbird.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mockingbird.swift; sourceTree = "<group>"; };
+		5C3246E627C002E000EFB5CA /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		5C3246E727C0032A00EFB5CA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		5C3246E827C004A300EFB5CA /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,7 +277,10 @@
 		5C3244D927BF832D00EFB5CA = {
 			isa = PBXGroup;
 			children = (
+				5C3246E627C002E000EFB5CA /* readme.md */,
+				5C3246E827C004A300EFB5CA /* LICENSE.txt */,
 				5C3245AF27BFB32700EFB5CA /* Package.swift */,
+				5C3246E727C0032A00EFB5CA /* .gitignore */,
 				5C3244E427BF832D00EFB5CA /* IONClientSample */,
 				5C3244FF27BF835E00EFB5CA /* IONClient */,
 				5C32450D27BF835F00EFB5CA /* IONClientTests */,

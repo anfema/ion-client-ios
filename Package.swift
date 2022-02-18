@@ -32,7 +32,7 @@ let package = Package(
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "Alamofire", package: "Alamofire")
             ],
-            path: "IONClientSample/IONClient"
+            path: "IONClient"
         ),
     ]
 )

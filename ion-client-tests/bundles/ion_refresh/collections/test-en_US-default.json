@@ -1,1 +1,0 @@
-{"collection": [{"identifier": "test", "default_locale": "en_US", "last_changed": "2016-03-02T15:20:44Z", "fts_db": "http://127.0.0.1:8000/protected_media/fts/test.sqlite3", "archive": "http://127.0.0.1:8000/client/v1/en_US/test.tar?variation=default", "pages": []}]}

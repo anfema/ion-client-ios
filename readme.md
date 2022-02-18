@@ -4,9 +4,16 @@ ION-Client for iOS and OS X clients
 
 ## Requirements:
 
-- iOS 9.0+ / macOS 10.10+
-- Xcode 9.4+
-- Swift 4.1+
+- iOS 13.0+
+- Xcode 13.2.1+
+- Swift 5.5+
+
+# Installation
+
+## Swift Package Manager (>= 8.0.0)
+1. In Xcode: Select `File` -> `Add Package` -> Search for `https://github.com/anfema/ion-client-ios.git`
+2. Select `IONClient` dependency and specify Dependency Rule
+3. `import IONClient` in source file to access the kit.
 
 <!-- MarkdownTOC -->
 
