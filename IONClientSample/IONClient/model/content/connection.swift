@@ -57,7 +57,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSURL` if the outlet is a connection outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func link(_ name: String, atPosition position: Int = 0) -> Result<URL> {
+    public func link(_ name: String, atPosition position: Int = 0) -> Result<URL, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -84,7 +84,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func link(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
+    @discardableResult public func link(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.link(name, atPosition: position))
         }

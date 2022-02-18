@@ -87,7 +87,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
     /// - parameter callback: Block to call when file data gets available.
     ///                       Provides `Result.Success` containing `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func data(_ callback: @escaping ((Result<Data>) -> Void)) {
+    open func data(_ callback: @escaping ((Result<Data, Error>) -> Void)) {
         guard let url = self.url, self.isValid else {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
@@ -115,7 +115,7 @@ open class IONFileContent: IONContent, CanLoadImage, URLProvider, TemporaryURLPr
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func temporaryURL(_ callback: @escaping ((Result<URL>) -> Void)) {
+    open func temporaryURL(_ callback: @escaping ((Result<URL, Error>) -> Void)) {
         guard let urlString = self.url?.absoluteString else {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
@@ -171,7 +171,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func fileData(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Data>) -> Void)) -> IONPage {
+    @discardableResult public func fileData(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Data, Error>) -> Void)) -> IONPage {
         self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))

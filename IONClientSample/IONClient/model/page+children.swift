@@ -20,7 +20,7 @@ extension IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the page
-    @discardableResult public func child(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
+    @discardableResult public func child(_ identifier: String, callback: @escaping ((Result<IONPage, Error>) -> Void)) -> IONPage {
         self.collection.page(identifier) { result in
             guard case .success(let page) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.didFail))
@@ -43,7 +43,7 @@ extension IONPage {
     ///
     /// - parameter identifier: Identifier of child page
     /// - returns: Page object that resolves asynchronously or nil if the page is no child of self
-    public func child(_ identifier: String) -> Result<IONPage> {
+    public func child(_ identifier: String) -> Result<IONPage, Error> {
         let page = self.collection.page(identifier)
 
         guard page.metadata != nil else {
@@ -61,7 +61,7 @@ extension IONPage {
     /// Enumerate page children
     ///
     /// - parameter callback: The callback to call for each child
-    public func children(_ callback: @escaping ((Result<IONPage>) -> Void)) {
+    public func children(_ callback: @escaping ((Result<IONPage, Error>) -> Void)) {
         self.collection.getChildIdentifiers(forParent: self.identifier) { children in
             for child in children {
                 self.child(child, callback: callback)

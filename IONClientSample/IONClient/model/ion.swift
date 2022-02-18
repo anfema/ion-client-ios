@@ -121,7 +121,7 @@ open class ION {
     /// - parameter identifier: the identifier of the collection
     /// - parameter callback: the block to call when the collection is fully initialized
     /// - returns: fetched collection to be able to chain calls
-    @discardableResult internal class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
+    @discardableResult internal class func collection(_ identifier: String, callback: @escaping ((Result<IONCollection, Error>) -> Void)) -> IONCollection {
         let cachedCollection = self.collectionCache[identifier]
 
         // return memcache if not timed out

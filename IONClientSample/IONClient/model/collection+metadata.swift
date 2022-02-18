@@ -49,7 +49,7 @@ extension IONCollection {
     /// - parameter pageIdentifier: Page identifier to get metadata for
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    @discardableResult public func metadata(_ pageIdentifier: String, callback: @escaping ((Result<IONPageMeta>) -> Void)) -> IONCollection {
+    @discardableResult public func metadata(_ pageIdentifier: String, callback: @escaping ((Result<IONPageMeta, Error>) -> Void)) -> IONCollection {
         // this block fetches the page count after the collection is ready
         self.workQueue.async {
             let result = self.metadata(pageIdentifier)
@@ -64,7 +64,7 @@ extension IONCollection {
     ///
     /// - parameter pageIdentifier: Page identifier to get metadata for
     /// - returns: `IONPageMeta` object or nil if collection is not loaded
-    public func metadata(_ pageIdentifier: String) -> Result<IONPageMeta> {
+    public func metadata(_ pageIdentifier: String) -> Result<IONPageMeta, Error> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .failure(IONError.didFail)
         }
@@ -82,7 +82,7 @@ extension IONCollection {
     /// - parameter parentIdentifier: Parent to enumerate metadata for, nil == top level
     /// - parameter callback: Callback to call with metadata
     /// - returns: self for chaining
-    @discardableResult public func childMetadataList(forParent parentIdentifier: String?, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
+    @discardableResult public func childMetadataList(forParent parentIdentifier: String?, callback: @escaping ((Result<[IONPageMeta], Error>) -> Void)) -> IONCollection {
         // fetch the page metadata after the collection is ready
         self.workQueue.async {
             responseQueueCallback(callback, parameter: self.childMetadataList(forParent: parentIdentifier))
@@ -96,7 +96,7 @@ extension IONCollection {
     ///
     /// - parameter parentIdentifier: Parent to enumerate metadata for, nil == top level
     /// - returns: Metadata or nil if collection is not ready yet
-    public func childMetadataList(forParent parentIdentifier: String?) -> Result<[IONPageMeta]> {
+    public func childMetadataList(forParent parentIdentifier: String?) -> Result<[IONPageMeta], Error> {
         guard !self.hasFailed && self.lastUpdate != nil else {
             return .failure(IONError.didFail)
         }
@@ -115,7 +115,7 @@ extension IONCollection {
     /// - parameter pageIdentifier: The page identifier to calculate the path for
     /// - parameter callback: Callback to call with a list of metadata items (last item is requested page, first item is toplevel parent)
     /// - returns: self for chaining
-    @discardableResult public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta]>) -> Void)) -> IONCollection {
+    @discardableResult public func metaPath(_ pageIdentifier: String, callback: @escaping ((Result<[IONPageMeta], Error>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard let result = self.metaPath(pageIdentifier) else {
                 responseQueueCallback(callback, parameter: .failure(IONError.pageNotFound(collection: self.identifier, page: pageIdentifier)))

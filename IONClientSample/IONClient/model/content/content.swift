@@ -27,7 +27,7 @@ public protocol TemporaryURLProvider {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     ///
-    func temporaryURL(_ callback: @escaping ((Result<URL>) -> Void))
+    func temporaryURL(_ callback: @escaping ((Result<URL, Error>) -> Void))
 }
 
 

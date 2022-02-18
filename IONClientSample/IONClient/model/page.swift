@@ -86,7 +86,7 @@ internal class IONPage {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     ///
-    init(collection: IONCollection, identifier: String, layout: String?, cacheBehaviour: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage>) -> Void)?) {
+    init(collection: IONCollection, identifier: String, layout: String?, cacheBehaviour: IONCacheBehaviour, parent: String?, callback: ((Result<IONPage, Error>) -> Void)?) {
         // Full asynchronous initializer, self will be populated asynchronously
         self.identifier = identifier
         self.workQueue = DispatchQueue(label: "com.anfema.ion.page.\(identifier)", attributes: [])
@@ -161,7 +161,7 @@ internal class IONPage {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONPage {
+    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONPage, Error>) -> Void)) -> IONPage {
         workQueue.async {
             guard !self.hasFailed else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -197,7 +197,7 @@ internal class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: Result.Success containing an `IONContent` if the outlet is valid
     ///            and the page was already cached, else an Result.Failure containing an `IONError`.
-    open func outlet(_ name: String, atPosition position: Int = 0) -> Result<IONContent> {
+    open func outlet(_ name: String, atPosition position: Int = 0) -> Result<IONContent, Error> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
             return .failure(IONError.didFail)
@@ -220,7 +220,7 @@ internal class IONPage {
     ///                       Provides `Result.Success` containing an `IONContent` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` to be able to chain another call
-    @discardableResult open func outlet(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<IONContent>) -> Void)) -> IONPage {
+    @discardableResult open func outlet(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<IONContent, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outlet(name, atPosition: position))
         }
@@ -235,7 +235,7 @@ internal class IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the page becomes available
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    open func outletExists(_ name: String, atPosition position: Int = 0) -> Result<Bool> {
+    open func outletExists(_ name: String, atPosition position: Int = 0) -> Result<Bool, Error> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a page loading asynchronously
             return .failure(IONError.didFail)
@@ -258,7 +258,7 @@ internal class IONPage {
     ///                       Provides `Result.Success` containing a `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: `self` for chaining
-    @discardableResult open func outletExists(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
+    @discardableResult open func outletExists(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Bool, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.outletExists(name, atPosition: position))
         }
@@ -272,7 +272,7 @@ internal class IONPage {
     /// - parameter callback: callback with object count
     ///
     /// - returns: `self` for chaining
-    @discardableResult open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int>) -> Void)) -> IONPage {
+    @discardableResult open func numberOfContentsForOutlet(_ name: String, callback: @escaping ((Result<Int, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.numberOfContentsForOutlet(name))
         }
@@ -285,7 +285,7 @@ internal class IONPage {
     /// - parameter name: outlet to check
     ///
     /// - returns: count if page was ready, `nil` if page is not loaded
-    open func numberOfContentsForOutlet(_ name: String) -> Result<Int> {
+    open func numberOfContentsForOutlet(_ name: String) -> Result<Int, Error> {
         guard self.isReady && self.hasFailed == false else {
             // cannot return outlet synchronously from a async loading page
             return .failure(IONError.didFail)

@@ -50,11 +50,13 @@ public class AsyncResult<T> {
 
 
     /// Executes the success or failure handler based on the provided Result
-    func execute(result: Result<T>) {
-        if case .success(let value) = result {
+    func execute(result: Result<T, Error>) {
+        switch result
+        {
+        case let .success(value):
             success?(value)
-        } else {
-            failure?(result.error ?? IONError.didFail)
+        case let .failure(error):
+            failure?(error)
         }
 
         alwaysBlock?()

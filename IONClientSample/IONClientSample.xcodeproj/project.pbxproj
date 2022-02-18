@@ -58,7 +58,6 @@
 		5C32457A27BF8D1D00EFB5CA /* collection+search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32454F27BF8D1D00EFB5CA /* collection+search.swift */; };
 		5C32457B27BF8D1D00EFB5CA /* search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32455027BF8D1D00EFB5CA /* search.swift */; };
 		5C32457C27BF8D1D00EFB5CA /* AsyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32455227BF8D1D00EFB5CA /* AsyncResult.swift */; };
-		5C32457D27BF8D1D00EFB5CA /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32455327BF8D1D00EFB5CA /* Result.swift */; };
 		5C32457E27BF8D1D00EFB5CA /* response_serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32455427BF8D1D00EFB5CA /* response_serializer.swift */; };
 		5C32457F27BF8D1D00EFB5CA /* request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32455527BF8D1D00EFB5CA /* request.swift */; };
 		5C32458427BF8D7500EFB5CA /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C32458127BF8D7500EFB5CA /* JSONEncoder.swift */; };
@@ -79,6 +78,7 @@
 		5C3245A827BF9BA300EFB5CA /* tarfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3245A727BF9BA300EFB5CA /* tarfile.swift */; };
 		5C3245AB27BF9DB900EFB5CA /* ISODate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3245AA27BF9DB900EFB5CA /* ISODate.swift */; };
 		5C3245AE27BFA3EF00EFB5CA /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 5C3245AD27BFA3EF00EFB5CA /* SQLite */; };
+		5C3245D427BFDA1900EFB5CA /* resultextensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3245D327BFDA1900EFB5CA /* resultextensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,7 +172,6 @@
 		5C32454F27BF8D1D00EFB5CA /* collection+search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "collection+search.swift"; sourceTree = "<group>"; };
 		5C32455027BF8D1D00EFB5CA /* search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = search.swift; sourceTree = "<group>"; };
 		5C32455227BF8D1D00EFB5CA /* AsyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncResult.swift; sourceTree = "<group>"; };
-		5C32455327BF8D1D00EFB5CA /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		5C32455427BF8D1D00EFB5CA /* response_serializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = response_serializer.swift; sourceTree = "<group>"; };
 		5C32455527BF8D1D00EFB5CA /* request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = request.swift; sourceTree = "<group>"; };
 		5C32458127BF8D7500EFB5CA /* JSONEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
@@ -192,6 +191,7 @@
 		5C3245A727BF9BA300EFB5CA /* tarfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tarfile.swift; sourceTree = "<group>"; };
 		5C3245AA27BF9DB900EFB5CA /* ISODate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISODate.swift; sourceTree = "<group>"; };
 		5C3245AF27BFB32700EFB5CA /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		5C3245D327BFDA1900EFB5CA /* resultextensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = resultextensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,8 +263,8 @@
 			isa = PBXGroup;
 			children = (
 				5C3245A927BF9DA900EFB5CA /* ISODate */,
-				5C3245A627BF9BA300EFB5CA /* Tarpit */,
 				5C3245A327BF907F00EFB5CA /* HashExtensions */,
+				5C3245A627BF9BA300EFB5CA /* Tarpit */,
 				5C32459827BF8F9100EFB5CA /* Markdown */,
 				5C32458D27BF8F4300EFB5CA /* HTML5Tokenizer */,
 				5C32458027BF8D7500EFB5CA /* DEjson */,
@@ -302,6 +302,7 @@
 				5C32452A27BF8D1C00EFB5CA /* imageloader.swift */,
 				5C32452B27BF8D1C00EFB5CA /* htmlparser.swift */,
 				5C32452C27BF8D1C00EFB5CA /* callback.swift */,
+				5C3245D327BFDA1900EFB5CA /* resultextensions.swift */,
 			);
 			path = helper;
 			sourceTree = "<group>";
@@ -365,7 +366,6 @@
 			isa = PBXGroup;
 			children = (
 				5C32455227BF8D1D00EFB5CA /* AsyncResult.swift */,
-				5C32455327BF8D1D00EFB5CA /* Result.swift */,
 				5C32455427BF8D1D00EFB5CA /* response_serializer.swift */,
 				5C32455527BF8D1D00EFB5CA /* request.swift */,
 			);
@@ -627,7 +627,6 @@
 				5C32455D27BF8D1D00EFB5CA /* ion+cache.swift in Sources */,
 				5C32459627BF8F4300EFB5CA /* tokenizer+namedcharacter.swift in Sources */,
 				5C32456227BF8D1D00EFB5CA /* option.swift in Sources */,
-				5C32457D27BF8D1D00EFB5CA /* Result.swift in Sources */,
 				5C32456027BF8D1D00EFB5CA /* Meta.swift in Sources */,
 				5C32457F27BF8D1D00EFB5CA /* request.swift in Sources */,
 				5C32455627BF8D1D00EFB5CA /* nsurlcache.swift in Sources */,
@@ -648,6 +647,7 @@
 				5C32457027BF8D1D00EFB5CA /* deprecated.swift in Sources */,
 				5C32456927BF8D1D00EFB5CA /* content.swift in Sources */,
 				5C32459527BF8F4300EFB5CA /* tokenizer.swift in Sources */,
+				5C3245D427BFDA1900EFB5CA /* resultextensions.swift in Sources */,
 				5C3245A227BF8F9100EFB5CA /* helper.swift in Sources */,
 				5C32459727BF8F4300EFB5CA /* tokenizer_states.swift in Sources */,
 				5C32456427BF8D1D00EFB5CA /* table.swift in Sources */,
@@ -762,7 +762,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -817,7 +817,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -895,6 +895,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -904,6 +905,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.IONClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -924,6 +926,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -933,6 +936,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.anfema.IONClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

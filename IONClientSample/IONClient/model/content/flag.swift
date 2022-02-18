@@ -52,7 +52,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `Bool` if the outlet is a flag outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func isSet(_ name: String, atPosition position: Int = 0) -> Result<Bool> {
+    public func isSet(_ name: String, atPosition position: Int = 0) -> Result<Bool, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -75,7 +75,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `Bool` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func isSet(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Bool>) -> Void)) -> IONPage {
+    @discardableResult public func isSet(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Bool, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.isSet(name, atPosition: position))
         }

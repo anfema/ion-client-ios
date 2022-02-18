@@ -145,7 +145,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func text(_ name: String, atPosition position: Int = 0) -> Result<String> {
+    public func text(_ name: String, atPosition position: Int = 0) -> Result<String, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -172,7 +172,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func text(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
+    @discardableResult public func text(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<String, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.text(name, atPosition: position))
         }
@@ -187,7 +187,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `String` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func html(_ name: String, atPosition position: Int = 0) -> Result<String> {
+    public func html(_ name: String, atPosition position: Int = 0) -> Result<String, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -214,7 +214,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `String` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func html(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<String>) -> Void)) -> IONPage {
+    @discardableResult public func html(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<String, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.html(name, atPosition: position))
         }
@@ -229,7 +229,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `NSAttributedString` if the outlet is a text outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func attributedString(_ name: String, atPosition position: Int = 0) -> Result<NSAttributedString> {
+    public func attributedString(_ name: String, atPosition position: Int = 0) -> Result<NSAttributedString, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -256,7 +256,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSAttributedString` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func attributedString(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<NSAttributedString>) -> Void)) -> IONPage {
+    @discardableResult public func attributedString(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<NSAttributedString, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.attributedString(name, atPosition: position))
         }

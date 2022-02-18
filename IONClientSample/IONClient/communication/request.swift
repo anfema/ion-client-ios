@@ -114,7 +114,11 @@ open class IONRequest {
             }
 
             // save response to cache
-            self.saveJSONToCache(using: request, IONClient.Result(result: response.result))
+            switch response.result
+            {
+            case let .success(value): self.saveJSONToCache(using: request, .success(value))
+            case let .failure(error): self.saveJSONToCache(using: request, .failure(error))
+            }
 
             // object can only be saved if there is a request url and the status code of the response is a 200
             var jsonObject: JSONObject?
@@ -331,7 +335,11 @@ open class IONRequest {
         let request = alamofire.request(urlString, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers)
         request.responseDEJSON { response in
             // call callback in correct queue
-            responseQueueCallback(callback, parameter: IONClient.Result(result: response.result))
+            switch response.result
+            {
+            case let .success(value): responseQueueCallback(callback, parameter: .success(value))
+            case let .failure(error): responseQueueCallback(callback, parameter: .failure(error))
+            }
         }
         request.resume()
     }

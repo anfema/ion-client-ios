@@ -81,7 +81,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing a `UIColor` if the outlet is a color outlet
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func cachedColor(_ name: String, atPosition position: Int = 0) -> Result<UIColor> {
+    public func cachedColor(_ name: String, atPosition position: Int = 0) -> Result<UIColor, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -108,7 +108,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing a `UIColor` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func color(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<UIColor>) -> Void)) -> IONPage {
+    @discardableResult public func color(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<UIColor, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.cachedColor(name, atPosition: position))
         }

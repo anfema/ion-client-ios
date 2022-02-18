@@ -95,12 +95,11 @@ extension IONRequest {
     ///
     /// - parameter request: request (used for request url)
     /// - parameter result: the object to save or an error
-    internal class func saveJSONToCache(using request: URLRequest, _ result: Result<JSONResponse>) {
+    internal class func saveJSONToCache(using request: URLRequest, _ result: Result<JSONResponse, Error>) {
 
         // object can only be saved if there is a request url and the status code of the response is a 200
-        guard result.isSuccess,
-            case .success(let jsonResponse) = result else {
-                return
+        guard case .success(let jsonResponse) = result else {
+            return
         }
 
         if jsonResponse.statusCode == 200,

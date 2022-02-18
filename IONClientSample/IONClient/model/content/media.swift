@@ -158,7 +158,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     /// - parameter callback: Block to call when the file data becomes available.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func data(_ callback: @escaping ((Result<Data>) -> Void)) {
+    open func data(_ callback: @escaping ((Result<Data, Error>) -> Void)) {
         self.cachedURL { result in
             guard case .success(let url) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -180,7 +180,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     /// - parameter callback: Block to call when the download of the file has finished.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func cachedURL(_ callback: @escaping ((Result<URL>) -> Void)) {
+    open func cachedURL(_ callback: @escaping ((Result<URL, Error>) -> Void)) {
         guard let url = self.url else {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
@@ -203,7 +203,7 @@ open class IONMediaContent: IONContent, CanLoadImage, URLProvider, TemporaryURLP
     /// - parameter callback: Block to call when the temporary URL was fetched from the server.
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
-    open func temporaryURL(_ callback: @escaping ((Result<URL>) -> Void)) {
+    open func temporaryURL(_ callback: @escaping ((Result<URL, Error>) -> Void)) {
         guard let urlString = self.url?.absoluteString else {
             responseQueueCallback(callback, parameter: .failure(IONError.didFail))
             return
@@ -256,7 +256,7 @@ extension IONPage {
     /// - parameter position: Position in the array (optional)
     /// - returns: `Result.Success` containing an `NSURL` if the outlet is a `URLProvider`
     ///            and the page was already cached, else an `Result.Failure` containing an `IONError`.
-    public func mediaURL(_ name: String, atPosition position: Int = 0) -> Result<URL> {
+    public func mediaURL(_ name: String, atPosition position: Int = 0) -> Result<URL, Error> {
         let result = self.outlet(name, atPosition: position)
 
         guard case .success(let content) = result else {
@@ -283,7 +283,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func mediaURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
+    @discardableResult public func mediaURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL, Error>) -> Void)) -> IONPage {
         workQueue.async {
             responseQueueCallback(callback, parameter: self.mediaURL(name, atPosition: position))
         }
@@ -300,7 +300,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func cachedMediaURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
+    @discardableResult public func cachedMediaURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL, Error>) -> Void)) -> IONPage {
         self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -329,7 +329,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSURL` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func temporaryURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL>) -> Void)) -> IONPage {
+    @discardableResult public func temporaryURL(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<URL, Error>) -> Void)) -> IONPage {
         self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))
@@ -358,7 +358,7 @@ extension IONPage {
     ///                       Provides `Result.Success` containing an `NSData` when successful, or
     ///                       `Result.Failure` containing an `IONError` when an error occurred.
     /// - returns: self for chaining
-    @discardableResult public func mediaData(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Data>) -> Void)) -> IONPage {
+    @discardableResult public func mediaData(_ name: String, atPosition position: Int = 0, callback: @escaping ((Result<Data, Error>) -> Void)) -> IONPage {
         self.outlet(name, atPosition: position) { result in
             guard case .success(let content) = result else {
                 responseQueueCallback(callback, parameter: .failure(result.error ?? IONError.unknownError))

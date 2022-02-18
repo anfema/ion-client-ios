@@ -49,7 +49,7 @@ internal class IONCollection {
     fileprivate var useCache = IONCacheBehaviour.prefer
 
     /// Block to call on completion
-    fileprivate var completionBlock: ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)?
+    fileprivate var completionBlock: ((_ collection: Result<IONCollection, Error>, _ completed: Bool) -> Void)?
 
     /// Archive download url
     internal var archiveURL: String?
@@ -81,7 +81,7 @@ internal class IONCollection {
     /// - parameter callback: Block to call when the collection becomes available.
     ///                       Provides Result.Success containing an `IONCollection` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
-    init(identifier: String, locale: String, cacheBehaviour: IONCacheBehaviour, callback: ((Result<IONCollection>) -> Void)?) {
+    init(identifier: String, locale: String, cacheBehaviour: IONCacheBehaviour, callback: ((Result<IONCollection, Error>) -> Void)?) {
         self.identifier = identifier
         self.workQueue = DispatchQueue(label: "com.anfema.ion.collection.\(identifier)", attributes: [])
         self.locale = locale
@@ -120,7 +120,7 @@ internal class IONCollection {
     ///                       Provides Result.Success containing an `IONPage` when successful, or
     ///                       Result.Failure containing an `IONError` when an error occurred.
     /// - returns: self, to be able to chain more actions to the collection
-    @discardableResult open func page(_ identifier: String, callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
+    @discardableResult open func page(_ identifier: String, callback: @escaping ((Result<IONPage, Error>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
                 return
@@ -265,7 +265,7 @@ internal class IONCollection {
     ///
     /// - parameter callback: Block to call for each page
     /// - returns: self for chaining
-    @discardableResult open func pages(_ callback: @escaping ((Result<IONPage>) -> Void)) -> IONCollection {
+    @discardableResult open func pages(_ callback: @escaping ((Result<IONPage, Error>) -> Void)) -> IONCollection {
         // append page listing to work queue
         self.workQueue.async {
             guard !self.hasFailed else {
@@ -292,7 +292,7 @@ internal class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONCollection>) -> Void)) -> IONCollection {
+    @discardableResult open func waitUntilReady(_ callback: @escaping ((Result<IONCollection, Error>) -> Void)) -> IONCollection {
         self.workQueue.async {
             guard !self.hasFailed else {
                 responseQueueCallback(callback, parameter: .failure(IONError.didFail))
@@ -314,7 +314,7 @@ internal class IONCollection {
     ///
     /// - parameter callback: Callback to call
     /// - returns: self for chaining
-    @discardableResult open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection>, _ completed: Bool) -> Void)) -> IONCollection {
+    @discardableResult open func onCompletion(_ callback: @escaping ((_ collection: Result<IONCollection, Error>, _ completed: Bool) -> Void)) -> IONCollection {
         self.workQueue.async(flags: .barrier, execute: {
             self.completionBlock = callback
         })
@@ -342,7 +342,7 @@ internal class IONCollection {
     }
 
 
-    @discardableResult fileprivate func updatePage(_ page: IONPage, callback: ((Result<IONPage>) -> Void)?) -> IONPage? {
+    @discardableResult fileprivate func updatePage(_ page: IONPage, callback: ((Result<IONPage, Error>) -> Void)?) -> IONPage? {
         // fetch page update
         guard let meta = self.getPageMeta(page.identifier) else {
             return nil
